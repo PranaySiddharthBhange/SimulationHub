@@ -1,0 +1,13 @@
+{
+  "generation_id": "gen_0001",
+  "status": "PASSED",
+  "syntax_errors": [],
+  "structural_errors": [],
+  "requirement_coverage": {
+    "total": 159,
+    "implemented": 159,
+    "missing": []
+  },
+  "traceability_errors": [],
+  "semantic_errors": []
+}

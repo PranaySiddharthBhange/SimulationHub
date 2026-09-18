@@ -1,0 +1,4455 @@
+[
+  {
+    "engineering_id": "ENT-0001",
+    "engineering_type": "Tank",
+    "sysml_construct": "part def",
+    "sysml_element_name": "TK_101",
+    "package": "tank_003::physical",
+    "rationale": "Physical tank component, best modeled as a part definition.",
+    "evidence": [
+      "EV-0001",
+      "EV-0002",
+      "EV-0087",
+      "EV-0088",
+      "EV-0089",
+      "EV-0831"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0002",
+    "engineering_type": "Tank",
+    "sysml_construct": "part def",
+    "sysml_element_name": "TK_102",
+    "package": "tank_003::physical",
+    "rationale": "Physical tank component, best modeled as a part definition.",
+    "evidence": [
+      "EV-0003",
+      "EV-0004",
+      "EV-0090",
+      "EV-0091",
+      "EV-0092",
+      "EV-0832"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0003",
+    "engineering_type": "Valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "XV_101",
+    "package": "tank_003::physical",
+    "rationale": "Physical valve hardware, modeled as a part definition.",
+    "evidence": [
+      "EV-0005",
+      "EV-0006",
+      "EV-0833",
+      "EV-0956",
+      "EV-0957"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0004",
+    "engineering_type": "Valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "XV_102",
+    "package": "tank_003::physical",
+    "rationale": "Physical valve hardware, modeled as a part definition.",
+    "evidence": [
+      "EV-0007",
+      "EV-0008",
+      "EV-0834",
+      "EV-0958",
+      "EV-0959"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0005",
+    "engineering_type": "Valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "XV_103",
+    "package": "tank_003::physical",
+    "rationale": "Physical valve hardware, modeled as a part definition.",
+    "evidence": [
+      "EV-0009",
+      "EV-0010",
+      "EV-0835",
+      "EV-0960",
+      "EV-0961"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0006",
+    "engineering_type": "SequenceController",
+    "sysml_construct": "part def",
+    "sysml_element_name": "PLC_101_SequenceController",
+    "package": "tank_003::control",
+    "rationale": "Controller hardware/software unit, modeled as a part definition.",
+    "evidence": [
+      "EV-0011",
+      "EV-0012"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0007",
+    "engineering_type": "LevelMeasurement",
+    "sysml_construct": "part def",
+    "sysml_element_name": "LT_101_LevelMeasurement",
+    "package": "tank_003::signals",
+    "rationale": "Measurement device/interface element associated with level sensing, best placed with signal-related model elements.",
+    "evidence": [
+      "EV-0013"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0008",
+    "engineering_type": "LevelMeasurement",
+    "sysml_construct": "part def",
+    "sysml_element_name": "LT_102_LevelMeasurement",
+    "package": "tank_003::signals",
+    "rationale": "Measurement device/interface element associated with level sensing, best placed with signal-related model elements.",
+    "evidence": [
+      "EV-0014"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0009",
+    "engineering_type": "Controller",
+    "sysml_construct": "part def",
+    "sysml_element_name": "PLC_101_Controller",
+    "package": "tank_003::control",
+    "rationale": "Controller component, modeled as a part definition in the control package.",
+    "evidence": [
+      "EV-0084",
+      "EV-0085",
+      "EV-0086",
+      "EV-1010",
+      "EV-1011"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0010",
+    "engineering_type": "On-off valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "XV_101_OnOffValve",
+    "package": "tank_003::physical",
+    "rationale": "On/off valve is a physical component, so it maps to a part definition.",
+    "evidence": [
+      "EV-0093",
+      "EV-0094",
+      "EV-0095",
+      "EV-0096"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0011",
+    "engineering_type": "On-off valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "XV_102_OnOffValve",
+    "package": "tank_003::physical",
+    "rationale": "On/off valve is a physical component, so it maps to a part definition.",
+    "evidence": [
+      "EV-0097",
+      "EV-0098",
+      "EV-0099",
+      "EV-0100"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0012",
+    "engineering_type": "On-off valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "XV_103_OnOffValve",
+    "package": "tank_003::physical",
+    "rationale": "On/off valve is a physical component, so it maps to a part definition.",
+    "evidence": [
+      "EV-0101",
+      "EV-0102",
+      "EV-0103",
+      "EV-0104"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0013",
+    "engineering_type": "Level transmitter",
+    "sysml_construct": "part def",
+    "sysml_element_name": "LT_101_LevelTransmitter",
+    "package": "tank_003::signals",
+    "rationale": "Level transmitter is instrumentation related to sensing/signaling, so it is grouped with signals.",
+    "evidence": [
+      "EV-0105",
+      "EV-0106",
+      "EV-0107",
+      "EV-0108"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0014",
+    "engineering_type": "Level transmitter",
+    "sysml_construct": "part def",
+    "sysml_element_name": "LT_102_LevelTransmitter",
+    "package": "tank_003::signals",
+    "rationale": "Level transmitter is instrumentation related to sensing/signaling, so it is grouped with signals.",
+    "evidence": [
+      "EV-0109",
+      "EV-0110",
+      "EV-0111",
+      "EV-0112"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0015",
+    "engineering_type": "Momentary pushbutton",
+    "sysml_construct": "part def",
+    "sysml_element_name": "PB_START",
+    "package": "tank_003::control",
+    "rationale": "Operator pushbutton is an external control device, modeled as a part definition.",
+    "evidence": [
+      "EV-0113",
+      "EV-0114",
+      "EV-0115",
+      "EV-0116"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0016",
+    "engineering_type": "Momentary pushbutton",
+    "sysml_construct": "part def",
+    "sysml_element_name": "PB_STOP",
+    "package": "tank_003::control",
+    "rationale": "Operator pushbutton is an external control device, modeled as a part definition.",
+    "evidence": [
+      "EV-0117",
+      "EV-0118",
+      "EV-0119",
+      "EV-0120"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0017",
+    "engineering_type": "Momentary pushbutton",
+    "sysml_construct": "part def",
+    "sysml_element_name": "PB_SHUT",
+    "package": "tank_003::control",
+    "rationale": "Operator pushbutton is an external control device, modeled as a part definition.",
+    "evidence": [
+      "EV-0121",
+      "EV-0122",
+      "EV-0123",
+      "EV-0124"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0018",
+    "engineering_type": "Boundary source",
+    "sysml_construct": "part def",
+    "sysml_element_name": "SRC_101",
+    "package": "tank_003::physical",
+    "rationale": "Boundary source represents a physical external source boundary, so part definition fits.",
+    "evidence": [
+      "EV-0125",
+      "EV-0126",
+      "EV-0127"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0019",
+    "engineering_type": "Boundary sink",
+    "sysml_construct": "part def",
+    "sysml_element_name": "DRN_101",
+    "package": "tank_003::physical",
+    "rationale": "Boundary sink represents a physical external drain boundary, so part definition fits.",
+    "evidence": [
+      "EV-0128",
+      "EV-0129",
+      "EV-0130"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0020",
+    "engineering_type": "Source",
+    "sysml_construct": "part def",
+    "sysml_element_name": "source",
+    "package": "tank_003::physical",
+    "rationale": "Generic source is a physical boundary component, so part definition fits.",
+    "evidence": [
+      "EV-0452"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0021",
+    "engineering_type": "Valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "valve1",
+    "package": "tank_003::physical",
+    "rationale": "Valve is a physical component, modeled as a part definition.",
+    "evidence": [
+      "EV-0453",
+      "EV-0454",
+      "EV-0455",
+      "EV-0456",
+      "EV-0904",
+      "EV-0905",
+      "EV-1073"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0022",
+    "engineering_type": "Tank",
+    "sysml_construct": "part def",
+    "sysml_element_name": "tank1",
+    "package": "tank_003::physical",
+    "rationale": "Tank is a physical component, modeled as a part definition.",
+    "evidence": [
+      "EV-0457",
+      "EV-0458",
+      "EV-0459",
+      "EV-0764",
+      "EV-0765",
+      "EV-1071"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0023",
+    "engineering_type": "Valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "valve2",
+    "package": "tank_003::physical",
+    "rationale": "Valve is a physical component, modeled as a part definition.",
+    "evidence": [
+      "EV-0460",
+      "EV-0461",
+      "EV-0462",
+      "EV-0906",
+      "EV-0907",
+      "EV-0908",
+      "EV-1074"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0024",
+    "engineering_type": "Tank",
+    "sysml_construct": "part def",
+    "sysml_element_name": "tank2",
+    "package": "tank_003::physical",
+    "rationale": "Tank is a physical component, modeled as a part definition.",
+    "evidence": [
+      "EV-0463",
+      "EV-0464",
+      "EV-0465",
+      "EV-0766",
+      "EV-0767",
+      "EV-1072"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0025",
+    "engineering_type": "Controller",
+    "sysml_construct": "part def",
+    "sysml_element_name": "tankController",
+    "package": "tank_003::control",
+    "rationale": "Controller logic/hardware entity belongs in the control package as a part definition.",
+    "evidence": [
+      "EV-0466",
+      "EV-0467",
+      "EV-0468",
+      "EV-0469",
+      "EV-0470",
+      "EV-0471",
+      "EV-0472",
+      "EV-0473",
+      "EV-0474",
+      "EV-0475"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0026",
+    "engineering_type": "InputSignal",
+    "sysml_construct": "part def",
+    "sysml_element_name": "start",
+    "package": "tank_003::signals",
+    "rationale": "Input signal is a signal-domain element, mapped as a part definition in the signals package.",
+    "evidence": [
+      "EV-0476"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0027",
+    "engineering_type": "InputSignal",
+    "sysml_construct": "part def",
+    "sysml_element_name": "stop",
+    "package": "tank_003::signals",
+    "rationale": "Input signal is a signal-domain element, mapped as a part definition in the signals package.",
+    "evidence": [
+      "EV-0477"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0028",
+    "engineering_type": "InputSignal",
+    "sysml_construct": "part def",
+    "sysml_element_name": "shut",
+    "package": "tank_003::signals",
+    "rationale": "Input signal is a signal-domain element, mapped as a part definition in the signals package.",
+    "evidence": [
+      "EV-0478"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0029",
+    "engineering_type": "Source",
+    "sysml_construct": "part def",
+    "sysml_element_name": "ambient1",
+    "package": "tank_003::physical",
+    "rationale": "Ambient source is a physical boundary source, so part definition fits.",
+    "evidence": [
+      "EV-0479"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0030",
+    "engineering_type": "Signal",
+    "sysml_construct": "part def",
+    "sysml_element_name": "level1",
+    "package": "tank_003::signals",
+    "rationale": "Level signal is a signal-domain element, so part definition fits.",
+    "evidence": [
+      "EV-0480",
+      "EV-0481"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0031",
+    "engineering_type": "Signal",
+    "sysml_construct": "part def",
+    "sysml_element_name": "level2",
+    "package": "tank_003::signals",
+    "rationale": "Level signal is a signal-domain element, so part definition fits.",
+    "evidence": [
+      "EV-0482",
+      "EV-0483"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0032",
+    "engineering_type": "Valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "valve3",
+    "package": "tank_003::physical",
+    "rationale": "Valve is a physical component, modeled as a part definition.",
+    "evidence": [
+      "EV-0484",
+      "EV-0485",
+      "EV-0486",
+      "EV-0487",
+      "EV-0909",
+      "EV-0910",
+      "EV-1075"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0033",
+    "engineering_type": "Source",
+    "sysml_construct": "part def",
+    "sysml_element_name": "SRC",
+    "package": "tank_003::physical",
+    "rationale": "Source is a physical boundary component, so part definition fits.",
+    "evidence": [
+      "EV-0509"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0034",
+    "engineering_type": "Valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "V1",
+    "package": "tank_003::physical",
+    "rationale": "Valve hardware component, modeled as a part definition.",
+    "evidence": [
+      "EV-0510",
+      "EV-0511",
+      "EV-0512",
+      "EV-0532",
+      "EV-0533",
+      "EV-0534",
+      "EV-0740",
+      "EV-0741",
+      "EV-0742",
+      "EV-1016",
+      "EV-1017"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0035",
+    "engineering_type": "Tank",
+    "sysml_construct": "part def",
+    "sysml_element_name": "T1",
+    "package": "tank_003::physical",
+    "rationale": "Tank hardware component, modeled as a part definition.",
+    "evidence": [
+      "EV-0513",
+      "EV-0514",
+      "EV-0515",
+      "EV-0550",
+      "EV-0551",
+      "EV-0552",
+      "EV-0553",
+      "EV-1012",
+      "EV-1013"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0036",
+    "engineering_type": "Valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "V2",
+    "package": "tank_003::physical",
+    "rationale": "Valve hardware component, modeled as a part definition.",
+    "evidence": [
+      "EV-0516",
+      "EV-0517",
+      "EV-0518",
+      "EV-0535",
+      "EV-0536",
+      "EV-0537",
+      "EV-0538",
+      "EV-0539",
+      "EV-0743",
+      "EV-0744",
+      "EV-0745",
+      "EV-0861",
+      "EV-0862",
+      "EV-1018",
+      "EV-1019"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0037",
+    "engineering_type": "Tank",
+    "sysml_construct": "part def",
+    "sysml_element_name": "T2",
+    "package": "tank_003::physical",
+    "rationale": "Tank hardware component, modeled as a part definition.",
+    "evidence": [
+      "EV-0519",
+      "EV-0520",
+      "EV-0521",
+      "EV-0554",
+      "EV-0555",
+      "EV-0556",
+      "EV-1014",
+      "EV-1015"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0038",
+    "engineering_type": "Valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "V3",
+    "package": "tank_003::physical",
+    "rationale": "Valve hardware component, modeled as a part definition.",
+    "evidence": [
+      "EV-0522",
+      "EV-0523",
+      "EV-0540",
+      "EV-0541",
+      "EV-0542",
+      "EV-0543",
+      "EV-0746",
+      "EV-0747",
+      "EV-0748",
+      "EV-0863",
+      "EV-0864",
+      "EV-1020",
+      "EV-1021"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0039",
+    "engineering_type": "Drain",
+    "sysml_construct": "part def",
+    "sysml_element_name": "DRN",
+    "package": "tank_003::physical",
+    "rationale": "Drain is a physical boundary component, so part definition fits.",
+    "evidence": [
+      "EV-0524"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0040",
+    "engineering_type": "Controller",
+    "sysml_construct": "part def",
+    "sysml_element_name": "Two_Tank_Fill_Transfer_Drain_Controller",
+    "package": "tank_003::control",
+    "rationale": "Named controller behavior/hardware element, modeled as a part definition in control.",
+    "evidence": [
+      "EV-0531"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0041",
+    "engineering_type": "LevelSensor",
+    "sysml_construct": "part def",
+    "sysml_element_name": "LT_101_LevelSensor",
+    "package": "tank_003::signals",
+    "rationale": "Level sensor is instrumentation associated with signals, so part definition fits.",
+    "evidence": [
+      "EV-0544",
+      "EV-0545",
+      "EV-0546",
+      "EV-0547",
+      "EV-0749",
+      "EV-0750"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0042",
+    "engineering_type": "LevelSensor",
+    "sysml_construct": "part def",
+    "sysml_element_name": "LT_102_LevelSensor",
+    "package": "tank_003::signals",
+    "rationale": "Level sensor is instrumentation associated with signals, so part definition fits.",
+    "evidence": [
+      "EV-0548",
+      "EV-0549",
+      "EV-0751",
+      "EV-0752"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0043",
+    "engineering_type": "ControllerState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "SHUTDOWN",
+    "package": "tank_003::control",
+    "rationale": "Explicit controller state maps naturally to a state definition.",
+    "evidence": [
+      "EV-0557",
+      "EV-0558",
+      "EV-0559",
+      "EV-0560",
+      "EV-0561"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0044",
+    "engineering_type": "ControllerState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "PAUSED",
+    "package": "tank_003::control",
+    "rationale": "Explicit controller state maps naturally to a state definition.",
+    "evidence": [
+      "EV-0562",
+      "EV-0563",
+      "EV-0564",
+      "EV-0565",
+      "EV-0566"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0045",
+    "engineering_type": "ControllerState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "IDLE",
+    "package": "tank_003::control",
+    "rationale": "Explicit controller state maps naturally to a state definition.",
+    "evidence": [
+      "EV-0567",
+      "EV-0568",
+      "EV-0569",
+      "EV-0570"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0046",
+    "engineering_type": "ControllerState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "FILL_T1",
+    "package": "tank_003::control",
+    "rationale": "Explicit controller state maps naturally to a state definition.",
+    "evidence": [
+      "EV-0571",
+      "EV-0572",
+      "EV-0573",
+      "EV-0574"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0047",
+    "engineering_type": "ControllerState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "WAIT_AFTER_FILL",
+    "package": "tank_003::control",
+    "rationale": "Explicit controller state maps naturally to a state definition.",
+    "evidence": [
+      "EV-0575",
+      "EV-0576",
+      "EV-0577",
+      "EV-0578"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0048",
+    "engineering_type": "ControllerState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "TRANSFER_T1_T2",
+    "package": "tank_003::control",
+    "rationale": "Explicit controller state maps naturally to a state definition.",
+    "evidence": [
+      "EV-0579",
+      "EV-0580",
+      "EV-0581"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0049",
+    "engineering_type": "ControllerState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "WAIT_AFTER_TRANSFER",
+    "package": "tank_003::control",
+    "rationale": "Explicit controller state maps naturally to a state definition.",
+    "evidence": [
+      "EV-0582",
+      "EV-0583",
+      "EV-0584",
+      "EV-0585"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0050",
+    "engineering_type": "ControllerState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "DRAIN_T2",
+    "package": "tank_003::control",
+    "rationale": "Explicit controller state maps naturally to a state definition.",
+    "evidence": [
+      "EV-0586",
+      "EV-0587",
+      "EV-0588"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0051",
+    "engineering_type": "ControllerState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "WAIT_AFTER_DRAIN",
+    "package": "tank_003::control",
+    "rationale": "Explicit controller state maps naturally to a state definition.",
+    "evidence": [
+      "EV-0589",
+      "EV-0590",
+      "EV-0591",
+      "EV-0592"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0052",
+    "engineering_type": "Controller",
+    "sysml_construct": "part def",
+    "sysml_element_name": "Two_Tank_Controller",
+    "package": "tank_003::control",
+    "rationale": "Controller component itself is a physical/software system element, so part definition fits.",
+    "evidence": [
+      "EV-0753",
+      "EV-0754"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0053",
+    "engineering_type": "OperatorCommand",
+    "sysml_construct": "part def",
+    "sysml_element_name": "STOP_Command",
+    "package": "tank_003::signals",
+    "rationale": "Operator command is represented as a command/signal-like element, so part definition fits in signals.",
+    "evidence": [
+      "EV-0755",
+      "EV-0756",
+      "EV-0757"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0054",
+    "engineering_type": "OperatorCommand",
+    "sysml_construct": "part def",
+    "sysml_element_name": "START_Command",
+    "package": "tank_003::signals",
+    "rationale": "Operator command is represented as a command/signal-like element, so part definition fits in signals.",
+    "evidence": [
+      "EV-0758",
+      "EV-0759",
+      "EV-0760"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0055",
+    "engineering_type": "OperatorCommand",
+    "sysml_construct": "part def",
+    "sysml_element_name": "SHUT_Command",
+    "package": "tank_003::signals",
+    "rationale": "Operator command is represented as a command/signal-like element, so part definition fits in signals.",
+    "evidence": [
+      "EV-0761",
+      "EV-0762",
+      "EV-0763"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0056",
+    "engineering_type": "LevelThreshold",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "T1_high_limit",
+    "package": "tank_003::constraints",
+    "rationale": "A threshold is a rule/limit, so constraint definition is the appropriate SysML construct.",
+    "evidence": [
+      "EV-0855",
+      "EV-0856",
+      "EV-0857"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0057",
+    "engineering_type": "Valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "Drain_valve",
+    "package": "tank_003::physical",
+    "rationale": "Drain valve is a physical component, so part definition fits.",
+    "evidence": [
+      "EV-0858"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0058",
+    "engineering_type": "LevelCondition",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "T2_low_level_condition",
+    "package": "tank_003::constraints",
+    "rationale": "A level condition expresses a logical bound on state, so constraint definition fits.",
+    "evidence": [
+      "EV-0859",
+      "EV-0860"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0059",
+    "engineering_type": "ControllerState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "SHUT",
+    "package": "tank_003::control",
+    "rationale": "Explicit controller state maps naturally to a state definition.",
+    "evidence": [
+      "EV-0865",
+      "EV-0866"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0060",
+    "engineering_type": "ControllerState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "STOP",
+    "package": "tank_003::control",
+    "rationale": "Explicit controller state maps naturally to a state definition.",
+    "evidence": [
+      "EV-0867",
+      "EV-0868"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0061",
+    "engineering_type": "ControllerCommand",
+    "sysml_construct": "part def",
+    "sysml_element_name": "START_ControllerCommand",
+    "package": "tank_003::signals",
+    "rationale": "Controller command is a signal-like control element, so part definition is used in signals.",
+    "evidence": [
+      "EV-0869",
+      "EV-0870"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0062",
+    "engineering_type": "Model",
+    "sysml_construct": "part def",
+    "sysml_element_name": "TankDemo_Rev12",
+    "package": "tank_003",
+    "rationale": "Top-level model container is represented as a part definition at the root package.",
+    "evidence": [
+      "EV-0903"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0063",
+    "engineering_type": "LevelState",
+    "sysml_construct": "state def",
+    "sysml_element_name": "tank1Level",
+    "package": "tank_003::simulation",
+    "rationale": "LevelState is a simulation state concept, so state definition in simulation is appropriate.",
+    "evidence": [
+      "EV-0911",
+      "EV-0912"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0064",
+    "engineering_type": "CommandSignal",
+    "sysml_construct": "part def",
+    "sysml_element_name": "startCmd",
+    "package": "tank_003::signals",
+    "rationale": "Command signal is a signal-domain element, so part definition fits in signals.",
+    "evidence": [
+      "EV-0913"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0065",
+    "engineering_type": "CommandSignal",
+    "sysml_construct": "part def",
+    "sysml_element_name": "stopCmd",
+    "package": "tank_003::signals",
+    "rationale": "Command signal is a signal-domain element, so part definition fits in signals.",
+    "evidence": [
+      "EV-0914"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0066",
+    "engineering_type": "Valve",
+    "sysml_construct": "part def",
+    "sysml_element_name": "VXS_24_OnOffValve",
+    "package": "tank_003::physical",
+    "rationale": "Named on/off valve hardware component, modeled as a part definition.",
+    "evidence": [
+      "EV-0954",
+      "EV-0955"
+    ]
+  },
+  {
+    "engineering_id": "ENT-0067",
+    "engineering_type": "Controller",
+    "sysml_construct": "part def",
+    "sysml_element_name": "controller",
+    "package": "tank_003::control",
+    "rationale": "Generic controller component belongs in the control package as a part definition.",
+    "evidence": [
+      "EV-1076"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0001",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Tank1_initial_level_req",
+    "package": "tank_003::constraints",
+    "rationale": "Captures the explicit initial level requirement for Tank 1 as a constraint-style requirement.",
+    "evidence": [
+      "EV-0033",
+      "EV-0034"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0002",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Tank2_initial_level_req",
+    "package": "tank_003::constraints",
+    "rationale": "Captures the explicit initial level requirement for Tank 2.",
+    "evidence": [
+      "EV-0035",
+      "EV-0036"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0003",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Tank1_high_limit_req",
+    "package": "tank_003::constraints",
+    "rationale": "Represents the high level limit requirement for Tank 1.",
+    "evidence": [
+      "EV-0037",
+      "EV-0038",
+      "EV-0039"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0004",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Tank1_low_limit_req",
+    "package": "tank_003::constraints",
+    "rationale": "Represents the low level limit requirement for Tank 1.",
+    "evidence": [
+      "EV-0040",
+      "EV-0041",
+      "EV-0042"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0005",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Tank2_low_limit_req",
+    "package": "tank_003::constraints",
+    "rationale": "Represents the low level limit requirement for Tank 2.",
+    "evidence": [
+      "EV-0043",
+      "EV-0044",
+      "EV-0045"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0006",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WaitAfterT1High_delay_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the controller wait delay after Tank 1 reaches high level.",
+    "evidence": [
+      "EV-0046",
+      "EV-0047",
+      "EV-0048"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0007",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WaitAfterT1Low_delay_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the controller wait delay after Tank 1 reaches low level.",
+    "evidence": [
+      "EV-0049",
+      "EV-0050",
+      "EV-0051"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0008",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WaitAfterT2Low_delay_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the controller wait delay after Tank 2 reaches low level.",
+    "evidence": [
+      "EV-0052",
+      "EV-0053",
+      "EV-0054"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0009",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Controller_start_condition_req",
+    "package": "tank_003::control",
+    "rationale": "Captures the allowed START command condition for automatic sequence initiation.",
+    "evidence": [
+      "EV-0275"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0010",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V1_fill_open_cmd_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies the commanded state of V1 during automatic fill.",
+    "evidence": [
+      "EV-0276"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0011",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "T1_high_setpoint_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines the high-level setpoint value for Tank 1.",
+    "evidence": [
+      "EV-0277",
+      "EV-0278",
+      "EV-0279",
+      "EV-0280"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0012",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "T1_low_setpoint_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines the low-level setpoint value for Tank 1.",
+    "evidence": [
+      "EV-0281",
+      "EV-0282",
+      "EV-0283",
+      "EV-0284"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0013",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "T2_low_setpoint_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines the low-level setpoint value for Tank 2.",
+    "evidence": [
+      "EV-0285",
+      "EV-0286",
+      "EV-0287",
+      "EV-0288"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0014",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WaitAfterT1High_beforeV2_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the wait time before opening V2 after Tank 1 reaches high level.",
+    "evidence": [
+      "EV-0289",
+      "EV-0290",
+      "EV-0291",
+      "EV-0292"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0015",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WaitAfterT1Low_beforeV3_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the wait time before opening V3 after Tank 1 reaches low level.",
+    "evidence": [
+      "EV-0293",
+      "EV-0294",
+      "EV-0295",
+      "EV-0296",
+      "EV-0297"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0016",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WaitAfterT2Low_returnFill_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the wait time before returning to Tank 1 filling after Tank 2 reaches low level.",
+    "evidence": [
+      "EV-0298",
+      "EV-0299",
+      "EV-0300",
+      "EV-0301",
+      "EV-0302"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0017",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Controller_state_after_stop_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies the controller state after STOP is accepted.",
+    "evidence": [
+      "EV-0303"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0018",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Controller_resume_after_stop_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies how the controller resumes after START following STOP.",
+    "evidence": [
+      "EV-0304"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0019",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Controller_shutdown_latch_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the latched shutdown mode behavior.",
+    "evidence": [
+      "EV-0305",
+      "EV-0306"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0020",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Shut_over_Stop_priority_req",
+    "package": "tank_003::control",
+    "rationale": "Captures that SHUT has higher priority than STOP.",
+    "evidence": [
+      "EV-0307"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0021",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stop_over_Start_priority_req",
+    "package": "tank_003::control",
+    "rationale": "Captures that STOP has higher priority than START.",
+    "evidence": [
+      "EV-0308"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0022",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V1_not_open_with_V2_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines the mutual exclusion rule preventing V1 open while V2 is open.",
+    "evidence": [
+      "EV-0309"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0023",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V2_V3_no_simul_open_normal_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines the no-simultaneous-open rule for V2 and V3 during normal automatic operation.",
+    "evidence": [
+      "EV-0310"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0024",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V2_V3_simul_open_allowed_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines the permitted simultaneous-open condition for V2 and V3.",
+    "evidence": [
+      "EV-0311"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0025",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Simulation_duration_req",
+    "package": "tank_003::simulation",
+    "rationale": "Constrains the overall simulation run duration.",
+    "evidence": [
+      "EV-0312",
+      "EV-0313",
+      "EV-0314"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0026",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Start_event_time_20s_req",
+    "package": "tank_003::simulation",
+    "rationale": "Records the conflicted START event time at 20 s.",
+    "evidence": [
+      "EV-0315"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0027",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stop_event_time_220s_req",
+    "package": "tank_003::simulation",
+    "rationale": "Records the conflicted STOP event time at 220 s.",
+    "evidence": [
+      "EV-0316"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0028",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Start_event_time_280s_req",
+    "package": "tank_003::simulation",
+    "rationale": "Records the conflicted START event time at 280 s.",
+    "evidence": [
+      "EV-0317"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0029",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stop_event_time_650s_req",
+    "package": "tank_003::simulation",
+    "rationale": "Records the conflicted STOP event time at 650 s.",
+    "evidence": [
+      "EV-0318"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0030",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Shut_event_time_700s_req",
+    "package": "tank_003::simulation",
+    "rationale": "Captures the SHUT event time in the simulation schedule.",
+    "evidence": [
+      "EV-0319"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0031",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Level_units_metres_req",
+    "package": "tank_003::constraints",
+    "rationale": "Specifies internal representation units for level values.",
+    "evidence": [
+      "EV-0320"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0032",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Level_nominal_range_req",
+    "package": "tank_003::constraints",
+    "rationale": "Constrains nominal valid range for level values.",
+    "evidence": [
+      "EV-0321"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0033",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "ValveCommands_boolean_open_closed_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines the representation used for valve commands.",
+    "evidence": [
+      "EV-0322"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0034",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Tank1_initial_level_req2",
+    "package": "tank_003::constraints",
+    "rationale": "Captures Tank 1 initial level; name differs from earlier claimed concept to avoid reuse.",
+    "evidence": [
+      "EV-0323",
+      "EV-0324"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0035",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Tank2_initial_level_req2",
+    "package": "tank_003::constraints",
+    "rationale": "Captures Tank 2 initial level; distinct name from earlier claimed item.",
+    "evidence": [
+      "EV-0325",
+      "EV-0326"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0036",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Controller_scan_time_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the controller scan time.",
+    "evidence": [
+      "EV-0327",
+      "EV-0328"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0037",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV101_nominal_flow_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines nominal flow for XV-101 as a physical component requirement.",
+    "evidence": [
+      "EV-0329",
+      "EV-0330"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0038",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV102_nominal_flow_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines nominal flow for XV-102 as a physical component requirement.",
+    "evidence": [
+      "EV-0331",
+      "EV-0332"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0039",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV103_nominal_flow_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines nominal flow for XV-103 as a physical component requirement.",
+    "evidence": [
+      "EV-0333",
+      "EV-0334"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0040",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "LT101_engineering_range_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines the engineering range for LT-101.",
+    "evidence": [
+      "EV-0335",
+      "EV-0336",
+      "EV-0337",
+      "EV-0338",
+      "EV-0339",
+      "EV-0340"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0041",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "LT102_engineering_range_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines the engineering range for LT-102.",
+    "evidence": [
+      "EV-0341",
+      "EV-0342",
+      "EV-0343",
+      "EV-0344",
+      "EV-0345",
+      "EV-0346"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0042",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "PB_START_signal_type_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines PB-START signal type as Boolean/edge.",
+    "evidence": [
+      "EV-0347",
+      "EV-0348"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0043",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "PB_STOP_signal_type_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines PB-STOP signal type as Boolean/edge.",
+    "evidence": [
+      "EV-0349",
+      "EV-0350"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0044",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "PB_SHUT_signal_type_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines PB-SHUT signal type as Boolean/edge.",
+    "evidence": [
+      "EV-0351",
+      "EV-0352"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0045",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "DO101_signal_type_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines DO-101 signal type as Boolean.",
+    "evidence": [
+      "EV-0353",
+      "EV-0354"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0046",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "DO102_signal_type_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines DO-102 signal type as Boolean.",
+    "evidence": [
+      "EV-0355",
+      "EV-0356"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0047",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "DO103_signal_type_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines DO-103 signal type as Boolean.",
+    "evidence": [
+      "EV-0357",
+      "EV-0358"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0048",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "tank1_level_default_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines the default value for tank1.level in the simulation model.",
+    "evidence": [
+      "EV-0504"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0049",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "tank2_level_default_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines the default value for tank2.level in the simulation model.",
+    "evidence": [
+      "EV-0505"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0050",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Shut_command_priority_highest_req",
+    "package": "tank_003::control",
+    "rationale": "Defines SHUT as the highest-priority controller command.",
+    "evidence": [
+      "EV-0679"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0051",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stop_command_priority_next_req",
+    "package": "tank_003::control",
+    "rationale": "Defines STOP as next-highest priority after SHUT.",
+    "evidence": [
+      "EV-0680"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0052",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Start_command_priority_lowest_req",
+    "package": "tank_003::control",
+    "rationale": "Defines START as the lowest-priority controller command.",
+    "evidence": [
+      "EV-0681"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0053",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Start_accepted_after_shutdown_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies START is accepted after shutdown completion.",
+    "evidence": [
+      "EV-0682"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0054",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Timer_remaining_retained_on_stop_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies remaining delay is retained when STOP occurs in wait states.",
+    "evidence": [
+      "EV-0683"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0055",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Timer_resume_remaining_delay_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies timer resumes with remaining delay on START.",
+    "evidence": [
+      "EV-0684"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0056",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V1_V2_no_simul_open_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines prohibition on V1 and V2 being open simultaneously.",
+    "evidence": [
+      "EV-0685"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0057",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V2_V3_no_simul_open_normal_req2",
+    "package": "tank_003::constraints",
+    "rationale": "Defines prohibition on V2 and V3 simultaneous open during normal operation; distinct from earlier claimed name.",
+    "evidence": [
+      "EV-0686"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0058",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V2_V3_simul_open_allowed_req2",
+    "package": "tank_003::constraints",
+    "rationale": "Defines allowed simultaneous open condition for V2 and V3; distinct name from earlier claim.",
+    "evidence": [
+      "EV-0687"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0059",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Controller_outputs_false_on_power_loss_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies controller outputs go false on power loss.",
+    "evidence": [
+      "EV-0688"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0060",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Level_threshold_equality_inclusive_req",
+    "package": "tank_003::constraints",
+    "rationale": "Specifies threshold comparisons include equality at high and low limits.",
+    "evidence": [
+      "EV-0689"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0061",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "FILL_T1_valve_pattern_req",
+    "package": "tank_003::control",
+    "rationale": "Defines valve command pattern for FILL_T1.",
+    "evidence": [
+      "EV-0690"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0062",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WAIT_AFTER_FILL_valve_pattern_req",
+    "package": "tank_003::control",
+    "rationale": "Defines valve command pattern for WAIT_AFTER_FILL.",
+    "evidence": [
+      "EV-0691"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0063",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "TRANSFER_T1_T2_valve_pattern_req",
+    "package": "tank_003::control",
+    "rationale": "Defines valve command pattern for TRANSFER_T1_T2.",
+    "evidence": [
+      "EV-0692"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0064",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WAIT_AFTER_TRANSFER_valve_pattern_req",
+    "package": "tank_003::control",
+    "rationale": "Defines valve command pattern for WAIT_AFTER_TRANSFER.",
+    "evidence": [
+      "EV-0693"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0065",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "DRAIN_T2_valve_pattern_req2",
+    "package": "tank_003::control",
+    "rationale": "Defines valve command pattern for DRAIN_T2 using a distinct name from earlier claim.",
+    "evidence": [
+      "EV-0694"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0066",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WAIT_AFTER_DRAIN_valve_pattern_req",
+    "package": "tank_003::control",
+    "rationale": "Defines valve command pattern for WAIT_AFTER_DRAIN.",
+    "evidence": [
+      "EV-0695"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0067",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "PAUSED_valve_pattern_req",
+    "package": "tank_003::control",
+    "rationale": "Defines valve command pattern for PAUSED state.",
+    "evidence": [
+      "EV-0696"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0068",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "SHUTDOWN_valve_pattern_req",
+    "package": "tank_003::control",
+    "rationale": "Defines valve command pattern for SHUTDOWN state.",
+    "evidence": [
+      "EV-0697"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0069",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "IDLE_valve_pattern_req",
+    "package": "tank_003::control",
+    "rationale": "Defines valve command pattern for IDLE state.",
+    "evidence": [
+      "EV-0698"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0070",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "FILL_T1_transition_guard_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the guard condition for FILL_T1 transition.",
+    "evidence": [
+      "EV-0699"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0071",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WAIT_AFTER_FILL_transition_guard_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the guard condition for WAIT_AFTER_FILL transition.",
+    "evidence": [
+      "EV-0700"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0072",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "TRANSFER_T1_T2_transition_guard_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the guard condition for TRANSFER_T1_T2 transition.",
+    "evidence": [
+      "EV-0701"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0073",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WAIT_AFTER_TRANSFER_transition_guard_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the guard condition for WAIT_AFTER_TRANSFER transition.",
+    "evidence": [
+      "EV-0702"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0074",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "DRAIN_T2_transition_guard_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the guard condition for DRAIN_T2 transition.",
+    "evidence": [
+      "EV-0703"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0075",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "WAIT_AFTER_DRAIN_transition_guard_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the guard condition for WAIT_AFTER_DRAIN transition.",
+    "evidence": [
+      "EV-0704"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0076",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Paused_restart_source_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies that PAUSED restarts from stored state.",
+    "evidence": [
+      "EV-0705"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0077",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Shutdown_exit_condition_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the exit condition for the SHUTDOWN sequence.",
+    "evidence": [
+      "EV-0706"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0078",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Command_precedence_order_req",
+    "package": "tank_003::control",
+    "rationale": "Captures the overall command priority order.",
+    "evidence": [
+      "EV-0799"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0079",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stop_command_valves_closed_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies valves are closed after STOP.",
+    "evidence": [
+      "EV-0800"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0080",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stop_interrupted_state_stored_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies interrupted state is stored on STOP.",
+    "evidence": [
+      "EV-0801"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0081",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Wait_timer_frozen_on_stop_req",
+    "package": "tank_003::control",
+    "rationale": "Defines that the remaining delay timer is frozen on STOP.",
+    "evidence": [
+      "EV-0802",
+      "EV-0803"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0082",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Start_timer_resume_remaining_req",
+    "package": "tank_003::control",
+    "rationale": "Defines that START resumes the remaining delay.",
+    "evidence": [
+      "EV-0804"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0083",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Start_ignored_while_running_req",
+    "package": "tank_003::control",
+    "rationale": "Defines START is ignored while the automatic sequence is running.",
+    "evidence": [
+      "EV-0805"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0084",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Start_ignored_during_shut_req",
+    "package": "tank_003::control",
+    "rationale": "Defines START is ignored during active SHUT.",
+    "evidence": [
+      "EV-0806"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0085",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stop_ignored_during_shut_req",
+    "package": "tank_003::control",
+    "rationale": "Defines STOP is ignored during active SHUT.",
+    "evidence": [
+      "EV-0807"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0086",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Shut_lt101_completion_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines LT-101 completion criterion for SHUT sequence.",
+    "evidence": [
+      "EV-0808"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0087",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Shut_lt102_completion_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines LT-102 completion criterion for SHUT sequence.",
+    "evidence": [
+      "EV-0809"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0088",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Shutdown_completion_valves_closed_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies valve state at shutdown completion.",
+    "evidence": [
+      "EV-0810"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0089",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Sequence_state_after_shutdown_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies sequence context returns to IDLE after shutdown completion.",
+    "evidence": [
+      "EV-0811"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0090",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V1_V2_commanded_open_prohibited_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines prohibition on commanding V1 and V2 open together.",
+    "evidence": [
+      "EV-0812"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0091",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V2_V3_commanded_open_prohibited_req",
+    "package": "tank_003::constraints",
+    "rationale": "Records conflicted requirement that V2 and V3 commanded open together is prohibited.",
+    "evidence": [
+      "EV-0813"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0092",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V2_V3_commanded_open_allowed_req",
+    "package": "tank_003::constraints",
+    "rationale": "Records conflicted requirement that V2 and V3 commanded open together is allowed.",
+    "evidence": [
+      "EV-0814",
+      "EV-0815"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0093",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "T1_high_threshold_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines the threshold value for T1 high.",
+    "evidence": [
+      "EV-0816"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0094",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Post_transfer_delay_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the post-transfer delay duration.",
+    "evidence": [
+      "EV-0817"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0095",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Inter_cycle_delay_after_T2_low_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the inter-cycle delay after Tank 2 low.",
+    "evidence": [
+      "EV-0818"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0096",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V1_drop_out_target_req",
+    "package": "tank_003::simulation",
+    "rationale": "Captures the observed target for V1 drop-out at high target.",
+    "evidence": [
+      "EV-0840"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0097",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stop_event_kills_valve_lamps_req",
+    "package": "tank_003::simulation",
+    "rationale": "Records the stop event time that kills all valve lamps.",
+    "evidence": [
+      "EV-0841"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0098",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Start_event_resume_transfer_req",
+    "package": "tank_003::simulation",
+    "rationale": "Records the start event time that resumes transfer.",
+    "evidence": [
+      "EV-0842"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0099",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Control_dead_time_after_T1_low_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the control dead time after T1 low.",
+    "evidence": [
+      "EV-0843"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0100",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Dead_time_after_T2_low_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the dead time after T2 low.",
+    "evidence": [
+      "EV-0844"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0101",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stop_event_interrupts_second_fill_req",
+    "package": "tank_003::simulation",
+    "rationale": "Records the stop event time that interrupts the second fill.",
+    "evidence": [
+      "EV-0845"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0102",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Shut_event_controlled_drain_req",
+    "package": "tank_003::simulation",
+    "rationale": "Records the shut event time of controlled drain shutdown.",
+    "evidence": [
+      "EV-0846"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0103",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Shutdown_idle_period_end_req",
+    "package": "tank_003::simulation",
+    "rationale": "Records the end time of idle period after shutdown.",
+    "evidence": [
+      "EV-0847"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0104",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Initial_both_tank_displays_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines the initial displayed level for both tanks.",
+    "evidence": [
+      "EV-0848"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0105",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "T1_high_limit_effective_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines the effective high-level limit for T1.",
+    "evidence": [
+      "EV-0878",
+      "EV-0879"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0106",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Delay_after_T1_low_before_drain_req",
+    "package": "tank_003::control",
+    "rationale": "Defines delay after T1 reaches low before opening drain valve.",
+    "evidence": [
+      "EV-0880",
+      "EV-0881"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0107",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Delay_after_T2_low_before_next_fill_req",
+    "package": "tank_003::control",
+    "rationale": "Defines delay after T2 reaches low before next fill starts.",
+    "evidence": [
+      "EV-0882",
+      "EV-0883"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0108",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Shut_over_Stop_priority_relation_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the priority relation of SHUT relative to STOP.",
+    "evidence": [
+      "EV-0884"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0109",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V2_open_during_shut_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies V2 remains open during SHUT until both low-level conditions are met.",
+    "evidence": [
+      "EV-0885"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0110",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V3_open_during_shut_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies V3 remains open during SHUT until both low-level conditions are met.",
+    "evidence": [
+      "EV-0886"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0111",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Start_ignored_during_shut_behavior_req",
+    "package": "tank_003::control",
+    "rationale": "Defines START behavior during SHUT as ignored.",
+    "evidence": [
+      "EV-0887"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0112",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stopped_state_after_start_edge_req",
+    "package": "tank_003::control",
+    "rationale": "Defines stopped state after startCmd edge.",
+    "evidence": [
+      "EV-0942"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0113",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stopped_state_after_stop_edge_req",
+    "package": "tank_003::control",
+    "rationale": "Defines stopped state after stopCmd edge.",
+    "evidence": [
+      "EV-0943"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0114",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Valve1_boolean_state_expr_req",
+    "package": "tank_003::control",
+    "rationale": "Captures the boolean expression governing valve1 state.",
+    "evidence": [
+      "EV-0944"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0115",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Valve2_boolean_state_expr_req",
+    "package": "tank_003::control",
+    "rationale": "Captures the boolean expression governing valve2 state.",
+    "evidence": [
+      "EV-0945"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0116",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Valve3_boolean_state_expr_req",
+    "package": "tank_003::control",
+    "rationale": "Captures the boolean expression governing valve3 state.",
+    "evidence": [
+      "EV-0946"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0117",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV101_feed_to_tank1_service_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines the service for the XV-101 valve.",
+    "evidence": [
+      "EV-0980"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0118",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV102_tank1_transfer_service_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines the service for the XV-102 valve.",
+    "evidence": [
+      "EV-0981"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0119",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV103_tank2_drain_service_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines the service for the XV-103 valve.",
+    "evidence": [
+      "EV-0982"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0120",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV101_deenergized_closed_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines the de-energized position for XV-101.",
+    "evidence": [
+      "EV-0983"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0121",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV102_deenergized_closed_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines the de-energized position for XV-102.",
+    "evidence": [
+      "EV-0984"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0122",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV103_deenergized_closed_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines the de-energized position for XV-103.",
+    "evidence": [
+      "EV-0985"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0123",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV101_nominal_demo_flow_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines nominal demo flow coefficient equivalent for XV-101.",
+    "evidence": [
+      "EV-0986"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0124",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV102_nominal_demo_flow_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines nominal demo flow coefficient equivalent for XV-102.",
+    "evidence": [
+      "EV-0987"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0125",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV103_nominal_demo_flow_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines nominal demo flow coefficient equivalent for XV-103.",
+    "evidence": [
+      "EV-0988"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0126",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV101_full_open_stroke_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines full open stroke time for XV-101.",
+    "evidence": [
+      "EV-0989"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0127",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV102_full_open_stroke_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines full open stroke time for XV-102.",
+    "evidence": [
+      "EV-0990"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0128",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV103_full_open_stroke_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines full open stroke time for XV-103.",
+    "evidence": [
+      "EV-0991"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0129",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV101_full_close_stroke_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines full close stroke time for XV-101.",
+    "evidence": [
+      "EV-0992"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0130",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV102_full_close_stroke_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines full close stroke time for XV-102.",
+    "evidence": [
+      "EV-0993"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0131",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV103_full_close_stroke_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines full close stroke time for XV-103.",
+    "evidence": [
+      "EV-0994"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0132",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV101_energized_open_relation_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines command relationship for XV-101.",
+    "evidence": [
+      "EV-0995"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0133",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV102_energized_open_relation_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines command relationship for XV-102.",
+    "evidence": [
+      "EV-0996"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0134",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "XV103_energized_open_relation_req",
+    "package": "tank_003::physical",
+    "rationale": "Defines command relationship for XV-103.",
+    "evidence": [
+      "EV-0997"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0135",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "T1_level_initial_value_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines initial value for T1 level in simulation.",
+    "evidence": [
+      "EV-1032",
+      "EV-1033"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0136",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "T2_level_initial_value_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines initial value for T2 level in simulation.",
+    "evidence": [
+      "EV-1034",
+      "EV-1035"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0137",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Simulation_duration_900s_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines simulation duration.",
+    "evidence": [
+      "EV-1036",
+      "EV-1037"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0138",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Logging_interval_1s_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines logging interval for the simulation.",
+    "evidence": [
+      "EV-1038",
+      "EV-1039"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0139",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "T1_effective_high_setpoint_req",
+    "package": "tank_003::constraints",
+    "rationale": "Defines the effective high-level setpoint value for T1.",
+    "evidence": [
+      "EV-1040"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0140",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stop_interval_valves_closed_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies all valves are closed during the stop interval.",
+    "evidence": [
+      "EV-1041"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0141",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Start_resume_interrupted_transfer_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies START resumes the interrupted transfer.",
+    "evidence": [
+      "EV-1042"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0142",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Inter_cycle_delay_value_req",
+    "package": "tank_003::control",
+    "rationale": "Defines the inter-cycle delay value.",
+    "evidence": [
+      "EV-1043"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0143",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Stop_interval_650_700_closed_req",
+    "package": "tank_003::simulation",
+    "rationale": "Specifies valves are closed during the 650-700 s stop interval.",
+    "evidence": [
+      "EV-1044"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0144",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V1_state_at_700s_req",
+    "package": "tank_003::simulation",
+    "rationale": "Specifies V1 state at 700 s.",
+    "evidence": [
+      "EV-1045"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0145",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "V2_V3_state_at_700s_req",
+    "package": "tank_003::simulation",
+    "rationale": "Specifies V2 and V3 states at 700 s.",
+    "evidence": [
+      "EV-1046"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0146",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Controller_state_after_shutdown_drain_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies controller state after shutdown drain completion.",
+    "evidence": [
+      "EV-1047"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0147",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "Valves_state_after_shutdown_drain_req",
+    "package": "tank_003::control",
+    "rationale": "Specifies valves state after shutdown drain completion.",
+    "evidence": [
+      "EV-1048"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0148",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "State_boundary_tolerance_req",
+    "package": "tank_003::control",
+    "rationale": "Defines tolerance for state-boundary comparisons.",
+    "evidence": [
+      "EV-1049"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0149",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "time_s_sampling_period_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines sampling period for time_s.",
+    "evidence": [
+      "EV-1084"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0150",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "time_s_range_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines range for time_s.",
+    "evidence": [
+      "EV-1085"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0151",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "cmd_start_value_range_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines value range for cmd_start.",
+    "evidence": [
+      "EV-1086"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0152",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "cmd_stop_value_range_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines value range for cmd_stop.",
+    "evidence": [
+      "EV-1087"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0153",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "cmd_shut_value_range_req",
+    "package": "tank_003::signals",
+    "rationale": "Defines value range for cmd_shut.",
+    "evidence": [
+      "EV-1088"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0154",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "tank1_level_m_range_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines range for tank1_level_m.",
+    "evidence": [
+      "EV-1089"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0155",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "tank2_level_m_range_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines range for tank2_level_m.",
+    "evidence": [
+      "EV-1090"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0156",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "valve1_open_value_range_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines value range for valve1_open.",
+    "evidence": [
+      "EV-1091"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0157",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "valve2_open_value_range_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines value range for valve2_open.",
+    "evidence": [
+      "EV-1092"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0158",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "valve3_open_value_range_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines value range for valve3_open.",
+    "evidence": [
+      "EV-1093"
+    ]
+  },
+  {
+    "engineering_id": "REQ-0159",
+    "engineering_type": "requirement",
+    "sysml_construct": "requirement def",
+    "sysml_element_name": "wait_remaining_s_range_req",
+    "package": "tank_003::simulation",
+    "rationale": "Defines range for wait_remaining_s.",
+    "evidence": [
+      "EV-1094"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0001",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Close_V1_On_T1_High",
+    "package": "tank_003::control",
+    "rationale": "If/then control rule: when Tank 1 reaches the high threshold, close V1.",
+    "evidence": [
+      "EV-0055",
+      "EV-0056"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0002",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Wait_10s_Before_Open_V2_On_T1_High",
+    "package": "tank_003::control",
+    "rationale": "Timed control rule that inserts a 10 s delay before opening V2 after Tank 1 is high.",
+    "evidence": [
+      "EV-0057",
+      "EV-0058"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0003",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Close_V2_On_T1_Low",
+    "package": "tank_003::control",
+    "rationale": "Control rule closes V2 when Tank 1 is at or below the low threshold.",
+    "evidence": [
+      "EV-0059",
+      "EV-0060"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0004",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Wait_10s_Before_Open_V3_On_T1_Low",
+    "package": "tank_003::control",
+    "rationale": "Timed control rule that waits 10 s before opening V3 after Tank 1 is low.",
+    "evidence": [
+      "EV-0061",
+      "EV-0062"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0005",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Close_V3_On_T2_Low",
+    "package": "tank_003::control",
+    "rationale": "Control rule closes V3 when Tank 2 is at or below the low threshold.",
+    "evidence": [
+      "EV-0063",
+      "EV-0064"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0006",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Stop_All_Valves_On_STOP_Command",
+    "package": "tank_003::control",
+    "rationale": "Command-response rule: STOP closes all valves and suspends automatic operation.",
+    "evidence": [
+      "EV-0065"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0007",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Enter_SHUT_Open_V2_V3_Inhibit_V1",
+    "package": "tank_003::control",
+    "rationale": "SHUT command handling opens V2/V3 while inhibiting V1.",
+    "evidence": [
+      "EV-0066"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0008",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Complete_Shutdown_Close_V2_V3_Return_Idle",
+    "package": "tank_003::control",
+    "rationale": "Shutdown completion rule closes V2/V3 and restores the start/idle configuration.",
+    "evidence": [
+      "EV-0067"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0009",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Start_Automatic_Sequence_On_VALID_START",
+    "package": "tank_003::control",
+    "rationale": "Valid START command initiates the automatic fill-transfer-drain sequence.",
+    "evidence": [
+      "EV-0359"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0010",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Close_V1_On_T1_High_Demo",
+    "package": "tank_003::control",
+    "rationale": "Demo/control rule closes V1 when Tank 1 reaches the high level.",
+    "evidence": [
+      "EV-0360",
+      "EV-0361"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0011",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Wait_12s_Before_Open_V2_On_T1_High_Demo",
+    "package": "tank_003::control",
+    "rationale": "Timed rule waits 12 s before opening V2 after Tank 1 is high.",
+    "evidence": [
+      "EV-0362",
+      "EV-0363",
+      "EV-0364"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0012",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Open_V3_After_12s_On_T1_Low_Demo",
+    "package": "tank_003::control",
+    "rationale": "Timed rule opens V3 after the 12 s wait when Tank 1 is low.",
+    "evidence": [
+      "EV-0365",
+      "EV-0366",
+      "EV-0367"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0013",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Return_To_Fill_T1_After_8s_On_T2_Low_Demo",
+    "package": "tank_003::control",
+    "rationale": "Timer-driven transition returns to Tank 1 filling after 8 s when Tank 2 is low.",
+    "evidence": [
+      "EV-0368",
+      "EV-0369"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0014",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Pause_All_Valves_On_STOP_Command_Demo",
+    "package": "tank_003::control",
+    "rationale": "STOP command closes all valves and pauses the controller in the demo behavior set.",
+    "evidence": [
+      "EV-0370"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0015",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Resume_Sequence_After_STOP_Command_Demo",
+    "package": "tank_003::control",
+    "rationale": "START after STOP continues the stored sequence from the accepted stop point.",
+    "evidence": [
+      "EV-0371"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0016",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Open_V2_V3_On_SHUT_Command_Demo",
+    "package": "tank_003::control",
+    "rationale": "SHUT command behavior opens V2/V3 for shutdown drain in the demo sequence.",
+    "evidence": [
+      "EV-0372"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0017",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Finish_Shutdown_Close_All_Valves_Demo",
+    "package": "tank_003::control",
+    "rationale": "When shutdown draining is complete, all valves are closed and idle configuration is restored.",
+    "evidence": [
+      "EV-0373"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0018",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Close_All_Valves_On_Power_Loss",
+    "package": "tank_003::control",
+    "rationale": "Fail-safe rule keeps all process valves closed on controller power loss.",
+    "evidence": [
+      "EV-0374"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0019",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Freeze_Wait_Timer_On_STOP_During_Wait",
+    "package": "tank_003::control",
+    "rationale": "STOP during a wait state preserves the timer rather than restarting it.",
+    "evidence": [
+      "EV-0375"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0020",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Ignore_START_While_Running",
+    "package": "tank_003::control",
+    "rationale": "START is ignored when the automatic sequence is already running.",
+    "evidence": [
+      "EV-0376"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0021",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Ignore_STOP_During_SHUT",
+    "package": "tank_003::control",
+    "rationale": "STOP has no effect while SHUT mode is active until shutdown completes.",
+    "evidence": [
+      "EV-0377"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0022",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Ignore_START_During_SHUT",
+    "package": "tank_003::control",
+    "rationale": "START has no effect while SHUT mode is active until shutdown completes.",
+    "evidence": [
+      "EV-0378"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0023",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Close_V2_V3_On_Both_Lows_Shutdown_Complete",
+    "package": "tank_003::control",
+    "rationale": "Completion rule closes V2/V3 once both tank levels are at or below their low setpoints.",
+    "evidence": [
+      "EV-0379"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0024",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Start_Controller_Sequence_On_DI101_Rise",
+    "package": "tank_003::control",
+    "rationale": "Rising edge on DI-101 starts or resumes the controller sequence.",
+    "evidence": [
+      "EV-0380"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0025",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Pause_All_Valves_On_DI102_Rise",
+    "package": "tank_003::control",
+    "rationale": "Rising edge on DI-102 pauses operation and closes all valves.",
+    "evidence": [
+      "EV-0381"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0026",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Latch_Shutdown_On_DI103_Rise",
+    "package": "tank_003::control",
+    "rationale": "Rising edge on DI-103 latches the shutdown request.",
+    "evidence": [
+      "EV-0382"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0027",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_Controller_Run_On_Start",
+    "package": "tank_003::control",
+    "rationale": "Boolean start input drives the tank controller behavior.",
+    "evidence": [
+      "EV-0506"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0028",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_Controller_Stop_On_Stop",
+    "package": "tank_003::control",
+    "rationale": "Boolean stop input drives the tank controller behavior.",
+    "evidence": [
+      "EV-0507"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0029",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_Controller_Shut_On_Shut",
+    "package": "tank_003::control",
+    "rationale": "Boolean shut input drives the tank controller behavior.",
+    "evidence": [
+      "EV-0508"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0030",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Transition_IDLE_To_FILL_T1_On_START_Edge",
+    "package": "tank_003::control",
+    "rationale": "State transition from IDLE to FILL_T1 on START edge.",
+    "evidence": [
+      "EV-0707",
+      "EV-0708"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0031",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Transition_To_PAUSED_On_STOP_Edge",
+    "package": "tank_003::control",
+    "rationale": "State transition to PAUSED with all valves false on STOP edge.",
+    "evidence": [
+      "EV-0709",
+      "EV-0710"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0032",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Transition_To_SHUTDOWN_On_SHUT_Edge",
+    "package": "tank_003::control",
+    "rationale": "State transition to SHUTDOWN and clear resume context on SHUT edge.",
+    "evidence": [
+      "EV-0711",
+      "EV-0712"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0033",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Enter_WAIT_AFTER_FILL_On_LT101_High",
+    "package": "tank_003::control",
+    "rationale": "Crossing the T1 high threshold transitions to WAIT_AFTER_FILL and closes V1.",
+    "evidence": [
+      "EV-0713",
+      "EV-0714",
+      "EV-0715"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0034",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Enter_WAIT_AFTER_TRANSFER_On_LT101_Low",
+    "package": "tank_003::control",
+    "rationale": "Crossing the T1 low threshold transitions to WAIT_AFTER_TRANSFER and closes V2.",
+    "evidence": [
+      "EV-0716",
+      "EV-0717",
+      "EV-0718"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0035",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Enter_WAIT_AFTER_DRAIN_On_LT102_Low",
+    "package": "tank_003::control",
+    "rationale": "Crossing the T2 low threshold transitions to WAIT_AFTER_DRAIN and closes V3.",
+    "evidence": [
+      "EV-0719",
+      "EV-0720",
+      "EV-0721"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0036",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Start_TRANSFER_T1_T2_On_Timer_Expired",
+    "package": "tank_003::control",
+    "rationale": "Timer expiration transitions the controller into TRANSFER_T1_T2 with V2 commanded on.",
+    "evidence": [
+      "EV-0722",
+      "EV-0723"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0037",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Start_DRAIN_T2_On_Timer_Expired",
+    "package": "tank_003::control",
+    "rationale": "Timer expiration transitions the controller into DRAIN_T2 with V3 commanded on.",
+    "evidence": [
+      "EV-0724",
+      "EV-0725"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0038",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Restart_FILL_T1_On_Timer_Expired",
+    "package": "tank_003::control",
+    "rationale": "Timer expiration transitions the controller back to FILL_T1 with V1 commanded on.",
+    "evidence": [
+      "EV-0726",
+      "EV-0727"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0039",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Preserve_Remaining_Delay_On_STOP_During_Waits",
+    "package": "tank_003::control",
+    "rationale": "STOP during delay states preserves the remaining delay so START can resume later.",
+    "evidence": [
+      "EV-0728",
+      "EV-0729"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0040",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_All_Valves_False_On_Power_Loss",
+    "package": "tank_003::control",
+    "rationale": "Power loss drives all valve outputs false as a fail-safe response.",
+    "evidence": [
+      "EV-0730"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0041",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Transition_To_IDLE_On_Both_Lows",
+    "package": "tank_003::control",
+    "rationale": "When both tank levels are below the low limits, the controller returns to IDLE and closes V2/V3.",
+    "evidence": [
+      "EV-0731",
+      "EV-0732"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0042",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Freeze_Delay_Timer_On_STOP_During_Delay",
+    "package": "tank_003::control",
+    "rationale": "STOP during any delay freezes the remaining delay timer.",
+    "evidence": [
+      "EV-0819",
+      "EV-0820"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0043",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Ignore_START_While_Sequence_Running",
+    "package": "tank_003::control",
+    "rationale": "START is ignored while the automatic sequence is already active.",
+    "evidence": [
+      "EV-0821"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0044",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Ignore_START_STOP_During_Active_SHUT",
+    "package": "tank_003::control",
+    "rationale": "START and STOP commands are ignored during active SHUT.",
+    "evidence": [
+      "EV-0822"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0045",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Complete_SHUT_On_Low_Level_Conditions",
+    "package": "tank_003::control",
+    "rationale": "SHUT completes when both tanks are at or below their low-level setpoints.",
+    "evidence": [
+      "EV-0823"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0046",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Reset_To_IDLE_On_Shutdown_Complete",
+    "package": "tank_003::control",
+    "rationale": "Shutdown completion closes all valves and resets controller sequence context to IDLE.",
+    "evidence": [
+      "EV-0824"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0047",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Prohibit_V1_V2_Open_Together",
+    "package": "tank_003::constraints",
+    "rationale": "This is a prohibitive if/then rule expressed as a control constraint on simultaneous valve opening.",
+    "evidence": [
+      "EV-0825"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0048",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Prohibit_V2_V3_Open_Together_Normal_Mode",
+    "package": "tank_003::constraints",
+    "rationale": "This rule prohibits V2 and V3 from being open together during normal automatic operation.",
+    "evidence": [
+      "EV-0826",
+      "EV-0827"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0049",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Drop_Out_V1_On_Tank_High",
+    "package": "tank_003::control",
+    "rationale": "High tank level causes V1 to drop out/stop filling.",
+    "evidence": [
+      "EV-0849"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0050",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Wait_12s_After_T1_Low_Before_Resuming",
+    "package": "tank_003::control",
+    "rationale": "Timed rule waits 12 s after T1 low before resuming the next control action.",
+    "evidence": [
+      "EV-0850"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0051",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Resume_Fill_After_8s_On_T2_Low",
+    "package": "tank_003::control",
+    "rationale": "Timed rule resumes filling after an 8 s dead time following T2 low.",
+    "evidence": [
+      "EV-0851"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0052",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Use_T1_High_As_Effective_Limit",
+    "package": "tank_003::constraints",
+    "rationale": "This defines an effective threshold relation, fitting a control-side constraint/action rule mapping.",
+    "evidence": [
+      "EV-0888",
+      "EV-0889"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0053",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Open_Drain_Valve_After_12s_From_T1_Low",
+    "package": "tank_003::control",
+    "rationale": "Once 12 s have elapsed since T1 low, the drain valve is opened.",
+    "evidence": [
+      "EV-0890",
+      "EV-0891"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0054",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Start_Next_Fill_After_8s_From_T2_Low",
+    "package": "tank_003::control",
+    "rationale": "Once 8 s have elapsed since T2 low, the next fill begins.",
+    "evidence": [
+      "EV-0892",
+      "EV-0893"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0055",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Hold_V2_V3_Open_During_SHUT",
+    "package": "tank_003::control",
+    "rationale": "SHUT state commands V2 and V3 to remain open.",
+    "evidence": [
+      "EV-0894"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0056",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Release_V2_V3_On_Low_Conditions",
+    "package": "tank_003::control",
+    "rationale": "When low-level conditions are satisfied, the SHUT hold on V2/V3 is released.",
+    "evidence": [
+      "EV-0895"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0057",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Ignore_START_During_SHUT_State",
+    "package": "tank_003::control",
+    "rationale": "START is ignored during SHUT state.",
+    "evidence": [
+      "EV-0896"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0058",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_Stopped_False_On_StartCmd_Rise",
+    "package": "tank_003::control",
+    "rationale": "Rising edge on startCmd clears the stopped flag.",
+    "evidence": [
+      "EV-0947"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0059",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_Stopped_True_On_StopCmd_Rise",
+    "package": "tank_003::control",
+    "rationale": "Rising edge on stopCmd sets the stopped flag.",
+    "evidence": [
+      "EV-0948"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0060",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_Valve1_On_Fill_State_Unless_Stopped",
+    "package": "tank_003::control",
+    "rationale": "When in FILL state, valve1 is commanded true unless stopped.",
+    "evidence": [
+      "EV-0949"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0061",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_Valve2_On_Transfer_State_Unless_Stopped",
+    "package": "tank_003::control",
+    "rationale": "When in TRANSFER state, valve2 is commanded true unless stopped.",
+    "evidence": [
+      "EV-0950"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0062",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_Valve3_On_Drain_State_Unless_Stopped",
+    "package": "tank_003::control",
+    "rationale": "When in DRAIN state, valve3 is commanded true unless stopped.",
+    "evidence": [
+      "EV-0951"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0063",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Close_VXS24_On_Power_Loss",
+    "package": "tank_003::physical",
+    "rationale": "Physical actuator behavior: loss of 24 VDC returns the valve to closed position.",
+    "evidence": [
+      "EV-0998"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0064",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Open_VXS24_On_24VDC_Command",
+    "package": "tank_003::physical",
+    "rationale": "Physical actuator behavior: energized 24 VDC command opens the valve.",
+    "evidence": [
+      "EV-0999",
+      "EV-1000"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0065",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Close_All_Valves_On_STOP_Command_Alt",
+    "package": "tank_003::control",
+    "rationale": "STOP command closes all three valves in the alternate controller wording.",
+    "evidence": [
+      "EV-1050",
+      "EV-1051"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0066",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Begin_Or_Resume_Automatic_Operation_On_START",
+    "package": "tank_003::control",
+    "rationale": "START begins or resumes automatic operation.",
+    "evidence": [
+      "EV-1052",
+      "EV-1053"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0067",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Begin_T1_Fill_On_START",
+    "package": "tank_003::control",
+    "rationale": "START initiates Tank 1 filling.",
+    "evidence": [
+      "EV-1054",
+      "EV-1055"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0068",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Enter_Controlled_Shutdown_On_SHUT",
+    "package": "tank_003::control",
+    "rationale": "SHUT command enters controlled shutdown mode.",
+    "evidence": [
+      "EV-1056",
+      "EV-1057"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0069",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Inhibit_V1_On_SHUT",
+    "package": "tank_003::control",
+    "rationale": "SHUT command inhibits V1.",
+    "evidence": [
+      "EV-1058",
+      "EV-1059"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0070",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Command_V2_V3_Open_Together_On_SHUT",
+    "package": "tank_003::control",
+    "rationale": "SHUT command explicitly commands V2 and V3 open together.",
+    "evidence": [
+      "EV-1060",
+      "EV-1061"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0071",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_Controller_State_On_cmd_start",
+    "package": "tank_003::control",
+    "rationale": "Edge on cmd_start causes a controller state change.",
+    "evidence": [
+      "EV-1095"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0072",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_Controller_State_On_cmd_stop",
+    "package": "tank_003::control",
+    "rationale": "Edge on cmd_stop causes a controller state change.",
+    "evidence": [
+      "EV-1096"
+    ]
+  },
+  {
+    "engineering_id": "BEH-0073",
+    "engineering_type": "behavior",
+    "sysml_construct": "action def",
+    "sysml_element_name": "Set_Controller_State_On_cmd_shut",
+    "package": "tank_003::control",
+    "rationale": "Edge on cmd_shut causes a controller state change.",
+    "evidence": [
+      "EV-1097"
+    ]
+  },
+  {
+    "engineering_id": "CON-0001",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Tank1_initial_level_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for Tank 1 initial level fixed at 0.05 m.",
+    "evidence": [
+      "EV-0068",
+      "EV-0069"
+    ]
+  },
+  {
+    "engineering_id": "CON-0002",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Tank2_initial_level_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for Tank 2 initial level fixed at 0.05 m.",
+    "evidence": [
+      "EV-0070",
+      "EV-0071"
+    ]
+  },
+  {
+    "engineering_id": "CON-0003",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Tank1_high_level_limit_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for Tank 1 high level limit fixed at 0.78 m.",
+    "evidence": [
+      "EV-0072",
+      "EV-0073"
+    ]
+  },
+  {
+    "engineering_id": "CON-0004",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Tank1_low_level_limit_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for Tank 1 low level limit fixed at 0.05 m.",
+    "evidence": [
+      "EV-0074",
+      "EV-0075"
+    ]
+  },
+  {
+    "engineering_id": "CON-0005",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Tank2_low_level_limit_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for Tank 2 low level limit fixed at 0.05 m.",
+    "evidence": [
+      "EV-0076",
+      "EV-0077"
+    ]
+  },
+  {
+    "engineering_id": "CON-0006",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "WaitAfterTank1High_duration_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for the wait duration after Tank 1 high, fixed at 10 s.",
+    "evidence": [
+      "EV-0078",
+      "EV-0079"
+    ]
+  },
+  {
+    "engineering_id": "CON-0007",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "WaitAfterTank1Low_duration_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for the wait duration after Tank 1 low, fixed at 10 s.",
+    "evidence": [
+      "EV-0080",
+      "EV-0081"
+    ]
+  },
+  {
+    "engineering_id": "CON-0008",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "WaitAfterTank2Low_duration_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for the wait duration after Tank 2 low, fixed at 10 s.",
+    "evidence": [
+      "EV-0082",
+      "EV-0083"
+    ]
+  },
+  {
+    "engineering_id": "CON-0009",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "TK101_initial_level_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for TK-101 initial level fixed at 0.05 m.",
+    "evidence": [
+      "EV-0383",
+      "EV-0384",
+      "EV-0385"
+    ]
+  },
+  {
+    "engineering_id": "CON-0010",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "TK102_initial_level_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for TK-102 initial level fixed at 0.05 m.",
+    "evidence": [
+      "EV-0386",
+      "EV-0387",
+      "EV-0388"
+    ]
+  },
+  {
+    "engineering_id": "CON-0011",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "TK101_high_level_limit_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for TK-101 high level limit fixed at 0.8 m.",
+    "evidence": [
+      "EV-0389",
+      "EV-0390",
+      "EV-0391"
+    ]
+  },
+  {
+    "engineering_id": "CON-0012",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "TK101_low_level_limit_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for TK-101 low level limit fixed at 0.05 m.",
+    "evidence": [
+      "EV-0392",
+      "EV-0393",
+      "EV-0394"
+    ]
+  },
+  {
+    "engineering_id": "CON-0013",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "TK102_low_level_limit_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for TK-102 low level limit fixed at 0.05 m.",
+    "evidence": [
+      "EV-0395",
+      "EV-0396",
+      "EV-0397"
+    ]
+  },
+  {
+    "engineering_id": "CON-0014",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Controller_waitAfterTank1High_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for controller wait-after-Tank-1-high time fixed at 10 s.",
+    "evidence": [
+      "EV-0398",
+      "EV-0399",
+      "EV-0400"
+    ]
+  },
+  {
+    "engineering_id": "CON-0015",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Controller_waitAfterTank1Low_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for controller wait-after-Tank-1-low time fixed at 12 s.",
+    "evidence": [
+      "EV-0401",
+      "EV-0402",
+      "EV-0403"
+    ]
+  },
+  {
+    "engineering_id": "CON-0016",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Controller_waitAfterTank2Low_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for controller wait-after-Tank-2-low time fixed at 8 s.",
+    "evidence": [
+      "EV-0404",
+      "EV-0405",
+      "EV-0406"
+    ]
+  },
+  {
+    "engineering_id": "CON-0017",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV101_nominal_inlet_flow_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-101 nominal inlet flow fixed at 0.006 m^3/s.",
+    "evidence": [
+      "EV-0407",
+      "EV-0408",
+      "EV-0409"
+    ]
+  },
+  {
+    "engineering_id": "CON-0018",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV102_nominal_transfer_flow_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-102 nominal transfer flow fixed at 0.0045 m^3/s.",
+    "evidence": [
+      "EV-0410",
+      "EV-0411",
+      "EV-0412"
+    ]
+  },
+  {
+    "engineering_id": "CON-0019",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV103_nominal_drain_flow_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-103 nominal drain flow fixed at 0.005 m^3/s.",
+    "evidence": [
+      "EV-0413",
+      "EV-0414",
+      "EV-0415"
+    ]
+  },
+  {
+    "engineering_id": "CON-0020",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "PLC101_scan_time_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for PLC-101 controller scan time fixed at 0.1 s.",
+    "evidence": [
+      "EV-0416",
+      "EV-0417",
+      "EV-0418"
+    ]
+  },
+  {
+    "engineering_id": "CON-0021",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Demo_simulation_stop_time_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for the simulation stop time fixed at 900 s.",
+    "evidence": [
+      "EV-0419",
+      "EV-0420",
+      "EV-0421"
+    ]
+  },
+  {
+    "engineering_id": "CON-0022",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "LT101_engineering_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for LT-101 engineering range from 0 to 1 m.",
+    "evidence": [
+      "EV-0422",
+      "EV-0423",
+      "EV-0424",
+      "EV-0425",
+      "EV-0426",
+      "EV-0427"
+    ]
+  },
+  {
+    "engineering_id": "CON-0023",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "LT102_engineering_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for LT-102 engineering range from 0 to 1 m.",
+    "evidence": [
+      "EV-0428",
+      "EV-0429",
+      "EV-0430",
+      "EV-0431",
+      "EV-0432",
+      "EV-0433"
+    ]
+  },
+  {
+    "engineering_id": "CON-0024",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "PBSTART_engineering_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for PB-START boolean engineering range 0 to 1.",
+    "evidence": [
+      "EV-0434",
+      "EV-0435",
+      "EV-0436"
+    ]
+  },
+  {
+    "engineering_id": "CON-0025",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "PBSTOP_engineering_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for PB-STOP boolean engineering range 0 to 1.",
+    "evidence": [
+      "EV-0437",
+      "EV-0438",
+      "EV-0439"
+    ]
+  },
+  {
+    "engineering_id": "CON-0026",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "PBSHUT_engineering_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for PB-SHUT boolean engineering range 0 to 1.",
+    "evidence": [
+      "EV-0440",
+      "EV-0441",
+      "EV-0442"
+    ]
+  },
+  {
+    "engineering_id": "CON-0027",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "DO101_engineering_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for DO-101 boolean engineering range 0 to 1.",
+    "evidence": [
+      "EV-0443",
+      "EV-0444",
+      "EV-0445"
+    ]
+  },
+  {
+    "engineering_id": "CON-0028",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "DO102_engineering_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for DO-102 boolean engineering range 0 to 1.",
+    "evidence": [
+      "EV-0446",
+      "EV-0447",
+      "EV-0448"
+    ]
+  },
+  {
+    "engineering_id": "CON-0029",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "DO103_engineering_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for DO-103 boolean engineering range 0 to 1.",
+    "evidence": [
+      "EV-0449",
+      "EV-0450",
+      "EV-0451"
+    ]
+  },
+  {
+    "engineering_id": "CON-0030",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "V1_V2_simultaneous_open_state_limit",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint forbidding simultaneous open state for V1 and V2.",
+    "evidence": [
+      "EV-0733"
+    ]
+  },
+  {
+    "engineering_id": "CON-0031",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "V2_V3_simultaneous_open_normal_limit",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint forbidding simultaneous open state for V2 and V3 during normal automatic operation.",
+    "evidence": [
+      "EV-0734"
+    ]
+  },
+  {
+    "engineering_id": "CON-0032",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "V2_V3_simultaneous_open_shutdown_requirement",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint requiring V2 and V3 to be simultaneously open in SHUTDOWN.",
+    "evidence": [
+      "EV-0735",
+      "EV-0736"
+    ]
+  },
+  {
+    "engineering_id": "CON-0033",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Controller_outputs_false_on_power_loss_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint forcing controller output commands to false on power loss.",
+    "evidence": [
+      "EV-0737"
+    ]
+  },
+  {
+    "engineering_id": "CON-0034",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Level_threshold_comparison_inclusive_rule",
+    "package": "tank_003::constraints",
+    "rationale": "Constraint on comparison semantics; modeled as a constraint definition even though not numeric.",
+    "evidence": [
+      "EV-0738"
+    ]
+  },
+  {
+    "engineering_id": "CON-0035",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "T1_high_limit_lower_bound",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint with a lower bound of 0.78 m for T1 high limit.",
+    "evidence": [
+      "EV-0739"
+    ]
+  },
+  {
+    "engineering_id": "CON-0036",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "T1_high_threshold_height_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for T1 high threshold height between 0.78 and 0.8 m.",
+    "evidence": [
+      "EV-0828"
+    ]
+  },
+  {
+    "engineering_id": "CON-0037",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Post_transfer_delay_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for post-transfer delay fixed at 12 s.",
+    "evidence": [
+      "EV-0829"
+    ]
+  },
+  {
+    "engineering_id": "CON-0038",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Inter_cycle_delay_after_T2_low_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for inter-cycle delay after Tank 2 low fixed at 8 s.",
+    "evidence": [
+      "EV-0830"
+    ]
+  },
+  {
+    "engineering_id": "CON-0039",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "T1_fill_target_level_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for T1 fill target level fixed at 0.8 m.",
+    "evidence": [
+      "EV-0852"
+    ]
+  },
+  {
+    "engineering_id": "CON-0040",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "T1_low_dead_time_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for T1 low dead time fixed at 12 s.",
+    "evidence": [
+      "EV-0853"
+    ]
+  },
+  {
+    "engineering_id": "CON-0041",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "T2_refill_after_low_delay_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for T2 refill-after-low delay fixed at 8 s.",
+    "evidence": [
+      "EV-0854"
+    ]
+  },
+  {
+    "engineering_id": "CON-0042",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "T1_high_limit_upper_bound",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint capping T1 high limit at 0.8 m.",
+    "evidence": [
+      "EV-0897",
+      "EV-0898"
+    ]
+  },
+  {
+    "engineering_id": "CON-0043",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Drain_valve_opening_delay_after_T1_low_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for drain valve opening delay after T1 low fixed at 12 s.",
+    "evidence": [
+      "EV-0899",
+      "EV-0900"
+    ]
+  },
+  {
+    "engineering_id": "CON-0044",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Next_fill_after_T2_low_delay_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for next fill start after T2 low fixed at 8 s.",
+    "evidence": [
+      "EV-0901",
+      "EV-0902"
+    ]
+  },
+  {
+    "engineering_id": "CON-0045",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "tank1Level_value_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint placeholder for tank1Level measurement value; evidence indicates a level-related bound.",
+    "evidence": [
+      "EV-0952"
+    ]
+  },
+  {
+    "engineering_id": "CON-0046",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "tank2Level_value_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint placeholder for tank2Level measurement value; evidence indicates a level-related bound.",
+    "evidence": [
+      "EV-0953"
+    ]
+  },
+  {
+    "engineering_id": "CON-0047",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV101_demo_flow_coefficient_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-101 nominal demo flow coefficient equivalent fixed at 0.006 m^3/s.",
+    "evidence": [
+      "EV-1001"
+    ]
+  },
+  {
+    "engineering_id": "CON-0048",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV102_demo_flow_coefficient_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-102 nominal demo flow coefficient equivalent fixed at 0.0045 m^3/s.",
+    "evidence": [
+      "EV-1002"
+    ]
+  },
+  {
+    "engineering_id": "CON-0049",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV103_demo_flow_coefficient_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-103 nominal demo flow coefficient equivalent fixed at 0.005 m^3/s.",
+    "evidence": [
+      "EV-1003"
+    ]
+  },
+  {
+    "engineering_id": "CON-0050",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV101_full_open_stroke_time_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-101 full open stroke time fixed at 0.8 s.",
+    "evidence": [
+      "EV-1004"
+    ]
+  },
+  {
+    "engineering_id": "CON-0051",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV102_full_open_stroke_time_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-102 full open stroke time fixed at 0.8 s.",
+    "evidence": [
+      "EV-1005"
+    ]
+  },
+  {
+    "engineering_id": "CON-0052",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV103_full_open_stroke_time_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-103 full open stroke time fixed at 0.8 s.",
+    "evidence": [
+      "EV-1006"
+    ]
+  },
+  {
+    "engineering_id": "CON-0053",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV101_full_close_stroke_time_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-101 full close stroke time fixed at 0.6 s.",
+    "evidence": [
+      "EV-1007"
+    ]
+  },
+  {
+    "engineering_id": "CON-0054",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV102_full_close_stroke_time_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-102 full close stroke time fixed at 0.6 s.",
+    "evidence": [
+      "EV-1008"
+    ]
+  },
+  {
+    "engineering_id": "CON-0055",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "XV103_full_close_stroke_time_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for XV-103 full close stroke time fixed at 0.6 s.",
+    "evidence": [
+      "EV-1009"
+    ]
+  },
+  {
+    "engineering_id": "CON-0056",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "T1_level_upper_bound",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint capping T1 level at 0.8 m.",
+    "evidence": [
+      "EV-1062"
+    ]
+  },
+  {
+    "engineering_id": "CON-0057",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "AllValves_closed_during_stop_interval_220_280",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint requiring zero open valves during STOP interval 220 s to 280 s.",
+    "evidence": [
+      "EV-1063"
+    ]
+  },
+  {
+    "engineering_id": "CON-0058",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "AllValves_closed_during_stop_interval_650_700",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint requiring zero open valves during STOP interval 650 s to 700 s.",
+    "evidence": [
+      "EV-1064"
+    ]
+  },
+  {
+    "engineering_id": "CON-0059",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "V1_commanded_closed_at_700s_shutdown",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint requiring V1 commanded state to be closed at 700 s during shutdown.",
+    "evidence": [
+      "EV-1065"
+    ]
+  },
+  {
+    "engineering_id": "CON-0060",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "V2_V3_commanded_open_at_700s_shutdown",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint requiring V2 and V3 commanded open at 700 s during shutdown.",
+    "evidence": [
+      "EV-1066"
+    ]
+  },
+  {
+    "engineering_id": "CON-0061",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Controller_simulation_duration_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for controller simulation duration fixed at 900 s.",
+    "evidence": [
+      "EV-1067",
+      "EV-1068"
+    ]
+  },
+  {
+    "engineering_id": "CON-0062",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "Controller_logging_interval_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for controller logging interval fixed at 1 s.",
+    "evidence": [
+      "EV-1069"
+    ]
+  },
+  {
+    "engineering_id": "CON-0063",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "State_boundary_timestamp_tolerance_range",
+    "package": "tank_003::constraints",
+    "rationale": "Bounded-range constraint for timestamp tolerance from -2 s to 2 s.",
+    "evidence": [
+      "EV-1070"
+    ]
+  },
+  {
+    "engineering_id": "CON-0064",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "time_s_value_range",
+    "package": "tank_003::simulation",
+    "rationale": "Bounded-range constraint for the time axis from 0 to 900 s.",
+    "evidence": [
+      "EV-1098"
+    ]
+  },
+  {
+    "engineering_id": "CON-0065",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "cmd_start_value_range",
+    "package": "tank_003::simulation",
+    "rationale": "Bounded-range constraint for cmd_start boolean-like value from 0 to 1.",
+    "evidence": [
+      "EV-1099"
+    ]
+  },
+  {
+    "engineering_id": "CON-0066",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "cmd_stop_value_range",
+    "package": "tank_003::simulation",
+    "rationale": "Bounded-range constraint for cmd_stop boolean-like value from 0 to 1.",
+    "evidence": [
+      "EV-1100"
+    ]
+  },
+  {
+    "engineering_id": "CON-0067",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "cmd_shut_value_range",
+    "package": "tank_003::simulation",
+    "rationale": "Bounded-range constraint for cmd_shut boolean-like value from 0 to 1.",
+    "evidence": [
+      "EV-1101"
+    ]
+  },
+  {
+    "engineering_id": "CON-0068",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "tank1_level_m_value_range",
+    "package": "tank_003::simulation",
+    "rationale": "Bounded-range constraint for tank1_level_m from 0.05 to 0.8 m.",
+    "evidence": [
+      "EV-1102"
+    ]
+  },
+  {
+    "engineering_id": "CON-0069",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "tank2_level_m_value_range",
+    "package": "tank_003::simulation",
+    "rationale": "Bounded-range constraint for tank2_level_m from 0.05 to 0.69286 m.",
+    "evidence": [
+      "EV-1103"
+    ]
+  },
+  {
+    "engineering_id": "CON-0070",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "valve1_open_value_range",
+    "package": "tank_003::simulation",
+    "rationale": "Bounded-range constraint for valve1_open from 0 to 1.",
+    "evidence": [
+      "EV-1104"
+    ]
+  },
+  {
+    "engineering_id": "CON-0071",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "valve2_open_value_range",
+    "package": "tank_003::simulation",
+    "rationale": "Bounded-range constraint for valve2_open from 0 to 1.",
+    "evidence": [
+      "EV-1105"
+    ]
+  },
+  {
+    "engineering_id": "CON-0072",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "valve3_open_value_range",
+    "package": "tank_003::simulation",
+    "rationale": "Bounded-range constraint for valve3_open from 0 to 1.",
+    "evidence": [
+      "EV-1106"
+    ]
+  },
+  {
+    "engineering_id": "CON-0073",
+    "engineering_type": "constraint",
+    "sysml_construct": "constraint def",
+    "sysml_element_name": "wait_remaining_s_value_range",
+    "package": "tank_003::simulation",
+    "rationale": "Bounded-range constraint for wait_remaining_s from 0 to 12 s.",
+    "evidence": [
+      "EV-1107"
+    ]
+  }
+]
