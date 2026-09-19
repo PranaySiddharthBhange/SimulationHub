@@ -1,0 +1,204 @@
+{
+  "generation_id": "gen_0001",
+  "status": "PASSED",
+  "syntax_errors": [],
+  "structural_errors": [],
+  "requirement_coverage": {
+    "total": 224,
+    "implemented": 224,
+    "missing": []
+  },
+  "traceability_errors": [],
+  "semantic_errors": [
+    {
+      "element": "Requirements.sysml / V1_open_during_normal_operation",
+      "expected": "V1 should be open during normal operation.",
+      "actual": "The requirement is represented as a ScalarValues::Real attribute with no open-state meaning; it does not encode the required open state."
+    },
+    {
+      "element": "Requirements.sysml / SHUT_opens_V2",
+      "expected": "SHUT should command V2 and V3 open and inhibit V1.",
+      "actual": "The requirement is represented as a ScalarValues::Real attribute with no command-state semantics; it does not encode the required open command."
+    },
+    {
+      "element": "Requirements.sysml / SHUT_opens_V3",
+      "expected": "SHUT should command V2 and V3 open and inhibit V1.",
+      "actual": "The requirement is represented as a ScalarValues::Real attribute with no command-state semantics; it does not encode the required open command."
+    },
+    {
+      "element": "Requirements.sysml / SHUT_empties_T1_and_T2",
+      "expected": "SHUT should empty both tanks.",
+      "actual": "The requirement is represented as a ScalarValues::Real attribute, which does not capture the empty-tank condition."
+    },
+    {
+      "element": "Requirements.sysml / V2_V3_simultaneous_open_allowed",
+      "expected": "V2 and V3 simultaneous open state should be allowed during SHUT mode.",
+      "actual": "The requirement is represented as a ScalarValues::Real attribute, which does not capture the allowed simultaneous-open condition."
+    },
+    {
+      "element": "Requirements.sysml / command_priority_SHUT_STOP_START",
+      "expected": "Command priority should be SHUT > STOP > START.",
+      "actual": "The requirement is represented as a ScalarValues::Real attribute, which does not encode command ordering."
+    },
+    {
+      "element": "Requirements.sysml / V2_V3_commanded_state_open_during_SHUT",
+      "expected": "During SHUT, V2 and V3 should be commanded open.",
+      "actual": "The requirement is represented as a ScalarValues::Real attribute, which does not encode the open commanded state."
+    },
+    {
+      "element": "Requirements.sysml / tank1_level_default_005g",
+      "expected": "tank1 level default value should be 0.05 m.",
+      "actual": "The unit is g, which does not match the contract's level unit of metres."
+    },
+    {
+      "element": "Requirements.sysml / tank2_level_default_005g",
+      "expected": "tank2 level default value should be 0.05 m.",
+      "actual": "The unit is g, which does not match the contract's level unit of metres."
+    },
+    {
+      "element": "Requirements.sysml / T1_high_limit_078m",
+      "expected": "T1 high limit should be 0.78 m.",
+      "actual": "No binding/value is shown; the requirement only declares a Real attribute and does not encode the specified limit."
+    },
+    {
+      "element": "Requirements.sysml / tank1_level_default_005g",
+      "expected": "Tank 1 level default value should be 0.05 m.",
+      "actual": "The requirement uses a mass unit (g) rather than the contract's level unit (m)."
+    },
+    {
+      "element": "Requirements.sysml / tank2_level_default_005g",
+      "expected": "Tank 2 level default value should be 0.05 m.",
+      "actual": "The requirement uses a mass unit (g) rather than the contract's level unit (m)."
+    },
+    {
+      "element": "Behaviors.sysml / close_V1_at_T1_high",
+      "expected": "V1 should close when Tank 1 level reaches 0.78 m.",
+      "actual": "The trigger value is 0.78 m, but the contract's effective T1 high limit is 0.80 m."
+    },
+    {
+      "element": "Behaviors.sysml / open_V2_after_T1_high_delay_12s",
+      "expected": "V2 should open after a 10 s wait following Tank 1 high.",
+      "actual": "The action is triggered after 12 s, but the contract for this behavior says 10 s."
+    },
+    {
+      "element": "Behaviors.sysml / open_V3_after_T1_low_delay_12s",
+      "expected": "V3 should open after a 10 s wait following Tank 1 low.",
+      "actual": "The action is triggered after 12 s, but the contract for this behavior says 10 s."
+    },
+    {
+      "element": "Behaviors.sysml / start_automatic_fill_transfer_drain_sequence",
+      "expected": "START should begin the automatic fill-transfer-drain sequence when the process is idle or paused.",
+      "actual": "The trigger is modeled as a range of states 'idle or paused' but the action text omits the explicit valid START-command condition; it does not encode the contract's START-command trigger."
+    },
+    {
+      "element": "Behaviors.sysml / enter_IDLE_on_both_levels_low",
+      "expected": "When both LT-101 and LT-102 are at or below low-level setpoints, the controller should enter IDLE.",
+      "actual": "The model labels the transition as an action on the controller state but does not encode the required state-entry semantics cleanly; the trigger/action text is not a direct representation of the contract."
+    },
+    {
+      "element": "Behaviors.sysml / maintain_V2_V3_open_in_SHUT",
+      "expected": "During SHUT, V2 and V3 should be commanded open.",
+      "actual": "The action text says 'maintain command open' but the contract specifies that V2 and V3 stay commanded open until both tanks are at low level; the model omits the completion condition."
+    },
+    {
+      "element": "Behaviors.sysml / set_T1_high_limit_at_080m",
+      "expected": "T1 high limit should be 0.8 m.",
+      "actual": "The trigger uses 0.8 m, but the contract also requires this to be the effective high limit after approved change; the model does not distinguish that from the earlier 0.78 m baseline."
+    },
+    {
+      "element": "Behaviors.sysml / open_drain_valve_after_T1_low_delay_12s",
+      "expected": "Drain valve should open after 12 s following T1 low.",
+      "actual": "This behavior is stated without the contractually required sequencing context that it follows T1 low before opening the drain valve."
+    },
+    {
+      "element": "Behaviors.sysml / start_next_fill_after_T2_low_delay_8s",
+      "expected": "Next fill should start after 8 s following T2 low.",
+      "actual": "This behavior is stated without the contractually required sequencing context that it follows T2 low before next fill starts."
+    },
+    {
+      "element": "Behaviors.sysml / open_VXS_24_valve_on_24VDC_command",
+      "expected": "24 VDC energized command should open the VXS-24 valve.",
+      "actual": "The trigger and action are represented, but the actuator-command polarity is only loosely captured and not explicitly tied to the contract's energized=open semantics."
+    },
+    {
+      "element": "Constraints.sysml / Tank1_high_limit_078m_constraint",
+      "expected": "Tank 1 high limit should be 0.78 m.",
+      "actual": "The constraint only declares an attribute and does not bind the value 0.78 m."
+    },
+    {
+      "element": "Constraints.sysml / Wait_after_T1_high_duration_10s_constraint",
+      "expected": "Wait after T1 high duration should be 10 s.",
+      "actual": "The constraint only declares an attribute and does not bind the value 10 s."
+    },
+    {
+      "element": "Constraints.sysml / T1_high_limit_effective_080m_constraint",
+      "expected": "T1 high limit effective value should be 0.80 m.",
+      "actual": "The constraint only declares an attribute and does not bind the value 0.80 m."
+    },
+    {
+      "element": "Constraints.sysml / V1_V2_simultaneous_open_status_0_constraint",
+      "expected": "V1 and V2 simultaneous open status should be not allowed (false).",
+      "actual": "The constraint expresses the value as 0 but without a clearly typed boolean prohibition; the semantic meaning is not explicit."
+    },
+    {
+      "element": "Constraints.sysml / V2_V3_simultaneous_open_status_SHUTDOWN_1_constraint",
+      "expected": "V2 and V3 simultaneous open status in SHUTDOWN should be allowed (true).",
+      "actual": "The constraint expresses the value as 1 but the surrounding model does not clearly tie this to SHUTDOWN-only allowance."
+    },
+    {
+      "element": "Architecture.sysml / stop",
+      "expected": "STOP should be an operator command entity.",
+      "actual": "It is also used as part of a control relationship to START and SHUT; the model does not distinguish the command from related relationships, making the semantic intent ambiguous."
+    },
+    {
+      "element": "Architecture.sysml / start",
+      "expected": "START should be an operator command entity.",
+      "actual": "It is used as a target of a control relation from SHUT, which does not clearly preserve the contract's command-role semantics."
+    },
+    {
+      "element": "Architecture.sysml / shut",
+      "expected": "SHUT should be an operator command entity.",
+      "actual": "The element participates in a control relation to STOP, which does not represent the contract's command-role semantics cleanly."
+    },
+    {
+      "element": "Architecture.sysml / connect stop to start; // depends_on",
+      "expected": "STOP and START should be separate operator commands with no dependency relation implied by the contract.",
+      "actual": "A dependency from STOP to START is introduced, which does not correspond to the contract and misrepresents the command relationship."
+    },
+    {
+      "element": "Architecture.sysml / connect stop to shut; // depends_on",
+      "expected": "STOP and SHUT should be separate operator commands with no dependency relation implied by the contract.",
+      "actual": "A dependency from STOP to SHUT is introduced, which does not correspond to the contract and misrepresents the command relationship."
+    },
+    {
+      "element": "Architecture.sysml / connect start to shut; // controls",
+      "expected": "START should not control SHUT.",
+      "actual": "The model shows START controlling SHUT, which reverses the intended command semantics."
+    },
+    {
+      "element": "Architecture.sysml / connect v2 to v3; // mutually_exclusive",
+      "expected": "V2 and V3 should be mutually exclusive only in normal automatic operation, with the SHUT exception waived.",
+      "actual": "The relationship states unconditional mutual exclusivity between V2 and V3, which contradicts the contract's SHUT-mode waiver."
+    },
+    {
+      "element": "Architecture.sysml / connect xV_103 to tK_101; // serves",
+      "expected": "XV-103 should serve TK-102.",
+      "actual": "The serving relationship is attached to TK-101 instead of TK-102, flipping the intended valve-to-tank association."
+    },
+    {
+      "element": "Architecture.sysml / connect lT_101 to t1; // connected_to",
+      "expected": "LT-101 should connect to T1 (tank1).",
+      "actual": "The target is the part typed T1, but elsewhere T1 is used as a tank alias and the semantic linkage is not clearly the level measurement to tank connection as in the contract."
+    },
+    {
+      "element": "Architecture.sysml / connect lT_102 to tank2; // connected_to",
+      "expected": "LT-102 should connect to T2 (tank2).",
+      "actual": "The target uses the lower-case tank2 part rather than the contract's T2 alias, creating a semantic mismatch in the modeled connection."
+    },
+    {
+      "element": "Architecture.sysml / connect v2 to v3; // mutually_exclusive",
+      "expected": "V2 and V3 should be simultaneously open in SHUT mode.",
+      "actual": "By modeling them as mutually exclusive, the SHUT-mode exception is lost."
+    }
+  ]
+}

@@ -90,3 +90,35 @@ D18 | Replace test-case-specific system prompts with domain-general instructions
 D19 | Connect the Document, SysML, Modelica, and Compiler agents through one orchestrated pipeline with explicit handoff contracts | Separate agents without a shared execution path can each appear complete while their facts, names, topology, and parameters disagree.
 
 D20 | Add result-level verification and feedback before publishing generated artifacts | A model can parse or compile and still produce incorrect physical behavior, so simulation outputs must be checked against requirements, invariants, and expected system behavior.
+
+## Tank case working features
+
+D21 | Use whole-packet engineering reasoning before generation | Tank behavior depends on revisions, units, command timing, initial conditions, and acceptance criteria that cannot be recovered safely from isolated document extraction.
+
+D22 | Keep source evidence, locators, chronology, and hashes attached to interpreted facts | Human reviewers need to trace each tank parameter and behavior claim back to the exact source.
+
+D23 | Require a human-in-the-loop decision when material choices remain unresolved | The platform must expose ambiguity through `NEEDS_CLARIFICATION` instead of inventing a tank medium, setpoint, or command priority.
+
+D24 | Enforce context and spend budgets for each reasoning stage | Large packets and repeated repairs must fail or stop explicitly instead of silently truncating evidence or exceeding the run's cost boundary.
+
+D25 | Hold out designated reference tables from generation and use them only for independent evaluation | The tank agent must demonstrate behavior against unseen trajectories rather than reproduce a supplied answer table.
+
+D26 | Generate one complete SysML model and one complete Modelica model per tank run | Whole models keep structure, behavior, equations, and correspondence understandable and prevent drift across fragmented artifacts.
+
+D27 | Run the real SysML parser and semantic review before attempting Modelica | A syntactically or semantically invalid system description should stop downstream generation.
+
+D28 | Use OpenModelica compilation, initialization, and simulation as executable release gates | Text generation and parser success do not establish that the tank equations run correctly.
+
+D29 | Check trajectories, event timing, invariants, acceptance criteria, and reference tolerances before declaring READY | A compiling tank model can still violate stop/resume, shutdown, level, or valve-interlock behavior.
+
+D30 | Propagate source-grounded corrections upstream and regenerate dependent artifacts | A discovered error in the tank brief must revise SysML and Modelica together rather than leave stale downstream results.
+
+D31 | Bound repair attempts and classify unresolved failures for human review | Repeated automated edits can mask a wrong equation or contradiction; the tank run needs a visible stopping point.
+
+D32 | Record settings, prompts, upstream outputs, artifact hashes, checks, and revision history for resumable runs | Reproducibility and cache invalidation require knowing exactly which evidence and configuration produced each tank result.
+
+D33 | Validate paths and input coverage and report unsupported files explicitly | The tank packet must not mix projects, traverse unsafe paths, or silently omit unreadable engineering evidence.
+
+D34 | Keep independent benchmark models outside the production generator | Offline physical oracles provide an unbiased check of tank verification without leaking benchmark constants into generation.
+
+D35 | Provide a CLI for full runs, individual stages, inspection, simulation, status, and source-only analysis | A command-line interface makes tank processing repeatable, scriptable, auditable, and usable in local or automated validation environments without depending on a GUI.

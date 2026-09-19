@@ -109,3 +109,87 @@
 - **Correction:** Add requirement checks, state and interlock checks, conservation/invariant checks, trajectory plausibility checks, and result feedback before publishing.
 - **Evidence:** Incorrect simulation results expose the gap between compilation and engineering correctness.
 - **Human judgment:** Compilation is necessary, but result validation decides whether the generated model is trustworthy.
+
+### A15 Whole-packet tank understanding
+
+- **AI output:** The working platform reads the complete tank packet and produces one engineering brief covering revisions, units, balances, initial conditions, commands, timing, outputs, and acceptance criteria.
+- **Why it exists:** Tank behavior is distributed across requirements, design notes, correspondence, datasets, and diagrams; isolated extraction loses the relationships between them.
+- **Control:** The brief is reviewed against the original packet before model generation.
+
+### A16 Evidence and traceability
+
+- **AI output:** Interpreted values retain source filenames, page or row locators, quoted evidence, chronology, and hashes.
+- **Why it exists:** A reviewer must be able to explain where every tank limit, wait, command priority, and physical assumption comes from.
+- **Control:** Unlocated or unsupported claims remain visible instead of becoming silent model inputs.
+
+### A17 Human-in-the-loop clarification
+
+- **AI output:** The run returns `NEEDS_CLARIFICATION` when a material choice or conflicting tank requirement cannot be resolved from the packet.
+- **Why it exists:** The system must not invent a fluid, setpoint, initial condition, or command priority to force generation to continue.
+- **Control:** Noninteractive runs stop with the unresolved question and preserve the evidence needed for a human decision.
+
+### A18 Budget and context constraints
+
+- **AI output:** Each stage enforces a maximum context size and estimated spend cap, including bounded repair calls.
+- **Why it exists:** Silent truncation can hide tank requirements, while unlimited retries make cost and behavior unpredictable.
+- **Control:** Oversized packets and exhausted budgets fail explicitly and can be resumed with a new invocation.
+
+### A19 Reference-data holdout
+
+- **AI output:** Designated tank reference tables are withheld from generation and used only for independent comparison.
+- **Why it exists:** Reusing expected trajectories would let the agent copy the answer instead of demonstrating correct physics.
+- **Control:** Reports identify reference evaluation separately from agent generation.
+
+### A20 Single-model generation
+
+- **AI output:** The run emits one understandable `Model.sysml` and one self-contained `Model.mo` for the tank case.
+- **Why it exists:** Fragmented files make correspondence, review, and behavior consistency difficult.
+- **Control:** Both artifacts are generated from the reviewed problem interpretation and are cross-checked against each other.
+
+### A21 Deterministic validation gates
+
+- **AI output:** The actual SysML parser and semantic checks run before OpenModelica compilation, initialization, and simulation.
+- **Why it exists:** Attractive text or a parser-only pass cannot establish that the tank model is executable.
+- **Control:** Missing outputs, parser failures, translation errors, initialization failures, and incomplete simulations block `READY`.
+
+### A22 Result-level verification
+
+- **AI output:** Tank trajectories are checked for event timing, level limits, valve interlocks, STOP/START resume, SHUT priority, invariants, acceptance criteria, and reference tolerances.
+- **Why it exists:** A model can compile while producing physically or behaviorally wrong results.
+- **Control:** Raw event rows and the requested logging endpoints are checked before the report is published.
+
+### A23 Upstream correction loop
+
+- **AI output:** A source-grounded review correction reruns understanding and regenerates dependent SysML and Modelica artifacts.
+- **Why it exists:** Keeping an old brief while repairing only downstream code can preserve the original tank mistake.
+- **Control:** Previous interpretations and corrections remain in project state for auditability.
+
+### A24 Bounded repair and escalation
+
+- **AI output:** Automated repairs are limited, classified, and escalated when the tank failure remains unresolved.
+- **Why it exists:** Unlimited edits can hide contradictory requirements or incorrect equations.
+- **Control:** The run records the failure class and stops at a visible human decision point.
+
+### A25 Reproducible resumable runs
+
+- **AI output:** Settings, prompts, source and artifact hashes, checks, mappings, cache decisions, and revision history are stored with the tank project.
+- **Why it exists:** A later run must be able to explain or invalidate an earlier result when evidence or configuration changes.
+- **Control:** Changed or deleted inputs make dependent artifacts stale and trigger regeneration or revalidation.
+
+### A26 Safe intake and explicit coverage
+
+- **AI output:** The platform validates archive paths, accounts for every tank input member, and reports unsupported or unreadable files.
+- **Why it exists:** Mixed projects, unsafe paths, and silent omissions can invalidate the engineering interpretation.
+- **Control:** Unsupported formats and failed reads are surfaced with the exact file and reason.
+
+### A27 Independent benchmark oracles
+
+- **AI output:** Separate reference models and fixed tolerances evaluate the tank verifier without being imported by production generation code.
+- **Why it exists:** An independent oracle tests numerical machinery without leaking the expected answer into the agent.
+- **Control:** Offline reference reports clearly distinguish physical baseline checks from generated-model claims.
+
+### A28 CLI-based operation
+
+- **AI output:** The tank workflow is available through a CLI for full execution and separate `index`, `inspect`, `sysml`, `simulate`, `status`, and `sources` commands.
+- **Why it exists:** Repeatable command invocation supports automation, stage-by-stage debugging, resumable runs, and reviewable validation records.
+- **Control:** Each command uses the same project state and artifacts, so a run can be inspected or resumed without relying on a graphical interface.

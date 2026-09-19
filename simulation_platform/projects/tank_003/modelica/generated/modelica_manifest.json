@@ -1,0 +1,22 @@
+{
+  "modelica_version": "v0001",
+  "sysml_version": "v0001",
+  "knowledge_version": "v0001",
+  "entry_class": "Tank003System",
+  "classes": [
+    "tankController",
+    "LT101",
+    "LT102",
+    "Tank_Filling_Emptying_System",
+    "Tank003System"
+  ],
+  "files": [
+    "LT101.mo",
+    "LT102.mo",
+    "Tank003System.mo",
+    "Tank_Filling_Emptying_System.mo",
+    "package.mo",
+    "package.order",
+    "tankController.mo"
+  ]
+}

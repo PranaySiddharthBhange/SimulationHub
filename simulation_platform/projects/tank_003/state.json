@@ -1,0 +1,18 @@
+{
+  "project_id": "tank_003",
+  "stage_1": {
+    "status": "completed",
+    "input_hash": "7df7c912a2d1b079608b32b1396393b9e4dcff98d8535bcaa460f05307214988",
+    "completed_at": "2026-09-19T05:30:00+00:00"
+  },
+  "stage_2": {
+    "status": "completed",
+    "input_hash": "ba4b4d467fc54284e6cd23210ee557c3c1b2739ccc77374fd43888d39e4c463c",
+    "completed_at": "2026-09-19T05:30:00+00:00"
+  },
+  "stage_3": {
+    "status": "completed",
+    "input_hash": "89251ca48b908aa597aadecae581b003465bebfb29bdbc936f53c3020fe57529",
+    "completed_at": "2026-09-19T05:30:00+00:00"
+  }
+}

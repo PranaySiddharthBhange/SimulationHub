@@ -1,0 +1,2 @@
+[console_scripts]
+simulation-platform = simulation_platform.cli:main
