@@ -193,3 +193,11 @@
 - **AI output:** The tank workflow is available through a CLI for full execution and separate `index`, `inspect`, `sysml`, `simulate`, `status`, and `sources` commands.
 - **Why it exists:** Repeatable command invocation supports automation, stage-by-stage debugging, resumable runs, and reviewable validation records.
 - **Control:** Each command uses the same project state and artifacts, so a run can be inspected or resumed without relying on a graphical interface.
+
+### A29 Generalized architecture and local extraction
+
+- **Architectural finding:** The implementation is still too specific to the tank system and the rigid contract layer makes the pipeline too restrictive for new engineering problems.
+- **Decision:** Generalize the pipeline around reusable evidence, reasoning, and validation capabilities; remove the strict contract from the runtime handoff path so valid variations are not rejected prematurely.
+- **Cost finding:** Sending document extraction to OpenAI for every source file creates excessive cost before engineering reasoning begins.
+- **Implementation change:** Run only document extraction on a local Gemma 4B-class model. Keep later interpretation, model generation, review, and validation stages available for higher-capability reasoning where needed.
+- **Expected effect:** Lower extraction cost, broader problem coverage, and fewer false failures caused by tank-specific contracts.

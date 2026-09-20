@@ -122,3 +122,15 @@ D33 | Validate paths and input coverage and report unsupported files explicitly 
 D34 | Keep independent benchmark models outside the production generator | Offline physical oracles provide an unbiased check of tank verification without leaking benchmark constants into generation.
 
 D35 | Provide a CLI for full runs, individual stages, inspection, simulation, status, and source-only analysis | A command-line interface makes tank processing repeatable, scriptable, auditable, and usable in local or automated validation environments without depending on a GUI.
+
+## Architecture change for generalization and extraction cost
+
+D36 | Generalize the production pipeline beyond tank-specific assumptions | The current implementation embeds tank names, sequence assumptions, fixed interfaces, and case-specific expectations in prompts and mappings. A new engineering problem must instead define its own parts, physics, behaviors, interfaces, and acceptance checks while reusing the same evidence, reasoning, generation, and validation capabilities.
+
+D37 | Remove the rigid tank-shaped contract from runtime handoffs | The existing contract rejects valid variations before the evidence is understood and forces unrelated systems into tank-specific fields. Keep typed structures only where they protect safety-critical handoffs, while allowing the problem-specific engineering brief and intermediate results to carry domain-appropriate content with traceable validation.
+
+D38 | Run document extraction locally with a Gemma 4B-class model | Extraction reads every page, table, spreadsheet row, email, image, and legacy artifact, so sending this high-volume work to OpenAI creates unnecessary cost before engineering judgment begins. A local model handles document classification, text and table extraction, supported image transcription, and source locator capture.
+
+D39 | Preserve extraction evidence and uncertainty when using the local model | Local extraction must retain original files, quoted spans, page or row locations, parser status, confidence, and unresolved extraction errors. This makes low-confidence or incomplete results visible for review instead of allowing an inexpensive extraction pass to become an untraceable source of model facts.
+
+D40 | Reserve higher-cost reasoning calls for interpretation, generation, review, and repair | OpenAI remains available for whole-problem interpretation, conflict resolution, SysML and Modelica generation, semantic review, and bounded repair when stronger reasoning is needed. The split lowers recurring extraction cost while deterministic validators and human review protect against local extraction mistakes.
