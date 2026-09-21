@@ -1,0 +1,100 @@
+## Entities
+
+*   **Controller:** Logical component, control system
+*   **Tank 1:** Physical component, storage tank
+*   **Tank 2:** Physical component, storage tank
+*   **V1:** Physical component, inlet valve
+*   **V2:** Physical component, transfer valve
+*   **V3:** Physical component, drain valve
+*   **XV-101:** Physical component, valve actuator
+*   **XV-102:** Physical component, valve actuator
+*   **XV-103:** Physical component, valve actuator
+*   **LT-101:** Physical component, level sensor
+*   **LT-102:** Physical component, level sensor
+*   **DR-02:** Logical component, command priority scheme
+*   **ICD-01:** Logical component, interface definition
+
+## Relationships
+
+*   **Controller** *controls* **V1**
+*   **Controller** *controls* **V2**
+*   **Controller** *controls* **V3**
+*   **V1** *connected_to* **Tank 1**
+*   **V2** *connected_to* **Tank 1**
+*   **V2** *connected_to* **Tank 2**
+*   **V3** *connected_to* **Tank 2**
+*   **XV-101** *connected_to* **V1**
+*   **XV-102** *connected_to* **V2**
+*   **XV-103** *connected_to* **V3**
+*   **LT-101** *supplies* **Controller**
+*   **LT-102** *supplies* **Controller**
+*   **Controller** *triggers* **automatic fill-transfer-drain sequence**
+*   **Controller** *triggers* **Tank 1 filling operation**
+*   **Controller** *triggers* **Tank 1 draining operation**
+*   **Controller** *triggers* **Tank 2 filling operation**
+*   **Controller** *triggers* **Tank 2 draining operation**
+*   **Controller** *triggers* **post-transfer waiting time**
+*   **Controller** *triggers* **inter-cycle waiting time**
+*   **Controller** *triggers* **resume behavior**
+
+## Requirements
+
+*   **URS-FUN-001:** The controller shall start the automatic fill-transfer-drain sequence upon a valid START command when the process is idle or paused. (Must, Functional)
+*   **URS-FUN-002:** The automatic sequence shall open inlet valve V1 to fill Tank 1. (Must, Functional)
+*   **URS-FUN-003:** When Tank 1 reaches its high-level limit, V1 shall close. (Must, Functional)
+*   **URS-FUN-004:** After Tank 1 reaches the high-level limit, the controller shall wait 10 s before opening V2. (Must, Timing)
+*   **URS-FUN-005:** V2 shall transfer liquid from Tank 1 to Tank 2 until Tank 1 reaches its low-level limit. (Must, Functional)
+*   **URS-FUN-006:** After Tank 1 reaches the low-level limit, the controller shall wait 10 s before opening V3. (Must, Timing)
+*   **URS-FUN-007:** V3 shall drain Tank 2 until Tank 2 reaches its low-level limit. (Must, Functional)
+*   **URS-FUN-008:** After Tank 2 reaches its low-level limit, the controller shall return to the Tank 1 filling operation after 10 s. (Must, Timing)
+*   **URS-PER-001:** Tank 1 high-level setpoint shall be 0.78 m. (Must, Performance)
+*   **URS-PER-002:** Tank 1 high-level setpoint shall be 0.80 m. (Must, Performance)
+*   **URS-PER-003:** Tank 1 low-level setpoint shall be 0.05 m. (Must, Performance)
+*   **URS-PER-004:** Tank 2 low-level setpoint shall be 0.05 m. (Must, Performance)
+*   **URS-PER-005:** The post-transfer waiting time shall be 12 s. (Must, Timing)
+*   **URS-PER-006:** The inter-cycle waiting time after Tank 2 reaches low level shall be 8 s. (Should, Timing)
+*   **URS-INT-001:** The controller shall receive two analog level measurements designated LT-101 and LT-102. (Must, Interface)
+*   **URS-INT-002:** The controller shall receive momentary START, STOP and SHUT digital commands. (Must, Interface)
+*   **URS-INT-003:** The controller shall provide three discrete valve-open commands to XV-101, XV-102 and XV-103. (Must, Interface)
+
+## Behaviors
+
+*   **URS-FUN-001:** Upon a valid START command when idle or paused, the controller initiates the automatic fill-transfer-drain sequence.
+*   **URS-FUN-003:** When Tank 1 reaches the high-level limit, V1 closes.
+*   **URS-FUN-004:** After reaching the high-level limit, the controller waits 10 seconds before opening V2.
+*   **URS-FUN-005:** V2 transfers liquid from Tank 1 to Tank 2 until Tank 1 reaches the low-level limit.
+*   **URS-FUN-006:** After reaching the low-level limit, the controller waits 10 seconds before opening V3.
+*   **URS-FUN-007:** V3 drains Tank 2 until Tank 2 reaches the low-level limit.
+*   **URS-FUN-008:** After reaching the low-level limit, the controller returns to the Tank 1 filling operation after 10 seconds.
+*   **URS-CTL-001:** During a wait state, a STOP command freezes the wait timer.
+
+## Constraints
+
+*   **URS-FUN-004:** Controller waits 10 seconds after reaching high-level limit before opening V2.
+*   **URS-FUN-006:** Controller waits 10 seconds after reaching low-level limit before opening V3.
+*   **URS-FUN-008:** Controller returns to Tank 1 filling operation after 10 seconds after reaching low-level limit.
+*   **URS-PER-001:** Tank 1 high-level setpoint is 0.78 m.
+*   **URS-PER-002:** Tank 1 high-level setpoint is 0.80 m.
+*   **URS-PER-003:** Tank 1 low-level setpoint is 0.05 m.
+*   **URS-PER-004:** Tank 2 low-level setpoint is 0.05 m.
+*   **URS-PER-005:** Post-transfer waiting time is 12 seconds.
+*   **URS-PER-006:** Inter-cycle waiting time after Tank 2 reaches low level is 8 seconds.
+*   **URS-INT-001:** Controller receives LT-101 and LT-102 level measurements.
+*   **URS-INT-002:** Controller receives START, STOP, and SHUT digital commands.
+*   **URS-INT-003:** Controller provides valve-open commands to XV-101, XV-102, and XV-103.
+
+## Physical relationships
+
+*   (page 2)  Wait timer is incremented for 10 seconds after Tank 1 reaches high-level limit.
+*   (page 2)  Wait timer is incremented for 10 seconds after Tank 1 reaches low-level limit.
+*   (page 2)  Wait timer is incremented for 10 seconds after Tank 2 reaches low-level limit.
+*   (page 2)  V2 opens after 10 seconds of wait time.
+*   (page 2)  V3 opens after 10 seconds of wait time.
+
+## Control laws
+
+*   None
+
+## Scheduled commands
+
+*   None

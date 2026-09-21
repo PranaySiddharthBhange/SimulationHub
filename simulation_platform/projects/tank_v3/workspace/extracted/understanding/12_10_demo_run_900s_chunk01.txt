@@ -1,0 +1,68 @@
+## Entities
+*   tank1: Tank, Tank
+*   tank2: Tank, Tank
+*   valve1: Valve, Valve
+*   valve2: Valve, Valve
+*   valve3: Valve, Valve
+*   controller_state: Controller, Controller
+
+## Relationships
+*   tank1 contains tank2 (page 1)
+*   tank1 supplies to valve1 (page 1)
+*   tank2 supplies to valve1 (page 1)
+*   valve1 controls valve2 (page 1)
+*   valve1 controls valve3 (page 1)
+*   valve2 controls valve3 (page 1)
+*   controller_state controls tank1 (page 1)
+*   controller_state controls tank2 (page 1)
+
+## Requirements
+*   tank1_level_m: 0.76 m (page 1)
+*   tank2_level_m: 0.05 m (page 1)
+*   valve1_open: 1 (page 1)
+*   valve2_open: 0 (page 1)
+*   valve3_open: 0 (page 1)
+*   controller_state: FILL_T1 (page 1)
+
+## Behaviors
+*   If tank1_level_m > 0.76 m, then set controller_state to FILL_T1 (page 1)
+*   If tank1_level_m > 0.8 m, then set controller_state to WAIT_AFTER_FILL (page 19)
+*   If controller_state == WAIT_AFTER_FILL, then decrement wait_remaining_s (page 19)
+*   If controller_state == WAIT_AFTER_FILL, then wait for 8 seconds (page 21)
+*   If controller_state == WAIT_AFTER_FILL, then wait for 7 seconds (page 22)
+*   If controller_state == WAIT_AFTER_FILL, then wait for 6 seconds (page 23)
+*   If controller_state == WAIT_AFTER_FILL, then wait for 5 seconds (page 24)
+*   If controller_state == WAIT_AFTER_FILL, then wait for 4 seconds (page 25)
+*   If controller_state == WAIT_AFTER_FILL, then wait for 3 seconds (page 26)
+*   If controller_state == WAIT_AFTER_FILL, then wait for 2 seconds (page 27)
+*   If controller_state == WAIT_AFTER_FILL, then wait for 1 second (page 28)
+*   If controller_state == WAIT_AFTER_FILL, then wait for 0 seconds (page 29)
+*   If controller_state == TRANSFER_T1_T2, then open valve2 (page 180)
+*   If controller_state == TRANSFER_T1_T2, then open valve3 (page 180)
+*   If controller_state == PAUSED, then stop all valves (page 220)
+
+## Constraints
+*   tank1_level_m <= 0.8 m (implied by behavior)
+*   tank2_level_m <= 0.18 m (implied by behavior)
+
+## Physical relationships
+*   None
+
+## Control laws
+*   None
+
+## Scheduled commands
+*   cmd_start: 0 (page 1)
+*   cmd_stop: 0 (page 1)
+*   cmd_shut: 0 (page 1)
+*   WAIT_AFTER_FILL: 9 seconds (page 19)
+*   WAIT_AFTER_FILL: 8 seconds (page 21)
+*   WAIT_AFTER_FILL: 7 seconds (page 22)
+*   WAIT_AFTER_FILL: 6 seconds (page 23)
+*   WAIT_AFTER_FILL: 5 seconds (page 24)
+*   WAIT_AFTER_FILL: 4 seconds (page 25)
+*   WAIT_AFTER_FILL: 3 seconds (page 26)
+*   WAIT_AFTER_FILL: 2 seconds (page 27)
+*   WAIT_AFTER_FILL: 1 second (page 28)
+*   TRANSFER_T1_T2: 0 seconds (page 180)
+*   PAUSED: 0 seconds (page 220)

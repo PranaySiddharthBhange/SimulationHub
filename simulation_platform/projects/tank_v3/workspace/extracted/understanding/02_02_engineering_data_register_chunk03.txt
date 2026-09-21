@@ -1,0 +1,55 @@
+## Entities
+
+*   SRC-02: Requirement
+*   SRC-03: Engineering diagram
+*   SRC-04: Word document
+*   SRC-05: Email thread
+*   SRC-06: Meeting notes
+*   SRC-07: Simulation model
+*   SRC-08: Valve datasheet
+*   SRC-09: Test procedure
+*   SRC-10: Demo run data
+*   SRC-11: Existing model
+*   SRC-12: Operator notes
+*   SRC-13: CSV test data
+*   SRC-14: Legacy architecture model
+*   SRC-15: Engineer notes
+
+## Relationships
+
+(No relationships are explicitly stated in this batch)
+
+## Requirements
+
+*   SRC-02: 02_engineering_data_register.xlsx (page 5)
+*   SRC-03: Provided reference (page 6)
+*   SRC-04: State semantics, command priority, timers (page 7)
+*   SRC-05: Clarifications and change discussion (page 8)
+*   SRC-06: Decisions and action items (page 9)
+*   SRC-07: Dynamics, tags, old controller parameters (page 10)
+*   SRC-08: Valve fail states and actuation times (page 11)
+*   SRC-09: 900 s demo events and acceptance criteria (page 12)
+*   SRC-10: Synthetic (page 13)
+*   SRC-13: Time series: levels, commands, valves, state (page 14)
+*   SRC-14: Legacy structure (page 15)
+*   SRC-15: Observed timing and behavior (page 16)
+
+## Behaviors
+
+(No behaviors are explicitly stated in this batch)
+
+## Constraints
+
+(No constraints are explicitly stated in this batch)
+
+## Physical relationships
+
+(No physical relationships are explicitly stated in this batch)
+
+## Control laws
+
+(No control laws are explicitly stated in this batch)
+
+## Scheduled commands
+
+(No scheduled commands are explicitly stated in this batch)

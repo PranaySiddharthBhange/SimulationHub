@@ -1,0 +1,39 @@
+[project]
+name = "local-simulation-agent"
+version = "0.1.0"
+description = "Whole-problem engineering reasoning, SysML v2, and verified Modelica simulation -- Ollama for Stage 1 document understanding, OpenAI for consolidation/generation with a real repair loop"
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.9",
+    "langchain>=1.4",
+    "langchain-ollama>=1.0",
+    "langchain-openai>=1.0",
+    "openai>=2.0",
+    "langgraph>=1.2",
+    "langgraph-checkpoint-sqlite>=3.1",
+    "rapidfuzz>=3.0",
+    "pymupdf>=1.24",
+    "pandas>=2.0",
+    "matplotlib>=3.8",
+    "pillow>=10.0",
+    "python-docx>=1.1",
+    "openpyxl>=3.1",
+    "python-dotenv>=1.0",
+    "jupyter_client>=8.0",
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "python-multipart>=0.0.12",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

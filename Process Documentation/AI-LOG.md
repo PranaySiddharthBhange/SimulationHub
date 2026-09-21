@@ -201,3 +201,9 @@
 - **Cost finding:** Sending document extraction to OpenAI for every source file creates excessive cost before engineering reasoning begins.
 - **Implementation change:** Run only document extraction on a local Gemma 4B-class model. Keep later interpretation, model generation, review, and validation stages available for higher-capability reasoning where needed.
 - **Expected effect:** Lower extraction cost, broader problem coverage, and fewer false failures caused by tank-specific contracts.
+
+### A30 CLI-focused implementation scope
+
+- **Decision:** Review and stage the backend, scripts, tests, configuration, and tank project through a CLI-focused boundary.
+- **Excluded:** The frontend and scratch-pad material are omitted from this milestone; magnet and evaporation project folders are not included in the staged tank run.
+- **Reason:** This keeps the milestone reproducible and narrow while preserving the complete tank workflow for review.

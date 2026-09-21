@@ -1,0 +1,48 @@
+## Entities
+*   `A1`: Real, unit="m2", value = 1.20
+*   `A2`: Real, unit="m2", value = 1.40
+*   `h0`: Real, unit="m", value = 0.05
+*   `h1High`: Real, unit="m", value = 0.78
+*   `h1Low`: Real, unit="m", value = 0.05
+*   `h2Low`: Real, unit="m", value = 0.05
+*   `qFill`: Real, unit="m3/s", value = 0.0060
+*   `qTransfer`: Real, unit="m3/s", value = 0.0045
+*   `qDrain`: Real, unit="m3/s", value = 0.0050
+*   `wait1`: Real, unit="s", value = 10
+*   `wait2`: Real, unit="s", value = 10
+*   `wait3`: Real, unit="s", value = 10
+*   `tank1Level`: Real, unit="m"
+*   `tank2Level`: Real, unit="m"
+*   `valve1`: Boolean
+*   `valve2`: Boolean
+*   `valve3`: Boolean
+*   `startCmd`: Boolean
+*   `stopCmd`: Boolean
+*   `shutCmd`: Boolean
+*   `seq`: StepState
+*   `stopped`: Boolean
+
+## Relationships
+None
+
+## Requirements
+*   `tank1Level`: Initial value = 0.05 m
+*   `tank2Level`: Initial value = 0.05 m
+
+## Behaviors
+*   `valve1`: Active when `seq` is `StepState.FILL` and `stopped` is false.
+*   `valve2`: Active when `seq` is `StepState.TRANSFER` and `stopped` is false.
+*   `valve3`: Active when `seq` is `StepState.DRAIN` and `stopped` is false.
+
+## Constraints
+None
+
+## Physical relationships
+None
+
+## Control laws
+None
+
+## Scheduled commands
+*   `startCmd`: Activates `stopped` to false.
+*   `stopCmd`: Activates `stopped` to true.

@@ -1,0 +1,35 @@
+## Entities
+V1, V2, V3, LT-101, LT-102, T1, Tank 2, Delay Timer
+
+## Relationships
+(page 1)
+
+## Requirements
+(page 1)
+LT-101: low-level setpoint
+LT-102: low-level setpoint
+T1: 0.78 m
+T1: 0.80 m
+
+## Behaviors
+(page 1)
+STOP: freezes remaining delay; START resumes remaining delay.
+
+## Constraints
+(page 1)
+V1 and V2: must never be commanded open together.
+V2 and V3: must not be commanded open together in normal auto operation.
+
+## Physical relationships
+(page 1)
+
+## Control laws
+(page 1)
+
+## Scheduled commands
+(page 1)
+
+## Rules
+(page 1)
+STOP waits for either START or SHUT but does not state what happens to an active delay timer.
+STOP during any delay freezes the remaining delay; START resumes the remaining delay.

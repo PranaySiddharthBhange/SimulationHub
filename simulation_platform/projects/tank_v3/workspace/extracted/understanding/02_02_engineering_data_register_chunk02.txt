@@ -1,0 +1,100 @@
+## Entities
+
+*   **TK-101:** Tank, Tank
+*   **TK-102:** Tank, Tank
+*   **TK-103:** Tank, Tank
+*   **XV-101:** Pump, Pump
+*   **XV-102:** Pump, Pump
+*   **XV-103:** Pump, Pump
+*   **DRN-101:** Drain, Drain
+*   **PLC-101:** PLC, Programmable Logic Controller
+*   **LT-101:** Level Sensor, Level Sensor
+*   **LT-102:** Level Sensor, Level Sensor
+*   **PB-START:** Button, Push Button
+*   **PB-STOP:** Button, Push Button
+*   **PB-SHUT:** Button, Push Button
+*   **AI-101:** Analog Input, Analog Input
+*   **AI-102:** Analog Input, Analog Input
+*   **DI-101:** Digital Input, Digital Input
+*   **DI-102:** Digital Input, Digital Input
+*   **DI-103:** Digital Input, Digital Input
+*   **valve1:** Valve, Valve
+*   **valve2:** Valve, Valve
+*   **valve3:** Valve, Valve
+*   **level1:** Level, Level
+*   **level2:** Level, Level
+*   **V1:** Flow, Flow
+*   **V2:** Flow, Flow
+*   **V3:** Flow, Flow
+
+## Relationships
+
+*   TK-101 contains V1 (page 2)
+*   TK-102 contains V2 (page 2)
+*   TK-103 contains V3 (page 2)
+*   XV-101 supplies V1 (page 2)
+*   XV-102 supplies V2 (page 2)
+*   XV-103 supplies V3 (page 2)
+*   XV-101 controls V1 (page 2)
+*   XV-102 controls V2 (page 2)
+*   XV-103 controls V3 (page 2)
+*   PLC-101 controls LT-101 (page 2)
+*   PLC-101 controls LT-102 (page 2)
+*   PLC-101 controls valve1 (page 2)
+*   PLC-101 controls valve2 (page 2)
+*   PLC-101 controls valve3 (page 2)
+*   LT-101 depends_on AI-101 (page 2)
+*   LT-102 depends_on AI-102 (page 2)
+*   LT-101 depends_on PB-START (page 2)
+*   LT-102 depends_on PB-STOP (page 2)
+*   LT-101 depends_on PB-SHUT (page 2)
+
+## Requirements
+
+*   TK-101 low level limit = 0.05 m (page 8)
+*   TK-102 low level limit = 0.05 m (page 9)
+*   TK-103 low level limit = 0.05 m (page 9)
+*   XV-101 nominal inlet flow = 0.006 m^3/s (page 15)
+*   XV-102 nominal transfer flow = 0.0045 m^3/s (page 16)
+*   XV-103 nominal drain flow = 0.005 m^3/s (page 17)
+*   PLC-101 scan time = 0.1 s (page 18)
+*   Simulation stop time = 900 s (page 19)
+
+## Behaviors
+
+*   If LT-101 level is high (value > 1 m), then wait for 10 s (page 10)
+*   If LT-102 level is low (value < 1 m), then wait for 10 s (page 11)
+*   If LT-101 level is low (value < 1 m), then wait for 12 s (page 12)
+*   If LT-103 level is low (value < 1 m), then wait for 10 s (page 13)
+*   If LT-103 level is low (value < 1 m), then wait for 8 s (page 14)
+*   If XV-101 is open, then open valve1 (page 15)
+*   If XV-102 is open, then open valve2 (page 16)
+*   If XV-103 is open, then open valve3 (page 17)
+
+## Constraints
+
+*   TK-101 low level limit = 0.05 m (page 8)
+*   TK-102 low level limit = 0.05 m (page 9)
+*   TK-103 low level limit = 0.05 m (page 9)
+*   XV-101 nominal inlet flow = 0.006 m^3/s (page 15)
+*   XV-102 nominal transfer flow = 0.0045 m^3/s (page 16)
+*   XV-103 nominal drain flow = 0.005 m^3/s (page 17)
+
+## Physical relationships
+
+*   None
+
+## Control laws
+
+*   None
+
+## Scheduled commands
+
+*   Controller scan time = 0.1 s (page 18)
+*   Simulation stop time = 900 s (page 19)
+*   Wait after Tank 1 high: Controller activates after 10 s (page 10)
+*   Wait after Tank 1 low: Controller activates after 10 s (page 11)
+*   Wait after Tank 1 low: Controller activates after 12 s (page 12)
+*   Wait after Tank 2 low: Controller activates after 10 s (page 13)
+*   Wait after Tank 2 low: Controller activates after 8 s (page 14)
+

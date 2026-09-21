@@ -1,0 +1,16 @@
+{
+  "verdict": "valid",
+  "summary": "The run matches the resolved two-tank demo sequence and satisfies the stated acceptance checks over the simulated scenario. It starts from the required initial condition (h1=0.05 m, h2=0.05 m, IDLE at t=0), responds to START at 20 s by filling TK-101 to 0.80 m at 170.0000000386 s, waits 10 s, then transfers to TK-102. STOP at 220 s pauses the transfer with all valves closed, and START at 280 s resumes transfer rather than restarting, completing at 440.0000001196 s with h2_at_transfer_end=0.692857, matching the 0.69286 target within tolerance. It then waits 12 s, drains TK-102 from 452.0000001209 s to 632.0000002187 s, waits 8 s, returns to fill at 640.0000002196 s, pauses again at 650 s with valves closed, and enters SHUTDOWN at 700.0000000001 s. During SHUTDOWN, XV-102 and XV-103 are open together as required, TK-101 and TK-102 both continue downward, and shutdown completes at 713.3333330407 s with final h1=0.05 m and h2=0.0452381 m before returning to IDLE with all valves closed. No prohibited valve overlap appears outside SHUTDOWN, and the observed level slopes match the resolved constant-flow balances.",
+  "issues": [],
+  "assumptions": [
+    "Resolved current configuration uses TK-101 high setpoint 0.80 m, not the deprecated 0.78 m.",
+    "Resolved waits are 10 s after fill, 12 s after transfer, and 8 s after drain.",
+    "Valves are modeled as ideal on/off elements with instantaneous realization of constant nominal flows qFill=0.0060 m^3/s, qTransfer=0.0045 m^3/s, and qDrain=0.0050 m^3/s.",
+    "Controller logic is evaluated on a 0.1 s PLC scan, so command and state changes occur on that time resolution; small ~0.1 s offsets in pause/resume transitions are consistent with this.",
+    "Low-level completion is enforced at the specified 0.05 m setpoints for control decisions rather than modeling continued physical emptying below that threshold.",
+    "In SHUTDOWN, XV-102 and XV-103 are intentionally allowed open together until both tanks meet the low-level criterion; XV-101 remains inhibited.",
+    "The model-generation stage implemented START/STOP/SHUT as 0.1 s pulses at 20/220/280/650/700 s rather than maintained Boolean toggles, materially affecting whether the PLC sees momentary commands correctly.",
+    "The transfer-end acceptance value is captured by a discrete transferEndPulse event at the transition out of TRANSFER_T1_T2, not inferred from a continuous state encoding."
+  ],
+  "root_causes": []
+}

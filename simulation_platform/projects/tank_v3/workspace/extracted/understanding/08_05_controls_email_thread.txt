@@ -1,0 +1,26 @@
+## Entities
+CR-004, CR, 0.80 m, T1, T2, V2, V3, SHUT, STOP, START, Tank 1, Tank 2, Drain Valve, Fill Valve
+
+## Relationships
+None
+
+## Requirements
+T1 high limit = 0.80 m (page 1)
+
+## Behaviors
+Drain valve opens 12 s after T1 reaches low level (page 1)
+Fill valve opens 8 s after T2 reaches low level (page 1)
+V2 and V3 stay commanded open during SHUT until both low-level conditions are satisfied (page 1)
+
+## Constraints
+T1_high = 0.78 m (page 2)
+Dead time after Tank 2 is empty = 10 s (page 2)
+
+## Physical relationships
+None
+
+## Control laws
+None
+
+## Scheduled commands
+None

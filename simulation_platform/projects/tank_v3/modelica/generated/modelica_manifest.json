@@ -1,0 +1,50 @@
+{
+  "entry_class": "TwoTankSystem",
+  "files": [
+    {
+      "filename": "Tank1.mo",
+      "role": "component"
+    },
+    {
+      "filename": "Tank2.mo",
+      "role": "component"
+    },
+    {
+      "filename": "OnOffValve.mo",
+      "role": "component"
+    },
+    {
+      "filename": "TankSequenceController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "TwoTankSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Math.Add",
+    "Modelica.Blocks.Math.Gain",
+    "Modelica.Blocks.Continuous.Integrator",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Blocks.Icons.Block",
+    "Modelica.Blocks.Icons.PartialBooleanBlock",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Used the resolved authoritative TK-101 high setpoint 0.80 m instead of deprecated 0.78 m, per the engineering brief's supersession summary.",
+    "Used resolved wait values 10 s after fill, 12 s after transfer, and 8 s after drain, preserving the explicit later-authority corrections stated in the brief.",
+    "Kept START/STOP/SHUT schedule at 20 s, 220 s, 280 s, 650 s, and 700 s exactly as directed by the brief.",
+    "Modeled SHUTDOWN as the only state allowing simultaneous XV-102 and XV-103 open, with XV-101 inhibited, matching the resolved exception.",
+    "Did not use unsupported TK-103/LT-103, pump interpretations, or contradictory topology artifacts because the brief explicitly rejects them.",
+    "Stop-vs-shut simultaneous priority outside SHUTDOWN remains unresolved in the source brief; the controller gives SHUT precedence over STOP if both pulses occur in the same event, and this assumption is stated here because the brief did not resolve that exact simultaneous case.",
+    "Phase-time check from stated rates: fill 0.75 m / 0.005 m/s = 150 s; transfer 0.75 m / 0.00375 m/s = 200 s; drain from transfer-end level 0.692857 m to 0.05 m at 0.00357143 m/s = 180 s. One full automatic cycle including waits is about 150 + 10 + 200 + 12 + 180 + 8 = 560 s, which fits within 85% of the 900 s scenario horizon (765 s).",
+    "The 900 s command schedule does not permit shutdown completion by 900 s after a SHUT at 700 s under the resolved rates. At t=700 s the system is 20 s into a transfer restarted at 680 s, so h1\u22480.725 m and h2\u22480.1143 m. In SHUTDOWN, TK-101 needs about (0.725-0.05)/0.00375 = 180 s to reach low, while TK-102 has net dh2/dt=(0.0045-0.0050)/1.40\u2248-0.00035714 m/s and needs about (0.1143-0.05)/0.00035714 \u2248 180 s. Therefore shutdown completes near 880 s, so completion by 900 s is consistent."
+  ],
+  "references": []
+}

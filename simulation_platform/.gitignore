@@ -1,0 +1,19 @@
+# Secrets -- never commit
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+build/
+dist/
+
+# Generated per-run project state (regeneratable from test_cases/ + code)
+projects/*/documents/
+projects/*/workspace/
+projects/*/sysml/
+projects/*/modelica/
+
+# Session scratch output
+*.log

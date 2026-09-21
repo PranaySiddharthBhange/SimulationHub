@@ -1,0 +1,43 @@
+## Entities
+tank1_level_m, Tank Level, 0.05m
+tank2_level_m, Tank Level, 0.05m
+valve1_open, Valve 1, 0
+valve2_open, Valve 2, 0
+valve3_open, Valve 3, 0
+controller_state, Controller, IDLE
+
+## Relationships
+(tank1_level_m, contains, tank1)
+(tank2_level_m, contains, tank2)
+(valve1_open, controls, tank1)
+(valve2_open, controls, tank2)
+(valve3_open, controls, tank2)
+(controller_state, controls, valve1)
+(controller_state, controls, valve2)
+(controller_state, controls, valve3)
+
+## Requirements
+tank1_level_m, 0.05m
+tank2_level_m, 0.05m
+
+## Behaviors
+IF tank1_level_m > 0.05m THEN controller_state = IDLE
+IF tank2_level_m > 0.05m THEN controller_state = IDLE
+
+## Constraints
+tank1_level_m, min = 0.05m
+tank1_level_m, max = 0.05m
+tank2_level_m, min = 0.05m
+tank2_level_m, max = 0.05m
+
+## Physical relationships
+None
+
+## Control laws
+None
+
+## Scheduled commands
+None
+
+## Rules
+None

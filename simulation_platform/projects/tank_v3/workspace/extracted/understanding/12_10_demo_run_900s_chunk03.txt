@@ -1,0 +1,106 @@
+## Entities
+tank1_level_m: Tank 1 Level, float
+tank2_level_m: Tank 2 Level, float
+valve1_open: Valve 1 Open, float
+valve2_open: Valve 2 Open, float
+valve3_open: Valve 3 Open, float
+controller_state: Controller State, string
+wait_remaining_s: Wait Remaining Seconds, float
+
+## Relationships
+(page 420) tank1_level_m contains 0.12125
+(page 420) tank2_level_m contains 0.63179
+(page 420) valve1_open contains 0
+(page 420) valve2_open contains 1
+(page 420) valve3_open contains 0
+(page 420) controller_state contains TRANSFER_T1_T2
+(page 420) wait_remaining_s contains 0
+(page 421) tank1_level_m contains 0.1175
+(page 421) tank2_level_m contains 0.635
+(page 421) valve1_open contains 0
+(page 421) valve2_open contains 1
+(page 421) valve3_open contains 0
+(page 421) controller_state contains TRANSFER_T1_T2
+(page 421) wait_remaining_s contains 0
+(page 422) tank1_level_m contains 0.11375
+(page 422) tank2_level_m contains 0.63821
+(page 422) valve1_open contains 0
+(page 422) valve2_open contains 1
+(page 422) valve3_open contains 0
+(page 422) controller_state contains TRANSFER_T1_T2
+(page 422) wait_remaining_s contains 0
+... (repeated entries for 423-478) ...
+(page 479) tank1_level_m contains 0.05
+(page 479) tank2_level_m contains 0.69286
+(page 479) valve1_open contains 0
+(page 479) valve2_open contains 0
+(page 479) valve3_open contains 0
+(page 479) controller_state contains WAIT_AFTER_TRANSFER
+(page 479) wait_remaining_s contains 12
+(page 482) tank1_level_m contains 0.05
+(page 482) tank2_level_m contains 0.68929
+(page 482) valve1_open contains 0
+(page 482) valve2_open contains 0
+(page 482) valve3_open contains 1
+(page 482) controller_state contains DRAIN_T2
+(page 482) wait_remaining_s contains 0
+
+## Requirements
+tank1_level_m: 0.12125 m
+tank2_level_m: 0.63179 m
+valve2_open: 1
+
+## Behaviors
+(page 420) if tank1_level_m > 0.12125 then cmd_start
+(page 420) if tank1_level_m < 0.12125 then cmd_stop
+(page 420) if tank1_level_m == 0.12125 then cmd_shut
+(page 420) if valve2_open == 1 then cmd_start
+(page 420) if valve2_open == 0 then cmd_stop
+(page 420) if valve2_open == 1 then TRANSFER_T1_T2
+(page 420) if valve2_open == 0 then TRANSFER_T1_T2
+(page 421) if tank1_level_m > 0.1175 then cmd_start
+(page 421) if tank1_level_m < 0.1175 then cmd_stop
+(page 421) if tank1_level_m == 0.1175 then cmd_shut
+(page 421) if valve2_open == 1 then cmd_start
+(page 421) if valve2_open == 0 then cmd_stop
+(page 421) if valve2_open == 1 then TRANSFER_T1_T2
+(page 421) if valve2_open == 0 then TRANSFER_T1_T2
+... (repeated entries for 423-478) ...
+(page 479) if valve3_open == 1 then cmd_start
+(page 479) if valve3_open == 0 then cmd_stop
+(page 479) if valve3_open == 1 then DRAIN_T2
+(page 479) if valve3_open == 0 then DRAIN_T2
+
+## Constraints
+tank1_level_m: min 0.05 m, max 0.69286 m
+tank2_level_m: min 0.05 m, max 0.69286 m
+
+## Physical relationships
+None
+
+## Control laws
+None
+
+## Scheduled commands
+(page 420) cmd_start at time_s = 420
+(page 420) cmd_stop at time_s = 420
+(page 420) cmd_shut at time_s = 420
+(page 421) cmd_start at time_s = 421
+(page 421) cmd_stop at time_s = 421
+(page 421) cmd_shut at time_s = 421
+(page 422) cmd_start at time_s = 422
+(page 422) cmd_stop at time_s = 422
+(page 422) cmd_shut at time_s = 422
+... (repeated entries for 423-478) ...
+(page 479) cmd_start at time_s = 479
+(page 479) cmd_stop at time_s = 479
+(page 479) cmd_shut at time_s = 479
+
+## Rules
+tank1_level_m: 0.12125 m
+tank2_level_m: 0.63179 m
+valve1_open: 0
+valve2_open: 1
+valve3_open: 0
+controller_state: TRANSFER_T1_T2
+wait_remaining_s: 0

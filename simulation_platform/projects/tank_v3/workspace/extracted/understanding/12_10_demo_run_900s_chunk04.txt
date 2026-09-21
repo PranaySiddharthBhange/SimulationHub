@@ -1,0 +1,111 @@
+## Entities
+*   tank1: Tank, Tank
+*   tank2: Tank, Tank
+*   valve1: Valve, Valve
+*   valve2: Valve, Valve
+*   valve3: Valve, Valve
+*   controller_state: Controller, Controller
+
+## Relationships
+*   tank1 contains tank2 (page 560)
+*   tank1 supplies to valve1 (page 560)
+*   tank2 supplies to valve1 (page 560)
+*   tank2 supplies to valve2 (page 560)
+*   tank2 supplies to valve3 (page 560)
+*   valve1 controls controller_state (page 560)
+*   valve2 controls controller_state (page 560)
+*   valve3 controls controller_state (page 560)
+*   controller_state triggers DRAIN_T2 (page 560)
+
+## Requirements
+*   tank1_level_m: 0.05 m (page 560-617)
+*   tank2_level_m: 0.30357 m (page 560)
+*   valve1_open: 1 (page 560-617)
+*   valve2_open: 0 (page 560-617)
+*   valve3_open: 1 (page 560-617)
+*   controller_state: DRAIN_T2 (page 560-617)
+
+## Behaviors
+*   IF tank1_level_m < 0.05 THEN cmd_shut = 1 (page 560)
+*   IF tank2_level_m < 0.3 THEN cmd_shut = 1 (page 560)
+*   IF valve1_open = 1 THEN controller_state = DRAIN_T2 (page 560)
+*   IF valve2_open = 0 THEN controller_state = DRAIN_T2 (page 560)
+*   IF valve3_open = 1 THEN controller_state = DRAIN_T2 (page 560)
+*   IF controller_state = DRAIN_T2 THEN cmd_start = 0 (page 630)
+*   IF controller_state = DRAIN_T2 THEN cmd_stop = 0 (page 630)
+
+## Constraints
+*   tank1_level_m: min 0.05 m (page 560-617)
+*   tank2_level_m: max 0.30357 m (page 560)
+*   valve1_open: max 1 (page 560-617)
+*   valve2_open: max 1 (page 560-617)
+*   valve3_open: max 1 (page 560-617)
+
+## Physical relationships
+*   None
+
+## Control laws
+*   None
+
+## Scheduled commands
+*   cmd_start = 0 (page 560-617)
+*   cmd_stop = 0 (page 560-617)
+*   cmd_shut = 1 (page 560-617)
+*   DRAIN_T2 = controller_state (page 560-617)
+*   WAIT_AFTER_DRAIN = 0 (page 630-697)
+*   FILL_T1 = 0 (page 640-697)
+
+## Rules
+*   tank1_level_m = 0.05 (page 560)
+*   tank2_level_m = 0.30357 (page 560)
+*   valve1_open = 0 (page 560)
+*   valve2_open = 0 (page 560)
+*   valve3_open = 1 (page 560)
+*   controller_state = DRAIN_T2 (page 560)
+*   wait_remaining_s = 0 (page 560)
+*   cmd_start = 0 (page 560)
+*   cmd_stop = 0 (page 560)
+*   cmd_shut = 0 (page 560)
+*   tank1_level_m = 0.05 (page 561)
+*   tank2_level_m = 0.3 (page 561)
+*   valve1_open = 0 (page 561)
+*   valve2_open = 0 (page 561)
+*   valve3_open = 1 (page 561)
+*   controller_state = DRAIN_T2 (page 561)
+*   wait_remaining_s = 0 (page 561)
+*   cmd_start = 0 (page 561)
+*   cmd_stop = 0 (page 561)
+*   cmd_shut = 0 (page 561)
+*   tank1_level_m = 0.05 (page 562)
+*   tank2_level_m = 0.29643 (page 562)
+*   valve1_open = 0 (page 562)
+*   valve2_open = 0 (page 562)
+*   valve3_open = 1 (page 562)
+*   controller_state = DRAIN_T2 (page 562)
+*   wait_remaining_s = 0 (page 562)
+*   cmd_start = 0 (page 562)
+*   cmd_stop = 0 (page 562)
+*   cmd_shut = 0 (page 562)
+*   tank1_level_m = 0.05 (page 563)
+*   tank2_level_m = 0.29286 (page 563)
+*   valve1_open = 0 (page 563)
+*   valve2_open = 0 (page 563)
+*   valve3_open = 1 (page 563)
+*   controller_state = DRAIN_T2 (page 563)
+*   wait_remaining_s = 0 (page 563)
+*   cmd_start = 0 (page 563)
+*   cmd_stop = 0 (page 563)
+*   cmd_shut = 0 (page 563)
+*   tank1_level_m = 0.05 (page 564)
+*   tank2_level_m = 0.28929 (page 564)
+*   valve1_open = 0 (page 564)
+*   valve2_open = 0 (page 564)
+*   valve3_open = 1 (page 564)
+*   controller_state = DRAIN_T2 (page 564)
+*   wait_remaining_s = 0 (page 564)
+*   cmd_start = 0 (page 564)
+*   cmd_stop = 0 (page 564)
+*   cmd_shut = 0 (page 564)
+*   tank1_level_m = 0.05 (page 565)
+*   tank2_level_m = 0.28571 (page 565)
+*   

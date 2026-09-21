@@ -134,3 +134,21 @@ D38 | Run document extraction locally with a Gemma 4B-class model | Extraction r
 D39 | Preserve extraction evidence and uncertainty when using the local model | Local extraction must retain original files, quoted spans, page or row locations, parser status, confidence, and unresolved extraction errors. This makes low-confidence or incomplete results visible for review instead of allowing an inexpensive extraction pass to become an untraceable source of model facts.
 
 D40 | Reserve higher-cost reasoning calls for interpretation, generation, review, and repair | OpenAI remains available for whole-problem interpretation, conflict resolution, SysML and Modelica generation, semantic review, and bounded repair when stronger reasoning is needed. The split lowers recurring extraction cost while deterministic validators and human review protect against local extraction mistakes.
+
+D41 | Keep the reviewed execution surface CLI-based and exclude the frontend from this implementation commit | A command-line entry point makes runs repeatable and reviewable, while the frontend adds a separate delivery surface that is outside this milestone. The commit should therefore carry the backend, CLI-oriented scripts, tests, configuration, and only the tank project data needed to reproduce the workflow.
+
+## Generalized local extraction pipeline
+
+D42 | Discover and read a complete engineering packet without domain-specific entity schemas | The intake layer must work for tanks, magnetic circuits, IAQ, evaporation, and unseen systems by preserving every supported file and relative source path before domain reasoning begins.
+
+D43 | Provide format-aware extraction for PDF, scanned pages, images, spreadsheets, DOCX, email, CSV/TSV, structured text, Modelica, SysML, PlantUML, XML, HTML, and YAML | Each format carries different engineering evidence, so the pipeline preserves page text, visual pages, spreadsheet coordinates and cached formulas, document tables, email chronology, and source text instead of flattening everything into generic prose.
+
+D44 | Use Ollama-served Gemma 4B-class local inference for document-level understanding | Local inference removes per-document API spend and keeps extraction available offline while the same packet, locators, and raw evidence remain available to later reasoning stages.
+
+D45 | Batch large documents and enforce an explicit context limit without silent truncation | Local model context windows can truncate long observation sets or tables; bounded batches and explicit oversize failures preserve completeness and make the extraction boundary visible.
+
+D46 | Keep extraction domain-neutral and defer entity naming, conflict arbitration, and engineering decisions | The extractor should report source-grounded observations and uncertainty; later problem-specific reasoning decides what constitutes a part, parameter, behavior, or requirement.
+
+D47 | Preserve append-only run logs, parser failures, confidence, and unresolved extraction errors for every run | A generalized pipeline needs replayable evidence and human review when a local model is unavailable, a file is unreadable, or an extraction result is incomplete.
+
+D48 | Hold out externally designated reference tables before local or remote reasoning | Expected trajectories and acceptance outputs must remain evaluation data so the generalized pipeline cannot learn or reproduce the answer during extraction.

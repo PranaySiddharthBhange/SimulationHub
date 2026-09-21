@@ -1,0 +1,54 @@
+## Entities
+V1, Valve 1; Type: Valve; Aliases: None
+V2, Valve 2; Type: Valve; Aliases: None
+V3, Valve 3; Type: Valve; Aliases: None
+XV-101, Valve 1 Control; Type: Control Valve; Aliases: None
+XV-102, Valve 2 Control; Type: Control Valve; Aliases: None
+XV-103, Valve 3 Control; Type: Control Valve; Aliases: None
+LT-101, Tank 1 Level Sensor; Type: Level Sensor; Aliases: None
+LT-102, Tank 2 Level Sensor; Type: Level Sensor; Aliases: None
+T1_High, Tank 1 High Level Threshold; Type: Threshold; Aliases: None
+T1_Low, Tank 1 Low Level Threshold; Type: Threshold; Aliases: None
+T2_Low, Tank 2 Low Level Threshold; Type: Threshold; Aliases: None
+START, Start Command; Type: Command; Aliases: None
+STOP, Stop Command; Type: Command; Aliases: None
+SHUT, Shut Command; Type: Command; Aliases: None
+IDLE, Idle State; Type: State; Aliases: None
+FILL_T1, Fill Tank 1; Type: State; Aliases: None
+WAIT_AFTER_FILL, Wait After Fill; Type: State; Aliases: None
+TRANSFER_T1_T2, Transfer Tank 1 to Tank 2; Type: State; Aliases: None
+WAIT_AFTER_TRANSFER, Wait After Transfer; Type: State; Aliases: None
+DRAIN_T2, Drain Tank 2; Type: State; Aliases: None
+WAIT_AFTER_DRAIN, Wait After Drain; Type: State; Aliases: None
+PAUSED, Paused State; Type: State; Aliases: None
+SHUTDOWN, Shutdown State; Type: State; Aliases: None
+
+## Relationships
+None
+
+## Requirements
+V1 >= 0.78 m (Tank 1 High Level Threshold)
+V2 >= 0.78 m (Tank 2 Low Level Threshold)
+V3 >= 0.78 m (Tank 2 Low Level Threshold)
+
+## Behaviors
+If LT-101 >= T1_High, then V1 = 1 (FILL_T1)
+If LT-101 <= T1_Low, then V2 = 1 (TRANSFER_T1_T2)
+If LT-102 <= T2_Low, then V3 = 1 (DRAIN_T2)
+If LT-101 >= T1_High AND LT-102 >= T2_Low, then V1 = 1 AND V3 = 1 (FILL_T1 and DRAIN_T2)
+
+## Constraints
+V1 and V2 shall never be open simultaneously
+V2 and V3 shall not be open simultaneously during normal automatic operation
+
+## Physical relationships
+None
+
+## Control laws
+None
+
+## Scheduled commands
+None
+
+## Rules
+None

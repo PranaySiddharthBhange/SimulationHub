@@ -1,0 +1,44 @@
+## Entities
+TK-101, Tank, TK-101
+TK-102, Tank, TK-102
+XV-101, Valve, XV-101
+XV-102, Valve, XV-102
+XV-103, Valve, XV-103
+
+## Relationships
+None
+
+## Requirements
+0.  80, Target level for V1 (page 9:06)
+0.78, Old target level for V1 (page 9:06)
+
+## Behaviors
+1.  Start at 20 s: T1 fill is slow/linear (page 9:03)
+2.  Stop at 220: All valve lamps stop (page 9:07)
+3.  Start at 280: Transfer picks up (page 9:08)
+4.  Stop at 650: Second fill is interrupted (page 9:16)
+5.  Shut at 700: Transfer and drain lamps are on together (page 9:17)
+
+## Constraints
+None
+
+## Physical relationships
+None
+
+## Control laws
+None
+
+## Scheduled commands
+Start at 20 s (page 9:03)
+Start at 280 s (page 9:08)
+Stop at 220 s (page 9:07)
+Stop at 650 s (page 9:16)
+Shut at 700 s (page 9:17)
+
+## Terms
+tank1 = TK-101 (page 9:02)
+tank2 = TK-102 (page 9:02)
+valve1 = XV-101 (page 9:02)
+valve2 = XV-102 (page 9:02)
+valve3 = XV-103 (page 9:02)
+'shut' is controlled drain (page 9:02)
