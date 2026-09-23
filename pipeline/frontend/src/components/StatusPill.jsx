@@ -1,5 +1,7 @@
 const CONFIG = {
   created: { label: 'Ready to run', color: 'var(--text-muted)', bg: 'var(--bg-soft)' },
+  stage1_ready: { label: 'Extraction complete', color: 'var(--green)', bg: '#edf3ec' },
+  ready: { label: 'Stage complete', color: 'var(--green)', bg: '#edf3ec' },
   running: { label: 'Running', color: 'var(--blue)', bg: '#eaf1f4' },
   awaiting_input: { label: 'Needs your input', color: 'var(--amber)', bg: '#faf1de' },
   done: { label: 'Complete', color: 'var(--green)', bg: '#edf3ec' },

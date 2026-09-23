@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 
 export default function NewProjectModal({ onClose, onCreate }) {
   const [name, setName] = useState('')
+  const [stage1Backend, setStage1Backend] = useState('ollama')
   const [files, setFiles] = useState([])
   const [dragging, setDragging] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -16,7 +17,7 @@ export default function NewProjectModal({ onClose, onCreate }) {
     setBusy(true)
     setError(null)
     try {
-      await onCreate(name.trim(), files)
+      await onCreate(name.trim(), files, stage1Backend)
     } catch (e) {
       setError(e.message)
       setBusy(false)
@@ -43,6 +44,38 @@ export default function NewProjectModal({ onClose, onCreate }) {
               placeholder="e.g. Evaporation Tank System"
               className="w-full rounded-lg border border-[var(--border-strong)] bg-[var(--bg-soft)] px-3 py-2 text-[13.5px] text-[var(--text)] outline-none focus:border-[var(--accent)]"
             />
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-[12px] font-medium text-[var(--text-muted)]">
+              Document extraction
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setStage1Backend('ollama')}
+                className="rounded-lg border px-3 py-2 text-left text-[12px]"
+                style={{
+                  borderColor: stage1Backend === 'ollama' ? 'var(--accent)' : 'var(--border-strong)',
+                  background: stage1Backend === 'ollama' ? 'var(--accent-soft)' : 'transparent',
+                }}
+              >
+                <div className="font-semibold text-[var(--text)]">Local Gemma</div>
+                <div className="mt-0.5 text-[11px] text-[var(--text-dim)]">Private text extraction through Ollama</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => setStage1Backend('openai')}
+                className="rounded-lg border px-3 py-2 text-left text-[12px]"
+                style={{
+                  borderColor: stage1Backend === 'openai' ? 'var(--accent)' : 'var(--border-strong)',
+                  background: stage1Backend === 'openai' ? 'var(--accent-soft)' : 'transparent',
+                }}
+              >
+                <div className="font-semibold text-[var(--text)]">Cloud GPT-5.4</div>
+                <div className="mt-0.5 text-[11px] text-[var(--text-dim)]">OpenAI extraction with visual support</div>
+              </button>
+            </div>
           </div>
 
           <div>

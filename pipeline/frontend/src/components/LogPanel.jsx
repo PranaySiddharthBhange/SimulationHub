@@ -8,7 +8,7 @@ import {
   PlayCircle,
   XCircle,
 } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 function timeOf(ts) {
   try {
@@ -52,18 +52,61 @@ function describe(e) {
         sub: `attempt ${e.attempt}`,
         detail: e.issues || e.errors,
       }
+    case 'validation_report':
+      return e.verdict === 'invalid'
+        ? {
+            icon: XCircle,
+            color: 'var(--red)',
+            title: 'Validation verdict: Invalid',
+            sub: `${e.issue_count ?? 0} issue(s) · open the Validation tab for the diagnosis`,
+          }
+        : {
+            icon: CheckCircle2,
+            color: 'var(--green)',
+            title: `Validation verdict: ${e.verdict || 'complete'}`,
+            sub: `${e.issue_count ?? 0} issue(s)`,
+          }
     case 'clarification_requested':
       return {
         icon: HelpCircle,
         color: 'var(--amber)',
         title: `Stage 2 has ${e.questions?.length ?? 0} question(s) for you`,
         sub: 'waiting on human review',
+        detail: e.questions,
       }
     case 'clarification_answered':
-      return { icon: MessageSquareText, color: 'var(--accent)', title: 'Answers submitted', sub: 'resuming Stage 2' }
+      return {
+        icon: MessageSquareText,
+        color: 'var(--accent)',
+        title: 'User input submitted',
+        sub: `${Object.keys(e.answers || {}).length} selected value(s) · click to view`,
+        detail: e.answers,
+      }
     default:
       return { icon: ChevronRight, color: 'var(--text-dim)', title: e.event }
   }
+}
+
+function formatDetail(detail) {
+  if (typeof detail === 'string') return detail
+  if (Array.isArray(detail)) {
+    return detail
+      .map((item, index) => {
+        if (typeof item === 'string') return `${index + 1}. ${item}`
+        if (item?.question) {
+          const options = item.options?.length ? `\n   Options: ${item.options.join(' | ')}` : ''
+          return `${index + 1}. ${item.question}${options}`
+        }
+        return `${index + 1}. ${JSON.stringify(item, null, 2)}`
+      })
+      .join('\n\n')
+  }
+  if (detail && typeof detail === 'object') {
+    return Object.entries(detail)
+      .map(([key, value]) => `${key}\n${String(value)}`)
+      .join('\n\n')
+  }
+  return String(detail ?? '')
 }
 
 function LogLine({ e }) {
@@ -90,20 +133,21 @@ function LogLine({ e }) {
       </button>
       {open && detail && (
         <pre className="font-mono ml-6 mt-1.5 max-h-40 overflow-auto rounded-lg border border-[var(--border)] bg-[var(--bg-soft)] p-2 text-[11px] whitespace-pre-wrap text-[var(--text-muted)]">
-          {detail}
+          {formatDetail(detail)}
         </pre>
       )}
     </div>
   )
 }
 
-export default function LogPanel({ logs }) {
+export default function LogPanel({ logs, stage1Backend }) {
   const scrollRef = useRef(null)
-  const pinnedRef = useRef(true)
+  const newestFirst = useMemo(() => [...logs].reverse(), [logs])
+  const modelLabel = stage1Backend === 'openai' ? 'Extraction · Cloud GPT-5.4' : 'Extraction · Local Gemma 3 4B'
 
   useEffect(() => {
     const el = scrollRef.current
-    if (el && pinnedRef.current) el.scrollTop = el.scrollHeight
+    if (el) el.scrollTo({ top: 0, behavior: 'smooth' })
   }, [logs])
 
   return (
@@ -111,16 +155,17 @@ export default function LogPanel({ logs }) {
       <div className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg-soft)] px-4 py-2.5">
         <div className="flex items-center gap-2">
           <span className="text-[12.5px] font-semibold text-[var(--text)]">Activity log</span>
-          <span className="font-mono text-[10.5px] text-[var(--text-dim)]">run.jsonl</span>
+          <span className="font-mono text-[10.5px] text-[var(--text-dim)]">newest first</span>
         </div>
-        <span className="font-mono text-[11px] text-[var(--text-dim)]">{logs.length} events</span>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--panel)] px-2 py-0.5 text-[10.5px] font-medium text-[var(--text-muted)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--green)]" /> {modelLabel}
+          </span>
+          <span className="font-mono text-[11px] text-[var(--text-dim)]">{logs.length} events</span>
+        </div>
       </div>
       <div
         ref={scrollRef}
-        onScroll={(ev) => {
-          const el = ev.currentTarget
-          pinnedRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 40
-        }}
         className="flex-1 divide-y divide-[var(--border)]/60 overflow-y-auto"
       >
         {logs.length === 0 && (
@@ -128,8 +173,8 @@ export default function LogPanel({ logs }) {
             Logs will appear here once the run starts.
           </div>
         )}
-        {logs.map((e, i) => (
-          <LogLine key={i} e={e} />
+        {newestFirst.map((e, i) => (
+          <LogLine key={`${e.ts || 'event'}-${e.event || 'log'}-${logs.length - i}`} e={e} />
         ))}
       </div>
     </div>

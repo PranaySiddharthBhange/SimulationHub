@@ -79,16 +79,11 @@ class PlatformSettings:
     # stage1+2+3 == total sum-check below, same as the two repair budgets above.
     stage4_budget_usd: float
 
+    stage1_backend: str
     stage1_extraction_model: str
-    # The ONE call that genuinely needs a vision-capable model (currently
-    # unused -- vision is off for now, see `reasoner_pipeline.py`'s own
-    # note) -- kept as its own setting, deliberately separate from
-    # `stage1_extraction_model`, because `qwen3:8b` rejects multimodal
-    # requests outright ("model does not support multimodal requests",
-    # confirmed live) while `gemma3:4b` handles them fine. Per the user's
-    # explicit choice: every OTHER call in this fork uses `qwen3:8b` now;
-    # `gemma3:4b` is kept ONLY for this one role, not as a general "mini"
-    # tier anymore.
+    # Retained for compatibility with older project configuration. Local
+    # Stage 1 remains text-only and skips image-only files; cloud Stage 1
+    # handles visual evidence when selected.
     stage1_vision_model: str
     # `mapping_model` is the ONE model each of Stage 2/3 actually uses --
     # this fork replaced the old separate planning/mapping/validation/
@@ -135,6 +130,9 @@ class PlatformSettings:
         stage2 = _float("STAGE_2_BUDGET_USD", 2.0, "SYSML_AGENT_BUDGET_USD")
         stage3 = _float("STAGE_3_BUDGET_USD", 2.0, "MODELICA_AGENT_BUDGET_USD")
         total = _float("TOTAL_BUDGET_USD", stage1 + stage2 + stage3)
+        stage1_backend = _str("STAGE_1_BACKEND", "ollama").strip().lower()
+        if stage1_backend not in {"ollama", "openai"}:
+            raise ConfigError("STAGE_1_BACKEND must be one of: ollama, openai")
         # Validated at load time (platform startup), per new direction.txt
         # §27 -- refuse to run rather than silently letting per-stage caps
         # add up to more than the declared total.
@@ -154,21 +152,19 @@ class PlatformSettings:
             stage3_budget_usd=stage3,
             price_per_1k_input_usd=_float("PRICE_PER_1K_INPUT_USD", 0.00025),
             price_per_1k_output_usd=_float("PRICE_PER_1K_OUTPUT_USD", 0.001),
-            # `qwen3:8b` for everything -- the user's explicit choice, after
-            # a real live comparison showed model SIZE wasn't the actual
-            # speed bottleneck on this machine's 4GB-VRAM GPU (context-
-            # window-driven VRAM pressure was, see `utils/local_models.py`).
-            # `gemma3:4b` is kept ONLY for `stage1_vision_model`, the one
-            # role `qwen3:8b` cannot do at all (no multimodal support).
-            stage1_extraction_model=_str("STAGE_1_EXTRACTION_MODEL", "qwen3:8b", "ENGINEERING_AGENT_EXTRACTION_MODEL"),
+            # Gemma 3 4B is the configured local model. Context sizing and
+            # all prompts remain unchanged.
+            stage1_backend=stage1_backend,
+            stage1_extraction_model=_str("STAGE_1_EXTRACTION_MODEL", "gemma3:4b", "ENGINEERING_AGENT_EXTRACTION_MODEL"),
             stage1_vision_model=_str("STAGE_1_VISION_MODEL", "gemma3:4b"),
-            stage2_mapping_model=_str("STAGE_2_MAPPING_MODEL", "qwen3:8b", "SYSML_AGENT_MAPPING_MODEL"),
-            stage3_mapping_model=_str("STAGE_3_MAPPING_MODEL", "qwen3:8b", "MODELICA_AGENT_MAPPING_MODEL"),
+            stage2_mapping_model=_str("STAGE_2_MAPPING_MODEL", "gemma3:4b", "SYSML_AGENT_MAPPING_MODEL"),
+            stage3_mapping_model=_str("STAGE_3_MAPPING_MODEL", "gemma3:4b", "MODELICA_AGENT_MAPPING_MODEL"),
             use_real_sysml_parser=_bool("USE_REAL_SYSML_PARSER", True, "SYSML_AGENT_USE_REAL_PARSER"),
             sysml_parser_timeout_seconds=_float("SYSML_PARSER_TIMEOUT_SECONDS", 90.0, "SYSML_AGENT_REAL_PARSER_TIMEOUT_SECONDS"),
             use_real_compiler=_bool("USE_REAL_COMPILER", True, "MODELICA_AGENT_USE_REAL_COMPILER"),
             omc_timeout_seconds=_float("OMC_TIMEOUT_SECONDS", 120.0, "MODELICA_AGENT_OMC_TIMEOUT_SECONDS"),
-            max_repair_attempts=int(_float("MAX_REPAIR_ATTEMPTS", 2.0)),
+            # Four repairs after the initial generation display and execute as 1/5..5/5.
+            max_repair_attempts=int(_float("MAX_REPAIR_ATTEMPTS", 4.0)),
             stage2_repair_budget_usd=_float("STAGE_2_REPAIR_BUDGET_USD", 1.0),
             stage3_repair_budget_usd=_float("STAGE_3_REPAIR_BUDGET_USD", 1.0),
             stage4_budget_usd=_float("STAGE_4_BUDGET_USD", 1.0),

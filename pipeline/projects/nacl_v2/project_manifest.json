@@ -1,8 +1,0 @@
-{
-  "project_id": "nacl_v2",
-  "name": "nacl_v2",
-  "created_at": "2026-09-22T07:59:55.266863+00:00",
-  "source_root": "test_cases\\nacl_evaporation_sysmlv2_full_dataset",
-  "status": "CREATED",
-  "knowledge_version": "v0000"
-}

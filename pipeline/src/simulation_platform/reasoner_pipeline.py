@@ -18,11 +18,10 @@ pipeline existed earlier and has since been removed).
              ordered multi-file Modelica bundle using verified Standard
              Library components (`contracts.ModelicaDraft.files`).
 
-Stage 1 is the only stage that reads the raw documents (which genuinely
-contain images -- diagrams, and any PDF page with embedded graphics) and
-so is the only stage that needs the vision-capable model (see
-`reasoner.Reasoner.__init__`'s own comment) -- Stages 2/3 work from
-already-extracted TEXT only, never touching an image again.
+Stage 1 is the only stage that reads the raw documents. Local Ollama mode
+uses gemma3:4b for text extraction and explicitly skips image-only files.
+OpenAI mode can process the original visual evidence when that is required.
+Stages 2/3 work from the extracted understanding and never read raw images.
 """
 
 from __future__ import annotations
@@ -116,6 +115,42 @@ def _draft_files(draft: ModelicaDraft) -> dict[str, str]:
 
 def _render_modelica_bundle(draft: ModelicaDraft) -> str:
     return "\n\n".join(f"--- {file.filename} ({file.role}) ---\n{file.code}" for file in draft.files)
+
+
+def _modelica_static_issues(draft: ModelicaDraft) -> list[str]:
+    """Catch deterministic Modelica mistakes before spending an omc run.
+
+    `connect()` accepts connectors only. Generated bundles have repeatedly used
+    ordinary Boolean/Real/Integer variables as endpoints, even though those
+    values must be assigned with equations instead.
+    """
+
+    declaration = re.compile(
+        r"(?m)^\s*(?:(?:parameter|constant|discrete|input|output)\s+)*"
+        r"(?:Real|Boolean|Integer)\s+([^;]+);"
+    )
+    connection = re.compile(
+        r"\bconnect\s*\(\s*([^,()]+?)\s*,\s*([^,()]+?)\s*\)", re.MULTILINE,
+    )
+    issues: list[str] = []
+    for file in draft.files:
+        plain_scalars: set[str] = set()
+        for match in declaration.finditer(file.code):
+            for item in match.group(1).split(","):
+                name_match = re.match(r"\s*([A-Za-z_]\w*)", item)
+                if name_match:
+                    plain_scalars.add(name_match.group(1))
+        for match in connection.finditer(file.code):
+            for endpoint in (match.group(1).strip(), match.group(2).strip()):
+                bare = re.fullmatch(r"([A-Za-z_]\w*)(?:\[[^\]]+\])?", endpoint)
+                if bare and bare.group(1) in plain_scalars:
+                    line = file.code.count("\n", 0, match.start()) + 1
+                    issues.append(
+                        f"- {file.filename}:{line}: connect() endpoint '{endpoint}' is an ordinary scalar, "
+                        "not a connector. Replace the connection with an equation assignment or use a "
+                        "proper Modelica connector."
+                    )
+    return issues
 
 
 def _force_split(piece: str) -> list[str]:
@@ -215,30 +250,42 @@ def _chunk_source_text(text: str) -> list[str]:
 _IMAGE_ONLY_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tif", ".tiff"}
 
 
-def _understand_documents(ws: Workspace, project_id: str, run_log: RunLog | None = None) -> list[Path]:
-    """One free-text understanding call per document, or per page-sized
-    chunk of a document too large for one call. Each file is written to
-    disk immediately as it's produced -- real, incremental progress
-    visible on disk, not an all-or-nothing result at the very end.
+def _understand_documents(ws: Workspace, project_id: str, run_log: RunLog | None = None, stage1_backend: str | None = None) -> list[Path]:
+    """Understand documents with a selectable Stage 1 backend.
 
-    TEXT ONLY -- no image ever reaches the model, per the user's explicit
-    choice: `read_source()` already extracts real text from every format
-    (PDF, DOCX, XLSX, email, code, ...), including PDF pages that ALSO
-    happen to attach a supplementary image; that supplementary image is
-    dropped, the real extracted text is not."""
+    "ollama" uses the configured local gemma text model and skips image-only
+    files. "openai" uses the configured OpenAI model (normally gpt-5.4) and
+    can process the original visual evidence. Raw parsing remains deterministic
+    and every generated note is written incrementally.
+    """
+
+    settings = PlatformSettings.load()
+    backend = (stage1_backend or settings.stage1_backend).strip().lower()
+    if backend not in {"ollama", "openai"}:
+        raise ValueError("Stage 1 backend must be ollama or openai")
+    reasoner = Reasoner(
+        settings,
+        1,
+        backend="openai" if backend == "openai" else "ollama",
+        model_override=settings.openai_model if backend == "openai" else None,
+        run_log=run_log,
+    )
 
     documents_dir = ws.documents_dir(project_id)
     understanding_dir = _understanding_dir(ws, project_id)
     understanding_dir.mkdir(parents=True, exist_ok=True)
-
-    reasoner = Reasoner(PlatformSettings.load(), 1, run_log=run_log)
     doc_paths = sorted(p for p in documents_dir.rglob("*") if p.is_file())
     written: list[Path] = []
 
     for doc_index, doc_path in enumerate(doc_paths, 1):
         rel = doc_path.relative_to(documents_dir).as_posix()
-        if doc_path.suffix.lower() in _IMAGE_ONLY_EXTENSIONS:
-            print(f"    [Stage 1] document {doc_index}/{len(doc_paths)}: {rel} -- skipped (image-only, vision disabled for now)", flush=True)
+        is_image_only = doc_path.suffix.lower() in _IMAGE_ONLY_EXTENSIONS
+        if is_image_only and backend == "ollama":
+            print(
+                f"    [Stage 1:{backend}] document {doc_index}/{len(doc_paths)}: {rel} "
+                "-- skipped (local Gemma mode is text-only)",
+                flush=True,
+            )
             continue
         try:
             source = read_source(doc_path, rel)
@@ -246,22 +293,28 @@ def _understand_documents(ws: Workspace, project_id: str, run_log: RunLog | None
             print(f"    [Stage 1] skipping {rel}: {exc}", flush=True)
             continue
 
+        if is_image_only:
+            packet = Packet([source])
+            text = reasoner.ask_free_text(DOCUMENT_UNDERSTANDING_PROMPT, "", packet)
+            out_path = understanding_dir / f"{doc_index}_{doc_path.stem}.txt"
+            out_path.write_text(text, encoding="utf-8")
+            written.append(out_path)
+            print(f"    [Stage 1:{backend}] document {doc_index}/{len(doc_paths)}: {rel} (visual)", flush=True)
+            continue
+
         chunks = _chunk_source_text(source.text) if len(source.text) > _MAX_CHARS_PER_CHUNK else [source.text]
         for chunk_index, chunk_text in enumerate(chunks):
-            chunk_source = Source(rel, chunk_text, images=[])  # text only -- see function docstring
+            chunk_source = Source(rel, chunk_text, images=[])
             packet = Packet([chunk_source])
             label = f"{rel}" + (f" (chunk {chunk_index + 1}/{len(chunks)})" if len(chunks) > 1 else "")
-            print(f"    [Stage 1] document {doc_index}/{len(doc_paths)}: {label}", flush=True)
-
+            print(f"    [Stage 1:{backend}] document {doc_index}/{len(doc_paths)}: {label}", flush=True)
             text = reasoner.ask_free_text(DOCUMENT_UNDERSTANDING_PROMPT, "", packet)
-
             suffix = f"_chunk{chunk_index:02d}" if len(chunks) > 1 else ""
             out_path = understanding_dir / f"{doc_index:02d}_{doc_path.stem}{suffix}.txt"
             out_path.write_text(text, encoding="utf-8")
             written.append(out_path)
 
     return written
-
 
 def _load_all_understanding(ws: Workspace, project_id: str) -> str:
     files = sorted(_understanding_dir(ws, project_id).glob("*.txt"))
@@ -366,6 +419,7 @@ def execute_reasoner_stage_1(
     docs_dir: Path | None = None,
     problem_path: Path | None = None,
     projects_root: Path | None = None,
+    stage1_backend: str | None = None,
 ) -> StageResult:
     ws = _workspace(projects_root)
     run_log = RunLog(ws.run_log_path(project_id))
@@ -376,7 +430,7 @@ def execute_reasoner_stage_1(
     ws.ensure_layout(project_id)
 
     with _traced_stage("Stage 1: read documents one at a time, write per-document understanding", run_log):
-        written = _understand_documents(ws, project_id, run_log)
+        written = _understand_documents(ws, project_id, run_log, stage1_backend=stage1_backend)
 
     return StageResult(
         stage="stage_1", project_id=project_id, status="READY",
@@ -544,7 +598,7 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
     for attempt in range(settings.max_repair_attempts + 1):
         prompt_context = context if attempt == 0 else (
             f"{context}\n\nYour previous multi-file attempt:\n\n{_render_modelica_bundle(draft)}\n\n"
-            f"The real OpenModelica compiler found these errors running an actual simulate() against the "
+            f"Modelica preflight or the real OpenModelica compiler found these errors while checking the "
             f"real {understanding.simulation.stop_time:.0f}s scenario above:\n\n{errors_summary}\n\n"
             "Before patching: re-read the engineering brief above and work out WHY this error happened in "
             "terms of the actual physical/control behavior it's supposed to represent, not just the "
@@ -589,6 +643,20 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
             run_log.event(
                 "validation_attempt", stage=3, attempt=attempt + 1, tool="stub_check", status="FAILED",
                 detail=errors_summary,
+            )
+            continue
+
+        static_issues = _modelica_static_issues(draft)
+        if static_issues:
+            errors_summary = "\n".join(static_issues)
+            print(
+                f"    [Stage 3] Modelica preflight found {len(static_issues)} invalid connect endpoint(s), "
+                f"attempt {attempt + 1}:\n{errors_summary}", flush=True,
+            )
+            run_log.event(
+                "validation_attempt", stage=3, attempt=attempt + 1,
+                tool="modelica_preflight", status="FAILED",
+                error_count=len(static_issues), errors=errors_summary,
             )
             continue
 
@@ -767,9 +835,9 @@ def _render_trajectory_digest(
     return "\n".join(lines)
 
 
-def _plot_trajectory(csv_path: Path, out_dir: Path, model_name: str, max_panels: int = 24) -> list[Path]:
-    """Saves the real simulated trajectory as PNG grids of per-variable line
-    plots, for the HUMAN reading Stage 4's report -- not for the LLM (vision
+def _plot_trajectory(csv_path: Path, out_dir: Path, model_name: str, max_series: int = 24) -> list[Path]:
+    """Saves each changing simulated variable as its own PNG line plot for
+    the HUMAN reading Stage 4's result -- not for the LLM (vision
     stays off this project's own standing choice, see `_understand_documents`'s
     docstring; Stage 4's review is grounded in `_render_trajectory_digest`'s
     real numbers, not a picture). matplotlib directly against the CSV
@@ -778,9 +846,9 @@ def _plot_trajectory(csv_path: Path, out_dir: Path, model_name: str, max_panels:
     new simulation-layer dependency needed on top of this project's own
     hardened `compile_files()` compiler wrapper. Skips any column that never
     changes (a fixed parameter echoed into the CSV) -- a flat line shows
-    nothing. Paginates rather than silently dropping variables past
-    `max_panels`. Returns the list of files written (empty if nothing to
-    plot)."""
+    nothing. Limits the set rather than silently creating an unbounded number
+    of images. Returns the list of individual files written (empty if nothing
+    changes)."""
 
     import matplotlib
     matplotlib.use("Agg")
@@ -810,26 +878,21 @@ def _plot_trajectory(csv_path: Path, out_dir: Path, model_name: str, max_panels:
         return []
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    names = sorted(series)
+    names = sorted(series)[:max_series]
     written: list[Path] = []
-    pages = [names[i:i + max_panels] for i in range(0, len(names), max_panels)]
-    for page_index, page_names in enumerate(pages):
-        n = len(page_names)
-        ncols = 3
-        nrows = -(-n // ncols)
-        fig, axes = plt.subplots(nrows, ncols, figsize=(5 * ncols, 3 * nrows), squeeze=False)
-        for i, name in enumerate(page_names):
-            ax = axes[i // ncols][i % ncols]
-            ax.plot(times, series[name], linewidth=1.2)
-            ax.set_title(name, fontsize=9)
-            ax.set_xlabel("time")
-            ax.grid(True, alpha=0.3)
-        for i in range(n, nrows * ncols):
-            axes[i // ncols][i % ncols].axis("off")
+    for stale in out_dir.glob(f"{model_name}.trajectory*.png"):
+        stale.unlink()
+    for index, name in enumerate(names, 1):
+        fig, ax = plt.subplots(figsize=(9, 4.8))
+        ax.plot(times, series[name], linewidth=1.5)
+        ax.set_title(name, fontsize=11)
+        ax.set_xlabel("time")
+        ax.set_ylabel(name)
+        ax.grid(True, alpha=0.3)
         fig.tight_layout()
-        suffix = f".page{page_index + 1}" if len(pages) > 1 else ""
-        out_path = out_dir / f"{model_name}.trajectory{suffix}.png"
-        fig.savefig(out_path, dpi=110)
+        safe_name = re.sub(r"[^A-Za-z0-9._-]+", "_", name).strip("._")[:80] or f"series_{index}"
+        out_path = out_dir / f"{model_name}.trajectory.{index:02d}.{safe_name}.png"
+        fig.savefig(out_path, dpi=130)
         plt.close(fig)
         written.append(out_path)
     return written

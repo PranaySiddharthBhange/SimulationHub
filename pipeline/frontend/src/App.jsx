@@ -6,8 +6,9 @@ import {
   getProject,
   listProjects,
   runProject,
+  runStage,
   streamLogs,
-  useDefaultClarifications,
+  useDefaultClarifications as submitDefaultClarifications,
 } from './api'
 import ArtifactViewer from './components/ArtifactViewer'
 import ClarificationCard from './components/ClarificationCard'
@@ -18,7 +19,15 @@ import Sidebar from './components/Sidebar'
 import StatusPill from './components/StatusPill'
 import { STAGES, STAGE_INDEX } from './constants'
 
-const EMPTY_ARTIFACTS = { understanding: false, sysml: false, modelica: false, validation: false }
+const EMPTY_ARTIFACTS = {
+  extraction: false,
+  understanding: false,
+  merged_understanding: false,
+  sysml: false,
+  modelica: false,
+  validation: false,
+  result: false,
+}
 
 function computeStepStates(project) {
   if (!project) return STAGES.map(() => 'pending')
@@ -29,8 +38,8 @@ function computeStepStates(project) {
     if (status === 'awaiting_input' && s.key === 'stage_2') return 'awaiting'
     if (idx >= 0 && i < idx) return 'done'
     if (idx >= 0 && i === idx) return 'active'
-    if (s.key === 'stage_1' && artifacts?.understanding) return 'done'
-    if (s.key === 'merge' && artifacts?.understanding) return 'done'
+    if (s.key === 'stage_1' && artifacts?.extraction) return 'done'
+    if (s.key === 'merge' && artifacts?.merged_understanding) return 'done'
     if (s.key === 'stage_2' && artifacts?.sysml) return 'done'
     if (s.key === 'stage_3' && artifacts?.modelica) return 'done'
     if (s.key === 'stage_4' && artifacts?.validation) return 'done'
@@ -47,8 +56,12 @@ export default function App() {
   const [showNewProject, setShowNewProject] = useState(false)
   const [clarifyBusy, setClarifyBusy] = useState(false)
   const [refreshToken, setRefreshToken] = useState(0)
+  const [streamGeneration, setStreamGeneration] = useState(0)
+  const [stage1Backend, setStage1Backend] = useState('ollama')
+  const [logWidth, setLogWidth] = useState(390)
   const esRef = useRef(null)
   const prevSignature = useRef(null)
+  const resizingLogs = useRef(false)
 
   const refreshProjectList = useCallback(() => {
     listProjects().then(setProjects).catch(() => {})
@@ -85,17 +98,39 @@ export default function App() {
           refreshProjectList()
           setRefreshToken((t) => t + 1)
         }
-        if (payload.status === 'done' || payload.status === 'error') {
+        if (['stage1_ready', 'ready', 'done', 'error'].includes(payload.status)) {
           es.close()
         }
       },
     })
     esRef.current = es
     return () => es.close()
-  }, [selectedId, refreshProjectList])
+  }, [selectedId, refreshProjectList, streamGeneration])
 
-  const handleCreate = async (name, files) => {
-    const res = await createProject(name, files)
+  useEffect(() => {
+    if (project?.stage1_backend) setStage1Backend(project.stage1_backend)
+  }, [project?.stage1_backend])
+
+  useEffect(() => {
+    const onMove = (event) => {
+      if (!resizingLogs.current) return
+      setLogWidth(Math.max(300, Math.min(680, window.innerWidth - event.clientX - 24)))
+    }
+    const onUp = () => {
+      resizingLogs.current = false
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+    window.addEventListener('pointermove', onMove)
+    window.addEventListener('pointerup', onUp)
+    return () => {
+      window.removeEventListener('pointermove', onMove)
+      window.removeEventListener('pointerup', onUp)
+    }
+  }, [])
+
+  const handleCreate = async (name, files, stage1Backend) => {
+    const res = await createProject(name, files, stage1Backend)
     setShowNewProject(false)
     refreshProjectList()
     setSelectedId(res.project_id)
@@ -103,7 +138,16 @@ export default function App() {
 
   const handleRun = async () => {
     if (!selectedId) return
-    await runProject(selectedId)
+    await runProject(selectedId, stage1Backend)
+    setStreamGeneration((value) => value + 1)
+    getProject(selectedId).then(setProject).catch(() => {})
+    refreshProjectList()
+  }
+
+  const handleRunStage = async (stage) => {
+    if (!selectedId) return
+    await runStage(selectedId, stage, stage1Backend)
+    setStreamGeneration((value) => value + 1)
     getProject(selectedId).then(setProject).catch(() => {})
     refreshProjectList()
   }
@@ -120,7 +164,7 @@ export default function App() {
   const handleUseDefaults = async () => {
     setClarifyBusy(true)
     try {
-      await useDefaultClarifications(selectedId)
+      await submitDefaultClarifications(selectedId)
     } finally {
       setClarifyBusy(false)
     }
@@ -167,7 +211,7 @@ export default function App() {
         )}
 
         {project && (
-          <div className="fade-up mx-auto flex min-h-full max-w-6xl flex-col gap-5 px-6 py-6">
+          <div className="fade-up mx-auto flex min-h-full max-w-[1600px] flex-col gap-5 px-6 py-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="font-serif text-xl font-semibold text-[var(--text)]">
@@ -190,12 +234,50 @@ export default function App() {
                 ) : (
                   <Play className="h-4 w-4" fill="white" />
                 )}
-                {project.status === 'created' ? 'Run pipeline' : 'Re-run'}
+                {project.status === 'created'
+                  ? 'Run pipeline'
+                  : ['stage1_ready', 'ready'].includes(project.status)
+                    ? 'Continue pipeline'
+                    : 'Re-run'}
               </button>
             </div>
 
             <div className="card rounded-xl px-6 py-5">
-              <PipelineStepper states={stepStates} />
+              <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-4">
+                <div>
+                  <div className="text-[13px] font-semibold text-[var(--text)]">Understanding backend</div>
+                  <div className="mt-0.5 text-[11.5px] text-[var(--text-dim)]">
+                    Choose before running or re-running Understand
+                  </div>
+                </div>
+                <div className="inline-flex rounded-lg border border-[var(--border-strong)] bg-[var(--bg-soft)] p-1">
+                  {[
+                    ['ollama', 'Local Gemma'],
+                    ['openai', 'Cloud GPT-5.4'],
+                  ].map(([value, label]) => (
+                    <button
+                      key={value}
+                      type="button"
+                      disabled={project.status === 'running' || project.status === 'awaiting_input'}
+                      onClick={() => setStage1Backend(value)}
+                      className="rounded-md px-3 py-1.5 text-[11.5px] font-semibold transition-colors disabled:opacity-50"
+                      style={{
+                        background: stage1Backend === value ? 'var(--panel)' : 'transparent',
+                        color: stage1Backend === value ? 'var(--accent)' : 'var(--text-muted)',
+                        boxShadow: stage1Backend === value ? '0 1px 2px rgba(38,38,36,.08)' : 'none',
+                      }}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <PipelineStepper
+                states={stepStates}
+                onRunStage={handleRunStage}
+                logs={logs}
+                disabled={project.status === 'running' || project.status === 'awaiting_input'}
+              />
             </div>
 
             {project.status === 'error' && project.error && (
@@ -221,9 +303,25 @@ export default function App() {
               />
             )}
 
-            <div className="grid min-h-0 flex-1 grid-cols-2 gap-5 pb-2">
-              <LogPanel logs={logs} />
-              <ArtifactViewer projectId={selectedId} available={artifacts} refreshToken={refreshToken} />
+            <div className="flex min-h-[540px] flex-1 pb-2">
+              <div className="min-w-0 flex-1">
+                <ArtifactViewer projectId={selectedId} available={artifacts} refreshToken={refreshToken} />
+              </div>
+              <button
+                type="button"
+                aria-label="Resize activity log"
+                onPointerDown={() => {
+                  resizingLogs.current = true
+                  document.body.style.cursor = 'col-resize'
+                  document.body.style.userSelect = 'none'
+                }}
+                className="group mx-1.5 flex w-2 cursor-col-resize items-center justify-center"
+              >
+                <span className="h-16 w-1 rounded-full bg-[var(--border-strong)] transition-colors group-hover:bg-[var(--accent)]" />
+              </button>
+              <div className="shrink-0" style={{ width: logWidth }}>
+                <LogPanel logs={logs} stage1Backend={stage1Backend} />
+              </div>
             </div>
           </div>
         )}

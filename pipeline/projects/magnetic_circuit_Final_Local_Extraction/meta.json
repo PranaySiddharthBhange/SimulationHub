@@ -1,0 +1,13 @@
+{
+  "project_id": "magnetic_circuit_Final_Local_Extraction",
+  "name": "magnetic_circuit_Final_Local_Extraction",
+  "mode": "local",
+  "stage1_backend": "ollama",
+  "source_path": "C:\\Users\\Pranay Bhange\\Desktop\\Hackathon\\pipeline\\test_cases\\magnetic_circuit_sysmlv2_full_dataset",
+  "updated_at": "2026-09-22T23:27:00.506791+00:00",
+  "status": "stage1_ready",
+  "extraction_status": "completed",
+  "document_count": 15,
+  "documents_understood": 25,
+  "elapsed_seconds": 2315.9
+}

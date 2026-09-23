@@ -1,0 +1,13 @@
+{
+  "project_id": "nacl_evaporation_Final_Local_Extraction",
+  "name": "nacl_evaporation_Final_Local_Extraction",
+  "mode": "local",
+  "stage1_backend": "ollama",
+  "source_path": "C:\\Users\\Pranay Bhange\\Desktop\\Hackathon\\pipeline\\test_cases\\nacl_evaporation_sysmlv2_full_dataset",
+  "updated_at": "2026-09-23T00:33:03.273666+00:00",
+  "status": "stage1_ready",
+  "extraction_status": "completed",
+  "document_count": 15,
+  "documents_understood": 30,
+  "elapsed_seconds": 3962.8
+}

@@ -48,7 +48,9 @@ Physical or logical components of the actual system this batch describes -- \
 whatever real component types are actually named or implied in the text \
 (this varies by domain: it could be mechanical, electrical, thermal, \
 chemical, or something else entirely -- do not assume any particular kind \
-of system). For each: its name, its type, and any other names it's called \
+of system). Include named actors and control elements (for example an \
+operator, controller, sensor, switch, or actuator) when they initiate, sense, \
+or carry out a behavior. For each: its name, its type, and any other names it's called \
 elsewhere in this batch (aliases). List every real component that appears \
 ANYWHERE in this batch, including one only named inline inside a list \
 alongside others (e.g. "opens V18, V23, V22, V1, V3") -- give it its own \
@@ -62,13 +64,22 @@ Connections between entities (contains, connected_to, supplies, controls, \
 regulates, depends_on, triggers, signal_flow, etc.) -- only between \
 entities you actually named above. A formula or equation goes in Physical \
 relationships below instead, not here, even if it also relates two named \
-entities -- don't write the same fact in both sections.
+entities -- don't write the same fact in both sections. If the source says \
+that something is "connected by", "joined to", "feeds", "flows to", \
+"opens a path to", or otherwise routes a signal/material between named \
+entities, write that explicit connection here with its direction or medium. \
+Do not write "None" when the batch contains any such connection statement; \
+split a shared connection into one bullet per affected pair when needed.
 
 ## Requirements
-Measurable bounds on a property (a numeric value/min/max with a unit, or \
-equality against a named state) -- only ones explicitly stated with an \
-actual number, never an architectural/narrative statement with no \
-measurable value.
+Every explicitly required outcome stated with words such as "shall", "must", \
+"required", or "needs to", plus measurable bounds on a property (a numeric \
+value/min/max with a unit, or equality against a named state). A required \
+experiment duration and the variables/results that the document says to report \
+belong here together as one requirement. Preserve every named output and its \
+duration exactly; for example, "report tank levels and valve commands for a \
+900-second experiment" must not be reduced to only "900 seconds" or omitted. \
+Only include requirements actually stated by the source.
 
 ## Behaviors
 Discrete IF/THEN control rules (a stated measured property crossing a \
@@ -110,6 +121,35 @@ clock). Use the actual command name(s) the document gives, never a generic \
 placeholder word.
 
 HOW TO WRITE IT (this is guidance for you, not a section to reproduce in your output)
+- Before answering, read the batch once from beginning to end and account for \
+EVERY sentence. Pay particular attention to the final sentence, which often \
+contains the simulation duration, required outputs, or acceptance condition. \
+Before returning, check that every explicit number with a unit and every \
+shall/must/required statement appears in exactly one of the seven sections. \
+Concise means one faithful bullet per fact; it never means dropping a stated \
+duration, output, threshold, command, or requirement.
+- Extract meaning at the atomic-fact level. Preserve the subject, object, \
+direction, action, condition, timing, affected component, and result of each \
+statement; do not summarize away routing, signal flow, control intent, or \
+cause-and-effect. Terms such as "connected by", "through", "feeds", \
+"flows to", "controls", "until", "after", "before", "when", "pauses", \
+"resumes", "inhibits", and "reports" are meaningful evidence and must be \
+represented in the appropriate section when the source uses them.
+- Preserve ordered procedures as ordered behavior bullets. Keep the entry \
+trigger, action or actuator state, completion guard, wait or duration, and \
+next phase together; do not flatten a multi-step sequence into a vague \
+summary or move a completion condition onto a different action.
+- Separate what the source says from what you infer. Use `Explicit:` for a \
+directly stated fact and `Implied:` only for a necessary interpretation that \
+follows from the wording. Never invent a domain convention, component, \
+threshold, connection, priority, or failure mode. If the source leaves an \
+alternative or dependency unresolved, retain that uncertainty instead of \
+choosing one plausible answer.
+- Preserve operational detail that is easy to lose: requested reports and \
+logged variables, experiment windows and durations, acceptance observations, \
+units, aliases, command names, interlocks, pause/resume behavior, revisions, \
+and stated absences or prohibitions. A fact may be concise, but it must remain \
+traceable to the source wording.
 - If given a "[page N]" marker, cite it as "(page N)" right after the fact it \
 supports -- just the word "page" and its number, nothing else inside the \
 parentheses. No marker given anywhere -> no citation, id, or page number at \

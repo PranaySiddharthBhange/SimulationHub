@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 import threading
 import time
 import traceback
@@ -62,7 +63,7 @@ app.add_middleware(
 
 _ws = Workspace(PlatformSettings.load().projects_root)
 
-Status = Literal["created", "running", "awaiting_input", "done", "error", "interrupted"]
+Status = Literal["created", "stage1_ready", "ready", "running", "awaiting_input", "done", "error", "interrupted"]
 
 
 @dataclass
@@ -113,8 +114,25 @@ def _run_pipeline(project_id: str) -> None:
     from simulation_platform.utils.run_log import RunLog
     RunLog(_ws.run_log_path(project_id)).event("run_started")
     try:
-        state.current_stage = "stage_1"
-        execute_reasoner_stage_1(project_id, projects_root=_ws.projects_root)
+        meta = {}
+        if _meta_path(project_id).exists():
+            meta = json.loads(_meta_path(project_id).read_text(encoding="utf-8"))
+        stage1_backend = meta.get("stage1_backend", "ollama")
+        notes_dir = _ws.extracted_dir(project_id) / "understanding"
+        stage1_ready = (
+            meta.get("extraction_status") == "completed"
+            and notes_dir.exists()
+            and any(notes_dir.glob("*.txt"))
+        )
+        if stage1_ready:
+            RunLog(_ws.run_log_path(project_id)).event(
+                "stage_skipped", stage="stage_1", reason="completed by create_project script",
+            )
+        else:
+            state.current_stage = "stage_1"
+            execute_reasoner_stage_1(
+                project_id, projects_root=_ws.projects_root, stage1_backend=stage1_backend,
+            )
         state.current_stage = "merge"
         execute_merge(project_id, projects_root=_ws.projects_root)
         state.current_stage = "stage_2"
@@ -142,16 +160,36 @@ def _meta_path(project_id: str) -> Path:
     return _ws.project_dir(project_id) / "meta.json"
 
 
+def _read_meta(project_id: str) -> dict:
+    path = _meta_path(project_id)
+    if not path.exists():
+        return {}
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def _write_meta(project_id: str, meta: dict) -> None:
+    _meta_path(project_id).write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
+
+
 def _artifacts(project_id: str) -> dict:
     sysml_dir = _ws.sysml_dir(project_id) / "generated"
     modelica_dir = _ws.modelica_dir(project_id) / "generated"
     validation_dir = _ws.validation_dir(project_id)
+    results_dir = _ws.modelica_dir(project_id) / "results"
     understanding_path = _ws.extracted_dir(project_id) / "merged_understanding.txt"
+    notes_dir = _ws.extracted_dir(project_id) / "understanding"
+    extraction = notes_dir.exists() and any(notes_dir.glob("*.txt"))
     return {
-        "understanding": understanding_path.exists(),
+        "extraction": extraction,
+        "understanding": understanding_path.exists() or extraction,
+        "merged_understanding": understanding_path.exists(),
         "sysml": sysml_dir.exists() and any(sysml_dir.glob("*.sysml")),
         "modelica": modelica_dir.exists() and any(modelica_dir.glob("*.mo")),
         "validation": validation_dir.exists() and any(validation_dir.glob("*.report.json")),
+        "result": results_dir.exists() and any(results_dir.glob("*.png")),
     }
 
 
@@ -191,12 +229,33 @@ def _effective_status(project_id: str) -> dict:
         return {"status": "done", "current_stage": None, "error": None, "pending_clarifications": None}
 
     last_event = _tail_last_event(project_id)
-    if last_event is None:
-        return {"status": "created", "current_stage": None, "error": None, "pending_clarifications": None}
-
-    if last_event.get("event") == "stage_end" and last_event.get("ok") is False:
+    if last_event is not None and last_event.get("event") == "stage_end" and last_event.get("ok") is False:
         error = f"{last_event.get('error_type')}: {last_event.get('error_message')}"
         return {"status": "error", "current_stage": None, "error": error, "pending_clarifications": None}
+
+    meta = _read_meta(project_id)
+    stage1_finished = (
+        last_event is not None
+        and last_event.get("event") == "stage_end"
+        and str(last_event.get("name", "")).startswith("Stage 1:")
+        and last_event.get("ok") is True
+    )
+    if (
+        meta.get("extraction_status") == "completed"
+        and _artifacts(project_id)["extraction"]
+        and stage1_finished
+    ):
+        return {
+            "status": "stage1_ready", "current_stage": None,
+            "error": None, "pending_clarifications": None,
+        }
+
+    artifacts = _artifacts(project_id)
+    if artifacts["merged_understanding"] or artifacts["sysml"] or artifacts["modelica"]:
+        return {"status": "ready", "current_stage": None, "error": None, "pending_clarifications": None}
+
+    if last_event is None:
+        return {"status": "created", "current_stage": None, "error": None, "pending_clarifications": None}
 
     return {
         "status": "interrupted", "current_stage": None,
@@ -208,13 +267,15 @@ def _effective_status(project_id: str) -> dict:
 
 @app.get("/api/health")
 def health():
-    return {"ok": True}
+    return {"ok": True, "application": "hackathon-simulation-pipeline"}
 
 
 @app.post("/api/projects")
-async def create_project(name: str = Form(...), files: list[UploadFile] = File(...)):
+async def create_project(name: str = Form(...), stage1_backend: str = Form("ollama"), files: list[UploadFile] = File(...)):
     if not files:
         raise HTTPException(400, "attach at least one document")
+    if stage1_backend not in {"ollama", "openai"}:
+        raise HTTPException(400, "stage1_backend must be ollama or openai")
     project_id = _slugify(name)
     docs_dir = _ws.documents_dir(project_id)
     docs_dir.mkdir(parents=True, exist_ok=True)
@@ -222,7 +283,7 @@ async def create_project(name: str = Form(...), files: list[UploadFile] = File(.
         filename = Path(f.filename or "document").name
         (docs_dir / filename).write_bytes(await f.read())
     _ws.ensure_layout(project_id)
-    _meta_path(project_id).write_text(json.dumps({"name": name}), encoding="utf-8")
+    _meta_path(project_id).write_text(json.dumps({"name": name, "stage1_backend": stage1_backend}), encoding="utf-8")
     return {"project_id": project_id, "name": name}
 
 
@@ -256,8 +317,10 @@ def get_project(project_id: str):
     if not root.exists():
         raise HTTPException(404, "project not found")
     effective = _effective_status(project_id)
+    meta = _read_meta(project_id)
     return {
         "project_id": project_id,
+        "stage1_backend": meta.get("stage1_backend", "ollama"),
         "status": effective["status"],
         "current_stage": effective["current_stage"],
         "error": effective["error"],
@@ -266,15 +329,129 @@ def get_project(project_id: str):
     }
 
 
+class RunBody(BaseModel):
+    stage1_backend: Literal["ollama", "openai"] | None = None
+
+
+class StageRunBody(BaseModel):
+    stage1_backend: Literal["ollama", "openai"] | None = None
+
+
 @app.post("/api/projects/{project_id}/run")
-def run_project(project_id: str):
+def run_project(project_id: str, body: RunBody | None = None):
     if not _ws.project_dir(project_id).exists():
         raise HTTPException(404, "project not found")
     state = _state(project_id)
     if state.status in ("running", "awaiting_input"):
         raise HTTPException(409, "already running")
+    if body is not None and body.stage1_backend is not None:
+        meta = _read_meta(project_id)
+        meta["stage1_backend"] = body.stage1_backend
+        _write_meta(project_id, meta)
+    state.status = "running"
+    state.current_stage = None
+    state.error = None
     threading.Thread(target=_run_pipeline, args=(project_id,), daemon=True).start()
     return {"status": "started"}
+
+
+def _require_stage_input(project_id: str, stage: str) -> None:
+    artifacts = _artifacts(project_id)
+    if stage == "stage_1":
+        if not any(_ws.documents_dir(project_id).rglob("*")):
+            raise HTTPException(400, "Stage 1 requires source documents")
+    elif stage == "merge" and not artifacts["extraction"]:
+        raise HTTPException(400, "Merge requires completed Stage 1 extraction")
+    elif stage == "stage_2" and not artifacts["merged_understanding"]:
+        raise HTTPException(400, "SysML generation requires a merged understanding")
+    elif stage == "stage_3" and not artifacts["sysml"]:
+        raise HTTPException(400, "Modelica generation requires SysML output")
+    elif stage == "stage_4" and not artifacts["modelica"]:
+        raise HTTPException(400, "Validation requires Modelica output")
+
+
+def _remove(path: Path) -> None:
+    if path.is_dir():
+        shutil.rmtree(path)
+    elif path.exists():
+        path.unlink()
+
+
+def _prepare_stage_rerun(project_id: str, stage: str) -> None:
+    extracted = _ws.extracted_dir(project_id)
+    project_root = _ws.project_dir(project_id)
+    if stage == "stage_1":
+        _remove(extracted / "understanding")
+        _remove(extracted / "merged_understanding.json")
+        _remove(extracted / "merged_understanding.txt")
+        _remove(project_root / "sysml")
+        _remove(project_root / "modelica")
+        _remove(project_root / "validation")
+    elif stage == "merge":
+        _remove(extracted / "merged_understanding.json")
+        _remove(extracted / "merged_understanding.txt")
+        _remove(project_root / "sysml")
+        _remove(project_root / "modelica")
+        _remove(project_root / "validation")
+    elif stage == "stage_2":
+        _remove(project_root / "sysml")
+        _remove(project_root / "modelica")
+        _remove(project_root / "validation")
+    elif stage == "stage_3":
+        _remove(project_root / "modelica")
+        _remove(project_root / "validation")
+    elif stage == "stage_4":
+        _remove(project_root / "modelica" / "results")
+        _remove(project_root / "validation")
+
+
+def _run_single_stage(project_id: str, stage: str, stage1_backend: str | None) -> None:
+    state = _state(project_id)
+    state.status = "running"
+    state.current_stage = stage
+    state.error = None
+    try:
+        _prepare_stage_rerun(project_id, stage)
+        if stage == "stage_1":
+            backend = stage1_backend or _read_meta(project_id).get("stage1_backend", "ollama")
+            execute_reasoner_stage_1(project_id, projects_root=_ws.projects_root, stage1_backend=backend)
+            meta = _read_meta(project_id)
+            meta.update({"stage1_backend": backend, "extraction_status": "completed", "status": "stage1_ready"})
+            _write_meta(project_id, meta)
+        elif stage == "merge":
+            execute_merge(project_id, projects_root=_ws.projects_root)
+        elif stage == "stage_2":
+            execute_reasoner_stage_2(
+                project_id, projects_root=_ws.projects_root, clarify=_make_clarify(project_id),
+            )
+        elif stage == "stage_3":
+            execute_reasoner_stage_3(project_id, projects_root=_ws.projects_root)
+        elif stage == "stage_4":
+            execute_reasoner_stage_4(project_id, projects_root=_ws.projects_root)
+        state.status = "created"
+        state.current_stage = None
+    except Exception as exc:  # noqa: BLE001
+        traceback.print_exc()
+        state.status = "error"
+        state.error = f"{type(exc).__name__}: {exc}"
+
+
+@app.post("/api/projects/{project_id}/stages/{stage}/run")
+def run_stage(project_id: str, stage: str, body: StageRunBody | None = None):
+    if not _ws.project_dir(project_id).exists():
+        raise HTTPException(404, "project not found")
+    if stage not in {"stage_1", "merge", "stage_2", "stage_3", "stage_4"}:
+        raise HTTPException(404, "unknown pipeline stage")
+    state = _state(project_id)
+    if state.status in ("running", "awaiting_input"):
+        raise HTTPException(409, "another stage is already running")
+    _require_stage_input(project_id, stage)
+    backend = body.stage1_backend if body is not None else None
+    state.status = "running"
+    state.current_stage = stage
+    state.error = None
+    threading.Thread(target=_run_single_stage, args=(project_id, stage, backend), daemon=True).start()
+    return {"status": "started", "stage": stage}
 
 
 class AnswerBody(BaseModel):
@@ -327,7 +504,7 @@ def stream_logs(project_id: str):
             effective = _effective_status(project_id)
             yield f"event: status\ndata: {json.dumps(effective)}\n\n"
             current_size = path.stat().st_size if path.exists() else 0
-            if effective["status"] in ("done", "error", "interrupted") and pos >= current_size:
+            if effective["status"] in ("stage1_ready", "ready", "done", "error", "interrupted") and pos >= current_size:
                 break
             time.sleep(0.5)
 
@@ -337,9 +514,16 @@ def stream_logs(project_id: str):
 @app.get("/api/projects/{project_id}/artifacts/understanding")
 def get_understanding(project_id: str):
     path = _ws.extracted_dir(project_id) / "merged_understanding.txt"
-    if not path.exists():
+    if path.exists():
+        return {"content": path.read_text(encoding="utf-8")}
+    notes_dir = _ws.extracted_dir(project_id) / "understanding"
+    notes = sorted(notes_dir.glob("*.txt")) if notes_dir.exists() else []
+    if not notes:
         raise HTTPException(404, "not generated yet")
-    return {"content": path.read_text(encoding="utf-8")}
+    content = "\n\n".join(
+        f"--- {note.name} ---\n{note.read_text(encoding='utf-8')}" for note in notes
+    )
+    return {"content": content}
 
 
 @app.get("/api/projects/{project_id}/artifacts/sysml")
@@ -393,21 +577,36 @@ def get_validation(project_id: str):
     """Stage 4's report: verdict, issues, assumptions, and root causes from
     an independent review of the REAL simulated trajectory against the
     actual problem statement -- see `reasoner_pipeline.execute_reasoner_stage_4`.
-    `plots` lists the saved trajectory PNGs (fetch each via
-    .../artifacts/validation/plot/{filename})."""
+    Simulation plots are exposed separately by the result artifact."""
 
     val_dir = _ws.validation_dir(project_id)
     reports = sorted(val_dir.glob("*.report.json")) if val_dir.exists() else []
     if not reports:
         raise HTTPException(404, "not generated yet")
     report = json.loads(reports[-1].read_text(encoding="utf-8"))
+    return {"filename": reports[-1].name, "report": report}
+
+
+@app.get("/api/projects/{project_id}/artifacts/result")
+def get_result(project_id: str):
     results_dir = _ws.modelica_dir(project_id) / "results"
     plots = sorted(p.name for p in results_dir.glob("*.png")) if results_dir.exists() else []
-    return {"filename": reports[-1].name, "report": report, "plots": plots}
+    if not plots:
+        raise HTTPException(404, "no result graphs generated yet")
+    return {
+        "filename": f"{len(plots)} individual result graphs",
+        "plots": [
+            {
+                "filename": filename,
+                "label": re.sub(r"^.*?\.trajectory\.\d+\.", "", Path(filename).stem).replace("_", " "),
+            }
+            for filename in plots
+        ],
+    }
 
 
-@app.get("/api/projects/{project_id}/artifacts/validation/plot/{filename}")
-def get_validation_plot(project_id: str, filename: str):
+@app.get("/api/projects/{project_id}/artifacts/result/plot/{filename}")
+def get_result_plot(project_id: str, filename: str):
     from fastapi.responses import FileResponse
 
     results_dir = _ws.modelica_dir(project_id) / "results"

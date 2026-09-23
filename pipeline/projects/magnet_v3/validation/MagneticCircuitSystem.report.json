@@ -1,7 +1,0 @@
-{
-  "verdict": "valid",
-  "summary": "The simulation is valid: it reproduces the intended 0–0.10 s zero-current hold, the ramp to 2.0 A, and the 2.0 A hold through 1.0 s, and the final simulated values match the released benchmark targets to the shown precision. At the end of the run, the model reaches I_rms = 2 A and F_mmf = 1200 A-turns, with Phi_core = 0.000524935 Wb, Phi_gap = 0.000482941 Wb, Phi_leak = 4.19948e-05 Wb, B_core = 0.839897 T, B_gap = 0.772705 T, H_core = 556.974 A/m, H_gap = 614899 A/m, Vm_core = 277.651 A-turns, Vm_gap = 922.349 A-turns, U_exc = 98.948 V_rms, and U_meas = -7.58601 V_rms, all matching the released analytic endpoint values within the stated tolerances. The useful/core flux ratio reaches and holds 0.92, and the reported mmf balance residual stays essentially zero (final -1.13687e-13 A-turns, extrema ±2.27374e-13), which is far inside the 6.0 A-turn acceptance limit. Initial conditions also match the brief: fluxes and induced voltages are zero at t = 0. The only notable runtime detail is that the ratio variable steps from 0 to 0.92 at t = 0.1000000762 s rather than exactly 0.10 s, but this is a negligible event-time resolution artifact and does not affect the physical results or any acceptance check.",
-  "issues": [],
-  "assumptions": [],
-  "root_causes": []
-}

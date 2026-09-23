@@ -83,12 +83,26 @@ class Reasoner:
             # seconds for text-only calls) --
             # `reasoner_pipeline.py::_understand_documents` never attaches
             # an image to any packet it builds, so Stage 1 no longer needs
-            # the vision-capable model either. `qwen3:8b` everywhere, per
+            # the vision-capable model either. `gemma3:4b` everywhere, per
             # the user's standing choice; `settings.stage1_vision_model`
             # (`gemma3:4b`) is kept configured, unused, in case vision is
             # turned back on later rather than deleted.
             self.model = {1: settings.stage1_extraction_model, 2: settings.stage2_mapping_model,
                           3: settings.stage3_mapping_model}[stage]
+
+    def _record_openai_usage(self, message) -> tuple[int, int, float]:
+        """Record the configured best-effort API cost for one raw AI message."""
+        if self.backend != "openai":
+            return 0, 0, 0.0
+        usage = getattr(message, "usage_metadata", None) or {}
+        input_tokens = int(usage.get("input_tokens", 0) or 0)
+        output_tokens = int(usage.get("output_tokens", 0) or 0)
+        call_spent = (
+            (input_tokens / 1000) * self.settings.price_per_1k_input_usd
+            + (output_tokens / 1000) * self.settings.price_per_1k_output_usd
+        )
+        self.spent += call_spent
+        return input_tokens, output_tokens, call_spent
 
     def _build_model(self, prompt: str, content: list[dict]):
         """Returns a constructed, backend-appropriate chat model -- the ONE
@@ -128,24 +142,24 @@ class Reasoner:
         # Ollama's own per-model choice (`structured_output_method`) is
         # unrelated and doesn't apply here.
         method = "function_calling" if self.backend == "openai" else structured_output_method(self.model)
-        structured_model = model.with_structured_output(schema, method=method)
         log_llm_call(f"Stage {self.stage}", self.model, schema.__name__)
-        result = structured_model.invoke(
-            [{"role": "system", "content": prompt}, {"role": "user", "content": content}]
-        )
-        self.calls += 1
+        messages = [{"role": "system", "content": prompt}, {"role": "user", "content": content}]
         if self.backend == "openai":
-            # Real dollar cost -- best-effort estimate from the shared
-            # per-1k-token price settings; local models stay at 0 (no bill).
-            usage = getattr(result, "usage_metadata", None) or {}
-            self.spent += (
-                (usage.get("input_tokens", 0) / 1000) * self.settings.price_per_1k_input_usd
-                + (usage.get("output_tokens", 0) / 1000) * self.settings.price_per_1k_output_usd
-            )
+            wrapped = model.with_structured_output(schema, method=method, include_raw=True).invoke(messages)
+            result = wrapped.get("parsed")
+            if result is None:
+                raise wrapped.get("parsing_error") or RuntimeError("OpenAI returned no parsed structured result")
+            input_tokens, output_tokens, call_spent = self._record_openai_usage(wrapped.get("raw"))
+        else:
+            structured_model = model.with_structured_output(schema, method=method)
+            result = structured_model.invoke(messages)
+            input_tokens, output_tokens, call_spent = 0, 0, 0.0
+        self.calls += 1
         if self.run_log is not None:
             self.run_log.event(
                 "llm_call", stage=self.stage, backend=self.backend, model=self.model,
-                schema=schema.__name__, cumulative_spent_usd=round(self.spent, 4),
+                schema=schema.__name__, input_tokens=input_tokens, output_tokens=output_tokens,
+                call_spent_usd=round(call_spent, 6), cumulative_spent_usd=round(self.spent, 6),
             )
         return result  # type: ignore[return-value]
 
@@ -165,10 +179,12 @@ class Reasoner:
         model = self._build_model(prompt, content)
         log_llm_call(f"Stage {self.stage}", self.model, "free text")
         result = model.invoke([{"role": "system", "content": prompt}, {"role": "user", "content": content}])
+        input_tokens, output_tokens, call_spent = self._record_openai_usage(result)
         self.calls += 1
         if self.run_log is not None:
             self.run_log.event(
                 "llm_call", stage=self.stage, backend=self.backend, model=self.model,
-                schema="free text", cumulative_spent_usd=round(self.spent, 4),
+                schema="free text", input_tokens=input_tokens, output_tokens=output_tokens,
+                call_spent_usd=round(call_spent, 6), cumulative_spent_usd=round(self.spent, 6),
             )
         return result.content

@@ -41,6 +41,19 @@ mistakes for you. You are fully capable of getting this right in one pass: apply
 real Modelica semantics rigorously, not a rough approximation of them, and actually
 verify your own equations against the two checklists below before returning them.
 
+CONNECTOR DISCIPLINE -- check this before returning any bundle:
+- Every operand passed to `connect(a, b)` must be a real connector declared with
+  a connector class such as `Modelica.Blocks.Interfaces.BooleanInput`,
+  `BooleanOutput`, `RealInput`, or `RealOutput`, or a connector member of a
+  component instance.
+- A plain `Boolean`, `Real`, or `Integer` variable is never a connector. Do not
+  write `connect(controller.startCmd, startCmd)` when `startCmd` was declared as
+  `Boolean startCmd;`. Use an equation such as `controller.startCmd = startCmd;`,
+  or model the source itself with a proper output connector.
+- Audit both operands of every `connect(...)` against their declarations. This
+  applies to command pulses, sensor values, schedules, and physical quantities;
+  graphical annotations do not turn an ordinary scalar into a connector.
+
 AUTHORING ORDER -- cover these five things, matching the ACTUAL system in the brief,
 not a generic template:
 1. STATE VARIABLES -- one continuous Real state per accumulating physical quantity

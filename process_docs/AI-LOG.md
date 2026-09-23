@@ -214,3 +214,24 @@
 - **Reason:** A visible workflow makes the generalized backend easier to operate and review than terminal output alone.
 - **Boundary:** The UI calls the shared backend and does not reintroduce tank-specific extraction or validation logic.
 - **Commit scope:** The older implementation documentation is removed as the architecture moves to the running UI-backed pipeline.
+### A32 Per-project extraction backend selection
+
+- **UI feature:** New project creation offers Local Gemma or Cloud GPT-5.4 for Stage 1.
+- **Persistence:** The selected backend is stored in project metadata and passed to Stage 1 when the pipeline starts.
+- **Behavior:** Local mode uses text-only Gemma and skips image-only files; cloud mode uses GPT-5.4 and can process visual evidence.
+- **Reason:** Reviewers can choose the privacy and cost profile per project without changing global configuration.
+
+### A33 Frontend delivery for the running pipeline
+
+- **Frontend files marked:** `pipeline/frontend/src/App.jsx`, `src/api.js`, `components/NewProjectModal.jsx`, `components/PipelineStepper.jsx`, `components/LogPanel.jsx`, `components/ArtifactViewer.jsx`, `components/StatusPill.jsx`, `vite.config.js`, and `public/runtime-marker.json`.
+- **UI changes:** Added per-project Local Gemma or Cloud GPT-5.4 selection, individual stage run and re-run controls, live stage status, newest-first activity logs, expandable human-input answers, delayed stage model/cost details, a resizable log pane, separate Validation and Result views, one graph per result variable, and a full-screen graph viewer with zoom, pan, reset, and close controls.
+- **Integration:** The frontend continues to use the shared API and SSE log stream; no separate frontend pipeline or tank-specific reasoning path was introduced.
+- **Verification:** The frontend production build passes and lint completes with existing non-blocking React warnings.
+
+### A34 Remaining pipeline implementation scope
+
+- **Backend and launcher files:** `pipeline/run.py`, `pipeline/src/simulation_platform/api.py`, `config.py`, `reasoner.py`, `reasoner_pipeline.py`, `utils/local_models.py`, `skills/stage1_understanding.py`, and `skills/stage3_modelica.py`.
+- **CLI and test files:** `pipeline/create_project/`, `pipeline/test_cases/human_input_smoke/`, and `pipeline/test_cases/stage1_smoke/`.
+- **Behavior included:** Dynamic service ports and reliable Ctrl+C cleanup, per-stage reruns, shared local/cloud extraction, accurate extraction of required durations and outputs, cloud cost records, five total generation attempts, connector preflight, individual simulation result graphs, and preserved human clarification flow.
+- **Review artifacts:** The generated tank project folder remains available for inspection together with its source copy, run log, extracted understanding, SysML, Modelica bundle, compiler output, and result graphs.
+- **Owner:** Pranay Bhange.

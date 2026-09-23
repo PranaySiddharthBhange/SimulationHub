@@ -18,9 +18,10 @@ export function listProjects() {
   return fetch(`${BASE}/projects`).then((r) => asJson(r))
 }
 
-export function createProject(name, files) {
+export function createProject(name, files, stage1Backend = "ollama") {
   const form = new FormData()
   form.append('name', name)
+  form.append('stage1_backend', stage1Backend)
   for (const f of files) form.append('files', f)
   return fetch(`${BASE}/projects`, { method: 'POST', body: form }).then((r) => asJson(r))
 }
@@ -29,8 +30,20 @@ export function getProject(id) {
   return fetch(`${BASE}/projects/${id}`).then((r) => asJson(r))
 }
 
-export function runProject(id) {
-  return fetch(`${BASE}/projects/${id}/run`, { method: 'POST' }).then((r) => asJson(r, [200, 409]))
+export function runProject(id, stage1Backend = 'ollama') {
+  return fetch(`${BASE}/projects/${id}/run`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ stage1_backend: stage1Backend }),
+  }).then((r) => asJson(r, [200, 409]))
+}
+
+export function runStage(id, stage, stage1Backend = null) {
+  return fetch(`${BASE}/projects/${id}/stages/${stage}/run`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ stage1_backend: stage === 'stage_1' ? stage1Backend : null }),
+  }).then((r) => asJson(r, [200, 409]))
 }
 
 export function answerClarifications(id, answers) {

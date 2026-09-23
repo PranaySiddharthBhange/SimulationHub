@@ -1,5 +1,18 @@
-import { Check, ClipboardCheck, Copy, FileCode2, FileText, Loader2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import {
+  Check,
+  ChartLine,
+  ClipboardCheck,
+  Copy,
+  FileCode2,
+  FileText,
+  Loader2,
+  Maximize2,
+  RotateCcw,
+  X,
+  ZoomIn,
+  ZoomOut,
+} from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { getArtifact } from '../api'
 
 const TABS = [
@@ -7,6 +20,7 @@ const TABS = [
   { key: 'sysml', label: 'SysML v2', icon: FileCode2, kind: 'code' },
   { key: 'modelica', label: 'Modelica', icon: FileCode2, kind: 'code' },
   { key: 'validation', label: 'Validation', icon: ClipboardCheck, kind: 'validation' },
+  { key: 'result', label: 'Result', icon: ChartLine, kind: 'result' },
 ]
 
 const VERDICT_STYLE = {
@@ -29,7 +43,153 @@ function ReportSection({ title, items }) {
   )
 }
 
-function ValidationView({ projectId, data }) {
+function PlotModal({ projectId, plot, onClose }) {
+  const [scale, setScale] = useState(1)
+  const viewportRef = useRef(null)
+  const dragRef = useRef(null)
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') onClose()
+      if (event.key === '+' || event.key === '=') setScale((value) => Math.min(5, value + 0.25))
+      if (event.key === '-') setScale((value) => Math.max(1, value - 0.25))
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [onClose])
+
+  const changeScale = (nextScale) => {
+    const viewport = viewportRef.current
+    if (!viewport) {
+      setScale(nextScale)
+      return
+    }
+    const xRatio = (viewport.scrollLeft + viewport.clientWidth / 2) / viewport.scrollWidth
+    const yRatio = (viewport.scrollTop + viewport.clientHeight / 2) / viewport.scrollHeight
+    setScale(nextScale)
+    requestAnimationFrame(() => {
+      viewport.scrollLeft = xRatio * viewport.scrollWidth - viewport.clientWidth / 2
+      viewport.scrollTop = yRatio * viewport.scrollHeight - viewport.clientHeight / 2
+    })
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Plot viewer: ${plot}`}
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose()
+      }}
+    >
+      <div className="flex h-[94vh] w-[96vw] max-w-[1800px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-[var(--border)] bg-white px-4 py-3">
+          <div className="min-w-0">
+            <div className="text-[13px] font-semibold text-[var(--text)]">Simulation graph</div>
+            <div className="font-mono truncate text-[11px] text-[var(--text-dim)]">{plot}</div>
+          </div>
+          <div className="flex shrink-0 items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => changeScale(Math.max(1, scale - 0.25))}
+              disabled={scale <= 1}
+              className="rounded-lg border border-[var(--border)] p-2 text-[var(--text-muted)] hover:bg-[var(--bg-soft)] disabled:opacity-35"
+              aria-label="Zoom out"
+            >
+              <ZoomOut className="h-4 w-4" />
+            </button>
+            <span className="w-14 text-center font-mono text-[11px] text-[var(--text-muted)]">
+              {Math.round(scale * 100)}%
+            </span>
+            <button
+              type="button"
+              onClick={() => changeScale(Math.min(5, scale + 0.25))}
+              disabled={scale >= 5}
+              className="rounded-lg border border-[var(--border)] p-2 text-[var(--text-muted)] hover:bg-[var(--bg-soft)] disabled:opacity-35"
+              aria-label="Zoom in"
+            >
+              <ZoomIn className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => changeScale(1)}
+              className="rounded-lg border border-[var(--border)] p-2 text-[var(--text-muted)] hover:bg-[var(--bg-soft)]"
+              aria-label="Fit graph to window"
+              title="Fit to window"
+            >
+              <RotateCcw className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="ml-2 inline-flex items-center gap-1.5 rounded-lg bg-[var(--text)] px-3 py-2 text-[12px] font-semibold text-white hover:opacity-85"
+            >
+              <X className="h-4 w-4" /> Close
+            </button>
+          </div>
+        </div>
+        <div
+          ref={viewportRef}
+          className="relative flex-1 cursor-grab overflow-auto bg-[#e8eaed] active:cursor-grabbing"
+          onWheel={(event) => {
+            event.preventDefault()
+            changeScale(Math.max(1, Math.min(5, scale + (event.deltaY < 0 ? 0.25 : -0.25))))
+          }}
+          onDoubleClick={() => changeScale(scale === 1 ? 2 : 1)}
+          onPointerDown={(event) => {
+            if (event.button !== 0) return
+            const viewport = viewportRef.current
+            dragRef.current = {
+              x: event.clientX,
+              y: event.clientY,
+              left: viewport.scrollLeft,
+              top: viewport.scrollTop,
+            }
+            viewport.setPointerCapture(event.pointerId)
+          }}
+          onPointerMove={(event) => {
+            if (!dragRef.current) return
+            const viewport = viewportRef.current
+            viewport.scrollLeft = dragRef.current.left - (event.clientX - dragRef.current.x)
+            viewport.scrollTop = dragRef.current.top - (event.clientY - dragRef.current.y)
+          }}
+          onPointerUp={(event) => {
+            dragRef.current = null
+            if (viewportRef.current?.hasPointerCapture(event.pointerId)) {
+              viewportRef.current.releasePointerCapture(event.pointerId)
+            }
+          }}
+          onPointerCancel={() => {
+            dragRef.current = null
+          }}
+        >
+          <div
+            className="flex items-center justify-center p-6"
+            style={{ width: `${scale * 100}%`, height: `${scale * 100}%`, minWidth: '100%', minHeight: '100%' }}
+          >
+            <img
+              src={`/api/projects/${projectId}/artifacts/result/plot/${plot}`}
+              alt={plot}
+              draggable={false}
+              className="max-h-full max-w-full select-none object-contain shadow-lg"
+            />
+          </div>
+        </div>
+        <div className="shrink-0 border-t border-[var(--border)] bg-white px-4 py-2 text-center text-[11px] text-[var(--text-dim)]">
+          Mouse wheel or +/− to zoom · drag to pan · double-click to toggle 200% · Esc to close
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ValidationView({ data }) {
   const report = data?.report
   if (!report) return null
   const style = VERDICT_STYLE[report.verdict] || VERDICT_STYLE.partially_valid
@@ -45,23 +205,45 @@ function ValidationView({ projectId, data }) {
       <ReportSection title="Issues" items={report.issues} />
       <ReportSection title="Assumptions" items={report.assumptions} />
       <ReportSection title="Root causes" items={report.root_causes} />
-      {data.plots && data.plots.length > 0 && (
-        <div className="mt-5">
-          <div className="text-[11px] font-semibold uppercase tracking-wide text-[var(--text-dim)]">
-            Real simulated trajectory
-          </div>
-          <div className="mt-2 grid grid-cols-1 gap-3">
-            {data.plots.map((p) => (
-              <img
-                key={p}
-                src={`/api/projects/${projectId}/artifacts/validation/plot/${p}`}
-                alt={p}
-                className="w-full rounded-lg border border-[var(--border)]"
-              />
-            ))}
-          </div>
+    </div>
+  )
+}
+
+function ResultView({ projectId, data }) {
+  const [activePlot, setActivePlot] = useState(null)
+  const plots = data?.plots || []
+  if (plots.length === 0) return null
+  return (
+    <div className="fade-up px-5 py-4">
+      <div className="mb-4">
+        <div className="text-[13px] font-semibold text-[var(--text)]">Individual simulation graphs</div>
+        <div className="mt-1 text-[11.5px] text-[var(--text-dim)]">
+          Each changing result variable is plotted separately. Click any graph to open the zoomable viewer.
         </div>
-      )}
+      </div>
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        {plots.map((plot) => (
+          <button
+            key={plot.filename}
+            type="button"
+            onClick={() => setActivePlot(plot.filename)}
+            className="group overflow-hidden rounded-xl border border-[var(--border)] bg-white text-left shadow-sm transition-shadow hover:shadow-md"
+          >
+            <div className="flex items-center justify-between border-b border-[var(--border)] px-3 py-2">
+              <span className="font-mono truncate text-[11px] text-[var(--text-muted)]">{plot.label}</span>
+              <span className="inline-flex items-center gap-1 text-[10.5px] font-medium text-[var(--accent)]">
+                <Maximize2 className="h-3 w-3" /> Open
+              </span>
+            </div>
+            <img
+              src={`/api/projects/${projectId}/artifacts/result/plot/${plot.filename}`}
+              alt={plot.label}
+              className="w-full transition-transform duration-200 group-hover:scale-[1.01]"
+            />
+          </button>
+        ))}
+      </div>
+      {activePlot && <PlotModal projectId={projectId} plot={activePlot} onClose={() => setActivePlot(null)} />}
     </div>
   )
 }
@@ -96,6 +278,11 @@ export default function ArtifactViewer({ projectId, available, refreshToken }) {
     setCache({})
     setModelicaFilename(null)
   }, [projectId])
+
+  useEffect(() => {
+    setCache({})
+    setModelicaFilename(null)
+  }, [refreshToken])
 
   useEffect(() => {
     if (!available[tab] || cache[tab]) return
@@ -199,7 +386,10 @@ export default function ArtifactViewer({ projectId, available, refreshToken }) {
           </div>
         )}
         {!loading && available[tab] && data && active.kind === 'validation' && (
-          <ValidationView projectId={projectId} data={data} />
+          <ValidationView data={data} />
+        )}
+        {!loading && available[tab] && data && active.kind === 'result' && (
+          <ResultView projectId={projectId} data={data} />
         )}
       </div>
     </div>
