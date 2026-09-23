@@ -1,9 +1,14 @@
-import { UserRoundCog } from 'lucide-react'
+import { CheckCircle2, HelpCircle, UserRoundCog } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 export default function ClarificationCard({ clarifications, stage, onSubmit, onUseDefaults, busy }) {
   const [answers, setAnswers] = useState({})
   const hasDefaults = clarifications.length > 0 && clarifications.every((c) => c.suggested_value?.trim())
+  // Two different asks share this card: decisions Merge could not make, and
+  // decisions it already made from the evidence and wants signed off. Counting
+  // them separately keeps the header honest about what is actually required.
+  const openCount = clarifications.filter((c) => !c.resolved).length
+  const resolvedCount = clarifications.length - openCount
   const clarificationSignature = clarifications
     .map((c) => `${c.id}|${c.question}|${c.suggested_value}|${(c.options || []).join('\u001f')}`)
     .join('\u001e')
@@ -28,19 +33,47 @@ export default function ClarificationCard({ clarifications, stage, onSubmit, onU
         </div>
         <div>
           <div className="text-sm font-semibold text-[var(--text)]">
-            {stage === 'clarify' ? 'Merge needs a decision' : 'SysML generation needs a decision'}
+            {openCount > 0
+              ? stage === 'clarify' ? 'Merge needs a decision' : 'SysML generation needs a decision'
+              : 'Confirm the decisions Merge made'}
           </div>
           <div className="text-[12px] text-[var(--text-muted)]">
-            The pipeline paused on {clarifications.length} genuinely open question
-            {clarifications.length > 1 ? 's' : ''} before writing the SysML model.{' '}
-            {hasDefaults ? 'Pick an answer, or accept the suggested value.' : 'Provide an answer for each question to continue.'}
+            {openCount > 0 && (
+              <>
+                {openCount} open question{openCount > 1 ? 's' : ''} the evidence does not settle.{' '}
+              </>
+            )}
+            {resolvedCount > 0 && (
+              <>
+                {resolvedCount} conflict{resolvedCount > 1 ? 's' : ''} already resolved from the evidence,
+                shown so you can confirm or overrule {resolvedCount > 1 ? 'them' : 'it'}.{' '}
+              </>
+            )}
+            {hasDefaults ? 'Accept the suggested values, or change any of them.' : 'Provide an answer for each question to continue.'}
           </div>
         </div>
       </div>
 
       <div className="divide-y divide-[var(--border)]">
         {clarifications.map((c) => (
-          <div key={c.id} className="px-5 py-4">
+          <div key={c.id} className="px-5 py-4" style={c.resolved ? { background: 'rgba(34,197,94,0.04)' } : undefined}>
+            <div className="mb-1.5 flex items-center gap-1.5">
+              {c.resolved ? (
+                <>
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[var(--green,#16a34a)]" />
+                  <span className="text-[10.5px] font-semibold uppercase tracking-wide text-[var(--green,#16a34a)]">
+                    Resolved from evidence -- confirm or change
+                  </span>
+                </>
+              ) : (
+                <>
+                  <HelpCircle className="h-3.5 w-3.5 shrink-0 text-[var(--amber)]" />
+                  <span className="text-[10.5px] font-semibold uppercase tracking-wide text-[var(--amber)]">
+                    Open question -- your decision
+                  </span>
+                </>
+              )}
+            </div>
             <div className="text-[13.5px] font-medium text-[var(--text)]">{c.question}</div>
             <div className="mt-1 text-[12px] leading-relaxed text-[var(--text-muted)]">{c.reasoning}</div>
 
@@ -63,7 +96,12 @@ export default function ClarificationCard({ clarifications, stage, onSubmit, onU
                     >
                       {opt}
                       {isSuggested && (
-                        <span className="ml-1.5 text-[10px] font-normal text-[var(--amber)]">suggested</span>
+                        <span
+                          className="ml-1.5 text-[10px] font-normal"
+                          style={{ color: c.resolved ? 'var(--green,#16a34a)' : 'var(--amber)' }}
+                        >
+                          {c.resolved ? 'resolved' : 'suggested'}
+                        </span>
                       )}
                     </button>
                   )
@@ -96,7 +134,7 @@ export default function ClarificationCard({ clarifications, stage, onSubmit, onU
             onClick={onUseDefaults}
             className="rounded-lg border border-[var(--border-strong)] px-3.5 py-2 text-[12.5px] font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--text)] disabled:opacity-50"
           >
-            Accept all suggested defaults
+            {openCount === 0 ? 'Confirm all' : 'Accept all suggested defaults'}
           </button>
         )}
         <button
