@@ -12,10 +12,14 @@ class Record(BaseModel):
 
 
 class Simulation(Record):
-    start_time: float = 0
-    stop_time: float
-    intervals: int = Field(default=1000, ge=1, le=1000000)
-    tolerance: float = Field(default=1e-6, gt=0, le=0.01)
+    start_time: float = Field(default=0, description="Run start time in seconds.")
+    stop_time: float = Field(description=(
+        "Run end time in seconds, taken from the stated experiment duration. If no note "
+        "states one, choose the shortest horizon that lets every stated behaviour complete "
+        "and record that choice as an assumption."
+    ))
+    intervals: int = Field(default=1000, ge=1, le=1000000, description="Number of output samples.")
+    tolerance: float = Field(default=1e-6, gt=0, le=0.01, description="Solver tolerance.")
 
     @model_validator(mode="after")
     def valid_duration(self):
@@ -25,22 +29,55 @@ class Simulation(Record):
 
 
 class Check(Record):
-    name: str
-    # A restricted arithmetic/Boolean expression over simulation variable names.
-    # Bracketed names can be accessed with value("component.x"). Never Python eval.
-    expression: str
-    kind: Literal["final", "always", "at"]
-    at_time: float | None = None
-    expected: float
-    absolute_tolerance: float = Field(default=1e-6, ge=0)
-    relative_tolerance: float = Field(default=0, ge=0)
-    source: str
+    """One mechanically evaluable acceptance criterion.
+
+    Every field carries a description because the model filling this in only
+    ever sees the generated JSON schema -- a Python comment here reaches
+    nobody. Confirmed live: with the fields undescribed, the same prompt
+    produced evaluable expressions on one dataset and a prose sentence
+    describing the criterion on another, and a
+    prose expression cannot be checked against a result file at all.
+    """
+
+    name: str = Field(description="Short label for this criterion, e.g. its requirement id and intent.")
+    expression: str = Field(description=(
+        "An arithmetic or Boolean expression over the model's reported variable names, "
+        "evaluable against a result file. Use the exact variable names declared in the "
+        "narrative, combined with + - * / ( ), comparisons, and and/or/not. "
+        "It must NOT be an English sentence: 'quantity_a >= 0.80' is a valid expression, "
+        "'the quantity reaches its limit before the next phase' is not."
+    ))
+    kind: Literal["final", "always", "at"] = Field(description=(
+        "'final' compares the value at the end of the run, 'always' requires the "
+        "expression to hold at every sample, 'at' compares it at the instant in at_time."
+    ))
+    at_time: float | None = Field(default=None, description=(
+        "The instant this is evaluated at, in seconds. Required when kind is 'at', null otherwise."
+    ))
+    expected: float = Field(description=(
+        "The numeric value the expression should equal. For a Boolean condition use 1.0, "
+        "meaning the condition holds."
+    ))
+    absolute_tolerance: float = Field(default=1e-6, ge=0, description=(
+        "Absolute tolerance. Use the tolerance the evidence states. When none is stated, "
+        "choose one justified by the quantity's own precision rather than an exact match."
+    ))
+    relative_tolerance: float = Field(default=0, ge=0, description="Relative tolerance, when the evidence gives one.")
+    source: str = Field(description=(
+        "Where this criterion came from: the note's own filename, and the requirement "
+        "identifier that states it when the note records one. Take both from the note "
+        "itself; never write an identifier that does not appear there."
+    ))
 
 
 class TableRole(Record):
-    path: str
-    role: Literal["input", "reference", "supporting"]
-    reason: str
+    path: str = Field(description="The source document this table came from, as the notes name it.")
+    role: Literal["input", "reference", "supporting"] = Field(description=(
+        "'input' supplies the scenario the model must run; 'reference' is a recorded "
+        "result to compare against and must never drive the model; 'supporting' is "
+        "context that does neither."
+    ))
+    reason: str = Field(description="What in the notes establishes that role.")
 
 
 class MergeClarification(Record):
