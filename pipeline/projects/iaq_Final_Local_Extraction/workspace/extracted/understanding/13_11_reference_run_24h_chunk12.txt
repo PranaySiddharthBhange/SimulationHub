@@ -1,0 +1,8 @@
+## Entities
+*   occupants_person: Actor, type: Person, aliases: occupants
+*   outdoor_co2_ppm: Sensor, type: CO2 sensor, aliases: outdoor_co2
+*   outdoor_co2_mass_fraction_kgkg: Sensor, type: CO2 mass fraction sensor, aliases: outdoor_co2_mass_fraction
+*   room_co2_ppm: Sensor, type: CO2 sensor, aliases: room_co2
+*   room_co2_mass_fraction_kgkg: Sensor, type: CO2 mass fraction sensor, aliases: room_co2_mass_fraction
+*   normalized_co2_feedback: Sensor, type: CO2 feedback sensor, aliases: normalized_co2
+*   normalized_setpoint: Control element, type: Setpoint, aliases: normalized

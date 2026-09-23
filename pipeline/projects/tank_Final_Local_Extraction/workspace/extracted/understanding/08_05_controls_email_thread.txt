@@ -1,0 +1,32 @@
+## Entities
+V1, V2, V3, T1, T2, Drain Valve, SHUT, STOP
+
+## Relationships
+None
+
+## Requirements
+- Tank T1 high limit: 0.80 m
+- Drain Valve opens 12 s after T1 reaches low level
+- Next fill starts 8 s after T2 reaches low level
+- STOP: forces all valves closed
+- START: clears the STOP latch
+
+## Behaviors
+- IF T1 reaches low level THEN open Drain Valve after 12 s
+- IF T2 reaches low level THEN start next fill after 8 s
+- SHUT state has higher priority than STOP state
+
+## Constraints
+- T1_high = 0.78 m (current model value)
+- T1_high = 0.78 m (current model value)
+- T1_high = 10 s (current model value)
+- T2_high = 10 s (current model value)
+
+## Physical relationships
+None
+
+## Scheduled commands
+None
+
+## Scheduled commands
+None

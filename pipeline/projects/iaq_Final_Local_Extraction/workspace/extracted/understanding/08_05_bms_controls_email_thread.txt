@@ -1,0 +1,36 @@
+## Entities
+CO2Set, 1000 ppm, 1300 ppm, outdoor, ambient, freshAir, m_flow, zone, occupancy, carrier mass flow, CO2 emission, Kp, bias, ACH, min, max, integral, DR-IAQ-05, OCC-SCH-04, CR-IAQ-007, RM-201
+
+## Relationships
+CO2Set = 1000 ppm (absolute room concentration)
+outdoor = 300 ppm
+freshAir = negative m_flow
+m_flow = 1/100 of CO2 emission
+Kp = 6.0
+bias = 3.5 ACH
+min = 0.2
+max = 6.0
+integral = disabled
+
+## Requirements
+report tank levels and valve commands for a 900-second experiment (Elena Ruiz, Mar 1, 2026)
+peak occupancy is now 15 from 13:00-15:00 (Elena Ruiz, Mar 1, 2026)
+report CO2Set, Kp, bias, min, max, integral (Elena Ruiz, Mar 1, 2026)
+
+## Behaviors
+IF CO2Set > 1000 ppm THEN activate ventilation to reduce CO2 concentration
+IF occupancy > 15 THEN Kp = 6.0, bias = 3.5 ACH, min = 0.2, max = 6.0, integral disabled
+
+## Constraints
+CO2Set = 1000 ppm (absolute room concentration)
+min = 0.2 (ventilation rate)
+max = 6.0 (ventilation rate)
+
+## Physical relationships
+None
+
+## Scheduled commands
+None
+
+## Scheduled commands
+None

@@ -1,0 +1,10 @@
+## Entities
+*   occupants_person: Actor, type: Person, aliases: occupants
+*   outdoor_co2_ppm: Sensor, type: CO2 sensor, aliases: ppm
+*   outdoor_co2_mass_fraction_kgkg: Sensor, type: CO2 mass fraction sensor
+*   room_co2_ppm: Sensor, type: CO2 sensor
+*   room_co2_mass_fraction_kgkg: Sensor, type: CO2 mass fraction sensor
+*   normalized_co2_feedback: Sensor, type: CO2 feedback sensor
+*   normalized_setpoint: Control element, type: Setpoint
+*   ach_command_1_per_h: Actuator, type: HVAC command
+*   source_m_flow_command_kg_s: Actuator, type

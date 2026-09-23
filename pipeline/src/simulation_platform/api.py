@@ -667,3 +667,136 @@ def get_result_plot(project_id: str, filename: str):
     if not path.exists() or path.suffix.lower() != ".png":
         raise HTTPException(404, "plot not found")
     return FileResponse(path, media_type="image/png")
+
+
+# --- Project file browser -------------------------------------------------
+# The generated project folder is the reviewable record of a run: the source
+# documents, the per-document notes, the merged brief, the SysML, the Modelica
+# bundle with every archived repair attempt, the result CSV and the plots.
+# These endpoints expose that tree read-only so a reviewer can inspect and
+# download it from the UI instead of going to the filesystem.
+
+# Anything larger than this is streamed as a download only, never inlined into
+# a JSON preview -- a result CSV can be hundreds of thousands of rows.
+_PREVIEW_MAX_BYTES = 256 * 1024
+_TEXT_SUFFIXES = {
+    ".txt", ".md", ".json", ".jsonl", ".mo", ".mos", ".sysml", ".mmd", ".csv",
+    ".puml", ".eml", ".py", ".yaml", ".yml", ".xml", ".log", ".cfg", ".ini",
+}
+
+
+def _project_root(project_id: str) -> Path:
+    root = _ws.project_dir(project_id)
+    if not root.exists():
+        raise HTTPException(404, "project not found")
+    return root.resolve()
+
+
+def _safe_member(project_id: str, relative_path: str) -> Path:
+    """Resolve `relative_path` inside the project folder, or refuse.
+
+    Resolving BOTH sides and checking containment is what makes this safe:
+    a relative path can escape with `..`, an absolute path can point anywhere,
+    and on Windows a symlink or a drive-qualified path can do the same. The
+    check is on the resolved result, so none of those get through.
+    """
+
+    root = _project_root(project_id)
+    candidate = (root / relative_path).resolve()
+    if candidate != root and root not in candidate.parents:
+        raise HTTPException(400, "path escapes the project folder")
+    if not candidate.exists():
+        raise HTTPException(404, "file not found")
+    return candidate
+
+
+def _describe(path: Path, root: Path) -> dict:
+    stat = path.stat()
+    return {
+        "name": path.name,
+        "path": path.relative_to(root).as_posix(),
+        "type": "dir" if path.is_dir() else "file",
+        "size": None if path.is_dir() else stat.st_size,
+        "modified": stat.st_mtime,
+        "previewable": path.is_file()
+        and path.suffix.lower() in _TEXT_SUFFIXES
+        and stat.st_size <= _PREVIEW_MAX_BYTES,
+    }
+
+
+@app.get("/api/projects/{project_id}/files")
+def list_project_files(project_id: str, path: str = ""):
+    """One directory level, folders first. `path` is relative to the project."""
+
+    root = _project_root(project_id)
+    target = _safe_member(project_id, path) if path else root
+    if not target.is_dir():
+        raise HTTPException(400, "not a directory")
+    entries = [_describe(child, root) for child in target.iterdir()]
+    entries.sort(key=lambda e: (e["type"] != "dir", e["name"].lower()))
+    return {
+        "project_id": project_id,
+        "path": target.relative_to(root).as_posix() if target != root else "",
+        "entries": entries,
+    }
+
+
+@app.get("/api/projects/{project_id}/files/preview")
+def preview_project_file(project_id: str, path: str):
+    """Inline text for the viewer. Binary and oversized files are download-only."""
+
+    target = _safe_member(project_id, path)
+    if not target.is_file():
+        raise HTTPException(400, "not a file")
+    size = target.stat().st_size
+    if target.suffix.lower() not in _TEXT_SUFFIXES:
+        raise HTTPException(415, "binary file -- download it instead")
+    if size > _PREVIEW_MAX_BYTES:
+        raise HTTPException(413, f"file is {size} bytes -- too large to preview, download it instead")
+    return {
+        "path": target.relative_to(_project_root(project_id)).as_posix(),
+        "name": target.name,
+        "size": size,
+        "content": target.read_text(encoding="utf-8", errors="replace"),
+    }
+
+
+@app.get("/api/projects/{project_id}/files/download")
+def download_project_file(project_id: str, path: str):
+    from fastapi.responses import FileResponse
+
+    target = _safe_member(project_id, path)
+    if not target.is_file():
+        raise HTTPException(400, "not a file")
+    return FileResponse(target, filename=target.name, media_type="application/octet-stream")
+
+
+@app.get("/api/projects/{project_id}/files/archive")
+def download_project_archive(project_id: str, path: str = ""):
+    """Zip the project folder, or one subfolder of it, and stream it back.
+
+    Built in memory rather than written beside the project, so a download never
+    leaves a stray artifact inside the folder it is archiving.
+    """
+
+    import io
+    import zipfile
+    from fastapi.responses import StreamingResponse
+
+    root = _project_root(project_id)
+    target = _safe_member(project_id, path) if path else root
+    if not target.is_dir():
+        raise HTTPException(400, "not a directory")
+
+    buffer = io.BytesIO()
+    with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as archive:
+        for item in sorted(target.rglob("*")):
+            if item.is_file():
+                archive.write(item, item.relative_to(target).as_posix())
+    buffer.seek(0)
+    label = target.name if target != root else project_id
+    return StreamingResponse(
+        buffer,
+        media_type="application/zip",
+        headers={"Content-Disposition": f'attachment; filename="{label}.zip"'},
+    )

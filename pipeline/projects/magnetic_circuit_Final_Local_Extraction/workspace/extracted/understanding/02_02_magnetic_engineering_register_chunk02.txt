@@ -1,0 +1,123 @@
+Okay, here's a breakdown of the engineering document, organized into the seven sections as requested, based on the provided source data.
+
+## Entities
+
+*   **IF-MAG-03:** (Control Element - IF/THEN rule)
+*   **CORE-U:** (Physical Component - Magnetic Core)
+*   **port_n:** (Physical Component - Port Name)
+*   **CORE-R:** (Physical Component - Magnetic Core)
+*   **port_p:** (Physical Component - Port Name)
+*   **Phi / Vm:** (Physical Component - Magnetic Flux)
+*   **Series core path:** (Physical Component - Path)
+*   **IF-MAG-04:** (Control Element - IF/THEN rule)
+*   **CORE-R:** (Physical Component - Magnetic Core)
+*   **branch node:** (Physical Component - Branch Node)
+*   **GAP-1:** (Physical Component - Air Gap)
+*   **port_p:** (Physical Component - Port Name)
+*   **Phi / Vm:** (Physical Component - Magnetic Flux)
+*   **Useful branch:** (Physical Component - Branch)
+*   **IF-MAG-05:** (Control Element - IF/THEN rule)
+*   **CORE-R:** (Physical Component - Magnetic Core)
+*   **branch node:** (Physical Component - Branch Node)
+*   **LEAK-1:** (Physical Component - Magnetic Leakage)
+*   **port_p:** (Physical Component - Port Name)
+*   **Phi / Vm:** (Physical Component - Magnetic Flux)
+*   **Leakage branch:** (Physical Component - Branch)
+*   **IF-MAG-06:** (Control Element - IF/THEN rule)
+*   **GAP-1:** (Physical Component - Air Gap)
+*   **port_n:** (Physical Component - Port Name)
+*   **CORE-D:** (Physical Component - Magnetic Core)
+*   **port_p:** (Physical Component - Port Name)
+*   **Phi / Vm:** (Physical Component - Magnetic Flux)
+*   **Useful branch rejoin:** (Physical Component - Branch)
+*   **IF-MAG-07:** (Control Element - IF/THEN rule)
+*   **LEAK-1:** (Physical Component - Magnetic Leakage)
+*   **port_n:** (Physical Component - Port Name)
+*   **CORE-D:** (Physical Component - Magnetic Core)
+*   **port_p:** (Physical Component - Port Name)
+*   **Phi / Vm:** (Physical Component - Magnetic Flux)
+*   **Leakage branch rejoin:** (Physical Component - Branch)
+*   **IF-MAG-08:** (Control Element - IF/THEN rule)
+*   **CORE-D:** (Physical Component - Magnetic Core)
+*   **port_n:** (Physical Component - Port Name)
+*   **MagneticGround:** (Physical Component - Magnetic Ground)
+*   **reference:** (Physical Component - Reference)
+*   **Magnetic scalar potential:** (Physical Component - Magnetic Potential)
+*   **Zero magnetic potential:** (Physical Component - Magnetic Potential)
+*   **IF-SEN-01:** (Control Element - IF/THEN rule)
+*   **GAP-1:** (Physical Component - Air Gap)
+*   **useful flux:** (Physical Component - Magnetic Flux)
+*   **FluxSensor:** (Physical Component - Flux Sensor)
+*   **Phi_gap:** (Physical Component - Magnetic Flux)
+*   **Complex magnetic flux:** (Physical Component - Magnetic Flux)
+*   **Arrow direction defines positive sign:** (Physical Component - Direction)
+*   **IF-IND-01:** (Control Element - IF/THEN rule)
+*   **GAP-1:** (Physical Component - Air Gap)
+*   **Phi_gap:** (Physical Component - Magnetic Flux)
+*   **MeasuringCoil:** (Physical Component - Measuring Coil)
+*   **magnetic coupling:** (Physical Component - Magnetic Coupling)
+*   **Induced voltage:** (Physical Component - Voltage)
+*   **Negative electric orientation:** (Physical Component - Orientation)
+
+## Relationships
+
+*   **CORE-U** supplies **Phi / Vm**
+*   **CORE-R** supplies **Phi / Vm**
+*   **port_n** connects to **CORE-U**, **CORE-R**, **port_p**
+*   **port_p** connects to **CORE-R**, **port_n**, **port_p**
+*   **GAP-1** connects to **IF-MAG-03**, **IF-MAG-04**, **IF-MAG-05**, **IF-MAG-06**, **IF-MAG-07**, **IF-MAG-08**, **IF-SEN-01**, **IF-IND-01**
+*   **CORE-D** connects to **IF-MAG-06**, **IF-MAG-07**, **IF-MAG-08**
+*   **MagneticGround** connects to **IF-MAG-08**
+*   **reference** connects to **IF-MAG-08**
+*   **FluxSensor** connects to **GAP-1** and **Phi_gap**
+*   **MeasuringCoil** connects to **GAP-1** and **magnetic coupling**
+*   **Phi_gap** connects to **FluxSensor**, **MeasuringCoil**
+*   **Complex magnetic flux** connects to **FluxSensor**
+*   **Arrow direction defines positive sign** connects to **Complex magnetic flux**
+*   **CORE-D** connects to **Useful branch rejoin**
+*   **LEAK-1** connects to **IF-MAG-05**, **IF-MAG-06**, **IF-MAG-07**, **IF-MAG-08**
+*   **port_n** connects to **LEAK-1**, **CORE-D**
+*   **port_p** connects to **LEAK-1**, **CORE-D**
+*   **Phi / Vm** connects to **LEAK-1**, **CORE-D**
+*   **Leakage branch** connects to **LEAK-1**
+*   **Leakage branch rejoin** connects to **LEAK-1**
+*   **MagneticGround** connects to **Zero magnetic potential**
+*   **MeasuringCoil** connects to **Induced voltage**
+*   **Negative electric orientation** connects to **Induced voltage**
+
+## Requirements
+
+*   Benchmark using mu_r = 1000 (2026-01-08)
+*   Measuring coil 40 turns (2026-01-16)
+*   Leakage coefficient sigma = 0.05, 40-turn measuring coil (2026-01-22)
+*   a = 25 mm, l = 150 mm, nominal gap = 1.50 mm (2026-02-03)
+*   Exciting coil = 600 turns; measuring coil = 50 turns; polarity dots frozen (2026-02-18)
+*   Leakage coefficient revised from 0.05 to 0.08 after calibration fit (2026-02-26)
+*   RMS phasor convention, grounds, induction sign and real reluctance clarified (2026-03-04)
+*   Analytic verification at 2 A and 50 Hz defined (2026-03-20)
+*   1 s current-ramp validation and tolerances (2026-03-04)
+
+## Behaviors
+
+*   **IF-MAG-03:** IF Phi / Vm > 0, THEN opens V18, V23, V22, V1, V3
+*   **IF-MAG-04:** IF Phi / Vm > 0, THEN opens V18, V23, V22, V1, V3
+*   **IF-MAG-05:** IF Phi / Vm > 0, THEN opens V18, V23, V22, V1, V3
+*   **IF-MAG-06:** IF Phi / Vm > 0, THEN opens V18, V23, V22, V1, V3
+*   **IF-MAG-07:** IF Phi / Vm > 0, THEN opens V18, V23, V22, V1, V3
+*   **IF-MAG-08:** IF Phi / Vm > 0, THEN opens V18, V23, V22, V1, V3
+*   **IF-SEN-01:** IF Phi_gap > 0, THEN measures FluxSensor, Phi_gap
+
+## Constraints
+
+*   Core-U: mu_r = 1000 (2026-01-08)
+*   Core-R: mu_r = 1200 (2026-02-03)
+*   Leakage coefficient sigma = 0.05 (2026-01-22)
+*   Leakage coefficient sigma = 0.08 (2026-02-26)
+
+## Physical relationships
+
+*   None
+
+## Scheduled commands
+
+*   None

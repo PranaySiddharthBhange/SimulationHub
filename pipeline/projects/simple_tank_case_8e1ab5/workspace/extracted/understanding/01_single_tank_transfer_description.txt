@@ -1,0 +1,37 @@
+## Entities
+- Explicit: Operator — actor; alias: none stated.
+- Explicit: Controller — control element; alias: none stated.
+- Explicit: Tank 1 — atmospheric liquid tank; alias: none stated.
+- Explicit: Tank 2 — atmospheric liquid tank; alias: none stated.
+- Explicit: Inlet valve — valve; alias: none stated.
+- Explicit: Transfer valve — valve; alias: none stated.
+- Explicit: Drain valve — valve; alias: none stated.
+- Explicit: High-level switch — level switch; alias: none stated.
+- Explicit: Low-level switch — level switch; alias: none stated.
+- Explicit: START — command/input; alias: none stated.
+- Explicit: STOP — command/input; alias: none stated.
+- Explicit: SHUT — command/input; alias: none stated.
+
+## Relationships
+- Explicit: Tank 1 is connected to Tank 2 by the inlet valve, transfer valve, and drain valve.
+- Implied: Controller controls the inlet valve.
+- Implied: Controller controls the transfer valve.
+- Implied: Controller controls the drain valve.
+- Explicit: Operator issues START.
+- Explicit: Operator issues STOP.
+- Explicit: Operator issues SHUT.
+- Explicit: High-level switch senses Tank 1 level.
+- Explicit: Low-level switch senses Tank 1 level.
+- Explicit: Low-level switch senses Tank 2 level.
+
+## Requirements
+- Explicit: The model shall report tank levels and valve commands for a 900-second experiment.
+
+## Behaviors
+- Explicit: When the operator presses START, the controller fills Tank 1 until its high-level switch is reached.
+- Explicit: After Tank 1 high-level switch is reached, the controller waits ten seconds.
+- Explicit: After the ten-second wait, the controller transfers liquid to Tank 2 until Tank 1 reaches its low-level switch.
+- Explicit: After Tank 1 low-level switch is reached, the controller waits ten seconds.
+- Explicit: After the second ten-second wait, the controller drains Tank 2 until its low-level switch is reached.
+- Explicit: When STOP is issued, every valve closes and the sequence pauses so that a later START resumes the interrupted state.
+- Explicit: When SHUT is issued, the inlet is inhibited and the transfer and drain paths are opened until both tanks are empty.

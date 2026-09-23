@@ -1,0 +1,58 @@
+## Entities
+B1, Tank, levelMax=0.60
+B2, Tank, levelMax=0.60
+B3, Tank, levelMax=0.45
+B4, Tank, levelMax=0.45
+B5, TankWithEvaporator, area=0.060, levelMax=0.45
+B6, TankWithHeatPort, area=0.050, levelMax=0.40
+B7, TankWithHeatPort, area=0.050, levelMax=0.40
+controller, Controller, B3_water_level=0.13, B3_target_X=0.080, B5_batch_level=0.18, B5_target_X=0.180, B6_target_T=293.15, B7_target_T=293.15, restartTime=2500
+LIS_301, sensor, type=LIS 301
+QI_302, sensor, type=QI 302
+LIS_501, sensor, type=LIS 501
+QIS_502, sensor, type=QIS 502
+TIS_602, sensor, type=TIS 602
+TIS_702, sensor, type=TIS 702
+T5_Heater, actuator, type=T5 Heater
+## Relationships
+B3, supplies, B1
+B3, supplies, B5
+B3, supplies, B6
+B3, supplies, B7
+B4, supplies, B2
+B5, supplies, B1
+B5, supplies, B2
+B5, supplies, B6
+B5, supplies, B7
+B6, supplies, B1
+B6, supplies, B2
+B7, supplies, B1
+B7, supplies, B2
+controller, controls, B5.heatPort.Q_flow
+B5.heatPort.Q_flow, triggered_by, T5_Heater
+controller.sensors.LIS_301, depends_on, B3.level
+controller.sensors.QI_302, depends_on, B3.medium.Xi[1]
+controller.sensors.LIS_501, depends_on, B5.level
+controller.sensors.QIS_502, depends_on, B5.medium.Xi[1]
+controller.sensors.TIS_602, depends_on, B6.medium.T
+controller.sensors.TIS_702, depends_on, B7.medium.T
+## Requirements
+None
+## Behaviors
+controller.sensors.LIS_301 = B3.level
+controller.sensors.QI_302  = B3.medium.Xi[1]
+controller.sensors.LIS_501 = B5.level
+controller.sensors.QIS_502 = B5.medium.Xi[1]
+controller.sensors.TIS_602 = B6.medium.T
+controller.sensors.TIS_702 = B7.medium.T
+B5.heatPort.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;
+## Constraints
+None
+## Physical relationships
+None
+## Control laws
+None
+## Scheduled commands
+None
+## Scheduled commands
+None

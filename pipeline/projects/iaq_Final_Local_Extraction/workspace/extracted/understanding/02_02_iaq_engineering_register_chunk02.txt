@@ -1,0 +1,168 @@
+Okay, here's a breakdown of the system described in the provided engineering document, organized into the seven sections as requested.
+
+## Entities
+
+*   DUCT-OUT-201: Duct Outlet Component, Type: Duct Segment, Aliases: None
+*   DUCT-IN-201: Duct Inlet Component, Type: Duct Segment, Aliases: None
+*   ZON-201: Zone Component, Type: Room Outlet, Aliases: None
+*   BND-201: Boundary Component, Type: Boundary Stream, Aliases: None
+*   SRC-OA-201: Outdoor Air Source Component, Type: Air Port, Aliases: None
+*   SRC-CO2-201: CO2 Source Component, Type: Trace Injection, Aliases: None
+*   SEN-CO2-201: CO2 Sensor Component, Type: Sensor, Aliases: None
+*   GAIN-PEO-201: People Gain Component, Type: Gain, Aliases: None
+*   GAIN-NORM-201: Normalization Gain Component, Type: Gain, Aliases: None
+*   GAIN-AIR-201: Air Gain Component, Type: Gain, Aliases: None
+*   CTL-CO2-201: CO2 Controller Component, Type: Controller, Aliases: CR-IAQ-007
+*   OCC-SCH-04: Occupancy Schedule Component, Type: Schedule, Aliases: None
+*   V: Room volume, Type: m^3
+*   rho: Nominal air density, Type: kg/m^3
+*   CAtm: Atmospheric concentration, Type: ppm
+*   MW_CO2: CO2 molecular weight, Type: kg/kmol
+*   MW_air: Dry-air molecular weight, Type: kg/kmol
+*   C_ppm: CO2 compliance limit, Type: ppm
+*   C_out_ppm: Outdoor CO2, Type: ppm
+*   C_nom_project: Project nominal mass fraction, Type: kg/kg
+*   C_out_project: Project outdoor mass fraction, Type: kg/kg
+*   nPeo: People count, Type: integer
+*   m_people_carrier: peopleSource concentration, Type: kg/kg
+*   m_flow: Carrier source flow per person, Type: kg/s/person
+*   K_sensor: Sensor normalization gain, Type: 1/(kg/kg)
+
+## Relationships
+
+*   DUCT-OUT-201 contains ZON-201
+*   DUCT-OUT-201 contains BND-201
+*   DUCT-IN-201 contains ZON-201
+*   DUCT-IN-201 contains SRC-OA-201
+*   ZON-201 contains SRC-CO2-201
+*   SRC-CO2-201 contains SEN-CO2-201
+*   SRC-OA-201 supplies DUCT-IN-201
+*   SEN-CO2-201 supplies CTL-CO2-201
+*   CTL-CO2-201 supplies GAIN-AIR-201
+*   CTL-CO2-201 supplies IF-SIG-07
+*   GAIN-AIR-201 supplies IF-SIG-09
+*   OCC-SCH-04 supplies nPeo
+*   nPeo supplies GAIN-PEO-201
+*   GAIN-PEO-201 supplies IF-SIG-02
+*   GAIN-PEO-201 supplies GAIN-SIG-03
+*   GAIN-NORM-201 supplies IF-SIG-05
+*   GAIN-NORM-201 supplies IF-SIG-06
+*   GAIN-AIR-201 supplies IF-SIG-08
+*   CTL-CO2-201 controls IF-SIG-07
+*   CTL-CO2-201 controls IF-SIG-08
+*   CTL-CO2-201 controls IF-SIG-09
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   CTL-CO2-201 controls GAIN-AIR-201
+*   

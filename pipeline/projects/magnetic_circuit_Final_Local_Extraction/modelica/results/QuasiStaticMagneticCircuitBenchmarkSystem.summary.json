@@ -1,0 +1,417 @@
+{
+  "B_core": {
+    "min": 0.0,
+    "max": 0.8398969816897571,
+    "final": 0.8398966667290422
+  },
+  "B_gap": {
+    "min": 0.0,
+    "max": 0.7727052231545766,
+    "final": 0.7727049333907184
+  },
+  "H_air": {
+    "min": 0.0,
+    "max": 614899.2790898846,
+    "final": 614899.0485031329
+  },
+  "H_iron": {
+    "min": 0.0,
+    "max": 556.9739846828664,
+    "final": 556.9737758180554
+  },
+  "I_rms_A": {
+    "min": 0.0,
+    "max": 2.000000749998726,
+    "final": 2.0
+  },
+  "Phi_core": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "Phi_gap": {
+    "min": 0.0,
+    "max": 0.0004829407644716104,
+    "final": 0.0004829405833691991
+  },
+  "Phi_leak": {
+    "min": 0.0,
+    "max": 4.199484908448786e-05,
+    "final": 4.199483333645209e-05
+  },
+  "U_exc": {
+    "min": 0.0,
+    "max": 98.94803202932935,
+    "final": 98.94799492389429
+  },
+  "U_meas": {
+    "min": -7.586015788915249,
+    "max": -0.0,
+    "final": -7.586012944165225
+  },
+  "Vm_gap": {
+    "min": 0.0,
+    "max": 922.3489186348269,
+    "final": 922.3485727546994
+  },
+  "branchAssembly.airGap.V_m": {
+    "min": 0.0,
+    "max": 922.3489186348268,
+    "final": 922.3485727546991
+  },
+  "branchAssembly.leakagePath.V_m": {
+    "min": 0.0,
+    "max": 922.3489186348268,
+    "final": 922.3485727546991
+  },
+  "core_drop_At": {
+    "min": 0.0,
+    "max": 277.6515313644089,
+    "final": 277.6514272453006
+  },
+  "leftLeg.V_m": {
+    "min": 0.0,
+    "max": 69.62174808535832,
+    "final": 69.62172197725693
+  },
+  "leftLeg.port_n.V_m": {
+    "min": 0.0,
+    "max": 1130.378701913877,
+    "final": 1130.378278022743
+  },
+  "lowerYoke.V_m": {
+    "min": 0.0,
+    "max": 69.62174808535832,
+    "final": 69.62172197725693
+  },
+  "magneticGround.port.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "magneticGround.port.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "mmfGain.y": {
+    "min": 0.0,
+    "max": 1200.000449999236,
+    "final": 1200.0
+  },
+  "mmf_At": {
+    "min": 0.0,
+    "max": 1200.000449999236,
+    "final": 1200.0
+  },
+  "residual": {
+    "min": -4.547473508864641e-13,
+    "max": 2.273736754432321e-13,
+    "final": 0.0
+  },
+  "rightLegIron.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "rightLegIron.V_m": {
+    "min": 0.0,
+    "max": 68.78628710833402,
+    "final": 68.78626131352985
+  },
+  "rightLegIron.port_n.V_m": {
+    "min": 0.0,
+    "max": 991.970666720185,
+    "final": 991.9702947319561
+  },
+  "upperYoke.V_m": {
+    "min": 0.0,
+    "max": 69.62174808535832,
+    "final": 69.62172197725693
+  },
+  "upperYoke.port_n.V_m": {
+    "min": 0.0,
+    "max": 1060.756953828519,
+    "final": 1060.756556045486
+  },
+  "useful_to_core_flux_ratio": {
+    "min": 0.0,
+    "max": 0.9200000000000005,
+    "final": 0.9199999999999995
+  },
+  "branchAssembly.Phi_gap": {
+    "min": 0.0,
+    "max": 0.0004829407644716104,
+    "final": 0.0004829405833691991
+  },
+  "branchAssembly.Phi_leak": {
+    "min": 0.0,
+    "max": 4.199484908448786e-05,
+    "final": 4.199483333645209e-05
+  },
+  "branchAssembly.airGap.Phi": {
+    "min": 0.0,
+    "max": 0.0004829407644716104,
+    "final": 0.0004829405833691991
+  },
+  "branchAssembly.airGap.port_n.Phi": {
+    "min": -0.0004829407644716104,
+    "max": -0.0,
+    "final": -0.0004829405833691991
+  },
+  "branchAssembly.airGap.port_n.V_m": {
+    "min": 0.0,
+    "max": 69.62174808535832,
+    "final": 69.62172197725693
+  },
+  "branchAssembly.airGap.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0004829407644716104,
+    "final": 0.0004829405833691991
+  },
+  "branchAssembly.airGap.port_p.V_m": {
+    "min": 0.0,
+    "max": 991.970666720185,
+    "final": 991.9702947319561
+  },
+  "branchAssembly.gapFluxSensor.Phi": {
+    "min": 0.0,
+    "max": 0.0004829407644716104,
+    "final": 0.0004829405833691991
+  },
+  "branchAssembly.gapFluxSensor.port_n.Phi": {
+    "min": -0.0004829407644716104,
+    "max": -0.0,
+    "final": -0.0004829405833691991
+  },
+  "branchAssembly.gapFluxSensor.port_n.V_m": {
+    "min": 0.0,
+    "max": 69.62174808535832,
+    "final": 69.62172197725693
+  },
+  "branchAssembly.gapFluxSensor.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0004829407644716104,
+    "final": 0.0004829405833691991
+  },
+  "branchAssembly.gapFluxSensor.port_p.V_m": {
+    "min": 0.0,
+    "max": 69.62174808535832,
+    "final": 69.62172197725693
+  },
+  "branchAssembly.leakFluxSensor.Phi": {
+    "min": 0.0,
+    "max": 4.199484908448786e-05,
+    "final": 4.199483333645209e-05
+  },
+  "branchAssembly.leakFluxSensor.port_n.Phi": {
+    "min": -4.199484908448786e-05,
+    "max": -0.0,
+    "final": -4.199483333645209e-05
+  },
+  "branchAssembly.leakFluxSensor.port_n.V_m": {
+    "min": 0.0,
+    "max": 69.62174808535832,
+    "final": 69.62172197725693
+  },
+  "branchAssembly.leakFluxSensor.port_p.Phi": {
+    "min": 0.0,
+    "max": 4.199484908448786e-05,
+    "final": 4.199483333645209e-05
+  },
+  "branchAssembly.leakFluxSensor.port_p.V_m": {
+    "min": 0.0,
+    "max": 69.62174808535832,
+    "final": 69.62172197725693
+  },
+  "branchAssembly.leakagePath.Phi": {
+    "min": 0.0,
+    "max": 4.199484908448786e-05,
+    "final": 4.199483333645209e-05
+  },
+  "branchAssembly.leakagePath.port_n.Phi": {
+    "min": -4.199484908448786e-05,
+    "max": -0.0,
+    "final": -4.199483333645209e-05
+  },
+  "branchAssembly.leakagePath.port_n.V_m": {
+    "min": 0.0,
+    "max": 69.62174808535832,
+    "final": 69.62172197725693
+  },
+  "branchAssembly.leakagePath.port_p.Phi": {
+    "min": 0.0,
+    "max": 4.199484908448786e-05,
+    "final": 4.199483333645209e-05
+  },
+  "branchAssembly.leakagePath.port_p.V_m": {
+    "min": 0.0,
+    "max": 991.970666720185,
+    "final": 991.9702947319561
+  },
+  "branchAssembly.port_n.Phi": {
+    "min": -0.0005249356135560983,
+    "max": -0.0,
+    "final": -0.0005249354167056515
+  },
+  "branchAssembly.port_n.V_m": {
+    "min": 0.0,
+    "max": 69.62174808535832,
+    "final": 69.62172197725693
+  },
+  "branchAssembly.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "branchAssembly.port_p.V_m": {
+    "min": 0.0,
+    "max": 991.970666720185,
+    "final": 991.9702947319561
+  },
+  "coreFluxSensor.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "coreFluxSensor.port_n.Phi": {
+    "min": -0.0005249356135560983,
+    "max": -0.0,
+    "final": -0.0005249354167056515
+  },
+  "coreFluxSensor.port_n.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreFluxSensor.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "coreFluxSensor.port_p.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "currentProfile.I_rms_A": {
+    "min": 0.0,
+    "max": 2.000000749998726,
+    "final": 2.0
+  },
+  "excitingCoil.Phi": {
+    "min": -0.0005249356135560983,
+    "max": -0.0,
+    "final": -0.0005249354167056515
+  },
+  "excitingCoil.V_m": {
+    "min": 0.0,
+    "max": 1200.000449999236,
+    "final": 1200.0
+  },
+  "excitingCoil.port_n.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "excitingCoil.port_n.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCoil.port_p.Phi": {
+    "min": -0.0005249356135560983,
+    "max": -0.0,
+    "final": -0.0005249354167056515
+  },
+  "excitingCoil.port_p.V_m": {
+    "min": 0.0,
+    "max": 1200.000449999236,
+    "final": 1200.0
+  },
+  "leftLeg.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "leftLeg.port_n.Phi": {
+    "min": -0.0005249356135560983,
+    "max": -0.0,
+    "final": -0.0005249354167056515
+  },
+  "leftLeg.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "leftLeg.port_p.V_m": {
+    "min": 0.0,
+    "max": 1200.000449999236,
+    "final": 1200.0
+  },
+  "lowerYoke.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "lowerYoke.port_n.Phi": {
+    "min": -0.0005249356135560983,
+    "max": -0.0,
+    "final": -0.0005249354167056515
+  },
+  "lowerYoke.port_n.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "lowerYoke.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "lowerYoke.port_p.V_m": {
+    "min": 0.0,
+    "max": 69.62174808535832,
+    "final": 69.62172197725693
+  },
+  "mmfGain.u": {
+    "min": 0.0,
+    "max": 2.000000749998726,
+    "final": 2.0
+  },
+  "rightLegIron.port_n.Phi": {
+    "min": -0.0005249356135560983,
+    "max": -0.0,
+    "final": -0.0005249354167056515
+  },
+  "rightLegIron.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "rightLegIron.port_p.V_m": {
+    "min": 0.0,
+    "max": 1060.756953828519,
+    "final": 1060.756556045486
+  },
+  "upperYoke.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "upperYoke.port_n.Phi": {
+    "min": -0.0005249356135560983,
+    "max": -0.0,
+    "final": -0.0005249354167056515
+  },
+  "upperYoke.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0005249356135560983,
+    "final": 0.0005249354167056515
+  },
+  "upperYoke.port_p.V_m": {
+    "min": 0.0,
+    "max": 1130.378701913877,
+    "final": 1130.378278022743
+  }
+}

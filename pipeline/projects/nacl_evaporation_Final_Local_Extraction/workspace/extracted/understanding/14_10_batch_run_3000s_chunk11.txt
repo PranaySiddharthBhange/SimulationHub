@@ -1,0 +1,59 @@
+## Entities
+*   B3_level_m
+*   B4_level_m
+*   B5_level_m
+*   B6_level_m
+*   B7_level_m
+*   B3_w_NaCl
+*   B5_w_NaCl
+*   B5_temp_C
+*   B6_temp_C
+*   B7_temp_C
+*   FIS801
+*   P1_cmd
+*   P2_cmd
+*   B5_heater_cmd
+*   B6_cooler_cmd
+*   B7_cooler_cmd
+*   V1_open
+*   V3_open
+*   V5_open
+*   V6_open
+*   V8_open
+*   V9_open
+*   V11_open
+*   V12_open
+*   V15_open
+*   V18_open
+*   V20_open
+*   V22_open
+*   V23_open
+*   V24_open
+*   V25_open
+
+## Relationships
+*   B3_level_m contains B3_w_NaCl
+*   B4_level_m contains B5_w_NaCl
+*   B5_level_m contains B5_w_NaCl
+*   B5_level_m contains B5_temp_C
+*   B6_level_m contains B6_temp_C
+*   B7_level_m contains B7_temp_C
+*   FIS801 supplies P1_cmd
+*   FIS801 supplies P2_cmd
+*   FIS801 supplies B5_heater_cmd
+*   FIS801 supplies B6_cooler_cmd
+*   FIS801 supplies B7_cooler_cmd
+*   V1_open contains V8_open
+*   V3_open contains V9_open
+*   V5_open contains V11_open
+*   V6_open contains V12_open
+*   V8_open contains V15_open
+*   V9_open contains V18_open
+*   V11_open contains V20_open
+*   V12_open contains V22_open
+*   V15_open contains V23_open
+*   V18_open contains V24_open
+*   V20_open contains V25_open
+
+## Requirements
+*   report B

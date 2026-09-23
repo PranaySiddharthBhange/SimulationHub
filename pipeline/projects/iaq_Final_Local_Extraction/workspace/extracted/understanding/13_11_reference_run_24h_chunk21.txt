@@ -1,0 +1,13 @@
+## Entities
+*   `time_s`: Time in seconds
+*   `clock_time`: Time of day (HH:MM:SS)
+*   `occupants_person`: Number of occupants
+*   `outdoor_co2_ppm`: Outdoor CO2 concentration in parts per million
+*   `outdoor_co2_mass_fraction_kgkg`: Outdoor CO2 mass fraction in kilograms per kilogram
+*   `room_co2_ppm`: Room CO2 concentration in parts per million
+*   `room_co2_mass_fraction_kgkg`: Room CO2 mass fraction in kilograms per kilogram
+*   `normalized_co2_feedback`: Normalized CO2 feedback value
+*   `normalized_setpoint`: Normalized setpoint value
+*   `ach_command_1_per_h`: Achieved CO2 command per hour
+*   `source_m_flow_command_kg_s`: Source M flow command in kilograms per second
+*   `physical_supply_m_flow_

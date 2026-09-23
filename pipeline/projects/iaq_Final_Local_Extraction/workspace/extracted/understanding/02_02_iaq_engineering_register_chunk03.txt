@@ -1,0 +1,89 @@
+Okay, here's a breakdown of the system based on the provided engineering data, organized into the seven sections as requested.
+
+## Entities
+
+*   **Room:** (Logical) – The primary environment for IAQ control.
+*   **CO2 limit:** (Requirement) – 1000 ppm absolute.
+*   **Outdoor CO2 concentration:** (Requirement) – 300 ppm.
+*   **Room volume:** (Requirement) – 100 m3.
+*   **Occupant emission:** (Requirement) – 1.2 kg/m3 nominal density.
+*   **Controller:** (Logical) – The system component responsible for adjusting IAQ.
+*   **Kp:** (Physical) – Gain value for the controller.
+*   **ACH:** (Physical) – Air Changes per Hour.
+*   **nPeo:** (Physical) – Number of people.
+*   **CAtm:** (Physical) – Atmospheric CO2 concentration.
+*   **Trace-substance interfaces:** (Physical) – Interfaces for measuring trace substances (kg/kg).
+*   **Sensor:** (Logical) – Measures CO2 concentration.
+*   **Modelica model:** (Physical) – Legacy modelica model.
+*   **10_occupancy_schedule.csv:** (Physical) – Occupancy schedule data.
+*   **11_reference_run_24h.csv:** (Physical) – 24-hour trend test data.
+*   **Fault flag:** (Logical) – Indicates a sensor failure.
+
+## Relationships
+
+*   Controller controls Room CO2 concentration.
+*   CO2 limit is a constraint on Room CO2 concentration.
+*   Outdoor CO2 concentration is a constraint on Room CO2 concentration.
+*   Room volume is used in calculating CO2 emission rate.
+*   Occupant emission is used in calculating CO2 emission rate.
+*   Kp adjusts the controller output.
+*   ACH adjusts the controller output.
+*   nPeo adjusts the controller output.
+*   CAtm is used in the trace-substance interfaces.
+*   Trace-substance interfaces are used in the modelica model.
+*   10_occupancy_schedule.csv drives the occupancy schedule.
+*   11_reference_run_24h.csv is used for trend testing.
+*   Fault flag is triggered when the sensor is invalid for >60 s.
+*   Controller signal scaling is applied to the trace-substance interfaces.
+
+## Requirements
+
+*   Room CO2 limit shall be <= 1000 ppm absolute (IAQ-FUN-003, IAQ-VER-002).
+*   Outdoor CO2 concentration shall be <= 300 ppm (IAQ-FUN-004, IAQ-PER-006).
+*   Room volume shall be 100 m3 (SRC-01).
+*   Occupant emission shall be 1.2 kg/m3 nominal density (SRC-01).
+*   24-hour trend test shall have a maximum CO2 level <= 1000 ppm (CP23-T01, CP23-T07).
+*   Experiment duration: 24 hours (CP23-T01).
+*   Report tank levels and valve commands for a 900-second experiment (CP23-T01).
+
+## Behaviors
+
+*   IF Room CO2 concentration > 1000 ppm, THEN Controller adjusts to maintain CO2 limit (CDS-IAQ-02, CR-IAQ-007).
+*   Kp = 4.0 and integral enabled (CDS-IAQ-02).
+*   Kp changed to 6.0, bias set to 3.5 ACH, integral disabled for released reference run (CR-IAQ-007).
+*   Controller output is adjusted based on the ACH value (CP23-T05).
+*   Controller output is adjusted based on the nPeo value (CP23-T04).
+*   Controller output is adjusted based on the trace-substance interfaces (CP23-T06).
+*   If the sensor is invalid for >60 s, THEN the fallback active by t_fault+60 s (CP23-T07).
+
+## Constraints
+
+*   Room volume shall be 100 m3.
+*   CO2 limit shall be 1000 ppm absolute.
+*   Outdoor CO2 concentration shall be 300 ppm.
+
+## Physical relationships
+
+*   Room CO2 concentration = nPeo * Occupant emission (CP23-T03).
+*   Error = Room CO2 concentration - Target CO2 concentration (CP23-T04).
+*   Controller output = Gain * Error (CP23-T04).
+*   Normalized feedback = 1.0 (CP23-T04).
+*   C_room = 1.519E-3 kg/s (CP23-T05).
+
+## Scheduled commands
+
+*   07:00 – Start of morning occupancy (A6).
+*   08:00 – Start of morning occupancy (A6).
+*   10:00 – Start of high morning occupancy (A7).
+*   12:00 – Start of lunch-period partial occupancy (A8).
+*   13:00 – Start of design peak occupancy (A9).
+*   15:00 – Start of afternoon occupancy (A10).
+*   17:00 – Start of late occupants (A11).
+*   18:00 – Unoccupied (A12).
+*   24:00 – Unoccupied (A12).
+
+## Scheduled commands
+
+*   Peak occupancy increased from 12 to 15 people for 13:00-15:00 (A9).
+*   Kp changed 4.0 -> 6.0, bias set to 3.5 ACH, integral disabled for released reference run (A10).
+*   24-hour trend test and <=1000 ppm acceptance criteria issued (A11).

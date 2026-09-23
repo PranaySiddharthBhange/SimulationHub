@@ -1,0 +1,52 @@
+flowchart TD
+    A["Simulation start t=0 s<br/>controller_state=IDLE<br/>tank1_level_m=0.05 m<br/>tank2_level_m=0.05 m<br/>V1=0 V2=0 V3=0"] --> B{"Command/event?"}
+    B -->|START at 20 s| C["Enter FILL_T1<br/>DO-101 commands XV-101 open<br/>DO-102=0 DO-103=0"]
+    B -->|No command yet| B
+    B -->|SHUT| S1["Enter SHUTDOWN<br/>Inhibit V1/XV-101<br/>Command V2/XV-102 open and V3/XV-103 open"]
+    C -->|SHUT| S1
+    C -->|STOP at 220 s| P1["Enter PAUSED<br/>Close V1 V2 V3<br/>Save resume context"]
+    C -->|LT-101 >= 0.80 m| W1["Enter WAIT_AFTER_FILL<br/>Close V1 V2 V3<br/>Wait 10 s"]
+    C -->|No| C
+    W1 -->|SHUT| S1
+    W1 -->|STOP| P2["Enter PAUSED<br/>Close V1 V2 V3<br/>Freeze remaining WAIT_AFTER_FILL timer"]
+    W1 -->|10 s elapsed| T1["Enter TRANSFER_T1_T2<br/>DO-102 commands XV-102 open<br/>DO-101=0 DO-103=0"]
+    W1 -->|No| W1
+    T1 -->|SHUT| S1
+    T1 -->|STOP at 220 s or 650 s| P3["Enter PAUSED<br/>Close V1 V2 V3<br/>Save resume context as TRANSFER_T1_T2"]
+    T1 -->|LT-101 <= 0.05 m| W2["Enter WAIT_AFTER_TRANSFER<br/>Close V1 V2 V3<br/>Wait 10 s"]
+    T1 -->|No| T1
+    W2 -->|SHUT| S1
+    W2 -->|STOP| P4["Enter PAUSED<br/>Close V1 V2 V3<br/>Freeze remaining WAIT_AFTER_TRANSFER timer"]
+    W2 -->|10 s elapsed| D1["Enter DRAIN_T2<br/>DO-103 commands XV-103 open<br/>DO-101=0 DO-102=0"]
+    W2 -->|No| W2
+    D1 -->|SHUT| S1
+    D1 -->|STOP at 650 s| P5["Enter PAUSED<br/>Close V1 V2 V3<br/>Save resume context as DRAIN_T2"]
+    D1 -->|LT-102 <= 0.05 m| W3["Enter WAIT_AFTER_DRAIN<br/>Close V1 V2 V3<br/>Wait 8 s"]
+    D1 -->|No| D1
+    W3 -->|SHUT| S1
+    W3 -->|STOP| P6["Enter PAUSED<br/>Close V1 V2 V3<br/>Freeze remaining WAIT_AFTER_DRAIN timer"]
+    W3 -->|8 s elapsed| C
+    W3 -->|No| W3
+    P1 -->|START at 280 s| C
+    P1 -->|SHUT at 700 s| S1
+    P1 -->|No| P1
+    P2 -->|START| W1
+    P2 -->|SHUT| S1
+    P2 -->|No| P2
+    P3 -->|START at 280 s| T1
+    P3 -->|SHUT at 700 s| S1
+    P3 -->|No| P3
+    P4 -->|START| W2
+    P4 -->|SHUT| S1
+    P4 -->|No| P4
+    P5 -->|START| D1
+    P5 -->|SHUT at 700 s| S1
+    P5 -->|No| P5
+    P6 -->|START| W3
+    P6 -->|SHUT| S1
+    P6 -->|No| P6
+    S1 -->|LT-101 <= 0.05 m and LT-102 <= 0.05 m| S2["Shutdown complete<br/>Close V2 and V3<br/>Return to IDLE<br/>Reset sequence context"]
+    S1 -->|START or STOP during SHUTDOWN| S1
+    S1 -->|No| S1
+    S2 -->|t=900 s| E1["End simulation<br/>Report tank1_level_m tank2_level_m<br/>Report valve1_open valve2_open valve3_open<br/>Report controller_state"]
+    S2 -->|No| S2

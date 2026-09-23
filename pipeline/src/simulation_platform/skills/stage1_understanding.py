@@ -31,17 +31,37 @@ text -- NOT JSON, NOT a fixed schema. Write it as organized prose with \
 section headings, the way an engineer would write working notes while \
 reading a spec.
 
-Cover each of these sections (skip a section entirely if this batch has \
-nothing for it -- never invent content to fill a section). Use ONLY the \
-seven section headings below -- confirmed live, repeatedly, under more than \
-one invented name ("Rules", "Notes"): the model kept adding its own EIGHTH \
-section as a catch-all for content that didn't cleanly fit one of the seven \
--- sometimes re-listing facts already placed in a section above, sometimes \
-a free-text summary paragraph. There is no eighth section, under any name. \
-If a fact fits one of the seven below, it goes there exactly once; if it \
-genuinely fits NONE of them, leave it out rather than inventing a new \
-section to hold it -- the same "omit rather than pad" discipline below \
-applies to whole sections, not just to individual facts:
+There are EXACTLY EIGHT permitted headings, and this is the complete list:
+
+## Entities
+## Relationships
+## Requirements
+## Behaviors
+## Constraints
+## Physical relationships
+## Control laws
+## Scheduled commands
+
+Write no other heading, ever. Confirmed live, repeatedly: the model appended \
+its own extra section -- "Notes", "Summary", "Rules", "Overview" -- as a \
+catch-all, sometimes restating facts already placed above, sometimes a free \
+prose paragraph. Any heading outside the eight above is an error, and a \
+closing summary paragraph is an error even without a heading. If a fact fits \
+one of the eight, it goes there exactly once; if it genuinely fits none of \
+them, leave it out rather than inventing a place to put it. Skip a heading \
+entirely when this batch has nothing for it -- never invent content to fill \
+one.
+
+These headings cover every kind of engineering system, so MOST DOCUMENTS \
+WILL USE ONLY SOME OF THEM. A passive circuit, a static or quasi-static \
+network, a purely physical process or a plain measurement record typically \
+has entities, relationships and physical relationships, and NO behaviors, \
+NO control laws and NO scheduled commands at all. A section left out costs \
+nothing; a section filled with something the document never said is a \
+fabrication and is worse than useless downstream. Never let the presence of \
+a heading persuade you that this system must have that kind of content, and \
+never borrow a component, tag, command or actuator from a kind of system \
+this document is not about:
 
 ## Entities
 Physical or logical components of the actual system this batch describes -- \
@@ -50,8 +70,14 @@ whatever real component types are actually named or implied in the text \
 chemical, or something else entirely -- do not assume any particular kind \
 of system). Include named actors and control elements (for example an \
 operator, controller, sensor, switch, or actuator) when they initiate, sense, \
-or carry out a behavior. For each: its name, its type, and any other names it's called \
-elsewhere in this batch (aliases). List every real component that appears \
+or carry out a behavior. For each: its name, its type, any other names it's called \
+elsewhere in this batch (aliases), and every numeric value the text attaches to \
+it with a unit. A rating, size, capacity or setting is very often written as part \
+of the component's own description rather than in a separate parameter list -- a \
+phrase of the form "a <number> <unit> <component>" states that component's value \
+and MUST be recorded with it. Losing those numbers makes the whole extraction \
+unusable downstream, because nothing later in the pipeline ever sees this document \
+again. List every real component that appears \
 ANYWHERE in this batch, including one named only inline inside a list of \
 several tags on a single line -- give it its own Entities line too, the same \
 as any component that happened to get its own sentence. Confirmed live: a \
@@ -69,8 +95,13 @@ entities -- don't write the same fact in both sections. If the source says \
 that something is "connected by", "joined to", "feeds", "flows to", \
 "opens a path to", or otherwise routes a signal/material between named \
 entities, write that explicit connection here with its direction or medium. \
-Do not write "None" when the batch contains any such connection statement; \
-split a shared connection into one bullet per affected pair when needed.
+A stated physical ARRANGEMENT is a relationship too: "in series", "in \
+parallel", "in a single loop", "upstream/downstream of", "between A and B", \
+"branches into", "rejoins at" all describe how the named entities are wired \
+or plumbed together, and the arrangement is often the single most important \
+fact in the document for building a model. Do not write "None" when the \
+batch contains any such connection or arrangement statement; split a shared \
+connection into one bullet per affected pair when needed.
 
 ## Requirements
 Every explicitly required outcome stated with words such as "shall", "must", \
@@ -86,7 +117,11 @@ Only include requirements actually stated by the source.
 ## Behaviors
 Discrete IF/THEN control rules (a stated measured property crossing a \
 threshold causes a stated discrete action) -- not static wiring, not a \
-plain signal assignment. If the source gives a staged/sequential PROCEDURE \
+plain signal assignment. Only when the document states such a rule: a \
+system with no switching, no commanded actuator and no discrete stages has \
+no Behaviors, and this section is then omitted entirely. Do not manufacture \
+an IF/THEN rule out of a physical relationship or a steady operating \
+condition. If the source gives a staged/sequential PROCEDURE \
 TABLE (a phase name, its action, and that SAME phase's own completion \
 condition, e.g. "Phase | Required action | Completion condition"), capture \
 each row as ONE unit -- that row's action together with that SAME row's own \
@@ -113,21 +148,44 @@ incomplete here; do not fill in a plausible-looking missing term.
 Continuous/proportional control relationships (an output computed as a \
 gain times an error term, or similar) -- distinct from a discrete \
 behavior. Only give a gain or setpoint number if the document actually \
-states one.
+states one. A system that is not feedback-controlled has no Control laws; \
+a governing physical equation is NOT a control law and belongs in Physical \
+relationships instead.
 
 ## Scheduled commands
 An explicit, time-stamped command or event (a specific real time given in \
 the text paired with a specific real command named in the text) -- \
 distinct from a behavior (which reacts to a measured property, not a \
 clock). Use the actual command name(s) the document gives, never a generic \
-placeholder word.
+placeholder word, and never a command name carried over from another \
+system. A prescribed input that simply varies with time (a ramp, a hold, a \
+source turning on at the start of the run) is the excitation of the \
+experiment, not an operator command; record its shape and values here only \
+when the document gives explicit times, and omit this section entirely when \
+the document schedules nothing.
 
 HOW TO WRITE IT (this is guidance for you, not a section to reproduce in your output)
+- STAY INSIDE THIS DOCUMENT'S OWN DOMAIN. Documents in this pipeline come from \
+completely unrelated systems -- a liquid process with vessels and valves, a \
+magnetic circuit with cores, gaps and windings, an evaporation process with \
+mixtures and heat duty, an electrical network with sources and passive \
+components. Every entity, tag, identifier, command and quantity you write must \
+be one you could point to in THIS batch's text. Never introduce a component \
+type belonging to a different kind of system, and never carry over a tag \
+pattern you have seen elsewhere. If this batch describes a magnetic circuit, \
+it has no vessels and no valves; if it describes a liquid process, it has no \
+flux paths. Writing such an entity is a fabrication, not a helpful guess, and \
+it corrupts every later stage because they never see this document again.
+- Before returning, re-read your own output and check three things: every \
+heading is one of the eight permitted headings and there is no extra section \
+or trailing summary; every entity you named appears in this batch's text; and \
+every explicit number with a unit in the batch appears exactly once in your \
+output.
 - Before answering, read the batch once from beginning to end and account for \
 EVERY sentence. Pay particular attention to the final sentence, which often \
 contains the simulation duration, required outputs, or acceptance condition. \
 Before returning, check that every explicit number with a unit and every \
-shall/must/required statement appears in exactly one of the seven sections. \
+shall/must/required statement appears in exactly one of the eight sections. \
 Concise means one faithful bullet per fact; it never means dropping a stated \
 duration, output, threshold, command, or requirement.
 - Extract meaning at the atomic-fact level. Preserve the subject, object, \

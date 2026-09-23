@@ -1,0 +1,18 @@
+flowchart TD
+    A["Start simulation"] --> B["Apply grounds<br/>ElectricGround present<br/>MagneticGround present"]
+    B --> C["Set released benchmark parameters<br/>a=0.025 m<br/>A=0.000625 m^2<br/>l=0.150 m<br/>delta=0.00150 m<br/>mu_r=1200<br/>sigma=0.08<br/>f=50 Hz<br/>N_exc=600<br/>N_meas=50"]
+    C --> D["Use magnetic topology<br/>left leg -> upper yoke -> right-leg iron<br/>branch to GAP-1 and LEAK-1 in parallel<br/>rejoin -> lower yoke -> MagneticGround"]
+    D --> E["Prescribe exciting-coil RMS current schedule<br/>0 A until 0.10 s<br/>linear ramp to 2.0 A from 0.10 s to 0.50 s<br/>hold 2.0 A to 1.0 s"]
+    E --> F["At each time t compute N_exc*I_rms(t)<br/>positive current gives positive mmf"]
+    F --> G["Compute reluctances<br/>R_core from iron path<br/>R_gap=delta/(mu0*A)<br/>R_leak=R_gap*(1-sigma)/sigma"]
+    G --> H["Compute parallel and total reluctance<br/>R_par=1/(1/R_gap+1/R_leak)<br/>R_total=R_core+R_par"]
+    H --> I["Compute total core flux<br/>Phi_core=N_exc*I_rms/R_total"]
+    I --> J["Split flux at branch<br/>Phi_gap=(1-sigma)*Phi_core<br/>Phi_leak=sigma*Phi_core"]
+    J --> K["Compute field quantities<br/>B_core=Phi_core/A<br/>B_gap=Phi_gap/A<br/>H_core=B_core/(mu0*mu_r)<br/>H_air=B_gap/mu0"]
+    K --> L["Compute magnetic potential drops<br/>Vm_core from series iron path<br/>Vm_gap from GAP-1 branch<br/>GAP-1 and LEAK-1 share equal magnetic potential"]
+    L --> M["Compute induced voltages<br/>U_exc=2*pi*f*N_exc*Phi_core<br/>abs(U_meas)=2*pi*f*N_meas*abs(Phi_gap)<br/>measuring-coil signed orientation is negative relative to positive air-gap flux"]
+    M --> N{"t = 1.0 s?"}
+    N -->|No| F
+    N -->|Yes| O["Report required outputs<br/>N*I<br/>Phi_core<br/>Phi_gap<br/>Phi_leak<br/>B and H<br/>U_exc magnitude<br/>U_meas magnitude"]
+    O --> P["Evaluate final acceptance checks at t=1.0 s<br/>abs(residual)/(N_exc*I_rms)==0.0 tol 0.005<br/>Phi_gap/Phi_core==0.92 tol 0.002<br/>Phi_core==0.0005249354167056515 tol 1e-06<br/>Phi_gap==0.00048294058336919936 tol 1e-06<br/>Phi_leak==4.1994833336452115e-05 tol 1e-06<br/>B_core==0.839897 tol 1e-06<br/>B_gap==0.772705 tol 1e-06<br/>Vm_core==277.651 tol 1e-06<br/>Vm_gap==922.349 tol 1e-06<br/>U_exc_induced_V_rms==98.94799492389429 tol 1e-06<br/>abs(U_meas_induced_signed_V_rms)==7.586012944165229 tol 1e-06"]
+    P --> Q["End at 1.0 s"]

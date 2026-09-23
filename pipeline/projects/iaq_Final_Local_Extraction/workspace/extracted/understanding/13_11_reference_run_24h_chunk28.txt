@@ -1,0 +1,17 @@
+## Entities
+*   occupants_person: Actor, number of occupants
+*   outdoor_co2_ppm: Sensor, CO2 concentration in ppm
+*   outdoor_co2_mass_fraction_kgkg: Sensor, CO2 mass fraction in kg/kg
+*   room_co2_ppm: Sensor, CO2 concentration in ppm
+*   room_co2_mass_fraction_kgkg: Sensor, CO2 mass fraction in kg/kg
+*   normalized_co2_feedback: Sensor, feedback signal
+*   normalized_setpoint: Controller, setpoint value
+*   ach_command_1_per_h: Actuator, command 1 per hour
+*   source_m_flow_command_kg_s: Actuator, source mass flow command
+*   physical_supply_m_flow_kg_s: Actuator, physical supply mass flow command
+*   people_source_carrier_m_flow_kg_s: Actuator, people source carrier mass flow command
+*   actual_co2_generation_kg_s: Sensor, actual CO2 generation
+*   controller_mode: Actor, controller mode
+
+## Relationships
+*   occupants

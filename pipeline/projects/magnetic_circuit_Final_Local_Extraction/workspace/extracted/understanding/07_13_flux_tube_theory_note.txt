@@ -1,0 +1,58 @@
+## Entities
+*   Phi (Φ) – Flux
+*   Vm – Magnetic Potential
+*   Rm – Magnetic Reluctance
+*   A – Area
+*   l – Length
+*   B – Magnetic Flux Density
+*   H_iron – Magnetic Field Intensity (Iron)
+*   H_air – Magnetic Field Intensity (Air)
+*   sigma – Leakage Parameter
+*   N – Number of Turns
+*   I – Current
+*   R_core – Core Reluctance
+*   R_leak – Leakage Reluctance
+*   R_gap – Gap Reluctance
+*   f – Frequency
+*   Gap-1 – Magnetic Gap Component
+*   Leak-1 – Magnetic Leakage Component
+*   Exciting Coil
+*   Measuring Coil
+
+## Relationships
+*   Phi = integral_A B_n dA (Flux is equal to the integral of B_n dA)
+*   Vm = integral_l H_n dl (Magnetic Potential is equal to the integral of H_n dl)
+*   Rm = Vm/Phi (Magnetic Reluctance is equal to Magnetic Potential divided by Flux)
+*   B = Phi/A (Magnetic Flux Density is equal to Flux divided by Area)
+*   H_iron = B/(mu0*mu_r) (Magnetic Field Intensity (Iron) is equal to Magnetic Flux Density divided by mu0*mu_r)
+*   H_air = B/mu0 (Magnetic Field Intensity (Air) is equal to Magnetic Flux Density divided by mu0)
+*   R_leak = R_gap*(1-sigma)/sigma (Leakage Reluctance is equal to Gap Reluctance multiplied by (1-sigma) divided by sigma)
+*   R_parallel = 1/(1/R_gap + 1/R_leak) (Parallel Reluctance is equal to the inverse of the sum of the inverses of Gap Reluctance and Leakage Reluctance)
+*   Phi_core = N*I / (R_core + R_parallel) (Core Flux is equal to N*I divided by (R_core + R_parallel))
+*   Induced-voltage magnitude = 2*pi*f*N*|Phi| (Induced Voltage Magnitude is equal to 2*pi*f*N*|Phi|)
+
+## Requirements
+*   The document does not state any specific requirements.
+
+## Behaviors
+*   A flux tube confines magnetic flux.
+*   Signed fluxes satisfy continuity at magnetic nodes.
+*   Field quantities are complex phasors in quasi-static models.
+*   Linear reluctance remains real in quasi-static models.
+*   Leakage model is parameterized by sigma.
+*   Gap and Leak components are in parallel with equal magnetic potential difference.
+*   Induced voltage magnitude is proportional to frequency, number of turns, and flux magnitude.
+
+## Constraints
+*   The baseline benchmark does not use a nonlinear B-H curve, hysteresis, or frequency-dependent permeability.
+
+## Physical relationships
+*   B = Phi/A (Magnetic Flux Density is equal to Flux divided by Area)
+*   H_iron = B/(mu0*mu_r) (Magnetic Field Intensity (Iron) is equal to Magnetic Flux Density divided by mu0*mu_r)
+*   H_air = B/mu0 (Magnetic Field Intensity (Air) is equal to Magnetic Flux Density divided by mu0)
+
+## Control laws
+*   None
+
+## Scheduled commands
+*   None

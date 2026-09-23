@@ -1,0 +1,35 @@
+## Entities
+* CurrentRamp
+* ExcitingCoil
+* IronCore
+* AirGap
+* FluxSensor
+* MeasuringCoil
+
+## Relationships
+* CurrentRamp --> ExcitingCoil : current phasor
+* ExcitingCoil --> IronCore : mmf / flux
+* IronCore --> AirGap : flux
+* AirGap --> FluxSensor : Phi
+* AirGap --> MeasuringCoil : induction
+
+## Requirements
+* None
+
+## Behaviors
+* None
+
+## Constraints
+* None
+
+## Physical relationships
+* None
+
+## Control laws
+* None
+
+## Scheduled commands
+* None
+
+## Scheduled commands
+* None

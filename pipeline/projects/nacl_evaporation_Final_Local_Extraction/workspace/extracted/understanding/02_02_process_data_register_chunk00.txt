@@ -1,0 +1,328 @@
+Okay, here's an organized breakdown of the engineering observations from the provided data, structured as working notes.
+
+## Entities
+
+*   **B1:** Liquid Input Tank (Tank)
+*   **B2:** Liquid Input Tank (Tank)
+*   **B3:** Mixing Tank (Tank)
+*   **B4:** Output Tank (Tank)
+*   **B5:** Evaporator (Tank)
+*   **B6:** Condensate Return Tank (Tank)
+*   **B7:** Concentrate Return Tank (Tank)
+*   **V11:** Valve (Valve)
+*   **V12:** Valve (Valve)
+*   **V15:** Valve (Valve)
+*   **V18:** Valve (Valve)
+*   **V20:** Valve (Valve)
+*   **V22:** Valve (Valve)
+*   **V23:** Valve (Valve)
+*   **V24:** Valve (Valve)
+*   **V25:** Valve (Valve)
+*   **V5:** Valve (Valve)
+*   **V6:** Valve (Valve)
+*   **V9:** Valve (Valve)
+*   **V1:** Valve (Valve)
+*   **V3:** Valve (Valve)
+*   **V22:** Valve (Valve)
+*   **V23:** Valve (Valve)
+*   **V18:** Valve (Valve)
+*   **V20:** Valve (Valve)
+*   **P1:** Pump (Pump)
+*   **P2:** Pump (Pump)
+*   **LIS-301:** Level Sensor (Sensor)
+*   **LIS-501:** Level Sensor (Sensor)
+*   **LIS-601:** Level Sensor (Sensor)
+*   **LIS-701:** Level Sensor (Sensor)
+*   **FIS-801:** Flow Sensor (Sensor)
+*   **QI-302:** Concentration Sensor (Sensor)
+*   **QIS-502:** Concentration Sensor (Sensor)
+*   **V15:** Valve (Valve)
+*   **V18:** Valve (Valve)
+*   **V23:** Valve (Valve)
+*   **V22:** Valve (Valve)
+*   **V1:** Valve (Valve)
+*   **V3:** Valve (Valve)
+*   **V20:** Valve (Valve)
+*   **V24:** Valve (Valve)
+*   **V25:** Valve (Valve)
+*   **V5:** Valve (Valve)
+*   **V6:** Valve (Valve)
+*   **V9:** Valve (Valve)
+*   **V22:** Valve (Valve)
+*   **V23:** Valve (Valve)
+*   **V11:** Valve (Valve)
+*   **V12:** Valve (Valve)
+*   **V18:** Valve (Valve)
+*   **V20:** Valve (Valve)
+*   **V22:** Valve (Valve)
+*   **V23:** Valve (Valve)
+*   **V1:** Valve (Valve)
+*   **V3:** Valve (Valve)
+*   **V18:** Valve (Valve)
+*   **V23:** Valve (Valve)
+*   **V22:** Valve (Valve)
+*   **V1:** Valve (Valve)
+*   **V3:** Valve (Valve)
+*   **V20:** Valve (Valve)
+*   **V24:** Valve (Valve)
+*   **V25:** Valve (Valve)
+*   **V5:** Valve (Valve)
+*   **V6:** Valve (Valve)
+*   **V9:** Valve (Valve)
+*   **V11:** Valve (Valve)
+*   **V12:** Valve (Valve)
+*   **V15:** Valve (Valve)
+*   **V18:** Valve (Valve)
+*   **V20:** Valve (Valve)
+*   **V22:** Valve (Valve)
+*   **V23:** Valve (Valve)
+*   **P1:** Pump (Pump)
+*   **P2:** Pump (Pump)
+*   **B1:** Liquid Input Tank (Tank)
+*   **B2:** Liquid Input Tank (Tank)
+*   **B3:** Mixing Tank (Tank)
+*   **B4:** Output Tank (Tank)
+*   **B5:** Evaporator (Tank)
+*   **B6:** Condensate Return Tank (Tank)
+*   **B7:** Concentrate Return Tank (Tank)
+
+## Relationships
+
+*   B1 supplies to B3
+*   B2 supplies to B3
+*   B3 supplies to B4
+*   B3 supplies to B5
+*   B5 supplies to B6
+*   B5 supplies to B7
+*   V11 controls B4
+*   V12 controls B4
+*   V15 controls B5
+*   V18 controls B4
+*   V20 controls B4
+*   V22 controls B4
+*   V23 controls B4
+*   V1 controls B3
+*   V3 controls B3
+*   V9 controls B3
+*   LIS-301 regulates B3
+*   LIS-501 regulates B5
+*   LIS-601 regulates B5
+*   LIS-701 regulates B5
+*   FIS-801 regulates B5
+*   QI-302 regulates B3
+*   QIS-502 regulates B3
+*   V11 opens V18, V23, V22, V1, V3
+*   V12 opens V20, V24, V25, V5, V6
+*   B6 returns to B1
+*   B7 returns to B2
+*   P1 returns to B1
+*   P2 returns to B2
+*   B7/P1 returns to B1 using V18, V23, V22, V1, V3
+*   B6/P2 returns to B2 using V20, V24, V25, V5, V6
+*   B6 returns to B1 using P2 and the B1 return valve group
+*   B7 returns to B2 using P1 and the B2 return valve group
+*   V11 transfers B3 to B4
+*   V12 transfers B3 to B4
+*   V15 transfers B5 to B4
+*   V18 transfers B3 to B4
+*   V20 transfers B3 to B4
+*   V22 transfers B3 to B4
+*   V23 transfers B3 to B4
+*   V1 transfers B3 to B4
+*   V3 transfers B3 to B4
+*   V9 transfers B3 to B4
+*   V11 transfers B4 to B4
+*   V12 transfers B4 to B4
+*   V15 transfers B4 to B4
+*   V18 transfers B4 to B4
+*   V20 transfers B4 to B4
+*   V22 transfers B4 to B4
+*   V23 transfers B4 to B4
+*   P1 returns to B1
+*   P2 returns to B2
+*   B6 returns to B1
+*   B7 returns to B2
+*   B7/P1 returns to B1 using V18, V23, V22, V1, V3
+*   B6/P2 returns to B2 using V20, V24, V25, V5, V6
+*   B6 returns to B1 using P2 and the B1 return valve group
+*   B7 returns to B2 using P1 and the B2 return valve group
+*   V11 controls B4
+*   V12 controls B4
+*   V15 controls B5
+*   V18 controls B4
+*   V20 controls B4
+*   V22 controls B4
+*   V23 controls B4
+*   V1 controls B3
+*   V3 controls B3
+*   V9 controls B3
+*   LIS-301 regulates B3
+*   LIS-501 regulates B5
+*   LIS-601 regulates B5
+*   LIS-701 regulates B5
+*   FIS-801 regulates B5
+*   QI-302 regulates B3
+*   QIS-502 regulates B3
+*   V11 opens V18, V23, V22, V1, V3
+*   V12 opens V20, V24, V25, V5, V6
+*   V15 controls B5
+*   V18 controls B4
+*   V20 controls B4
+*   V22 controls B4
+*   V23 controls B4
+*   V1 controls B3
+*   V3 controls B3
+*   V9 controls B3
+*   LIS-301 regulates B3
+*   LIS-501 regulates B5
+*   LIS-601 regulates B5
+*   LIS-701 regulates B5
+*   FIS-801 regulates B5
+*   QI-302 regulates B3
+*   QIS-502 regulates B3
+*   V11 transfers B3 to B4
+*   V12 transfers B3 to B4
+*   V15 transfers B5 to B4
+*   V18 transfers B3 to B4
+*   V20 transfers B3 to B4
+*   V22 transfers B3 to B4
+*   V23 transfers B3 to B4
+*   V1 transfers B3 to B4
+*   V3 transfers B3 to B4
+*   V9 transfers B3 to B4
+*   V11 transfers B4 to B4
+*   V12 transfers B4 to B4
+*   V15 transfers B4 to B4
+*   V18 transfers B4 to B4
+*   V20 transfers B4 to B4
+*   V22 transfers B4 to B4
+*   V23 transfers B4 to B4
+*   P1 returns to B1
+*   P2 returns to B2
+*   B6 returns to B1
+*   B7 returns to B2
+*   B7/P1 returns to B1 using V18, V23, V22, V1, V3
+*   B6/P2 returns to B2 using V20, V24, V25, V5, V6
+*   B6 returns to B1 using P2 and the B1 return valve group
+*   B7 returns to B2 using P1 and the B2 return valve group
+*   V11 controls B4
+*   V12 controls B4
+*   V15 controls B5
+*   V18 controls B4
+*   V20 controls B4
+*   V22 controls B4
+*   V23 controls B4
+*   V1 controls B3
+*   V3 controls B3
+*   V9 controls B3
+*   LIS-301 regulates B3
+*   LIS-501 regulates B5
+*   LIS-601 regulates B5
+*   LIS-701 regulates B5
+*   FIS-801 regulates B5
+*   QI-302 regulates B3
+*   QIS-502 regulates B3
+*   V11 transfers B3 to B4
+*   V12 transfers B3 to B4
+*   V15 transfers B5 to B4
+*   V18 transfers B3 to B4
+*   V20 transfers B3 to B4
+*   V22 transfers B3 to B4
+*   V23 transfers B3 to B4
+*   V1 transfers B3 to B4
+*   V3 transfers B3 to B4
+*   V9 transfers B3 to B4
+*   V11 transfers B4 to B4
+*   V12 transfers B4 to B4
+*   V15 transfers B4 to B4
+*   V18 transfers B4 to B4
+*   V20 transfers B4 to B4
+*   V22 transfers B4 to B4
+*   V23 transfers B4 to B4
+*   P1 returns to B1
+*   P2 returns to B2
+*   B6 returns to B1
+*   B7 returns to B2
+*   B7/P1 returns to B1 using V18, V23, V22, V1, V3
+*   B6/P2 returns to B2 using V20, V24, V25, V5, V6
+*   B6 returns to B1 using P2 and the B1 return valve group
+*   B7 returns to B2 using P1 and the B2 return valve group
+*   V11 controls B4
+*   V12 controls B4
+*   V15 controls B5
+*   V18 controls B4
+*   V20 controls B4
+*   V22 controls B4
+*   V23 controls B4
+*   V1 controls B3
+*   V3 controls B3
+*   V9 controls B3
+*   LIS-301 regulates B3
+*   LIS-501 regulates B5
+*   LIS-601 regulates B5
+*   LIS-701 regulates B5
+*   FIS-801 regulates B5
+*   QI-302 regulates B3
+*   QIS-502 regulates B3
+*   V11 transfers B3 to B4
+*   V12 transfers B3 to B4
+*   V15 transfers B5 to B4
+*   V18 transfers B3 to B4
+*   V20 transfers B3 to B4
+*   V22 transfers B3 to B4
+*   V23 transfers B3 to B4
+*   V1 transfers B3 to B4
+*   V3 transfers B3 to B4
+*   V9 transfers B3 to B4
+*   V11 transfers B4 to B4
+*   V12 transfers B4 to B4
+*   V15 transfers B4 to B4
+*   V18 transfers B4 to B4
+*   V20 transfers B4 to B4
+*   V22 transfers B4 to B4
+*   V23 transfers B4 to B4
+*   P1 returns to B1
+*   P2 returns to B2
+*   B6 returns to B1
+*   B7 returns to B2
+*   B7/P1 returns to B1 using V18, V23, V22, V1, V3
+*   B6/P2 returns to B2 using V20, V24, V25, V5, V6
+*   B6 returns to B1 using P2 and the B1 return valve group
+*   B7 returns to B2 using P1 and the B2 return valve group
+*   V11 controls B4
+*   V12 controls B4
+*   V15 controls B5
+*   V18 controls B4
+*   V20 controls B4
+*   V22 controls B4
+*   V23 controls B4
+*   V1 controls B3
+*   V3 controls B3
+*   V9 controls B3
+*   LIS-301 regulates B3
+*   LIS-501 regulates B5
+*   LIS-601 regulates B5
+*   LIS-701 regulates B5
+*   FIS-801 regulates B5
+*   QI-302 regulates B3
+*   QIS-502 regulates B3
+*   V11 transfers B3 to B4
+*   V12 transfers B3 to B4
+*   V15 transfers B5 to B4
+*   V18 transfers B3 to B4
+*   V20 transfers B3 to B4
+*   V22 transfers B3 to B4
+*   V23 transfers B3 to B4
+*   V1 transfers B3 to B4
+*   V3 transfers B3 to B4
+*   V9 transfers B3 to B4
+*   V11 transfers B4 to B4
+*   V12 transfers B4 to B4
+*   V15 transfers B4 to B4
+*   V18 transfers B4 to B4
+*   V20 transfers B4 to B4
+*   V22 transfers B4 to B4
+*   V23 transfers B4 to B4
+*   P1 returns to B1
+*   P2 returns to B2
+*   B6 returns to

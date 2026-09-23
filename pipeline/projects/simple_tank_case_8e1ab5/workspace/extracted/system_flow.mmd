@@ -1,0 +1,45 @@
+flowchart TD
+    A["Simulation start"] --> B{"SHUT issued?"}
+    B -->|Yes| S1["Inlet inhibited"]
+    B -->|No| C{"START issued?"}
+    S1 --> S2["Open transfer path"]
+    S2 --> S3["Open drain path"]
+    S3 --> S4{"Tank 1 low-level switch reached<br/>and Tank 2 low-level switch reached?"}
+    S4 -->|No| S4
+    S4 -->|Yes| S5["Both tanks empty state"]
+    C -->|No| D{"STOP issued?"}
+    C -->|Yes| E{"Resume interrupted state?"}
+    D -->|Yes| P1["Close inlet valve, transfer valve,<br/>and drain valve"]
+    D -->|No| B
+    P1 --> P2["Sequence paused"]
+    P2 -->|START| E
+    P2 -->|SHUT| S1
+    E -->|Yes| R1["Resume interrupted state"]
+    E -->|No| F["Fill Tank 1"]
+    R1 --> G{"Interrupted state = Fill Tank 1?"}
+    G -->|Yes| F
+    G -->|No| H{"Interrupted state = Wait 10 s after<br/>Tank 1 High-level switch?"}
+    H -->|Yes| W1["Wait 10 s"]
+    H -->|No| I{"Interrupted state = Transfer to Tank 2?"}
+    I -->|Yes| J["Transfer liquid to Tank 2"]
+    I -->|No| K{"Interrupted state = Wait 10 s after<br/>Tank 1 Low-level switch?"}
+    K -->|Yes| W2["Wait 10 s"]
+    K -->|No| L["Drain Tank 2"]
+    F --> M{"Tank 1 High-level switch reached?"}
+    M -->|No| B
+    M -->|Yes| W1
+    W1 --> N{"STOP or SHUT issued during wait?"}
+    N -->|STOP| P1
+    N -->|SHUT| S1
+    N -->|No| J
+    J --> O{"Tank 1 low-level switch reached?"}
+    O -->|No| B
+    O -->|Yes| W2
+    W2 --> Q{"STOP or SHUT issued during wait?"}
+    Q -->|STOP| P1
+    Q -->|SHUT| S1
+    Q -->|No| L
+    L --> T{"Tank 2 low-level switch reached?"}
+    T -->|No| B
+    T -->|Yes| U["Report tank levels and valve commands<br/>for 900-second experiment"]
+    S5 --> U

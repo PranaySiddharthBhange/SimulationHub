@@ -5,6 +5,7 @@ import {
   Copy,
   FileCode2,
   FileText,
+  FolderTree,
   GitBranch,
   Loader2,
   Maximize2,
@@ -16,6 +17,7 @@ import {
 import { useEffect, useId, useRef, useState } from 'react'
 import mermaid from 'mermaid'
 import { getArtifact } from '../api'
+import FileBrowser from './FileBrowser'
 
 const TABS = [
   { key: 'understanding', label: 'Understanding', icon: FileText, kind: 'prose' },
@@ -24,7 +26,12 @@ const TABS = [
   { key: 'modelica', label: 'Modelica', icon: FileCode2, kind: 'code' },
   { key: 'validation', label: 'Validation', icon: ClipboardCheck, kind: 'validation' },
   { key: 'result', label: 'Result', icon: ChartLine, kind: 'result' },
+  { key: 'files', label: 'Files', icon: FolderTree, kind: 'files' },
 ]
+
+// The file browser reads the project folder directly, so it has nothing to wait
+// for and is never "not generated yet" the way a stage artifact is.
+const ALWAYS_AVAILABLE = new Set(['files'])
 
 const VERDICT_STYLE = {
   valid: { bg: 'var(--green-soft, rgba(34,197,94,0.15))', fg: 'var(--green)', label: 'Valid' },
@@ -343,7 +350,7 @@ export default function ArtifactViewer({ projectId, available, refreshToken }) {
   }, [refreshToken])
 
   useEffect(() => {
-    if (!available[tab] || cache[tab]) return
+    if (ALWAYS_AVAILABLE.has(tab) || !available[tab] || cache[tab]) return
     let cancelled = false
     setLoading(true)
     getArtifact(projectId, tab)
@@ -372,7 +379,7 @@ export default function ArtifactViewer({ projectId, available, refreshToken }) {
         <div className="flex shrink-0 gap-1">
           {TABS.map((t) => {
             const isActive = t.key === tab
-            const isAvailable = available[t.key]
+            const isAvailable = ALWAYS_AVAILABLE.has(t.key) || available[t.key]
             return (
               <button
                 key={t.key}
@@ -405,12 +412,13 @@ export default function ArtifactViewer({ projectId, available, refreshToken }) {
             <Loader2 className="h-4 w-4 animate-spin" /> loadingÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦
           </div>
         )}
-        {!loading && !available[tab] && (
+        {!loading && !ALWAYS_AVAILABLE.has(tab) && !available[tab] && (
           <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-[var(--text-dim)]">
             <active.icon className="h-6 w-6 opacity-40" />
             <span className="text-[13px]">Not generated yet</span>
           </div>
         )}
+        {active.kind === 'files' && <FileBrowser projectId={projectId} refreshToken={refreshToken} />}
         {!loading && available[tab] && content && active.kind === 'prose' && (
           <div className="fade-up whitespace-pre-wrap px-5 py-4 text-[13.5px] leading-relaxed text-[var(--text)]">
             {content}

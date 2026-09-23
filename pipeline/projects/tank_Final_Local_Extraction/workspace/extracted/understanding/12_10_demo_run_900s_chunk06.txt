@@ -1,0 +1,25 @@
+## Entities
+tank1_level_m, type: numeric, units: m
+tank2_level_m, type: numeric, units: m
+valve1_open, type: numeric, units: %
+valve2_open, type: numeric, units: %
+valve3_open, type: numeric, units: %
+controller_state, type: string, aliases: IDLE
+## Relationships
+None
+## Requirements
+None
+## Behaviors
+None
+## Constraints
+None
+## Physical relationships
+None
+## Control laws
+None
+## Scheduled commands
+None
+## Scheduled commands
+None
+Scheduled commands: None
+Summary: The system observes tank1_level_m and tank2_level_m at 0.05 m for 900 seconds, with valve1_open, valve2_open, and valve3_open all set to 0. The controller_state is consistently IDLE.

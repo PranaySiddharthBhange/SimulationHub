@@ -1,0 +1,24 @@
+## Entities
+*   `time_s`: Time in seconds
+*   `clock_time`: Clock time (HH:MM:SS)
+*   `occupants_person`: Number of occupants (0)
+*   `outdoor_co2_ppm`: Outdoor CO2 concentration in parts per million (300.0)
+*   `outdoor_co2_mass_fraction_kgkg`: Outdoor CO2 mass fraction in kg/kg (0.00045569999999999996)
+*   `room_co2_ppm`: Room CO2 concentration in parts per million (300.0)
+*   `room_co2_mass_fraction_kgkg`: Room CO2 mass fraction in kg/kg (0.00045569999999999996)
+*   `normalized_co2_feedback`: Normalized CO2 feedback value (0.3)
+*   `normalized_setpoint`: Normalized setpoint value (1.0)
+*   `ach_command_1_per_h`: Ach command 1 per hour (0.2)
+*   `source_m_flow_command_kg_s`: Source M flow command in kg/s (0.006666666666666667)
+*   `physical_supply_m_flow_kg_s`: Physical supply M flow command in kg/s (0.006666666666666667)
+*   `people_source_carrier_m_flow_kg_s`: People source carrier M flow command in kg/s (0.0)
+*   `actual_co2_generation_kg_s`: Actual CO2 generation in kg/s (0.0)
+*   `controller_mode`: Controller mode (AUTO_MIN)
+
+## Relationships
+*   `time_s` -> `clock_time`: Time is recorded at intervals of 60 seconds.
+*   `clock_time` -> `occupants_person`: Occupancy is constant at 0.
+*   `clock_time` -> `outdoor_co2_ppm`: Outdoor CO2 concentration remains at 300.0 ppm.
+*   `clock_time` -> `outdoor_co2_mass_fraction_kgkg`: Outdoor CO2 mass fraction remains at 0.00045569999999999996 kg/kg.
+*   `clock_time` -> `room_co2_ppm`: Room CO2 concentration remains at 300.0 ppm.
+*   `clock_time` -> `room_co2_mass_fraction_kgkg`: Room CO2 mass fraction remains at 0.0004556999999999999

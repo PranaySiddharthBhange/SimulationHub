@@ -1,0 +1,39 @@
+## Entities
+*   RM-201: Space, Room, "Seminar / Project Room 201"
+*   ZON-201: Space, Zone, "ZON-201"
+*   OA-VENT-2: System, Air Ventilation, "OA-VENT-2"
+*   EA-VENT-2: System, Air Ventilation, "EA-VENT-2"
+*   SUP-201-A: Connector, Air Connection, "SUP-201-A"
+*   EXH-201-A: Connector, Air Connection, "EXH-201-A"
+*   CO2 sensor: Actor, Sensor, "CO2 sensor"
+*   occupancy source: Actor, Occupancy Sensor, "occupancy source"
+
+## Relationships
+*   SUP-201-A connects_to OA-VENT-2
+*   EXH-201-A connects_to EA-VENT-2
+*   CO2 sensor located_at north wall, 1.5 m AFF
+*   occupancy source located_at logical schedule
+
+## Requirements
+*   reported_volume_m3 = 100.0 (m3)
+
+## Behaviors
+*   None
+
+## Constraints
+*   gross_floor_area_m2 = 40.0 (m2)
+*   net_floor_area_m2 = 38.6 (m2)
+*   clear_height_m = 2.59 (m)
+*   design_people = 15
+
+## Physical relationships
+*   None
+
+## Control laws
+*   None
+
+## Scheduled commands
+*   None
+
+## Scheduled commands
+*   None

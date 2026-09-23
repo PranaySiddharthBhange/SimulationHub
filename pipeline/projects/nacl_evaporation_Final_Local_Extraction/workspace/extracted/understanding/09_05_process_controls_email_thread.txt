@@ -1,0 +1,45 @@
+## Entities
+B1, type: Tank
+B2, type: Tank
+B6, type: Tank
+B7, type: Tank
+V1, type: Valve
+V18, type: Valve
+V20, type: Valve
+V22, type: Valve
+V23, type: Valve
+V24, type: Valve
+V25, type: Valve
+V3, type: Valve
+V5, type: Valve
+V6, type: Valve
+WaterNaCl, type: Medium
+StandardWater, type: Medium
+
+## Relationships
+P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1 (Implied: WaterNaCl)
+P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2 (Implied: WaterNaCl)
+B6 <= 20 C (Implied: WaterNaCl)
+B7 <= 25 C (Implied: WaterNaCl)
+
+## Requirements
+1) B6 condensate returns to B1. (page 5_correspondence/05_process_controls_email_thread.eml)
+2) B7 concentrate returns to B2. (page 5_correspondence/05_process_controls_email_thread.eml)
+3) B7 cooling completion is <=25 C. (page 5_correspondence/05_process_controls_email_thread.eml)
+
+## Behaviors
+P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1 (Implied: WaterNaCl)
+P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2 (Implied: WaterNaCl)
+
+## Constraints
+B6 cooling setpoint <= 20 C
+B7 cooling setpoint <= 25 C
+
+## Physical relationships
+None
+
+## Scheduled commands
+None
+
+## Scheduled commands
+None

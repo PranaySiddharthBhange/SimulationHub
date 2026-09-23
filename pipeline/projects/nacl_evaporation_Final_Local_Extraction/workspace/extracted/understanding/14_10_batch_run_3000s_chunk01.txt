@@ -1,0 +1,21 @@
+## Entities
+B3_level_m, type: float, aliases: B3
+B4_level_m, type: float, aliases: B4
+B5_level_m, type: float, aliases: B5
+B6_level_m, type: float, aliases: B6
+B7_level_m, type: float, aliases: B7
+B3_w_NaCl, type: float, aliases: B3
+B5_w_NaCl, type: float, aliases: B5
+B5_temp_C, type: float, aliases: B5
+B6_temp_C, type: float, aliases: B6
+B7_temp_C, type: float, aliases: B7
+FIS801_kg_s, type: float, aliases: FIS801
+P1_cmd, type: float, aliases: P1
+P2_cmd, type: float, aliases: P2
+V1_open, type: float, aliases: V1
+V3_open, type: float, aliases: V3
+V5_open, type: float, aliases: V5
+V6_open, type: float, aliases: V6
+V8_open, type: float, aliases: V8
+V9_open, type: float, aliases: V9
+V11_open, type: float, aliases: V

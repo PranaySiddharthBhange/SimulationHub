@@ -1,0 +1,74 @@
+Okay, here's a breakdown of the system described in the provided engineering document, organized into the seven sections as requested.
+
+## Entities
+
+*   **TK-101:** Tank, Tank, Vertical tank; initial level 0.05 m. Alias: tank1
+*   **TK-102:** Tank, Final receiving/drain tank, Vertical tank; initial level 0.05 m. Alias: tank2
+*   **XV-101:** On-off valve, V1, Feed source to TK-101. Alias: valve1
+*   **XV-102:** On-off valve, V2, TK-101 to TK-102. Alias: valve2
+*   **XV-103:** On-off valve, V3, TK-102 to drain. Alias: valve3
+*   **LT-101:** Level transmitter, level1, 4-20 mA mapped 0.0-1.0 m.
+*   **LT-102:** Level transmitter, level2, 4-20 mA mapped 0.0-1.0 m.
+*   **PB-START:** Momentary pushbutton, start, Momentary pushbutton.
+*   **PB-STOP:** Momentary pushbutton, stop, Momentary pushbutton.
+*   **PB-SHUT:** Momentary pushbutton, shut, Momentary pushbutton.
+*   **PLC-101:** Controller, tankController, Controller.
+*   **SRC-101:** Boundary source, source, Supply to XV-101.
+*   **DRN-101:** Boundary sink, ambient1, Drain from XV-103.
+*   **AI-101:** Level transmitter, LT-101.
+*   **AI-102:** Level transmitter, LT-102.
+*   **DO-101:** On-off valve, XV-101.
+*   **DO-102:** On-off valve, XV-102.
+*   **DO-103:** On-off valve, XV-103.
+
+## Relationships
+
+*   TK-101 supplies to XV-101
+*   TK-101 supplies to XV-102
+*   TK-101 supplies to XV-103
+*   TK-102 supplies to XV-102
+*   TK-102 supplies to XV-103
+*   XV-101 receives from SRC-101
+*   XV-103 receives from DRN-101
+*   LT-101 monitors TK-101 level
+*   LT-102 monitors TK-102 level
+*   DO-101 controls XV-101
+*   DO-102 controls XV-102
+*   DO-103 controls XV-103
+*   PLC-101 controls XV-101, XV-102, and XV-103
+*   AI-101 receives signal from LT-101
+*   AI-102 receives signal from LT-102
+*   DO-101 sends signal to XV-101
+*   DO-102 sends signal to XV-102
+*   DO-103 sends signal to XV-103
+
+## Requirements
+
+*   The demonstration run shall simulate from 0 s through 900 s (URS-TST-001, TP-17).
+*   The demonstration run shall apply START at 20 s, STOP at 220 s, START at 280 s, STOP at 650 s and SHUT at 700 s (URS-TST-002, TP-17).
+*   Level values shall be represented internally in metres with a nominal valid range of 0.0 to 1.0 m (URS-DAT-001, ICD-01).
+*   Shutdown completion shall require Tank 1 and Tank 2 to both be at or below their low-level setpoints (URS-CTL-004, DR-02).
+*   The demonstration run shall verify the exact stop time (URS-TST-001, TP-17, Exact stop time).
+*   The demonstration run shall verify the exact event times (URS-TST-002, TP-17, Exact event times).
+
+## Behaviors
+
+*   If DI-101 (PB-START) is activated, then DO-101 (XV-101) opens.
+*   If DI-102 (PB-STOP) is activated, then DO-101 (XV-101), DO-102 (XV-102), and DO-103 (XV-103) close.
+*   If DI-103 (PB-SHUT) is activated, then DO-101 (XV-101), DO-102 (XV-102), and DO-103 (XV-103) close.
+*   If LT-101 (AI-101) level is <= 0.05 m, then DO-101 (XV-101) closes.
+*   If LT-102 (AI-102) level is <= 0.05 m, then DO-102 (XV-102) closes.
+
+## Constraints
+
+*   TK-101 level shall be between 0.0 and 0.9 m.
+*   TK-102 level shall be between 0.0 and 0.9 m.
+
+## Physical relationships
+
+*   None
+
+## Scheduled commands
+
+*   None
+

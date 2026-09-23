@@ -1,0 +1,111 @@
+Okay, here's a breakdown of the engineering register data, organized into the seven sections as requested.
+
+## Entities
+*   **Core Side A:** 25 mm (Entity: Core Side A, Type: Dimension, Alias: Side A)
+*   **Reference Dimension l:** 150 mm (Entity: Reference Dimension l, Type: Dimension, Alias: l)
+*   **Nominal Gap Delta:** 1.50 mm (Entity: Nominal Gap Delta, Type: Dimension, Alias: Delta)
+*   **Exciting Coil:** 600 turns (Entity: Exciting Coil, Type: Coil, Alias: ECoil)
+*   **Measuring Coil:** 50 turns (Entity: Measuring Coil, Type: Coil, Alias: MC)
+*   **Flux Sensor:** (Entity: Flux Sensor, Type: Sensor)
+*   **Electric Ground:** (Entity: Electric Ground, Type: Ground)
+*   **Magnetic Ground:** (Entity: Magnetic Ground, Type: Ground)
+*   **Air Gap:** (Entity: Air Gap, Type: Component)
+*   **Iron Core:** (Entity: Iron Core, Type: Component)
+*   **Leakage Branch:** (Entity: Leakage Branch, Type: Component)
+*   **Upper Yoke:** (Entity: Upper Yoke, Type: Component)
+*   **Right Leg:** (Entity: Right Leg, Type: Component)
+*   **Lower Yoke:** (Entity: Lower Yoke, Type: Component)
+*   **Lower Yoke:** (Entity: Lower Yoke, Type: Component)
+
+## Relationships
+*   Core Side A is connected_to 25 mm
+*   Reference Dimension l is connected_to 150 mm
+*   Nominal Gap Delta is connected_to 1.50 mm
+*   Exciting Coil has 600 turns
+*   Measuring Coil has 50 turns
+*   Exciting Coil supplies current to the Exciting Coil
+*   Measuring Coil measures flux
+*   Flux Sensor detects flux
+*   Electric Ground is connected_to Electric Ground
+*   Magnetic Ground is connected_to Magnetic Ground
+*   Air Gap is connected_to Iron Core
+*   Iron Core supplies flux to the Air Gap
+*   Leakage Branch is connected_to Iron Core
+*   Upper Yoke is connected_to Iron Core
+*   Right Leg is connected_to Iron Core
+*   Lower Yoke is connected_to Iron Core
+*   REQ-FUN-001 (The electromagnetic converter shall create positive magnetic mmf when positive exciting-coil current is applied.) requires Exciting Coil
+*   REQ-FUN-002 (The core magnetic circuit shall include left leg, upper yoke, right leg, lower yoke and one discrete air gap.) includes all components listed above
+*   REQ-FUN-003 (The magnetic circuit shall include a leakage flux path in parallel with the useful air-gap path.) includes Leakage Branch
+*   REQ-FUN-004 (Useful air-gap flux shall be modeled as (1-sigma) times total core flux.) models Air Gap flux
+*   REQ-PER-001 (The effective leakage coefficient sigma shall be 0.08 for the released benchmark configuration.) relates to Leakage Branch
+*   REQ-PER-002 (The released effective relative permeability of the iron core shall be 1200 under the linear benchmark assumption.) relates to Iron Core
+*   REQ-GEO-001 (The square core cross section shall have side a = 25 mm.) relates to Core Side A
+*   REQ-GEO-002 (The mean outside magnetic-circuit dimension l shall be 150 mm as defined on the reference drawing.) relates to Reference Dimension l
+*   REQ-GEO-003 (The nominal air-gap length delta shall be 1.50 mm.) relates to Nominal Gap Delta
+*   REQ-GEO-004 (Mean flux-line lengths shall be l-a for left leg, upper yoke and lower yoke, and l-a-delta for the right leg iron section.) relates to all Iron Core components
+*   REQ-ELC-001 (The exciting coil shall have 600 turns.) relates to Exciting Coil
+*   REQ-ELC-002 (The measuring coil in the air gap shall have 50 turns.) relates to Measuring Coil
+*   REQ-ELC-003 (The exciting current RMS phasor magnitude shall ramp from 0 A to 2.0 A between 0.10 s and 0.50 s and then remain at 2.0 A through 1.0 s.) relates to Exciting Coil
+*   REQ-ELC-004 (The quasi-static excitation frequency shall be 50 Hz.) relates to Exciting Coil
+*   REQ-MAG-001 (For each linear flux-tube element, reluctance shall be Rm = length/(mu0*mu_r*A).) relates to Iron Core
+*   REQ-MAG-002 (Flux density shall be B = Phi/A for constant cross-section elements.) relates to Iron Core
+*   REQ-MAG-003 (Core field strength shall be H = B/(mu0*mu_r), and air-gap field strength shall be H = B/mu0.) relates to Iron Core and Air Gap
+*   REQ-MAG-004 (Magnetic potential difference of each element shall equal H multiplied by its mean flux-line length.) relates to Iron Core and Air Gap
+*   REQ-MAG-005 (The sum of series core magnetic potential drops plus the air-gap branch magnetic potential shall equal N*I.) relates to Exciting Coil and Iron Core
+*   REQ-MAG-006 (Magnetic potential difference across GAP-1 and LEAK-1 shall be equal because the elements are connected in parallel.) relates to Air Gap and Leakage Branch
+*   REQ-MAG-007 (Flux continuity shall be satisfied at the split: Phi_core = Phi_gap + Phi_leak.) relates to Iron Core, Air Gap and Leakage Branch
+*   REQ-QS-001 (Magnetic flux, flux density, field strength and magnetic potential shall be represented as quasi-static phasor quantities.) relates to all components
+*   REQ-QS-002 (For linear reluctance elements, reluctance shall remain a real-valued quantity and magnetic potential difference and flux shall have the same phasor angle.) relates to all components
+*   REQ-IND-001 (The exciting coil induced voltage shall be oriented positive with respect to the defined positive electric direction.) relates to Exciting Coil
+
+## Requirements
+*   REQ-FUN-001: The electromagnetic converter shall create positive magnetic mmf when positive exciting-coil current is applied. (Requires Exciting Coil, Measurement)
+*   REQ-FUN-002: The core magnetic circuit shall include left leg, upper yoke, right leg, lower yoke and one discrete air gap. (Includes all components listed above)
+*   REQ-FUN-003: The magnetic circuit shall include a leakage flux path in parallel with the useful air-gap path. (Includes Leakage Branch)
+*   REQ-FUN-004: Useful air-gap flux shall be modeled as (1-sigma) times total core flux. (Air Gap, Core Side A)
+*   REQ-PER-001: The effective leakage coefficient sigma shall be 0.08 for the released benchmark configuration. (Leakage Branch)
+*   REQ-PER-002: The released effective relative permeability of the iron core shall be 1200 under the linear benchmark assumption. (Iron Core)
+*   REQ-GEO-001: The square core cross section shall have side a = 25 mm. (Core Side A)
+*   REQ-GEO-002: The mean outside magnetic-circuit dimension l shall be 150 mm as defined on the reference drawing. (Reference Dimension l)
+*   REQ-GEO-003: The nominal air-gap length delta shall be 1.50 mm. (Nominal Gap Delta)
+*   REQ-GEO-004: Mean flux-line lengths shall be l-a for left leg, upper yoke and lower yoke, and l-a-delta for the right leg iron section. (All Iron Core components)
+*   REQ-ELC-001: The exciting coil shall have 600 turns. (Exciting Coil)
+*   REQ-ELC-002: The measuring coil in the air gap shall have 50 turns. (Measuring Coil)
+*   REQ-ELC-003: The exciting current RMS phasor magnitude shall ramp from 0 A to 2.0 A between 0.10 s and 0.50 s and then remain at 2.0 A through 1.0 s. (Exciting Coil)
+*   REQ-ELC-004: The quasi-static excitation frequency shall be 50 Hz. (Exciting Coil)
+*   REQ-MAG-001: For each linear flux-tube element, reluctance shall be Rm = length/(mu0*mu_r*A). (Iron Core)
+*   REQ-MAG-002: Flux density shall be B = Phi/A for constant cross-section elements. (Iron Core)
+*   REQ-MAG-003: Core field strength shall be H = B/(mu0*mu_r), and air-gap field strength shall be H = B/mu0. (Iron Core, Air Gap)
+*   REQ-MAG-004: Magnetic potential difference of each element shall equal H multiplied by its mean flux-line length. (Iron Core, Air Gap)
+*   REQ-MAG-005: The sum of series core magnetic potential drops plus the air-gap branch magnetic potential shall equal N*I. (Exciting Coil, Iron Core)
+*   REQ-MAG-006: Magnetic potential difference across GAP-1 and LEAK-1 shall be equal because the elements are connected in parallel. (Air Gap, Leakage Branch)
+*   REQ-MAG-007: Flux continuity shall be satisfied at the split: Phi_core = Phi_gap + Phi_leak. (Iron Core, Air Gap, Leakage Branch)
+*   REQ-QS-001: Magnetic flux, flux density, field strength and magnetic potential shall be represented as quasi-static phasor quantities. (All components)
+*   REQ-QS-002: For linear reluctance elements, reluctance shall remain a real-valued quantity and magnetic potential difference and flux shall have the same phasor angle. (All components)
+*   REQ-IND-001: The exciting coil induced voltage shall be oriented positive with respect to the defined positive electric direction. (Exciting Coil)
+
+## Behaviors
+*   (No behaviors explicitly stated in the source data)
+
+## Constraints
+*   Core Side A = 25 mm
+*   Reference Dimension l = 150 mm
+*   Nominal Gap Delta = 1.50 mm
+*   Effective Leakage Coefficient sigma = 0.08
+*   Relative Permeability of Iron Core = 1200
+*   Exciting Coil Turns = 600
+*   Measuring Coil Turns = 50
+*   Exciting Current Ramp: 0 A to 2.0 A between 0.10 s and 0.50 s, then 2.0 A through 1.0 s
+*   Quasi-Static Excitation Frequency = 50 Hz
+
+## Physical relationships
+*   Reluctance (Rm) = Length / (mu0 * mu_r * A) (Equation)
+*   Flux Density (B) = Phi / A (Equation)
+*   Field Strength (H) = B / (mu0 * mu_r) (Equation)
+*   Magnetic Potential Difference = H * Mean Flux-Line Length (Equation)
+*   Phi_core = Phi_gap + Phi_leak (Conservation)
+
+## Scheduled commands
+*   (No scheduled commands explicitly stated in the source data)
+

@@ -1,0 +1,81 @@
+## Entities
+*   B3: Level sensor
+*   B5: Medium (NaCl)
+*   B6: Condensate
+*   B7: Concentrate
+*   B9: Valve
+*   B1: Valve group
+*   B2: Valve group
+*   B5_Heater: Heater
+*   B6_Cooler: Cooler
+*   B7_Cooler: Cooler
+*   P1: Pump
+*   P2: Pump
+*   V8: Valve
+*   V9: Valve
+*   V11: Valve
+*   V12: Valve
+*   V15: Valve
+*   FIS-801: Flow sensor
+*   PIS-901: Pressure sensor
+*   PIS-1001: Pressure sensor
+*   controller.sensors.LIS_301: Level sensor
+*   controller.sensors.QIS_502: Medium sensor
+*   controller.actuators.V9: Valve
+*   controller.actuators.T5_Heater: Heater
+*   B3: Level sensor
+*   B5: Medium (NaCl)
+*   B6: Condensate
+*   B7: Concentrate
+## Relationships
+*   controller.sensors.LIS_301 is connected_to B3
+*   controller.sensors.QIS_502 is connected_to B5
+*   V9 is connected_to controller.actuators.V9
+*   HeatB5.Q_flow is controlled_by controller.actuators.T5_Heater
+*   V8=OPEN is controlled_by B9
+*   V9=OPEN is controlled_by B9
+*   V11=OPEN is controlled_by B9
+*   V12=OPEN is controlled_by B9
+*   V15=OPEN is controlled_by B9
+*   B5_Heater is controlled_by FIS-801
+*   P1 is controlled_by PIS-901
+*   P2 is controlled_by PIS-1001
+*   B6_Cooler is controlled_by TIS-602
+*   B7_Cooler is controlled_by TIS-702
+*   B6 returns to B1
+*   B7 returns to B2
+## Requirements
+*   Report tank levels and valve commands for a 900-second experiment (implied duration)
+*   LIS-301 >= 0.13 m
+*   QI-302 >= 0.080 kg/kg
+*   LIS-501 < 0.01 m
+*   LIS-501 >= 0.18 m
+*   QIS-502 >= 0.180 kg/kg
+*   TIS-602 <= 20 degC
+*   TIS-702 <= 25 degC
+*   time > 2500 s
+## Behaviors
+*   IF LIS-301 >= 0.13 m THEN V8=OPEN
+*   IF QI-302 >= 0.080 kg/kg THEN V9=OPEN
+*   IF LIS-301 < 0.01 m THEN V11=OPEN
+*   IF LIS-501 < 0.01 m AND NOT V15 THEN No transfer actuator
+*   IF LIS-501 >= 0.18 m THEN V12=OPEN
+*   IF QIS-502 >= 0.180 kg/kg THEN B5_Heater=ON
+*   IF TIS-602 <= 20 degC THEN B6_Cooler=ON
+*   IF B6 return complete THEN P2=ON + corrected B1 return valve group
+*   IF LIS-701 < 0.01 m THEN No transfer actuator
+*   IF LIS-501 < 0.01 m THEN V15=OPEN
+*   IF TIS-702 <= 25 degC THEN B7_Cooler=ON
+*   IF B7 return complete THEN P1=ON + corrected B2 return valve group
+## Constraints
+*   LIS-301 >= 0.13 m
+*   QI-302 >= 0.080 kg/kg
+*   LIS-501 < 0.01 m
+*   LIS-501 >= 0.18 m
+*   QIS-502 >= 0.180 kg/kg
+*   TIS-602 <= 20 degC
+*   TIS-702 <= 25 degC
+## Physical relationships
+*   None
+## Scheduled commands
+*   None

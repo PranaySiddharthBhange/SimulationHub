@@ -9,11 +9,10 @@ __pycache__/
 build/
 dist/
 
-# Generated per-run project state (regeneratable from test_cases/ + code)
-projects/*/documents/
-projects/*/workspace/
-projects/*/sysml/
-projects/*/modelica/
+# Generated per-run project state is COMMITTED on purpose: the extracted
+# understanding, SysML, Modelica bundle, simulation results and plots are the
+# reviewable evidence of what the pipeline produced, and a reviewer should not
+# have to re-run it to see them.
 
 # Session scratch output
 *.log

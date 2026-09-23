@@ -1,0 +1,102 @@
+## Entities
+
+*   CR-017 (Entity Type: Requirement)
+*   Thermal Sizing Memo (Entity Type: Document)
+*   B6 (Entity Type: Valve)
+*   B7 (Entity Type: Valve)
+*   BAT-09 (Entity Type: Identifier)
+*   SRC-01 (Entity Type: Document)
+*   SRC-02 (Entity Type: Document)
+*   SRC-03 (Entity Type: Document)
+*   SRC-04 (Entity Type: Document)
+*   SRC-05 (Entity Type: Document)
+*   SRC-06 (Entity Type: Document)
+*   SRC-07 (Entity Type: Modelica Model)
+*   SRC-08 (Entity Type: Datasheet)
+*   SRC-09 (Entity Type: Test Procedure)
+*   SRC-10 (Entity Type: CSV File)
+*   SRC-11 (Entity Type: Modelica Model)
+*   SRC-12 (Entity Type: PDF File)
+*   SRC-13 (Entity Type: CSV File)
+*   SRC-14 (Entity Type: Word Document)
+*   SRC-15 (Entity Type: JSON File)
+*   SRC-16 (Entity Type: PDF File)
+*   SRC-17 (Entity Type: Word Document)
+*   SRC-18 (Entity Type: Text File)
+*   K1 (Entity Type: Valve)
+*   P1 (Entity Type: Pump)
+*   P2 (Entity Type: Pump)
+*   B1 (Entity Type: Vessel)
+*   B2 (Entity Type: Vessel)
+*   B3 (Entity Type: Vessel)
+*   B4 (Entity Type: Vessel)
+*   B5 (Entity Type: Vessel)
+*   B6 (Entity Type: Valve)
+*   B7 (Entity Type: Valve)
+*   Water-NaCl two-phase mixture (Entity Type: Medium)
+*   StandardWater (Entity Type: Medium)
+
+## Relationships
+
+*   SRC-01 contains Process purpose, primary sequence, modeling constraints (Implied: SRC-01 is a specification)
+*   SRC-02 contains Requirements/equipment/valves/instruments/setpoints/interfaces/sequence/change log (Implied: SRC-02 is a register)
+*   SRC-03 provides Equipment tags, instruments, piping, manual and automatic valves (Implied: SRC-03 is a P&ID)
+*   SRC-04 defines StateGraph semantics, parallel branch logic, interlocks (Implied: SRC-04 is a design document)
+*   SRC-05 discusses Routing clarification, medium-model discussion, cooling setpoint dispute (Implied: SRC-05 is an email thread)
+*   SRC-06 approves Decisions from DR-07 (Implied: SRC-06 is meeting notes)
+*   SRC-07 contains Tank/evaporator equations and old controller wiring (Implied: SRC-07 is a legacy model)
+*   SRC-08 provides Valve fail states, pump operating assumptions (Implied: SRC-08 is a datasheet)
+*   SRC-09 defines 3000 s validation scenario and acceptance criteria (Implied: SRC-09 is a test procedure)
+*   SRC-10 generates Controller state, levels, composition, temperatures, actuators (Implied: SRC-10 is a simulation result)
+*   SRC-11 provides Partial structure (Implied: SRC-11 is an architecture model)
+*   SRC-12 defines 3000 s validation scenario and acceptance criteria (Implied: SRC-12 is a test procedure)
+*   SRC-13 generates Controller state, levels, composition, temperatures, actuators (Implied: SRC-13 is a simulation result)
+*   SRC-14 defines StateGraph semantics, parallel branch logic, interlocks (Implied: SRC-14 is a design document)
+*   SRC-15 provides Equipment elevations and approximate coordinates (Implied: SRC-15 is a CAD/BIM file)
+*   SRC-16 provides Medium hierarchy, property equations, known pump-start issue (Implied: SRC-16 is a technical note)
+*   SRC-17 defines Start-up/shutdown/manual observations (Implied: SRC-17 is an operating procedure)
+*   SRC-18 contains Solver symptoms and test observations (Implied: SRC-18 is engineer notes)
+*   B7 controls Return-stream destinations (Implied: B7 is a valve)
+*   B7 regulates Cooling target to 25 degC (Implied: B7 is a valve)
+*   B6 supplies Synthetic cooling duties (Implied: B6 is a valve)
+
+## Requirements
+
+*   A9: 2026-03-05 | CR-017 | 1 | Approved | E9: Corrected return-stream destinations and B7 cooling target to 25 degC.
+*   A10: 2026-03-19 | Thermal Sizing Memo | C | Released | E10: B6/B7 synthetic cooling duties set to -6.5/-4.5 kW for benchmark.
+*   A11: 2026-04-02 | BAT-09 | B | Released | E11: 3000 s acceptance test and trace logging definition.
+*   A12: 3000 s acceptance test and trace logging definition (Implied: A11)
+
+## Behaviors
+
+*   Phase | Required action | Completion condition
+*   Phase 1 | Set B6/B7 synthetic cooling duties to -6.5/-4.5 kW | Benchmark complete
+*   Phase 2 | Set B7 cooling target to 25 degC | Return-stream destinations corrected
+
+## Constraints
+
+*   B6/B7 synthetic cooling duties set to -6.5/-4.5 kW (Constraint: -6.5 to -4.5 kW)
+
+## Physical relationships
+
+*   None
+
+## Scheduled commands
+
+*   None
+
+## Scheduled commands
+*   None
+
+---
+
+**Notes:**
+
+This document represents a complex and partially inconsistent engineering design. Key challenges include:
+
+*   **Legacy Data:** The system relies heavily on outdated models (SRC-07, SRC-11) and documentation (SRC-05).
+*   **Conflicting Information:**  Multiple sources provide conflicting information, particularly regarding cooling setpoints (B7) and routing (SRC-05, SRC-07).
+*   **Unclear Ownership:** The P&ID (SRC-03) doesn't clearly identify controller ownership for all valves, creating ambiguity.
+*   **Incomplete Models:** The architecture model (SRC-11) is incomplete, lacking critical junction volumes and thermal interfaces.
+*   **Data Integrity:** The simulation data (SRC-13) is derived from an "effective truth," raising concerns about its accuracy and traceability.
+*   **Verification:** The acceptance test (SRC-09) is a verification source, not a design authority.

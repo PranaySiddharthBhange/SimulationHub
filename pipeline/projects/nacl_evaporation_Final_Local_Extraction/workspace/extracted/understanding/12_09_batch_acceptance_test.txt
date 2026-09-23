@@ -1,0 +1,100 @@
+## Entities
+B1, Tank, WaterNaCl composition
+B2, Tank, WaterNaCl composition
+B3, Tank, Near empty
+B5, Heater
+B6, Cooler
+B7, Cooler
+K1, Cooling-water flow
+P1, Pump
+P2, Pump
+QI-302, Measurement, Water flow rate
+QIS-502, Measurement, Water flow rate
+TI-503, Measurement, Temperature
+TIS-602, Measurement, Temperature
+TIS-702, Measurement, Temperature
+FIS-801, Measurement, Temperature
+LIS-301, Measurement, Tank level
+LIS-501, Measurement, Tank level
+Valve 1, Automated Valve, Valve command
+Valve 2, Automated Valve, Valve command
+Valve 3, Automated Valve, Valve command
+Valve 4, Automated Valve, Valve command
+Valve 5, Automated Valve, Valve command
+Valve 6, Automated Valve, Valve command
+Valve 7, Automated Valve, Valve command
+Valve 8, Automated Valve, Valve command
+Valve 9, Automated Valve, Valve command
+Valve 10, Automated Valve, Valve command
+Valve 11, Automated Valve, Valve command
+Valve 12, Automated Valve, Valve command
+Valve 13, Automated Valve, Valve command
+Valve 14, Automated Valve, Valve command
+Valve 15, Automated Valve, Valve command
+
+## Relationships
+B2 contains WaterNaCl
+B1 contains WaterNaCl
+B3 contains Near empty
+B5 controls Heater
+B6 controls Cooler
+B7 controls Cooler
+K1 supplies Cooling-water flow
+P1 controls Pump
+P2 controls Pump
+QI-302 measures Water flow rate
+QIS-502 measures Water flow rate
+TI-503 measures Temperature
+TIS-602 measures Temperature
+TIS-702 measures Temperature
+FIS-801 measures Temperature
+LIS-301 measures Tank level
+LIS-501 measures Tank level
+Valve 1 controls Valve command
+Valve 2 controls Valve command
+Valve 3 controls Valve command
+Valve 4 controls Valve command
+Valve 5 controls Valve command
+Valve 6 controls Valve command
+Valve 7 controls Valve command
+Valve 8 controls Valve command
+Valve 9 controls Valve command
+Valve 10 controls Valve command
+Valve 11 controls Valve command
+Valve 12 controls Valve command
+Valve 13 controls Valve command
+Valve 14 controls Valve command
+Valve 15 controls Valve command
+B6 condensate returns to B1
+B7 concentrate returns to B2
+Parallel join requires both branches to complete
+
+## Requirements
+Verify a complete automatic batch cycle using the effective setpoints and approved return routing.
+Tank levels at LIS-301 >=0.13 m during B3 water prefill.
+Water flow rate at QI-302 >=0.080 kg/kg during B3 recipe.
+Tank level at B3 below 0.01 m during B3 empty.
+Tank level at LIS-501 >=0.18 m during B5 charge.
+Water flow rate at QIS-502 >=0.180 kg/kg during Evaporation.
+Temperature at TIS-602 <=20 degC before P2 return.
+Temperature at TIS-702 <=25 degC before P1 return.
+Simulation time = 0 s.
+
+## Behaviors
+IF Tank level at B3 is >=0.13 m THEN Step1 exits at LIS-301 >=0.13 m
+IF Water flow rate at QI-302 is >=0.080 kg/kg THEN Step2 exits at QI-302 >=0.080 kg/kg
+IF Tank level at B3 is <=0.01 m THEN Step3 exits below 0.01 m
+IF Tank level at LIS-501 is >=0.18 m THEN Step5 exits at LIS-501 >=0.18 m
+IF Water flow rate at QIS-502 is >=0.180 kg/kg THEN Step6 exits at QIS-502 >=0.180 kg/kg
+IF Temperature at TIS-602 is <=20 degC THEN TIS-602 <=20 degC before P2 return
+IF Temperature at TIS-702 is <=25 degC THEN TIS-702 <=25 degC before P1 return
+
+## Constraints
+Ambient pressure = 101325 Pa
+Ambient temperature = 293.15 K
+
+## Physical relationships
+None
+
+## Scheduled commands
+None

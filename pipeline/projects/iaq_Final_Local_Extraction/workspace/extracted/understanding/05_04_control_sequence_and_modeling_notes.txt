@@ -1,0 +1,57 @@
+## Entities
+*   Room: Type: Room, Aliases: Room
+*   Outdoor Air: Type: Air Source, Aliases: Supply Duct
+*   Occupant: Type: Trace Substance Mass Source, Aliases: People
+*   traceVolume: Type: Sensor, Aliases: Sensor
+*   gainSensor: Type: Gain, Aliases: None
+*   CO2Set: Type: Controller, Aliases: None
+*   nPeo: Type: Integer, Aliases: None
+*   V: Type: Volume, Aliases: None
+*   rho: Type: Density, Aliases: None
+
+## Relationships
+*   Outdoor Air supplies to Room
+*   Occupant supplies to Room
+*   traceVolume measures Room
+*   gainSensor multiplies traceVolume
+*   CO2Set compares normalized feedback with gainSensor
+*   CO2Set generates ACH command
+*   ACH converts to mass-flow magnitude
+*   m_supply_physical is calculated from ACH, V, and rho
+*   m_supply_sourceCommand is calculated from m_supply_physical and has a negative sign
+*   C_room is calculated from nPeo and 8.18E-6
+*   m_peopleCarrier is calculated from G_CO2 and 100
+*   normalized_CO2 is calculated from C_room and C_nominal
+
+## Requirements
+*   Room CO2 concentration limit: 1000 ppm absolute
+*   ACH command range: 0.2 to 6.0 ACH
+*   Experiment duration: Not specified (implied to be continuous)
+*   Report: Room CO2 mass fraction, valve commands, ACH
+
+## Behaviors
+*   AUTO_MIN: If Room CO2 mass fraction is sufficiently below setpoint (0.2 ACH lower limit), then generate ACH command 0.2 ACH lower limit.
+*   AUTO_CO2: If 0.2 < requested ACH < 6.0, then generate ACH command Bias + Kp*(C/Cnom-1)
+*   AUTO_MAX: If Requested ACH >= 6.0, then generate ACH command 6.0 ACH
+*   SENSOR_FAULT: If Sensor invalid >60 s, then generate ACH command 4.0 ACH
+
+## Constraints
+*   C_room <= 1.519E-3 kg/kg during the approved design occupancy schedule.
+*   C_out = 0.3*C_nominal
+*   G_CO2 = nPeo*8.18E-6 kg/s
+*   m_peopleCarrier = G_CO2/100
+*   m_supply_physical = ACH*V*rho/3600
+*   0.2 <= ACH <= 6.0
+
+## Physical relationships
+*   m_supply_physical = ACH*V*rho/3600
+*   m_supply_sourceCommand = -m_supply_physical
+*   m_peopleCarrier = G_CO2/100
+
+## Control laws
+*   CO2Set = 1.0 (normalized controller signal)
+*   ACH command = Bias + Kp*(C/Cnom-1) (AUTO_CO2)
+*   GainSensor = 1/C_nominal (normalization)
+
+## Scheduled commands
+*   None

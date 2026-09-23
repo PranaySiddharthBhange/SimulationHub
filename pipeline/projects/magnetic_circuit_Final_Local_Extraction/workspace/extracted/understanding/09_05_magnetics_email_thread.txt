@@ -1,0 +1,32 @@
+## Entities
+CR-MAG-004, type: Approval Document
+CR-MAG-006, type: Approval Document
+CoreCatalog_A, type: Catalog
+coil Data B, type: Coil Data
+shim stack, type: Physical Component
+technician, type: Actor
+magnetic circuit, type: Physical Component
+
+## Relationships
+None
+
+## Requirements
+None
+
+## Behaviors
+None
+
+## Constraints
+None
+
+## Physical relationships
+None
+
+## Control laws
+None
+
+## Scheduled commands
+None
+
+## Scheduled commands
+None

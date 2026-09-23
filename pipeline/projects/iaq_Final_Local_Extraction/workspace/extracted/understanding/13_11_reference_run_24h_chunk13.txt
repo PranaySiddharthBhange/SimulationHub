@@ -1,0 +1,12 @@
+## Entities
+*   occupants_person: Actor, type: Person, aliases: occupants
+*   outdoor_co2_ppm: Sensor, type: Gas Concentration, aliases: co2_ppm
+*   outdoor_co2_mass_fraction_kgkg: Sensor, type: Gas Concentration, aliases: co2_mass_fraction
+*   room_co2_ppm: Sensor, type: Gas Concentration, aliases: co2_ppm
+*   room_co2_mass_fraction_kgkg: Sensor, type: Gas Concentration, aliases: co2_mass_fraction
+*   normalized_co2_feedback: Sensor, type: Ratio, aliases: normalized_feedback
+*   normalized_setpoint: Sensor, type: Ratio, aliases: setpoint
+*   ach_command_1_per_h: Actuator, type: Control Command, aliases: ach_command
+*   source_m_flow_command_kg_s: Actuator, type: Flow Command, aliases: source_flow_command
+*   physical_supply_m_flow_kg_s: Actuator, type: Flow Command, aliases: physical_supply_flow_command
+*   people_source

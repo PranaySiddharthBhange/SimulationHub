@@ -1,0 +1,145 @@
+Okay, here's a breakdown of the system described in the provided engineering data, organized into the seven sections as requested.
+
+## Entities
+
+*   **SP-B6-Q:** Control Point (Sensor/Actuator)
+*   **B6:** Tank (Physical Component)
+*   **B7:** Tank (Physical Component)
+*   **B3:** Tank (Physical Component)
+*   **B4:** Tank (Physical Component)
+*   **B5:** Tank (Physical Component)
+*   **B2:** Tank (Physical Component)
+*   **B1:** Tank (Physical Component)
+*   **V8:** Valve (Actuator)
+*   **V9:** Valve (Actuator)
+*   **V11:** Valve (Actuator)
+*   **V12:** Valve (Actuator)
+*   **V15:** Valve (Actuator)
+*   **V20/V24/V25:** Valve Group (Actuator)
+*   **V18/V23/V22:** Valve Group (Actuator)
+*   **V17:** Valve (Actuator)
+*   **P2:** Header (Physical Component)
+*   **P1:** Header (Physical Component)
+*   **K1:** Header (Physical Component)
+*   **CW header:** Cooling Water Header (Physical Component)
+*   **Sensors:** Sensor Bundle (Physical Component)
+*   **Central controller:** Controller (Physical Component)
+*   **Actuators:** Actuator Bundle (Physical Component)
+*   **FIS-801:** Control System (Actor)
+*   **LIS-301, LIS-501, LIS-701:** Level Sensors (Physical Component)
+*   **QI-302:** Flow Sensor (Physical Component)
+*   **TIS-602, TIS-702:** Temperature Sensors (Physical Component)
+*   **B6_Cooler, B7_Cooler:** Cooler Actuators (Physical Component)
+*   **B5_Heater:** Heater Actuator (Physical Component)
+
+## Relationships
+
+*   SP-B6-Q contains B6
+*   SP-B7-Q contains B7
+*   SP-B6-Q contains B3
+*   SP-B7-Q contains B4
+*   SP-B6-Q contains B5
+*   SP-B2-Q contains B1
+*   V8 supplies water-rich liquid to IF-PROC-01
+*   V8 receives water-rich liquid from IF-PROC-01
+*   V9 supplies brine to IF-PROC-03
+*   V9 receives brine from IF-PROC-03
+*   V11 supplies mixed batch to IF-PROC-05
+*   V11 receives mixed batch from IF-PROC-05
+*   V12 supplies mixed batch to IF-PROC-07
+*   V12 receives mixed batch from IF-PROC-07
+*   V15 supplies concentrated brine to IF-PROC-14
+*   V15 receives concentrated brine from IF-PROC-14
+*   B3 supplies mixed batch to IF-PROC-06
+*   B3 receives mixed batch from IF-PROC-06
+*   B4 supplies mixed batch to IF-PROC-08
+*   B4 receives mixed batch from IF-PROC-08
+*   B5 supplies mixed batch to IF-PROC-09
+*   B5 receives mixed batch from IF-PROC-09
+*   B6 receives mixed batch from IF-PROC-09
+*   B7 receives mixed batch from IF-PROC-14
+*   B5 receives concentrated brine from IF-PROC-14
+*   K1 supplies cooling water to IF-UTIL-01
+*   K1 receives process side from IF-PROC-12
+*   B6 receives condensate from IF-PROC-13
+*   B7 receives condensate from IF-PROC-15
+*   P2 receives condensate from IF-RET-01
+*   P1 receives condensate from IF-RET-03
+*   B6 receives concentrate from IF-PROC-14
+*   B7 receives concentrate from IF-PROC-15
+*   B6 receives condensate from IF-RET-02
+*   B7 receives concentrate from IF-RET-04
+*   Sensors supplies measured values to Central controller
+*   Central controller controls actuators
+*   Actuators control plant
+*   FIS-801 controls K1
+*   CW header supplies cooling water to K1
+*   CW header supplies cooling water to B6
+*   CW header supplies cooling water to B7
+
+## Requirements
+
+*   SP-B6-Q: Nominal cooling duty = -6500 W
+*   SP-B7-Q: Nominal cooling duty = -4500 W
+*   Controller: Minimum cycle restart time = 2500 s
+*   Experiment: Report tank levels and valve commands for a 900-second experiment
+*   StateGraph: Initial state, idle/reset, complete after 2500s
+
+## Behaviors
+
+*   **IF-PROC-01:** V8=OPEN when water-rich liquid flows in
+*   **IF-PROC-02:** V8=OPEN when water-rich liquid flows out
+*   **IF-PROC-03:** V9=OPEN when brine flows in
+*   **IF-PROC-04:** V9=OPEN when brine flows out
+*   **IF-PROC-05:** V11=OPEN when mixed batch flows in
+*   **IF-PROC-06:** V11=OPEN when mixed batch flows out
+*   **IF-PROC-07:** V12=OPEN when mixed batch flows in
+*   **IF-PROC-08:** V12=OPEN when mixed batch flows out
+*   **IF-PROC-09:** V15=OPEN when concentrated brine flows in
+*   **IF-PROC-10:** V15=OPEN when concentrated brine flows out
+*   **IF-PROC-11:** V17=OPEN when concentrate flows in
+*   **IF-RET-01:** P2=ON when condensate flows in
+*   **IF-RET-02:** P2=ON when condensate flows in
+*   **IF-RET-03:** P1=ON when concentrate flows in
+*   **IF-UTIL-01:** Cooling water flows when FIS-801 is active
+*   **IF-UTIL-02:** Cooling water flows when FIS-801 is active
+*   **IF-UTIL-03:** Cooling water flows when FIS-801 is active
+*   **IF-CTL-01:** Sensors send measured values to Central controller
+*   **IF-CTL-02:** Actuators receive commands from Central controller
+*   **StateGraph:**
+    *   Initial: Idle/reset, all valves closed, pumps/heaters/coolers off, startEnable AND B3 available
+    *   Step1: Water charge to B3, V8=OPEN, LIS-301 >= 0.13 m
+    *   Step2: Brine charge/mix, V9=OPEN, QI-302 >= 0.080 kg/kg
+    *   Step3: B3 to B4, V11=OPEN, LIS-301 < 0.01 m
+    *   Step4: Wait for B5 idle, No transfer actuator, LIS-501 <0.01 m AND NOT V15
+    *   Step5: B4 to B5, V12=OPEN, LIS-501 >=0.18 m
+    *   Step6: Heat/evaporate B5, B5_Heater=ON, QIS-502 >=0.180 kg/kg
+    *   Step7: Wait for B7 idle, No transfer actuator, LIS-701 <0.01 m
+    *   Step8: B5 concentrate to B7, V15=OPEN, LIS-501 <0.01 m
+    *   Step9: Cool concentrate in B7, B7_Cooler=ON, TIS-702 <=25 degC
+    *   Join: Wait for both branches, No transfer actuator, A complete AND B complete AND time>2500 s, Initial
+
+## Constraints
+
+*   B6: Nominal cooling duty = -6500 W
+*   B7: Nominal cooling duty = -4500 W
+*   Controller: Minimum cycle restart time = 2500 s
+
+## Physical relationships
+
+*   None
+
+## Scheduled commands
+
+*   None
+
+## Notes
+
+*   The document describes a system for evaporative cooling using brine and mixed batch.
+*   The system utilizes a series of tanks (B1-B7) and valves to control the flow of liquids and vapor.
+*   The cooling water is supplied by the CW header and controlled by FIS-801.
+*   The controller monitors sensor data and adjusts actuator settings to maintain the desired cooling duty.
+*   The system includes a state graph to manage the sequence of operations.
+*   The document references several revisions and change logs, indicating an iterative development process.
+*   The system incorporates safety interlocks and redundancy measures.
+*   The system uses a legacy model for combining B5+K1.

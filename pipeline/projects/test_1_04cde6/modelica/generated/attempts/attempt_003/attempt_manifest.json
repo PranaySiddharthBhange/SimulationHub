@@ -1,0 +1,41 @@
+{
+  "attempt": 3,
+  "entry_class": "SingleTankTransferSystem",
+  "files": [
+    {
+      "filename": "Tank1Unit.mo",
+      "role": "component"
+    },
+    {
+      "filename": "Tank2Unit.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ValveFlowCommand.mo",
+      "role": "component"
+    },
+    {
+      "filename": "TransferController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "SingleTankTransferSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Icons.Example",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Sources.BooleanTable"
+  ],
+  "corrections": [
+    "Because 01_single_tank_transfer_description.txt and the clarified answers do not provide physical routing for inlet_valve, transfer_valve, and drain_valve, the model uses a signal-flow assumption consistent with the named sequence actions: inlet valve provides inflow to Tank 1 during filling, transfer valve removes liquid from Tank 1 and adds the same commanded flow to Tank 2 during transfer, and drain valve removes liquid from Tank 2 during draining. This is an assumption required to make the model executable and does not claim source-provided piping topology.",
+    "Because the brief provides no tank geometry, hydraulic law, switch thresholds, initial levels, command event schedule, simulation interval, or solver tolerance, the executable model assumes constant cross-sectional area 1 m2 for both tanks, high-level threshold 1 m, low-level threshold 0.1 m, initial levels 0 m in both tanks, nominal inlet/transfer/drain flows 0.02 m3/s, command pulse width 1 s, START at 10 s and 200 s, STOP at 80 s, SHUT at 500 s, experiment interval 0.1 s, and tolerance 1e-6.",
+    "The previous rejection arose because TankLevelUnit exposed a highReached connector for Tank 2 even though the evidence uses only Tank 1 high-level completion. The revised bundle removes that unused connector by separating Tank 1 and Tank 2 component classes so every declared connector is used."
+  ],
+  "references": []
+}
