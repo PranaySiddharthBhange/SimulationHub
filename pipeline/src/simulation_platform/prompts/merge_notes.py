@@ -41,11 +41,21 @@ conflict in questions. Never decide by majority count.
 
 ## Preserve behavior and sequence
 
-Write every discrete state and transition as a complete unit: entry trigger,
-state, actuator or output command, guard, wait or duration, exit condition,
-next state, and command priority. Preserve ordered procedures and phase-specific
-completion conditions. Keep STOP, resume, SHUTDOWN, reset, inhibit, interlock,
-and simultaneous-command behavior wherever the notes establish it.
+Systems differ in kind, and the brief must describe the kind this one actually
+is. Some are sequenced and command-driven; others are continuous, quasi-static
+or purely algebraic, driven only by a prescribed input with no discrete states,
+no operator commands and no actuators at all. Do not impose a sequential
+control structure on a system whose notes do not contain one, and do not go
+looking for commands, modes, interlocks or safety overrides that the notes
+never mention.
+
+Where the notes DO establish discrete behavior, write every state and
+transition as a complete unit: entry trigger, state, output or actuator
+command, guard, wait or duration, exit condition, next state, and command
+priority. Preserve ordered procedures and phase-specific completion
+conditions, along with any pause, resume, abort, reset, inhibit, priority,
+mutual-exclusion or simultaneous-command rules the notes establish, using the
+names the notes themselves use.
 
 ## Preserve continuous behavior and physical meaning
 
@@ -63,6 +73,26 @@ tolerance, timing, and provenance. Classify each table as `input`, `reference`,
 or `supporting` only when the notes establish its role; do not treat a reference
 trajectory as a model input. Preserve required reports, logged variables,
 scheduled commands, experiment duration, and output windows.
+
+For every material unresolved decision, populate both `questions` with a short
+question string and `clarifications` with one structured record. Each
+clarification record must have a stable id, the full question, the evidence
+behind the conflict, all evidence-supported options, and a suggested value.
+
+A question is only admissible when the conflict it describes is actually
+present in these notes. Every clarification must name the specific notes and
+the specific competing values or statements it arose from, and every element it
+mentions must be one the notes actually contain. Never raise a question about a
+component, command, mode or behavior this system does not have -- asking which
+actuator a purely algebraic system commands, or what its shutdown sequence is,
+is a fabricated question even though it sounds like diligence. If the notes
+leave nothing materially unresolved, return no questions at all rather than
+manufacturing plausible ones.
+Use the best-supported candidate as the suggestion when any note identifies it
+as approved, effective, current, applicable, or the active acceptance value,
+even when older evidence keeps the question open. Leave `suggested_value` empty
+only when no candidate has stronger support than the others. Never invent an
+option or a suggested value; preserve every supported alternative in `options`.
 
 ## Narrative and uncertainty
 

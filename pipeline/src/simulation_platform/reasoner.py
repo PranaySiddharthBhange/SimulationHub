@@ -61,6 +61,35 @@ def _to_chat_content(blocks: list[dict]) -> list[dict]:
     return converted
 
 
+def _with_transient_retry(call, *args, attempts: int = 3, backoff: float = 2.0):
+    """Retry an OpenAI call through a transient network failure.
+
+    A stage's repair loop has a small, fixed number of attempts against the real
+    compiler, and each one is a full generation. Found live: a bare
+    `APIConnectionError` consumed the last Stage 3 attempt and failed the whole
+    stage while the model itself was making real progress. A dropped connection
+    is not a modelling error, so it must not cost a modelling attempt.
+    """
+
+    import time as _time
+
+    for attempt in range(attempts):
+        try:
+            return call(*args)
+        except Exception as exc:  # noqa: BLE001 -- re-raised below unless transient
+            name = type(exc).__name__
+            transient = (
+                "Connection" in name or "Timeout" in name or "RateLimit" in name
+                or "InternalServer" in name or "APIStatus" in name
+            )
+            if not transient or attempt == attempts - 1:
+                raise
+            delay = backoff * (2 ** attempt)
+            print(f"    [Reasoner] transient {name}, retrying in {delay:.0f}s "
+                  f"({attempt + 2}/{attempts})", flush=True)
+            _time.sleep(delay)
+
+
 class OpenAIUnavailable(RuntimeError):
     """Raised when an OpenAI-backed stage is invoked without OPENAI_API_KEY
     configured -- fails clean, never silently falls back to a local model
@@ -145,7 +174,9 @@ class Reasoner:
         log_llm_call(f"Stage {self.stage}", self.model, schema.__name__)
         messages = [{"role": "system", "content": prompt}, {"role": "user", "content": content}]
         if self.backend == "openai":
-            wrapped = model.with_structured_output(schema, method=method, include_raw=True).invoke(messages)
+            wrapped = _with_transient_retry(
+                model.with_structured_output(schema, method=method, include_raw=True).invoke, messages,
+            )
             result = wrapped.get("parsed")
             if result is None:
                 raise wrapped.get("parsing_error") or RuntimeError("OpenAI returned no parsed structured result")
@@ -178,7 +209,9 @@ class Reasoner:
 
         model = self._build_model(prompt, content)
         log_llm_call(f"Stage {self.stage}", self.model, "free text")
-        result = model.invoke([{"role": "system", "content": prompt}, {"role": "user", "content": content}])
+        result = _with_transient_retry(
+            model.invoke, [{"role": "system", "content": prompt}, {"role": "user", "content": content}],
+        )
         input_tokens, output_tokens, call_spent = self._record_openai_usage(result)
         self.calls += 1
         if self.run_log is not None:

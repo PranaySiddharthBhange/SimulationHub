@@ -21,6 +21,7 @@ function Icon({ state }) {
 function stageKeyFromName(name = '') {
   const value = name.toLowerCase()
   if (value.startsWith('merge')) return 'merge'
+  if (value.startsWith('clarif')) return 'clarify'
   if (value.includes('stage 1:')) return 'stage_1'
   if (value.includes('stage 2:')) return 'stage_2'
   if (value.includes('stage 3:')) return 'stage_3'
@@ -86,7 +87,7 @@ function StageIcon({ state, style, stage, metric, edge }) {
               <div className="flex justify-between gap-3"><span>Estimated API cost</span><span className="font-mono text-[var(--text)]">${metric.cost.toFixed(6)}</span></div>
               {(metric.inputTokens > 0 || metric.outputTokens > 0) && (
                 <div className="border-t border-[var(--border)] pt-1.5 text-[10px] text-[var(--text-dim)]">
-                  {metric.inputTokens.toLocaleString()} input · {metric.outputTokens.toLocaleString()} output tokens
+                  {metric.inputTokens.toLocaleString()} input Â· {metric.outputTokens.toLocaleString()} output tokens
                 </div>
               )}
               {isLocal && <div className="text-[10px] text-[var(--text-dim)]">Local inference has no API charge.</div>}

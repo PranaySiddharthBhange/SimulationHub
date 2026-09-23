@@ -52,12 +52,13 @@ of system). Include named actors and control elements (for example an \
 operator, controller, sensor, switch, or actuator) when they initiate, sense, \
 or carry out a behavior. For each: its name, its type, and any other names it's called \
 elsewhere in this batch (aliases). List every real component that appears \
-ANYWHERE in this batch, including one only named inline inside a list \
-alongside others (e.g. "opens V18, V23, V22, V1, V3") -- give it its own \
-Entities line too, the same as any component that happened to get its own \
-sentence. Confirmed live: a component named only inside such a list was \
-otherwise the one left without its own Entities line, while everything \
-else nearby was listed individually.
+ANYWHERE in this batch, including one named only inline inside a list of \
+several tags on a single line -- give it its own Entities line too, the same \
+as any component that happened to get its own sentence. Confirmed live: a \
+component named only inside such a list was otherwise the one left without \
+its own Entities line, while everything nearby was listed individually. \
+Take every tag you write from THIS batch's own text; never carry over an \
+identifier from anywhere else.
 
 ## Relationships
 Connections between entities (contains, connected_to, supplies, controls, \
@@ -77,8 +78,9 @@ Every explicitly required outcome stated with words such as "shall", "must", \
 value/min/max with a unit, or equality against a named state). A required \
 experiment duration and the variables/results that the document says to report \
 belong here together as one requirement. Preserve every named output and its \
-duration exactly; for example, "report tank levels and valve commands for a \
-900-second experiment" must not be reduced to only "900 seconds" or omitted. \
+duration exactly: a requirement naming both the quantities to report and the \
+length of the run must keep both, never collapsing to the duration alone and \
+never dropping the named outputs. \
 Only include requirements actually stated by the source.
 
 ## Behaviors
@@ -166,9 +168,9 @@ the real data. If a batch is too sparse to say anything beyond the column \
 names, say exactly that. Two columns being adjacent (or co-occurring in the \
 same row) is NOT evidence that one "controls", "supplies", or otherwise \
 causally affects the other -- confirmed live: a model asserted specific \
-"valve X controls tank Y level" relationships for most of a CSV's valve \
-columns purely from column proximity, and most of them were wrong when \
-checked against the actual documented routing. Only state a Relationship \
+"column X controls column Y" relationships across most of a CSV purely from \
+column proximity, and most of them were wrong when checked against the \
+actual documented routing. Only state a Relationship \
 between two tabular columns if the batch's own values actually show it (a \
 value change in one column visibly coinciding with the other across the \
 rows you were given) or another part of THIS SAME batch states it in words \

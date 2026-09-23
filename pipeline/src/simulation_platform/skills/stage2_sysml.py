@@ -1,86 +1,62 @@
-"""Stage 2: SysML v2 generation. Extends `prompts.common.COMMON` with the
-SysML-specific authoring order and a real-parser-confirmed syntax discipline
-(every rule below was found live against the actual SysML v2 kernel parser).
-"""
+"""Stage 2: concise SysML v2 generation for the real parser and Modelica handoff."""
 
 from simulation_platform.prompts.common import COMMON
 
-SYSML = COMMON + """
-Stage 2: generate ONE deliberately concise textual SysML v2 file. Its job is to be
-the readable architecture and operating-flow handoff to Modelica, not a second copy
-of the entire engineering brief. Keep it to the point (normally under 200 lines):
+SYSML = COMMON + r"""
+You are generating the single SysML v2 architecture and operating-flow handoff for the system described in the context. The context is the merged engineering Understanding followed by any human-confirmed Clarify answers. Treat the confirmed answers as authoritative. Generate only what is supported by that context; do not fill gaps with a familiar tank, magnet, or textbook design.
 
-1. SYSTEM FLOW -- declare only the distinct physical components needed to show the
-   real topology, then connect their instances in physical flow order. For a staged
-   two-vessel process this should read visually as source -> valve -> first vessel ->
-   valve -> second vessel -> valve -> sink. Use exact resolved equipment ids.
-2. OPERATING FLOW -- declare one compact state definition containing only the real
-   operating states. Add one short action definition per transition, with a doc that
-   states `source -> target`, the guard, and any wait duration. This is the primary
-   content: a reader should immediately see which tank/branch operates, when it stops,
-   and what operates next.
-3. ESSENTIAL VALUES -- retain only values that define topology, transition guards,
-   flow rates, capacities, initial conditions, or simulation behavior. Do not repeat
-   instrumentation metadata, correspondence history, deprecated values, or every
-   acceptance check as large prose attributes.
-4. SAFETY EXCEPTIONS -- retain concise requirements only for behavior that changes
-   the flow (pause/resume, shutdown, mutual exclusion, priority). Preserve a source
-   requirement id when one exists, but do not emit a requirement object for every
-   numeric check; those checks already remain in the structured understanding.
+## Required result
 
-Do not create a part for every signal channel, document mention, requirement, state,
-or acceptance row. Do not embed governing equations as long strings: Stage 3 receives
-the structured understanding directly. Avoid unnecessary interfaces, nested packages,
-and speculative imports. Always write scalar
-attribute types fully qualified -- `ScalarValues::Real`, `ScalarValues::Integer`,
-`ScalarValues::Boolean`, `ScalarValues::String` -- never bare (`Real`, `Boolean`, ...
-alone fail: "Couldn't resolve reference to Type", confirmed directly against the real
-parser; an `import` doesn't fix it either, just write the qualified form every time).
-Prefer a small readable model over a framework. Return raw code, without Markdown
-fences. Report material corrections to the understanding in corrections; do not
-silently propagate a wrong interpretation.
+Return one structured SysMLDraft. `code` must contain one complete, concise SysML v2 file (normally under 200 lines), with no Markdown fences and no explanation outside the schema. `corrections` records only material interpretation corrections. The file is parsed by the real SysML v2 kernel and then passed to Modelica, so executable syntax and an unambiguous operating flow matter more than decorative detail.
 
-CLARIFICATIONS -- a human engineer is available to answer genuinely unresolved
-questions before this design is used further. Populate `clarifications` ONLY for a
-decision that is both materially significant to the model AND actually unresolved
-in the brief -- never for something the brief already states, never for a routine
-engineering default, and never as a substitute for your own reasoning. For each one,
-give: the concrete question, why it's unresolved (`reasoning`), and your own best
-engineering `suggested_value` -- never leave `suggested_value` empty, since it is
-what a reviewer sees pre-filled as the default answer. Optionally list a short set of
-`options` when the decision is naturally a pick from a few discrete alternatives.
-Regardless of whether a human ever answers, still write a complete, valid `code`
-right now that USES your `suggested_value` for each open item, so the model is always
-immediately usable and a clarification only ever refines it, never blocks it. Keep
-this list short -- a handful of real, high-leverage decisions, not a checklist of
-every minor unknown.
+The file must make these things immediately visible:
 
-SYNTAX DISCIPLINE (this real parser is strict; use the forms below, confirmed to
-parse, over other valid-looking SysML v2 you may know):
-- No hyphens in identifiers -- a real-world tag with hyphens parses as
-  subtraction. Convert every hyphen to underscore EVERYWHERE that tag appears
-  (parts, requirements, connections, doc strings), not just at first declaration.
-  Keep the original hyphenated form in a note string if useful; the identifier
-  itself must never contain one.
-- Never write "usage" as a keyword ("part usage", "attribute usage", "requirement
-  usage" are all wrong). "part"/"attribute"/"requirement"/"state"/"connection" used
-  ALONE already mean a usage; only "<keyword> def" declares a definition. Use
-  `part PartA : TypeA;` / `attribute level : Real;` with the brief's real names,
-  never `part usage ...`.
-- Give an attribute its resolved value INSIDE the owning part's own body
-  (`part PartA : TypeA { attribute someProperty = 1.20; }`), never as a separate
-  dotted statement outside it (`attribute PartA.someProperty = 1.20;` fails).
-- No native `transition` construct -- it's NOT valid in this parser and breaks
-  parsing for the rest of the file. Represent each transition as an `action def`
-  (or `constraint def`) naming its source state, guard, and target in plain text.
-  Bare `state <Name>;` usages are fine; only the `transition` keyword is banned.
-- A bare `end A; end B;` connection ALWAYS fails ("Must have at least two related
-  elements"), no matter how many ends. Use `connect A to B;` instead. Never a
-  dotted port path on an end (`end PartA.out;` fails -- no ports are declared).
-- `doc` takes `/* block comment */` with NO trailing semicolon -- never
-  `doc /* text */;`, never `doc "text";`. A quoted string is only valid as an
-  ordinary attribute's value (`attribute note = "text";`).
-- Never name an attribute `doc` -- it is a reserved word, not a usable identifier
-  (`attribute doc : String;` fails outright). Use a different name for a free-text
-  attribute, e.g. `note`, `description`, or `rationale`.
-"""
+1. The real physical topology: canonical component instances, their containment, medium or signal direction, and every grounded connection needed to understand the system.
+2. The complete ordered operating flow: initial condition, scheduled commands, each state/phase, actuator commands, guards, threshold direction, wait/duration, next state, priority, cycle/repeat behavior, normal completion, STOP, resume, shutdown, reset, and interlocks when present in the Understanding.
+3. Essential quantities: values, units, initial conditions, limits, rates, capacities, timing, experiment start/stop, sample interval, and required reports that affect the model or simulation.
+4. Concise safety behavior: mutual exclusion, inhibit, priority, pause/resume, shutdown, and other requirements that change system behavior. Keep requirement ids or source references when available.
+
+Use the exact resolved names, ids, values, units, command times, and states from the context. Do not silently round, rename, merge, or reverse a flow. Do not claim that simulation or validation passed. Do not recreate every document row, signal channel, acceptance check, or provenance note as a SysML element; retain only what helps communicate architecture and behavior. Do not write governing equations as long strings: the structured Understanding is the source for Stage 3.
+
+## Entity naming and clarity
+
+Use the canonical entity names established by the Understanding. Every physical,
+control, signal, and human-interface entity in the topology or operating flow
+must have a distinct, semantically readable name. Prefer the full grounded name
+over an abbreviation: if the brief identifies an element as "Unit 1", use the
+legal SysML identifier `Unit_1` and document/display it as "Unit 1"; do not
+shorten it to `Un_1`, `U1`, or `PartA`. If the source calls that entity `u1`,
+expand it only when the Understanding explicitly establishes that alias or
+meaning. Never guess an expansion. Take every real name from the brief itself.
+Keep meaningful suffixes and indices consistent everywhere, including connections,
+actions, states, requirements, and notes. If two source names may refer to
+different entities, keep them distinct until the Understanding resolves them.
+Put the source-facing full name or alias in a `doc /* ... */` comment when the
+legal identifier must be normalized.
+## Authoring pattern
+
+- Declare a small set of `part def` types only when a reusable type improves clarity, then instantiate the grounded components with `part name : Type;`. A small model may use instance parts directly when that is clearer.
+- Use `part`, `attribute`, `requirement`, `state`, `connection`, `action def`, and `constraint def` only where they convey an evidenced concept. Keep one compact state definition and one short `action def` per important transition or operating action.
+- Put transition details in each action's `doc /* source -> target; guard; command; wait/duration; priority */` text. This is the portable representation used by this parser; do not invent a native transition syntax.
+- Keep values inside the owning part or definition body. Include units in the value or a clear attribute name/type when the source supplies them. Use qualified scalar types for declared attributes.
+- Keep the file readable from top to bottom: model/package header if needed, definitions, top-level system part and connections, then state/action/requirement behavior.
+
+## Clarification discipline
+
+Do not ask about anything already resolved by the Understanding or human answers. Populate `clarifications` only for a remaining decision that is both materially model-changing and genuinely unresolved. Each item needs a concrete question, evidence-based reasoning, a non-empty best engineering `suggested_value`, and short evidence-supported `options` when applicable. Still return a complete code draft using the suggested value; clarification refines a model and must never produce an empty file. Keep the list short.
+
+## Strict parser rules
+
+These rules were verified against the real local SysML v2 parser. Follow them exactly:
+
+- Return raw SysML text, never ``` fences. Use one file and do not emit multiple files or a second model.
+- Identifiers may contain letters, digits, and underscores only. Replace every hyphen in tags, names, and ids with `_`, including references and connection endpoints. Preserve the original spelling only in a `note`/`description` string if needed.
+- `part`, `attribute`, `requirement`, `state`, and `connection` alone are usages. Add `def` only for definitions. Never write `part usage`, `attribute usage`, or `requirement usage`.
+- Declare scalar attributes with fully qualified types: `ScalarValues::Real`, `ScalarValues::Integer`, `ScalarValues::Boolean`, or `ScalarValues::String`. Never use bare `Real`, `Integer`, `Boolean`, or `String`.
+- Assign an attribute inside its owning part/definition body. Never write a dotted assignment such as `attribute Unit_1.setting = 0.8;` outside that body.
+- Do not use a native `transition` keyword. Represent each transition with an `action def` or `constraint def`, and document source, target, guard, command, and timing in its body/doc.
+- Do not declare ports unless the parser-valid port syntax is essential. For ordinary topology use `connect A to B;`. Never use bare `end A; end B;`, and never use dotted end paths without declared ports.
+- `doc` is a block comment with no semicolon: `doc /* text */`. Never use `doc "text";` and never name an attribute `doc`; use `note`, `description`, or `rationale`.
+- Avoid speculative imports, custom libraries, nested packages, unsupported annotations, and equations that are not grounded in the context.
+
+Before returning, audit the whole file: every identifier is legal, every referenced element is declared, every important flow and operating branch is present, all human-confirmed values are used exactly, no required behavior was dropped for brevity, the file has no Markdown fences, and it is valid SysML v2 rather than merely SysML-like pseudocode."""

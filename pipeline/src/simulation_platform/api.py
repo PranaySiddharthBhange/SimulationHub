@@ -4,9 +4,8 @@ Wraps `reasoner_pipeline.py`'s four `execute_*` functions with: project
 creation (file upload), a background thread that runs the full pipeline for
 one project, live log streaming (tails `run.jsonl` -- the durable record
 `utils/run_log.py` already writes, so the UI shows nothing the file itself
-doesn't also have), and the Stage-2-ONLY human-in-the-loop clarification
-pause/resume (see `execute_reasoner_stage_2`'s `clarify` callback -- Stage 1
-and Stage 3 stay fully autonomous, the user's explicit choice).
+doesn't also have), and human-in-the-loop clarification pauses after Merge
+and during SysML generation.
 
 In-memory `RunState` per project is deliberately process-local, not
 persisted -- restarting this server loses "is a run currently paused
@@ -47,6 +46,7 @@ from pydantic import BaseModel
 from simulation_platform.config import PlatformSettings
 from simulation_platform.contracts import Clarification
 from simulation_platform.reasoner_pipeline import (
+    execute_clarify,
     execute_merge,
     execute_reasoner_stage_1,
     execute_reasoner_stage_2,
@@ -86,11 +86,12 @@ def _state(project_id: str) -> RunState:
 
 
 def _make_clarify(project_id: str):
-    """Built fresh per run and handed to `execute_reasoner_stage_2` as its
-    `clarify` callback -- called from the BACKGROUND PIPELINE THREAD, so it
+    """Build a callback for a Merge Clarify or Stage 2 clarification pause.
+
+    The callback is called from the BACKGROUND PIPELINE THREAD, so it
     blocks that thread (not the request handling the run) until a person
-    answers via POST .../clarifications/answer, or accepts the model's own
-    suggested defaults via .../clarifications/use-defaults."""
+    answers via POST .../clarifications/answer, or accepts suggested defaults
+    via .../clarifications/use-defaults when defaults are available."""
 
     def clarify(clarifications: list[Clarification]) -> dict[str, str]:
         state = _state(project_id)
@@ -135,6 +136,11 @@ def _run_pipeline(project_id: str) -> None:
             )
         state.current_stage = "merge"
         execute_merge(project_id, projects_root=_ws.projects_root)
+        state.current_stage = "clarify"
+        execute_clarify(
+            project_id, projects_root=_ws.projects_root,
+            clarify=_make_clarify(project_id),
+        )
         state.current_stage = "stage_2"
         execute_reasoner_stage_2(
             project_id, projects_root=_ws.projects_root, clarify=_make_clarify(project_id),
@@ -180,12 +186,16 @@ def _artifacts(project_id: str) -> dict:
     validation_dir = _ws.validation_dir(project_id)
     results_dir = _ws.modelica_dir(project_id) / "results"
     understanding_path = _ws.extracted_dir(project_id) / "merged_understanding.txt"
+    clarified_path = _ws.extracted_dir(project_id) / "clarified_answers.json"
+    diagram_path = _ws.extracted_dir(project_id) / "system_flow.mmd"
     notes_dir = _ws.extracted_dir(project_id) / "understanding"
     extraction = notes_dir.exists() and any(notes_dir.glob("*.txt"))
     return {
         "extraction": extraction,
         "understanding": understanding_path.exists() or extraction,
         "merged_understanding": understanding_path.exists(),
+        "clarified": clarified_path.exists(),
+        "diagram": diagram_path.exists(),
         "sysml": sysml_dir.exists() and any(sysml_dir.glob("*.sysml")),
         "modelica": modelica_dir.exists() and any(modelica_dir.glob("*.mo")),
         "validation": validation_dir.exists() and any(validation_dir.glob("*.report.json")),
@@ -362,8 +372,12 @@ def _require_stage_input(project_id: str, stage: str) -> None:
             raise HTTPException(400, "Stage 1 requires source documents")
     elif stage == "merge" and not artifacts["extraction"]:
         raise HTTPException(400, "Merge requires completed Stage 1 extraction")
+    elif stage == "clarify" and not artifacts["merged_understanding"]:
+        raise HTTPException(400, "Clarify requires a merged understanding")
     elif stage == "stage_2" and not artifacts["merged_understanding"]:
         raise HTTPException(400, "SysML generation requires a merged understanding")
+    elif stage == "stage_2" and not artifacts["clarified"]:
+        raise HTTPException(400, "SysML generation requires completed Clarify")
     elif stage == "stage_3" and not artifacts["sysml"]:
         raise HTTPException(400, "Modelica generation requires SysML output")
     elif stage == "stage_4" and not artifacts["modelica"]:
@@ -377,6 +391,19 @@ def _remove(path: Path) -> None:
         path.unlink()
 
 
+def _clear_modelica_active_outputs(project_root: Path) -> None:
+    """Remove only the active Modelica result, preserving archived drafts."""
+    generated = project_root / "modelica" / "generated"
+    if generated.exists():
+        for path in generated.glob("*.mo"):
+            path.unlink()
+        manifest = generated / "modelica_manifest.json"
+        if manifest.exists():
+            manifest.unlink()
+        results = project_root / "modelica" / "results"
+        if results.exists():
+            shutil.rmtree(results)
+
 def _prepare_stage_rerun(project_id: str, stage: str) -> None:
     extracted = _ws.extracted_dir(project_id)
     project_root = _ws.project_dir(project_id)
@@ -384,21 +411,31 @@ def _prepare_stage_rerun(project_id: str, stage: str) -> None:
         _remove(extracted / "understanding")
         _remove(extracted / "merged_understanding.json")
         _remove(extracted / "merged_understanding.txt")
+        _remove(extracted / "clarified_answers.json")
+        _remove(extracted / "system_flow.mmd")
         _remove(project_root / "sysml")
-        _remove(project_root / "modelica")
+        _clear_modelica_active_outputs(project_root)
         _remove(project_root / "validation")
     elif stage == "merge":
         _remove(extracted / "merged_understanding.json")
         _remove(extracted / "merged_understanding.txt")
+        _remove(extracted / "clarified_answers.json")
+        _remove(extracted / "system_flow.mmd")
         _remove(project_root / "sysml")
-        _remove(project_root / "modelica")
+        _clear_modelica_active_outputs(project_root)
+        _remove(project_root / "validation")
+    elif stage == "clarify":
+        _remove(extracted / "clarified_answers.json")
+        _remove(extracted / "system_flow.mmd")
+        _remove(project_root / "sysml")
+        _clear_modelica_active_outputs(project_root)
         _remove(project_root / "validation")
     elif stage == "stage_2":
         _remove(project_root / "sysml")
-        _remove(project_root / "modelica")
+        _clear_modelica_active_outputs(project_root)
         _remove(project_root / "validation")
     elif stage == "stage_3":
-        _remove(project_root / "modelica")
+        _clear_modelica_active_outputs(project_root)
         _remove(project_root / "validation")
     elif stage == "stage_4":
         _remove(project_root / "modelica" / "results")
@@ -420,6 +457,11 @@ def _run_single_stage(project_id: str, stage: str, stage1_backend: str | None) -
             _write_meta(project_id, meta)
         elif stage == "merge":
             execute_merge(project_id, projects_root=_ws.projects_root)
+        elif stage == "clarify":
+            execute_clarify(
+                project_id, projects_root=_ws.projects_root,
+                clarify=_make_clarify(project_id),
+            )
         elif stage == "stage_2":
             execute_reasoner_stage_2(
                 project_id, projects_root=_ws.projects_root, clarify=_make_clarify(project_id),
@@ -440,7 +482,7 @@ def _run_single_stage(project_id: str, stage: str, stage1_backend: str | None) -
 def run_stage(project_id: str, stage: str, body: StageRunBody | None = None):
     if not _ws.project_dir(project_id).exists():
         raise HTTPException(404, "project not found")
-    if stage not in {"stage_1", "merge", "stage_2", "stage_3", "stage_4"}:
+    if stage not in {"stage_1", "merge", "clarify", "stage_2", "stage_3", "stage_4"}:
         raise HTTPException(404, "unknown pipeline stage")
     state = _state(project_id)
     if state.status in ("running", "awaiting_input"):
@@ -473,7 +515,10 @@ def use_default_clarifications(project_id: str):
     state = _state(project_id)
     if state.status != "awaiting_input" or state.event is None:
         raise HTTPException(409, "no pending clarification for this project")
-    state.answers = {c["id"]: c["suggested_value"] for c in (state.pending_clarifications or [])}
+    pending = state.pending_clarifications or []
+    if any(not str(c.get("suggested_value", "")).strip() for c in pending):
+        raise HTTPException(409, "this clarification stage requires explicit answers")
+    state.answers = {c["id"]: c["suggested_value"] for c in pending}
     state.event.set()
     return {"status": "ok"}
 
@@ -533,6 +578,14 @@ def get_sysml(project_id: str):
     if not files:
         raise HTTPException(404, "not generated yet")
     return {"filename": files[0].name, "content": files[0].read_text(encoding="utf-8")}
+
+
+@app.get("/api/projects/{project_id}/artifacts/diagram")
+def get_diagram(project_id: str):
+    path = _ws.extracted_dir(project_id) / "system_flow.mmd"
+    if not path.exists():
+        raise HTTPException(404, "not generated yet")
+    return {"filename": path.name, "content": path.read_text(encoding="utf-8")}
 
 
 @app.get("/api/projects/{project_id}/artifacts/modelica")

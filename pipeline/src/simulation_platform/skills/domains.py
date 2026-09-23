@@ -47,11 +47,14 @@ Fluid level & flow systems (tanks, vessels, valves, pipes, pumps):
   type relation Q = Cv * sqrt(deltaP) when a valve coefficient and pressure
   drop are actually given -- use whichever the source actually specifies,
   never invent a Cv or pressure drop that wasn't given.
-- A flow that should physically stop at a limit (empty vessel, closed valve,
-  a level crossing a threshold) needs `noEvent()` around the comparison in
-  Modelica if the system can settle exactly at that boundary, or real state
-  events otherwise -- see `skills/stage3_modelica.py`'s own event-semantics
-  notes for the chattering failure mode this avoids.
+- A flow that should physically stop at a limit (empty vessel, closed valve, a
+  level crossing a threshold) needs a real state event on that comparison when
+  the limit is a stated setpoint or is used in a transition guard, so the
+  solver locates the crossing and the quantity settles exactly at the limit
+  rather than a whole step beyond it. `noEvent()` suppresses that location and
+  is only appropriate for a boundary whose exact crossing does not matter --
+  see `skills/stage3_modelica.py`'s own event-semantics notes for both the
+  chattering and the overshoot failure modes this trades between.
 - Distinguish level (a length, e.g. m) from volume (m^3) from stored mass
   (kg, = density * volume) -- a source may state a "level limit" that is
   really a volume or mass limit in disguise; convert consistently, don't mix
@@ -77,7 +80,21 @@ Magnetic circuits (cores, air gaps, windings, flux paths):
 - Leakage flux is the portion that does NOT cross the working air gap or
   reach the intended path; a real circuit's useful flux and leakage flux are
   usually reported separately and must not be summed or substituted for one
-  another without the source saying so.""",
+  another without the source saying so.
+- Reluctances in SERIES carry the same flux and their MMF drops add;
+  reluctances in PARALLEL share the same MMF drop and their fluxes add. So a
+  source that states a leakage FACTOR (the fraction of total flux that leaks,
+  or equivalently the fraction that is useful) has already fixed the ratio of
+  the two parallel branch reluctances: with leakage fraction s, the leakage and
+  useful branches satisfy R_leak = R_useful * (1 - s) / s. Derive the branch
+  from the stated factor this way rather than inventing a geometric leakage
+  path the source never described.
+- Getting the series/parallel TOPOLOGY right is the whole model in this domain.
+  Place each segment either before the branch point or inside one branch --
+  never between the two branch nodes, which silently creates an extra parallel
+  path. Check the split numerically before accepting the circuit: the flux
+  entering a junction must equal the sum of the fluxes leaving it, and that
+  identity is the fastest way to catch a mis-wired branch.""",
 
     "thermal": """\
 Thermal / heat-transfer systems (thermal masses, heaters, heat exchange):
@@ -170,6 +187,24 @@ vessels or units, each stage gated by a completion condition):
   collapse a multi-stage sequence into a single continuous behavior or drop
   a stage's own completion condition in favor of a fixed duration that
   wasn't actually given.
+- A programmable controller is a SAMPLED device: it scans its inputs on a
+  fixed cycle and acts on the values it latched, rather than reacting to a
+  continuous signal the instant it crosses a threshold. Model it that way --
+  sample the operator commands and measurements on the controller's scan
+  period and derive one-shot edges from the sampled values. Clocking the
+  logic this way is what keeps the discrete equations well-ordered: it is the
+  standard remedy for a discrete dependency cycle (an unsolvable "purely
+  discrete algebraic loop"), because every discrete value in a scan is
+  computed from the previous scan's latched values rather than from another
+  value being decided in the same instant. It also matches the real device,
+  so the scan period is a genuine modeling parameter rather than a numerical
+  trick.
+- A stage timer is a quantity that accumulates only while its stage is
+  active. Represent it as a state whose rate is one during that stage and
+  zero elsewhere, set to its starting value at the moment the stage is
+  entered. Where a pause must freeze a timer and a later resume must continue
+  from the remaining time rather than restart it, store that remaining time
+  when the pause happens and restore it on entry after the resume.
 - A stage that runs two branches that must BOTH finish before the sequence
   can proceed (a parallel split/join) needs both branches' own completion
   conditions tracked and ANDed together, not just the first branch to finish.

@@ -23,6 +23,7 @@ const EMPTY_ARTIFACTS = {
   extraction: false,
   understanding: false,
   merged_understanding: false,
+  clarified: false,
   sysml: false,
   modelica: false,
   validation: false,
@@ -35,11 +36,12 @@ function computeStepStates(project) {
   const idx = currentStage != null ? STAGE_INDEX[currentStage] : -1
   return STAGES.map((s, i) => {
     if (status === 'error' && i === idx) return 'error'
-    if (status === 'awaiting_input' && s.key === 'stage_2') return 'awaiting'
+    if (status === 'awaiting_input' && s.key === currentStage) return 'awaiting'
     if (idx >= 0 && i < idx) return 'done'
     if (idx >= 0 && i === idx) return 'active'
     if (s.key === 'stage_1' && artifacts?.extraction) return 'done'
     if (s.key === 'merge' && artifacts?.merged_understanding) return 'done'
+    if (s.key === 'clarify' && artifacts?.clarified) return 'done'
     if (s.key === 'stage_2' && artifacts?.sysml) return 'done'
     if (s.key === 'stage_3' && artifacts?.modelica) return 'done'
     if (s.key === 'stage_4' && artifacts?.validation) return 'done'
@@ -196,8 +198,8 @@ export default function App() {
               Turn documents into a verified simulation
             </h1>
             <p className="max-w-md text-[13.5px] text-[var(--text-muted)]">
-              Upload engineering documents. The pipeline reads them, writes a SysML v2 model, and compiles a
-              verified Modelica simulation — pausing to ask you when Stage 2 hits a genuinely open decision.
+              Upload engineering documents. The pipeline reads them, resolves the brief, asks you about open decisions,
+              writes a SysML v2 model, and compiles a verified Modelica simulation.
             </p>
             <button
               type="button"
@@ -297,6 +299,7 @@ export default function App() {
             {project.status === 'awaiting_input' && project.pending_clarifications?.length > 0 && (
               <ClarificationCard
                 clarifications={project.pending_clarifications}
+                stage={project.current_stage}
                 onSubmit={handleAnswer}
                 onUseDefaults={handleUseDefaults}
                 busy={clarifyBusy}

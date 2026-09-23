@@ -11,10 +11,14 @@ pipeline existed earlier and has since been removed).
              a single whole-project call needed 17023 tokens just for the
              tank dataset; per-document/per-chunk calls stay small enough
              to never need more than the shared default context window.
-    Stage 2: read ALL of Stage 1's per-document understanding files ->
+    Merge: read ALL of Stage 1's per-document understanding files -> write one
+           resolved `Understanding` JSON brief.
+    Clarify: pause for human answers to unresolved Merge questions and persist
+             those decisions separately from the original brief.
+    Stage 2: read the merged understanding plus confirmed Clarify answers ->
              write the SysML v2 file directly (`contracts.SysMLDraft.code`),
              one call, no separate planning/mapping/validation calls.
-    Stage 3: read the merged understanding + concise SysML flow -> write an
+    Stage 3: read the merged understanding, confirmed answers, and concise SysML flow -> write an
              ordered multi-file Modelica bundle using verified Standard
              Library components (`contracts.ModelicaDraft.files`).
 
@@ -38,11 +42,12 @@ from typing import Callable
 
 from simulation_platform.config import PlatformSettings
 from simulation_platform.contracts import (
-    Check, Clarification, ModelicaDraft, Simulation, SysMLDraft, Understanding, ValidationReport,
+    Check, Clarification, MergeClarification, MermaidDraft, ModelicaDraft, Simulation, SysMLDraft, Understanding, ValidationReport,
 )
 from simulation_platform.project_store import ProjectStore
 from simulation_platform.reasoner import Reasoner
 from simulation_platform.prompts.merge_notes import MERGE_PROMPT
+from simulation_platform.prompts.flow_diagram import FLOW_DIAGRAM
 from simulation_platform.skills.domains import domain_skill_block
 from simulation_platform.skills.modelica_catalog import modelica_catalog_block
 from simulation_platform.skills.stage1_understanding import SYSTEM_PROMPT as DOCUMENT_UNDERSTANDING_PROMPT
@@ -117,22 +122,486 @@ def _render_modelica_bundle(draft: ModelicaDraft) -> str:
     return "\n\n".join(f"--- {file.filename} ({file.role}) ---\n{file.code}" for file in draft.files)
 
 
+def _archive_modelica_attempt(ws: Workspace, project_id: str, attempt: int, draft: ModelicaDraft) -> Path:
+    """Preserve every Stage 3 draft, including failed compiler attempts."""
+    attempt_dir = _modelica_generated_dir(ws, project_id) / "attempts" / f"attempt_{attempt:03d}"
+    attempt_dir.mkdir(parents=True, exist_ok=True)
+    for file in draft.files:
+        (attempt_dir / file.filename).write_text(file.code, encoding="utf-8")
+    (attempt_dir / "attempt_manifest.json").write_text(
+        json.dumps({
+            "attempt": attempt,
+            "entry_class": draft.entry_class,
+            "files": [file.model_dump(exclude={"code"}) for file in draft.files],
+            "library_components": draft.library_components,
+            "corrections": draft.corrections,
+            "references": [reference.model_dump() for reference in draft.references],
+        }, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return attempt_dir
+# Every reserved word in the Modelica Language Specification. Using one as an
+# identifier is the single most expensive Stage 3 failure mode found live: a
+# generated valve component declared `RealOutput flow;` (`flow` is reserved for
+# connector flow variables), and omc reported it as
+# `No viable alternative near token: RealOutput` -- pointing at the token BEFORE
+# the offending one. Three consecutive repair attempts rewrote the innocent
+# `RealOutput` declaration and never touched `flow`, so the loop could not
+# converge. Naming it here turns an undiagnosable parser error into one precise
+# instruction, without spending an omc run to get it.
+_MODELICA_RESERVED_WORDS = frozenset("""
+algorithm and annotation block break class connect connector constant
+constrainedby der discrete each else elseif elsewhen encapsulated end
+enumeration equation expandable extends external false final flow for function
+if import impure in initial inner input loop model not operator or outer output
+package parameter partial protected public pure record redeclare replaceable
+return stream then true type when while within
+""".split())
+
+# `time` is not reserved, but it is the built-in independent variable -- a
+# component that declares its own `time` shadows it and produces a model whose
+# equations silently mean something else.
+_MODELICA_BUILTIN_NAMES = frozenset({"time"})
+
+
+def _icon_graphics(code: str) -> str | None:
+    """The body of a class's `Icon(...)` annotation, or None if it has none.
+
+    Returned by balanced-paren scan rather than a regex, because an icon's
+    graphics list nests parentheses several levels deep and a non-greedy match
+    stops at the first inner `)`.
+    """
+
+    start = code.find("Icon(")
+    if start < 0:
+        return None
+    depth, index = 0, start + len("Icon")
+    while index < len(code):
+        if code[index] == "(":
+            depth += 1
+        elif code[index] == ")":
+            depth -= 1
+            if depth == 0:
+                return code[start:index + 1]
+        index += 1
+    return code[start:]
+
+
+# A `Text` element alone renders as a labelled blank box -- the shape is what
+# makes a component recognisable at a glance. Confirmed live across runs: the
+# same prompt produced a proper two-triangle valve symbol on one attempt and a
+# bare text label on the next, so icon quality has to be checked, not asked for.
+_ICON_SHAPES = ("Rectangle(", "Polygon(", "Ellipse(", "Line(", "Bitmap(")
+
+
+def _equation_section(code: str) -> str:
+    """Only the equation/algorithm bodies of a class.
+
+    A component declaration's parameter modifiers (`Ctrl c(limit=limit)`) read
+    exactly like equations to a line parser, which made the loop detector report
+    `limit -> limit` self-loops that do not exist.
+    """
+
+    parts = re.split(r"(?m)^\s*(?:initial\s+)?(?:equation|algorithm)\b", code)
+    return "\n".join(parts[1:]) if len(parts) > 1 else ""
+
+
+def _algebraic_feedthrough(code: str, members: list[str]) -> set[tuple[str, str]]:
+    """Which of a class's outputs depend on its inputs with no state in between.
+
+    A dependency that passes through `der(x)` (a continuous state) or through a
+    variable assigned inside a `when` (a discrete state) is NOT feedthrough --
+    that is what makes a feedback control loop solvable. Only the algebraic
+    paths can close an unsolvable loop, so only those are reported.
+    """
+
+    body = re.sub(r"(?s)\bwhen\b.*?\bend\s+when\s*;", " ", _equation_section(code))  # discrete state
+    depends: dict[str, set[str]] = {}
+    for line in body.splitlines():
+        line = line.split("//")[0].strip().rstrip(";")
+        if "=" not in line or line.startswith(("connect", "parameter", "constant")):
+            continue
+        lhs, _, rhs = line.partition("=")
+        lhs, rhs = lhs.strip(), rhs.strip()
+        if lhs.startswith("der(") or not re.fullmatch(r"[A-Za-z_]\w*", lhs):
+            continue  # a state's derivative gives no algebraic dependency
+        depends.setdefault(lhs, set()).update(re.findall(r"\b([A-Za-z_]\w*)\b", rhs))
+
+    def reaches(start: str) -> set[str]:
+        seen, stack, found = set(), [start], set()
+        while stack:
+            node = stack.pop()
+            if node in seen:
+                continue
+            seen.add(node)
+            if node in members:
+                found.add(node)
+            stack.extend(depends.get(node, ()))
+        return found
+
+    return {(source, name) for name in members for source in reaches(name) if source != name}
+
+
+def _algebraic_loops(draft: ModelicaDraft, system_code: str) -> list[list[str]]:
+    """Find signal loops in the system model that contain no state.
+
+    Built over symbols, not components, because the same loop appears equally
+    often routed through ordinary equations and intermediate variables as
+    through `connect()` -- three consecutive live runs closed a vessel/valve
+    loop, one via connects and two via equations, and every one of them
+    compiled, simulated and reported success with the whole loop solved as a
+    constant zero.
+    """
+
+    ports = _connector_members(draft)
+    feedthrough = {
+        name: _algebraic_feedthrough(other.code, ports.get(name, []))
+        for other in draft.files if other.role != "system"
+        for name in re.findall(r"(?m)^\s*(?:partial\s+)?(?:model|block)\s+(\w+)", other.code)
+    }
+
+    edges: dict[str, set[str]] = {}
+    def link(source: str, target: str) -> None:
+        edges.setdefault(source, set()).add(target)
+
+    # Inside each instance: an output that algebraically feeds through from an input.
+    for class_name, pairs in feedthrough.items():
+        for instance in re.findall(rf"(?m)^\s*{re.escape(class_name)}\s+([A-Za-z_]\w*)", system_code):
+            for source, target in pairs:
+                link(f"{instance}.{source}", f"{instance}.{target}")
+
+    body = re.sub(r"(?s)\bwhen\b.*?\bend\s+when\s*;", " ", _equation_section(system_code))
+    for line in body.splitlines():
+        line = line.split("//")[0].strip().rstrip(";")
+        connect = re.fullmatch(r"connect\s*\(\s*([\w.]+)\s*,\s*([\w.]+)\s*\)(?:\s*annotation.*)?", line)
+        if connect:
+            link(connect.group(1), connect.group(2))
+            continue
+        if "=" not in line or line.startswith(("parameter", "constant", "connect")):
+            continue
+        lhs, _, rhs = line.partition("=")
+        lhs, rhs = lhs.strip(), rhs.split("annotation")[0].strip()
+        if not re.fullmatch(r"[A-Za-z_][\w.]*", lhs) or lhs.startswith("der("):
+            continue
+        for symbol in re.findall(r"\b([A-Za-z_][\w.]*)\b", rhs):
+            if symbol != lhs:
+                link(symbol, lhs)
+
+    # Any cycle in this graph is algebraic by construction: every state-crossing
+    # dependency was excluded when the edges were built.
+    found: list[list[str]] = []
+    colour: dict[str, int] = {}
+    def walk(node: str, path: list[str]) -> None:
+        colour[node] = 1
+        for nxt in sorted(edges.get(node, ())):
+            if colour.get(nxt) == 1:
+                cycle = path[path.index(nxt):] + [nxt] if nxt in path else [nxt, node, nxt]
+                if len(found) < 3:
+                    found.append(cycle)
+            elif colour.get(nxt, 0) == 0:
+                walk(nxt, path + [nxt])
+        colour[node] = 2
+
+    for node in sorted(edges):
+        if colour.get(node, 0) == 0:
+            walk(node, [node])
+    return found
+
+
+def _instance_count(draft: ModelicaDraft, class_code: str) -> int:
+    """How many times the class defined in `class_code` is placed by the system."""
+
+    names = re.findall(r"(?m)^\s*(?:partial\s+)?(?:model|block)\s+(\w+)", class_code)
+    system = next((f.code for f in draft.files if f.role == "system"), "")
+    return sum(
+        len(re.findall(rf"(?m)^\s*{re.escape(name)}\s+[A-Za-z_]\w*", system))
+        for name in names
+    )
+
+
+def _connector_members(draft: ModelicaDraft) -> dict[str, list[str]]:
+    """Map each class this bundle defines to the connector members it declares."""
+
+    # Inputs AND outputs. An unconnected output means the component computes a
+    # result the system throws away -- an actuator wired around, for instance.
+    # An unconnected INPUT is worse: Modelica silently defaults it to zero, so
+    # the model compiles, simulates and reports success while that signal path
+    # carries nothing. Found live, twice: a vessel's `requestedOutflow` input was
+    # never driven, so every transfer flow in the process was zero for the whole
+    # run and only the trajectory revealed it.
+    members: dict[str, list[str]] = {}
+    declaration = re.compile(
+        r"(?m)^\s*Modelica\.[\w.]*Interfaces\.\w+\s+([A-Za-z_]\w*)"
+    )
+    for file in draft.files:
+        if file.role == "system":
+            continue
+        for match in re.finditer(r"(?m)^\s*(?:partial\s+)?(?:model|block)\s+(\w+)", file.code):
+            names = declaration.findall(file.code)
+            if names:
+                members[match.group(1)] = names
+    return members
+
+
+def _diagram_issues(draft: ModelicaDraft) -> list[str]:
+    """The bundle is inspected in OMEdit, so an undrawable diagram is a defect.
+
+    Found live: a bundle that compiled and simulated perfectly rendered as two
+    blank rectangles, because the whole plant had been collapsed into one
+    aggregate class and not one `connect()` carried a `Line` annotation. None of
+    that is visible to the compiler, so nothing rejected it.
+    """
+
+    issues: list[str] = []
+    # Every library connector, not just the causal Blocks signals: magnetic
+    # ports, heat ports, mechanical flanges, electrical pins and fluid ports all
+    # need placing and connecting too, and a bundle in one of those domains was
+    # otherwise invisible to these checks.
+    connector = re.compile(r"Modelica\.[\w.]*Interfaces\.\w+\b")
+    for file in draft.files:
+        if file.role == "system":
+            plain = [
+                number for number, text in enumerate(file.code.splitlines(), 1)
+                if re.match(r"\s*connect\s*\(", text) and "Line(" not in text
+            ]
+            if plain:
+                shown = ", ".join(str(n) for n in plain[:8])
+                issues.append(
+                    f"- {file.filename}: {len(plain)} connect() statement(s) (line(s) {shown}) have no "
+                    "graphical annotation. Every connection in the system diagram must carry "
+                    "annotation(Line(points={{x1,y1},{x2,y2}}, color={...})) or the diagram cannot be "
+                    "drawn and the bundle is not inspectable in OMEdit."
+                )
+            # A component that is placed but never connected renders as an icon
+            # floating on its own, which is exactly what makes a generated
+            # diagram look wrong to an engineer reading it.
+            connected = set(re.findall(r"connect\s*\(\s*([A-Za-z_]\w*)[.,]", file.code))
+            connected |= set(re.findall(r"connect\s*\([^,]+,\s*([A-Za-z_]\w*)[.)]", file.code))
+            placed = re.findall(
+                r"(?m)^\s*(?:[A-Za-z_]\w*\.)*[A-Za-z_]\w*\s+([A-Za-z_]\w*)\s*(?:\([^;]*\))?\s*annotation\s*\(\s*Placement",
+                file.code,
+            )
+            floating = [name for name in placed if name not in connected]
+            if floating:
+                issues.append(
+                    f"- {file.filename}: component(s) {', '.join(floating)} are placed in the diagram but "
+                    "never appear in any connect(). Every component shown must be wired into the system -- "
+                    "a boundary source or sink is connected to the first/last element of the material path, "
+                    "not left floating. Either connect it or remove it."
+                )
+
+            # Component-level wiring is not enough: an actuator whose OUTPUT port
+            # is left dangling still looks connected (its command input is wired)
+            # while the material path silently routes around it. Found live: a
+            # supply source was connected straight to the vessel it feeds, so the
+            # inlet valve gated nothing and the vessel filled whatever the valve
+            # was commanded to do.
+            # A pair of components wired BOTH ways with nothing in between is an
+            # algebraic loop, not a feedback control loop (that one runs through
+            # the controller, so it is three or more components long). Found live:
+            # a vessel's actual outflow drove the downstream valve's requested
+            # flow while that valve's actual flow drove the vessel's outflow
+            # demand. The system compiled, simulated and reported success with
+            # every flow in the loop solved as a constant zero, so no transfer
+            # ever happened and nothing in the toolchain objected.
+            loops = _algebraic_loops(draft, file.code)
+            if loops:
+                shown = "; ".join(" -> ".join(loop) for loop in loops)
+                issues.append(
+                    f"- {file.filename}: algebraic signal loop(s) with no state anywhere in them: {shown}. "
+                    "The solver can satisfy such a loop with every signal in it stuck at zero, so the "
+                    "process silently transports nothing while the run still reports success -- this is not "
+                    "a compiler error and only the trajectory reveals it. Break it by making the chain "
+                    "one-directional: an on/off actuator on a fixed-flow brief produces its OWN nominal "
+                    "flow from its command alone (`flowOut = if openCmd then qNominal else 0`) and needs no "
+                    "upstream flow input at all; the vessel upstream subtracts that same flow and limits it "
+                    "to its own inventory inside its own equations, and the vessel downstream adds it. "
+                    "Never feed a vessel's resulting outflow back into the actuator that sets it."
+                )
+
+            ports = _connector_members(draft)
+            dangling: list[str] = []
+            for class_name, members in ports.items():
+                for instance in re.findall(rf"(?m)^\s*{re.escape(class_name)}\s+([A-Za-z_]\w*)", file.code):
+                    # Referenced ANYWHERE in the system model counts, not only in a
+                    # connect(): reading an output in an ordinary equation (for a
+                    # reported variable, say) is a legitimate use. What this must
+                    # catch is a port that nothing in the system touches at all.
+                    dangling += [
+                        f"{instance}.{member}" for member in members
+                        if not re.search(rf"\b{re.escape(instance)}\.{re.escape(member)}\b", file.code)
+                    ]
+            if dangling:
+                issues.append(
+                    f"- {file.filename}: connector(s) {', '.join(sorted(dangling))} are declared on placed "
+                    "components but nothing in the system model uses them. The material path must run "
+                    "THROUGH every element the brief puts in it -- source into the first actuator, each "
+                    "actuator into the unit it feeds -- never around one of them. Fix each port by "
+                    "connecting it into the path, or by reading it in an equation if it is genuinely a "
+                    "terminal report, or by removing it from the component."
+                )
+
+            # Library instances count as much as this bundle's own classes: a
+            # diagram assembled from Standard Library vessels and valves is the
+            # better outcome, not a worse one, because each of those already
+            # carries its own icon and connectors.
+            if len(placed) < 4:
+                issues.append(
+                    f"- {file.filename}: the system diagram places only {len(placed)} component(s) "
+                    f"({', '.join(placed) or 'none'}), counting library and generated classes alike. "
+                    "The diagram must show each physical unit the brief names separately -- every vessel, "
+                    "every valve, every named source or sink, plus the controller -- as its own instance. "
+                    "Do not aggregate the plant into a single combined class."
+                )
+        else:
+            icon = _icon_graphics(file.code)
+            if icon is None:
+                issues.append(
+                    f"- {file.filename}: this class has no Icon annotation, so it renders as a blank box. "
+                    "Give it an Icon(graphics={...}) that depicts what it is, including "
+                    'Text(extent={{-100,100},{100,140}}, textString="%name").'
+                )
+            elif not any(shape in icon for shape in _ICON_SHAPES):
+                issues.append(
+                    f"- {file.filename}: this class's Icon contains no shape, only text, so it renders as a "
+                    "labelled blank box. Draw what the component actually is using Rectangle, Polygon, "
+                    "Ellipse or Line: a vessel as a body rectangle plus a partial fill rectangle, an on/off "
+                    "valve as two opposed triangles meeting at a point, a boundary source or sink as an "
+                    "ellipse, a controller as a block with its port names."
+                )
+            elif '"%name"' not in icon and _instance_count(draft, file.code) > 1:
+                # Only worth failing over when the class really has several
+                # instances -- a one-off component reads fine with a static
+                # label, and rejecting an otherwise correct bundle for this
+                # costs a whole repair attempt.
+                issues.append(
+                    f"- {file.filename}: this class's Icon never draws %name, and the system places several "
+                    'instances of it, so they all show the same label. Add '
+                    'Text(extent={{-100,100},{100,140}}, textString="%name").'
+                )
+        for number, text in _declaration_lines(file.code):
+            if connector.search(text) and "Placement(" not in text:
+                issues.append(
+                    f"- {file.filename}:{number}: this connector declaration has no Placement annotation, "
+                    "so connections to it cannot be positioned. Put inputs on the left edge and outputs on "
+                    "the right edge of the -100..100 icon coordinate system."
+                )
+    return issues
+
+
+def _declaration_lines(code: str) -> list[tuple[int, str]]:
+    """The lines of each class that declare things, excluding its equation and
+    algorithm bodies.
+
+    Needed because a Boolean expression in a body reads exactly like a
+    declaration to a line regex: `startPulse and (pre(mode) == Mode.IDLE)`
+    scans as type `startPulse`, name `and`, open paren -- which made the
+    reserved-word check reject a perfectly valid controller.
+    """
+
+    header = re.compile(r"^(?:partial\s+|encapsulated\s+)*"
+                        r"(?:model|block|connector|record|class|package|function|type)\b")
+    out: list[tuple[int, str]] = []
+    declaring = False
+    for number, raw in enumerate(code.splitlines(), 1):
+        stripped = raw.strip()
+        if header.match(stripped):
+            declaring = True
+            continue
+        if re.match(r"^(?:initial\s+)?(?:equation|algorithm)\b", stripped):
+            declaring = False
+            continue
+        if re.match(r"^(?:public|protected)\b", stripped):
+            declaring = True
+            continue
+        if declaring and stripped:
+            out.append((number, raw))
+    return out
+
+
+def _when_block_issues(filename: str, code: str) -> list[str]:
+    """Two `when` mistakes OpenModelica reports in a way the model can't act on.
+
+    Both were observed live on the tank dataset in consecutive attempts:
+    an equation-section `when` holding an `if/elseif` chain with no `else`
+    (illegal -- every branch of an if-equation inside a when-equation must
+    assign the same left-hand sides), and `reinit` sharing a when-branch with
+    ordinary assignments, which omc rejects as a locationless
+    `Internal error BackendDAECreate.lowerWhenEqn: equation not handled`.
+    """
+
+    issues: list[str] = []
+    in_algorithm = False
+    when_start: int | None = None
+    when_lines: list[str] = []
+
+    for number, raw in enumerate(code.splitlines(), 1):
+        stripped = raw.strip()
+        if when_start is None:
+            if re.match(r"^(algorithm|initial\s+algorithm)\b", stripped):
+                in_algorithm = True
+            elif re.match(r"^(equation|initial\s+equation)\b", stripped):
+                in_algorithm = False
+            elif re.match(r"^(public|protected)\b", stripped):
+                in_algorithm = False
+            if re.match(r"^when\b", stripped):
+                when_start, when_lines = number, [stripped]
+            continue
+
+        when_lines.append(stripped)
+        if not re.match(r"^end\s+when\s*;", stripped):
+            continue
+
+        body = "\n".join(when_lines)
+        if not in_algorithm and re.search(r"(?m)^\s*if\b", body) and not re.search(r"(?m)^\s*else\b", body):
+            issues.append(
+                f"- {filename}:{when_start}: this `when` is in an EQUATION section and its if/elseif chain "
+                "has no `else` branch. Every branch of an if-equation inside a when-equation must assign "
+                "exactly the same set of variables, so a missing `else` is an error. Move the whole mode "
+                "dispatcher into an `algorithm` section and assign with `:=`, where an if/elseif chain may "
+                "legally omit the `else` and unassigned variables keep their previous value."
+            )
+        if "reinit(" in body and re.search(r"(?m)^\s*[A-Za-z_][\w.]*\s*:?=", body):
+            issues.append(
+                f"- {filename}:{when_start}: this `when` mixes `reinit(...)` with ordinary assignments in "
+                "the same branch, which OpenModelica rejects as an internal `lowerWhenEqn` error with no "
+                "usable location. Remove the `reinit` entirely: represent elapsed time as a plain equation "
+                "`waitElapsed = time - tEnter;` over a `discrete Real tEnter` that the transition sets, "
+                "instead of resetting a continuous timer state."
+            )
+        when_start, when_lines = None, []
+
+    return issues
+
+
 def _modelica_static_issues(draft: ModelicaDraft) -> list[str]:
     """Catch deterministic Modelica mistakes before spending an omc run.
 
-    `connect()` accepts connectors only. Generated bundles have repeatedly used
-    ordinary Boolean/Real/Integer variables as endpoints, even though those
-    values must be assigned with equations instead.
+    Each check here exists because the real compiler's own message for that
+    mistake is either wrong about where the problem is (reserved-word
+    identifiers) or does not name the construct at all -- in both cases the
+    repair loop provably could not converge on the real error text alone.
     """
 
     declaration = re.compile(
-        r"(?m)^\s*(?:(?:parameter|constant|discrete|input|output)\s+)*"
+        r"(?m)^\s*(?:(?:parameter|constant|discrete|input|output|final|inner|outer|flow|stream)\s+)*"
         r"(?:Real|Boolean|Integer)\s+([^;]+);"
+    )
+    # Any component declaration: a (possibly dotted) type name followed by the
+    # instance name. Deliberately broad -- it only feeds the reserved-word check.
+    component = re.compile(
+        r"(?m)^\s*(?:(?:parameter|constant|discrete|input|output|final|inner|outer|replaceable)\s+)*"
+        r"(?P<type>[A-Za-z_]\w*(?:\.\w+)*)\s+(?P<name>[A-Za-z_]\w*)\s*(?:\(|;|\[|=|\bannotation\b)"
     )
     connection = re.compile(
         r"\bconnect\s*\(\s*([^,()]+?)\s*,\s*([^,()]+?)\s*\)", re.MULTILINE,
     )
+    empty_array = re.compile(r"=\s*\{\s*\}")
     issues: list[str] = []
+
+    def line_of(code: str, offset: int) -> int:
+        return code.count("\n", 0, offset) + 1
+
     for file in draft.files:
         plain_scalars: set[str] = set()
         for match in declaration.finditer(file.code):
@@ -140,16 +609,48 @@ def _modelica_static_issues(draft: ModelicaDraft) -> list[str]:
                 name_match = re.match(r"\s*([A-Za-z_]\w*)", item)
                 if name_match:
                     plain_scalars.add(name_match.group(1))
+
+        for number, text in _declaration_lines(file.code):
+            match = component.match(text)
+            if match is None:
+                continue
+            name = match.group("name")
+            if match.group("type") in _MODELICA_RESERVED_WORDS:
+                continue  # `parameter Real x` style prefixes, already handled above
+            if name in _MODELICA_RESERVED_WORDS:
+                issues.append(
+                    f"- {file.filename}:{number}: '{name}' is a RESERVED "
+                    f"Modelica keyword and cannot be used as an identifier. Rename this declaration (for "
+                    f"example '{name}Signal' or a descriptive physical name) and update every reference to "
+                    f"it, including any '<instance>.{name}' member access in other files. Note the compiler "
+                    f"reports this as a parse error on the PRECEDING token, so do not trust its location."
+                )
+            elif name in _MODELICA_BUILTIN_NAMES:
+                issues.append(
+                    f"- {file.filename}:{number}: '{name}' is the built-in "
+                    f"Modelica variable and must not be redeclared. Rename it."
+                )
+
+        issues.extend(_when_block_issues(file.filename, file.code))
+
+        for match in empty_array.finditer(file.code):
+            issues.append(
+                f"- {file.filename}:{line_of(file.code, match.start())}: empty array constructor '{{}}' is "
+                "not valid Modelica. Omit the attribute entirely (for example write "
+                "'annotation(Icon())' or drop the graphics attribute) instead of giving it an empty list."
+            )
+
         for match in connection.finditer(file.code):
             for endpoint in (match.group(1).strip(), match.group(2).strip()):
                 bare = re.fullmatch(r"([A-Za-z_]\w*)(?:\[[^\]]+\])?", endpoint)
                 if bare and bare.group(1) in plain_scalars:
-                    line = file.code.count("\n", 0, match.start()) + 1
                     issues.append(
-                        f"- {file.filename}:{line}: connect() endpoint '{endpoint}' is an ordinary scalar, "
-                        "not a connector. Replace the connection with an equation assignment or use a "
-                        "proper Modelica connector."
+                        f"- {file.filename}:{line_of(file.code, match.start())}: connect() endpoint "
+                        f"'{endpoint}' is an ordinary scalar, not a connector. Replace the connection with "
+                        "an equation assignment or use a proper Modelica connector."
                     )
+
+    issues.extend(_diagram_issues(draft))
     return issues
 
 
@@ -329,6 +830,41 @@ def _merged_narrative_path(ws: Workspace, project_id: str) -> Path:
     return ws.extracted_dir(project_id) / "merged_understanding.txt"
 
 
+def _clarified_answers_path(ws: Workspace, project_id: str) -> Path:
+    return ws.extracted_dir(project_id) / "clarified_answers.json"
+
+
+def _flow_diagram_path(ws: Workspace, project_id: str) -> Path:
+    return ws.extracted_dir(project_id) / "system_flow.mmd"
+
+
+def _load_clarified_answers(ws: Workspace, project_id: str) -> dict[str, str]:
+    path = _clarified_answers_path(ws, project_id)
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    answers = payload.get("answers", {}) if isinstance(payload, dict) else {}
+    return {str(key): str(value) for key, value in answers.items() if str(value).strip()}
+
+
+def _merge_clarifications(understanding: Understanding) -> list[Clarification]:
+    if understanding.clarifications:
+        return [Clarification(**item.model_dump()) for item in understanding.clarifications]
+    return [
+        Clarification(
+            id=f"merge_question_{index}",
+            question=question,
+            reasoning="Merge marked this decision as unresolved. Choose the governing value or explain the approved resolution before SysML generation.",
+            suggested_value="",
+            options=[],
+        )
+        for index, question in enumerate(understanding.questions, 1)
+    ]
+
+
 def _load_merged_understanding(ws: Workspace, project_id: str) -> Understanding:
     path = _merged_understanding_path(ws, project_id)
     if path.exists():
@@ -347,7 +883,7 @@ def _render_check(c: Check) -> str:
     return f"- {c.name}: {c.expression} == {c.expected} ({tol}), {when} -- source: {c.source}"
 
 
-def _understanding_context(understanding: Understanding) -> str:
+def _understanding_context(understanding: Understanding, clarified_answers: dict[str, str] | None = None) -> str:
     """Merge already resolves `checks` (exact expression/expected value/
     tolerance/when-it-applies), `assumptions`, and `questions` into clean
     structured fields -- real, confirmed gap: Stage 2/3 used to see only
@@ -370,9 +906,13 @@ def _understanding_context(understanding: Understanding) -> str:
         )
     if understanding.questions:
         parts.append(
-            "Open questions Merge flagged as unresolved (informational -- Stage 2 may raise its own "
-            "`clarifications` for anything here that materially affects the model):\n"
+            "Open questions Merge flagged as unresolved (these must be answered by the Clarify stage before SysML generation):\n"
             + "\n".join(f"- {q}" for q in understanding.questions)
+        )
+    if clarified_answers:
+        parts.append(
+            "Human-confirmed answers from the Clarify stage -- these decisions are authoritative:\n"
+            + "\n".join(f"- {key}: {value}" for key, value in clarified_answers.items())
         )
     return "\n\n".join(parts)
 
@@ -411,6 +951,80 @@ def execute_merge(project_id: str, projects_root: Path | None = None) -> StageRe
             "assumptions": len(understanding.assumptions),
             "questions": len(understanding.questions),
         },
+    )
+
+
+def execute_clarify(
+    project_id: str,
+    projects_root: Path | None = None,
+    clarify: Callable[[list[Clarification]], dict[str, str]] | None = None,
+) -> StageResult:
+    """Pause for human answers to Merge's unresolved questions.
+
+    This stage does not call an LLM. It records the human decisions separately
+    from the original merged brief so the source interpretation remains
+    auditable and downstream stages can consume the confirmed answers.
+    """
+    ws = _workspace(projects_root)
+    understanding = _load_merged_understanding(ws, project_id)
+    answers_path = _clarified_answers_path(ws, project_id)
+    existing = _load_clarified_answers(ws, project_id)
+    clarifications = _merge_clarifications(understanding)
+    if existing or not clarifications:
+        if not answers_path.exists():
+            answers_path.write_text(
+                json.dumps({"questions": [c.question for c in clarifications], "answers": existing}, indent=2) + "\n",
+                encoding="utf-8",
+            )
+        diagram = execute_flow_diagram(project_id, projects_root=projects_root)
+        return StageResult(
+            stage="clarify", project_id=project_id, status="READY",
+            details={"questions": len(clarifications), "answered": len(existing), "skipped": not clarifications, "diagram": diagram.details},
+        )
+    if clarify is None:
+        return StageResult(
+            stage="clarify", project_id=project_id, status="NEEDS_INPUT",
+            details={"questions": len(clarifications), "answered": 0},
+        )
+    answers = {key: value.strip() for key, value in clarify(clarifications).items() if value and value.strip()}
+    missing = [c.id for c in clarifications if c.id not in answers]
+    if missing:
+        raise ValueError(f"Clarify requires an answer for every Merge question: {', '.join(missing)}")
+    answers_path.write_text(
+        json.dumps({"questions": [c.question for c in clarifications], "answers": answers}, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    diagram = execute_flow_diagram(project_id, projects_root=projects_root)
+    return StageResult(
+        stage="clarify", project_id=project_id, status="READY",
+        details={"questions": len(clarifications), "answered": len(answers), "diagram": diagram.details},
+    )
+
+
+def execute_flow_diagram(project_id: str, projects_root: Path | None = None) -> StageResult:
+    """Generate the clarified system flow as a Mermaid source artifact."""
+    ws = _workspace(projects_root)
+    run_log = RunLog(ws.run_log_path(project_id))
+    settings = PlatformSettings.load()
+    understanding = _load_merged_understanding(ws, project_id)
+    context = _understanding_context(understanding, _load_clarified_answers(ws, project_id))
+    with _traced_stage("Clarify (OpenAI): generate Mermaid system flow", run_log):
+        draft: MermaidDraft = Reasoner(
+            settings, 2, backend="openai", model_override=settings.merge_model, run_log=run_log,
+        ).ask(FLOW_DIAGRAM, context, MermaidDraft, Packet([]))
+    code = draft.code.strip()
+    if code.startswith("```"):
+        code = code.split("\n", 1)[1] if "\n" in code else code
+        if code.endswith("```"):
+            code = code[:-3].rstrip()
+    if not code.startswith("flowchart TD"):
+        raise ValueError("Mermaid flow must begin with 'flowchart TD'")
+    if "```" in code:
+        raise ValueError("Mermaid flow contains Markdown fences")
+    _flow_diagram_path(ws, project_id).write_text(code + "\n", encoding="utf-8")
+    return StageResult(
+        stage="clarify", project_id=project_id, status="READY",
+        details={"filename": _flow_diagram_path(ws, project_id).name, "characters": len(code), "corrections": draft.corrections},
     )
 
 
@@ -453,17 +1067,14 @@ def execute_reasoner_stage_2(
     auto-repair discipline the structured pipeline already used, not a
     new invention.
 
-    Human-in-the-loop, Stage 2 ONLY (the user's explicit choice -- Stage 1
-    and Stage 3 stay fully autonomous): the first draft may also surface a
-    handful of `clarifications` (see `contracts.Clarification`) for a
-    decision the brief left genuinely open. When `clarify` is given, those
-    are handed to it -- e.g. the API layer pauses the run and waits for a
-    person to pick an answer (or accept the model's own `suggested_value`)
-    -- and the model rewrites the draft once with the confirmed answers
-    before the real-parser repair loop begins. `clarify=None` (the default,
-    used by tests and any non-interactive caller) skips this entirely: the
-    draft already used its own `suggested_value` for every open item, so
-    the pipeline never blocks on a human who isn't there."""
+    Human review can occur in the preceding Clarify stage for Merge's open
+    questions. The first SysML draft may also surface a handful of additional
+    `clarifications` (see `contracts.Clarification`) for decisions discovered
+    only while writing the model. When `clarify` is given, the API pauses and
+    waits for a person to answer those questions (or accept suggested defaults)
+    before the real-parser repair loop begins. `clarify=None` remains useful
+    for tests and non-interactive callers: the draft proceeds with its own
+    suggested values for these Stage 2-only questions."""
 
     from simulation_platform.tools import RealParserUnavailable, validate_files_with_real_parser
 
@@ -471,7 +1082,7 @@ def execute_reasoner_stage_2(
     run_log = RunLog(ws.run_log_path(project_id))
     settings = PlatformSettings.load()
     understanding = _load_merged_understanding(ws, project_id)
-    context = _understanding_context(understanding)
+    context = _understanding_context(understanding, _load_clarified_answers(ws, project_id))
     sysml_prompt = SYSML + domain_skill_block(understanding.domains)
 
     reasoner = Reasoner(settings, 2, backend="openai", run_log=run_log)
@@ -585,7 +1196,7 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
     understanding = _load_merged_understanding(ws, project_id)
     sysml_code = _sysml_generated_path(ws, project_id).read_text(encoding="utf-8")
 
-    context = f"{_understanding_context(understanding)}\n\nSysML v2 model (already generated):\n\n{sysml_code}"
+    context = f"{_understanding_context(understanding, _load_clarified_answers(ws, project_id))}\n\nSysML v2 model (already generated):\n\n{sysml_code}"
     modelica_prompt = (
         MODELICA
         + domain_skill_block(understanding.domains)
@@ -594,10 +1205,22 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
     reasoner = Reasoner(settings, 3, backend="openai", run_log=run_log)
     draft: ModelicaDraft | None = None
     errors_summary = ""
+    # Only the immediately previous attempt used to be sent back, so the loop
+    # had no memory: run live on the tank dataset it oscillated between a
+    # discrete algebraic loop and a failed C build for five straight attempts,
+    # each "fix" reintroducing the error from two attempts earlier. The full
+    # rejection history makes a repeat visible to the model as a repeat.
+    history: list[str] = []
 
     for attempt in range(settings.max_repair_attempts + 1):
+        history_block = (
+            "\n\nEvery earlier attempt in THIS run and why it was rejected. Do not reintroduce a "
+            "structure that already failed, and do not trade the current error for one already "
+            f"listed here:\n\n{chr(10).join(history)}\n"
+            if len(history) > 1 else ""
+        )
         prompt_context = context if attempt == 0 else (
-            f"{context}\n\nYour previous multi-file attempt:\n\n{_render_modelica_bundle(draft)}\n\n"
+            f"{context}{history_block}\n\nYour previous multi-file attempt:\n\n{_render_modelica_bundle(draft)}\n\n"
             f"Modelica preflight or the real OpenModelica compiler found these errors while checking the "
             f"real {understanding.simulation.stop_time:.0f}s scenario above:\n\n{errors_summary}\n\n"
             "Before patching: re-read the engineering brief above and work out WHY this error happened in "
@@ -623,6 +1246,9 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
         with _traced_stage(f"Stage 3: write Modelica (attempt {attempt + 1}/{settings.max_repair_attempts + 1})", run_log):
             draft = reasoner.ask(modelica_prompt, prompt_context, ModelicaDraft, Packet([]))
 
+        attempt_dir = _archive_modelica_attempt(ws, project_id, attempt + 1, draft)
+        print(f"    [Stage 3] archived attempt {attempt + 1} at {attempt_dir}", flush=True)
+        run_log.event("attempt_archived", stage=3, attempt=attempt + 1, path=str(attempt_dir))
         # A bundle with no `equation` section can't represent any real physics --
         # confirmed live: a draft returned a bare enum-only stub (its own
         # `corrections` text admitted it was a placeholder "to satisfy the tool-call
@@ -644,13 +1270,14 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
                 "validation_attempt", stage=3, attempt=attempt + 1, tool="stub_check", status="FAILED",
                 detail=errors_summary,
             )
+            history.append(f"Attempt {attempt + 1} rejected (returned a stub with no equation section).")
             continue
 
         static_issues = _modelica_static_issues(draft)
         if static_issues:
             errors_summary = "\n".join(static_issues)
             print(
-                f"    [Stage 3] Modelica preflight found {len(static_issues)} invalid connect endpoint(s), "
+                f"    [Stage 3] Modelica preflight found {len(static_issues)} issue(s), "
                 f"attempt {attempt + 1}:\n{errors_summary}", flush=True,
             )
             run_log.event(
@@ -658,6 +1285,7 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
                 tool="modelica_preflight", status="FAILED",
                 error_count=len(static_issues), errors=errors_summary,
             )
+            history.append(f"Attempt {attempt + 1} rejected by preflight:\n{errors_summary}")
             continue
 
         if not settings.use_real_compiler:
@@ -693,6 +1321,7 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
             "validation_attempt", stage=3, attempt=attempt + 1, tool="omc", status="FAILED",
             error_count=len(result.errors), errors=errors_summary,
         )
+        history.append(f"Attempt {attempt + 1} rejected by the real OpenModelica compiler:\n{errors_summary}")
 
     generated_dir = _modelica_generated_dir(ws, project_id)
     generated_dir.mkdir(parents=True, exist_ok=True)
@@ -951,7 +1580,7 @@ def execute_reasoner_stage_4(project_id: str, projects_root: Path | None = None)
 
         digest = _render_trajectory_digest(csv_path, result.result_summary)
         context = "\n\n".join([
-            _understanding_context(understanding),
+            _understanding_context(understanding, _load_clarified_answers(ws, project_id)),
             "Assumptions the model-generation stage explicitly made while writing this Modelica model:\n"
             + ("\n".join(f"- {c}" for c in stage3_corrections) if stage3_corrections else "(none recorded)"),
             digest,
@@ -978,6 +1607,14 @@ def execute_reasoner_stage_4(project_id: str, projects_root: Path | None = None)
     validation_dir = ws.validation_dir(project_id)
     validation_dir.mkdir(parents=True, exist_ok=True)
     report_path = validation_dir / f"{model_name}.report.json"
+    # A rerun whose entry class was renamed used to leave the previous run's
+    # report sitting beside the new one, with no indication which was current --
+    # confirmed live: a stale report was read as this run's result and described
+    # a trajectory the current model never produced. Stage 3 already prunes its
+    # own stale .mo files for the same reason; do the same here.
+    for stale in validation_dir.glob("*.report.json"):
+        if stale != report_path:
+            stale.unlink()
     report_path.write_text(report.model_dump_json(indent=2), encoding="utf-8")
 
     run_log.event("validation_report", stage=4, verdict=report.verdict, issue_count=len(report.issues))

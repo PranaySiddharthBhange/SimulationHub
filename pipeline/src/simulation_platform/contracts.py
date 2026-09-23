@@ -43,6 +43,16 @@ class TableRole(Record):
     reason: str
 
 
+class MergeClarification(Record):
+    """A material Merge decision presented to the Clarify stage."""
+
+    id: str
+    question: str
+    reasoning: str
+    suggested_value: str = ""
+    options: list[str] = Field(default_factory=list)
+
+
 class Understanding(Record):
     title: str
     # The principal handoff: purpose, system boundary, resolved configuration,
@@ -53,6 +63,7 @@ class Understanding(Record):
     tables: list[TableRole] = Field(default_factory=list)
     assumptions: list[str] = Field(default_factory=list)
     questions: list[str] = Field(default_factory=list)
+    clarifications: list[MergeClarification] = Field(default_factory=list)
     # Which general engineering domain(s) this system belongs to (from
     # `skills.domains.DOMAIN_SKILLS`'s keys), so Stage 2/3 can be handed the
     # relevant domain's standard equations/conventions -- see
@@ -77,6 +88,13 @@ class Clarification(Record):
     reasoning: str
     suggested_value: str
     options: list[str] = Field(default_factory=list)
+
+
+class MermaidDraft(Record):
+    """A validated handoff for the human-readable system flow diagram."""
+
+    code: str = Field(min_length=1)
+    corrections: list[str] = Field(default_factory=list)
 
 
 class SysMLDraft(Record):

@@ -5,6 +5,7 @@ import {
   Copy,
   FileCode2,
   FileText,
+  GitBranch,
   Loader2,
   Maximize2,
   RotateCcw,
@@ -12,11 +13,13 @@ import {
   ZoomIn,
   ZoomOut,
 } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
+import mermaid from 'mermaid'
 import { getArtifact } from '../api'
 
 const TABS = [
   { key: 'understanding', label: 'Understanding', icon: FileText, kind: 'prose' },
+  { key: 'diagram', label: 'Flow diagram', icon: GitBranch, kind: 'diagram' },
   { key: 'sysml', label: 'SysML v2', icon: FileCode2, kind: 'code' },
   { key: 'modelica', label: 'Modelica', icon: FileCode2, kind: 'code' },
   { key: 'validation', label: 'Validation', icon: ClipboardCheck, kind: 'validation' },
@@ -182,7 +185,7 @@ function PlotModal({ projectId, plot, onClose }) {
           </div>
         </div>
         <div className="shrink-0 border-t border-[var(--border)] bg-white px-4 py-2 text-center text-[11px] text-[var(--text-dim)]">
-          Mouse wheel or +/− to zoom · drag to pan · double-click to toggle 200% · Esc to close
+          Mouse wheel or +/ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ to zoom ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· drag to pan ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· double-click to toggle 200% ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· Esc to close
         </div>
       </div>
     </div>
@@ -268,6 +271,61 @@ function CopyButton({ text }) {
   )
 }
 
+function MermaidView({ code }) {
+  const containerRef = useRef(null)
+  const reactId = useId()
+  const renderIdRef = useRef(`system-flow-${reactId.replace(/:/g, "")}`)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    setError(null)
+    if (containerRef.current) containerRef.current.innerHTML = ''
+
+    const render = async () => {
+      try {
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'default' })
+        await mermaid.parse(code)
+        const result = await mermaid.render(renderIdRef.current, code)
+        if (!cancelled && containerRef.current) {
+          containerRef.current.innerHTML = result.svg
+          const svg = containerRef.current.querySelector('svg')
+          if (svg) {
+            svg.removeAttribute('width')
+            svg.style.maxWidth = 'none'
+            svg.style.height = 'auto'
+          }
+        }
+      } catch (renderError) {
+        if (!cancelled) setError(renderError?.message || String(renderError))
+      }
+    }
+    render()
+    return () => {
+      cancelled = true
+      if (containerRef.current) containerRef.current.innerHTML = ''
+    }
+  }, [code])
+
+  if (error) {
+    return (
+      <div className="fade-up space-y-3 px-5 py-4">
+        <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[12px] text-red-700">
+          Mermaid could not render this diagram. The generated source is shown below so it can be corrected safely.
+        </div>
+        <pre className="overflow-auto rounded-lg bg-[var(--bg-soft)] p-4 font-mono text-[12px] leading-relaxed text-[var(--text)]">
+          <code>{code}</code>
+        </pre>
+      </div>
+    )
+  }
+
+  return (
+    <div className="fade-up h-full overflow-auto bg-white px-5 py-6">
+      <div ref={containerRef} className="min-w-max [&_svg]:mx-auto" aria-label="System flow diagram" />
+    </div>
+  )
+}
 export default function ArtifactViewer({ projectId, available, refreshToken }) {
   const [tab, setTab] = useState('understanding')
   const [cache, setCache] = useState({})
@@ -344,7 +402,7 @@ export default function ArtifactViewer({ projectId, available, refreshToken }) {
       <div className="flex-1 overflow-auto">
         {loading && (
           <div className="flex h-full items-center justify-center gap-2 text-sm text-[var(--text-dim)]">
-            <Loader2 className="h-4 w-4 animate-spin" /> loading…
+            <Loader2 className="h-4 w-4 animate-spin" /> loadingÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦
           </div>
         )}
         {!loading && !available[tab] && (
@@ -358,6 +416,7 @@ export default function ArtifactViewer({ projectId, available, refreshToken }) {
             {content}
           </div>
         )}
+        {!loading && available[tab] && content && active.kind === 'diagram' && <MermaidView code={content} />}
         {!loading && available[tab] && content && active.kind === 'code' && (
           <div className="fade-up">
             {tab === 'modelica' && data?.files?.length > 1 && (

@@ -45,16 +45,31 @@ from pathlib import Path
 
 from simulation_platform.schemas import CompileError, CompileResult, CompileStatus, ErrorCategory
 
-_ERROR_LINE = re.compile(r"\[(?P<file>[^\[\]]*\.mo):(?P<line>\d+):\d+-\d+:\d+:\w+\]\s*Error:\s*(?P<message>.*)")
-# A structural error with no single source location (e.g. "Too few
-# equations, under-determined system...") has no `[<file>:<line>...]`
-# prefix at all -- found live (see DECISIONS.md D54) alongside every
-# bracketed one, printed as a bare `Error: <message>` line. `.search()`,
-# not an anchored `.match()` -- omc's own value-echoing wraps the whole
-# `getErrorString()` return in a quoted string literal, so the actual
+# One diagnostic starts here. The optional `[<file>:<line>:<col>-...]` prefix is
+# present only for errors omc can pin to a source location; a structural error
+# (e.g. "Too few equations, under-determined system...") prints as a bare
+# `Error: <message>` with no prefix at all (found live, DECISIONS.md D54).
+# `.search()`, not an anchored `.match()` -- omc's own value-echoing wraps the
+# whole `getErrorString()` return in a quoted string literal, so the actual
 # first character on the line is a literal `"`, not `E`.
-_BARE_ERROR_LINE = re.compile(r"Error:\s*(?P<message>.*)")
+_MESSAGE_START = re.compile(
+    r"(?:\[(?P<file>[^\[\]]*\.mo):(?P<line>\d+):\d+-\d+:\d+:\w+\]\s*)?"
+    r"(?P<kind>Error|Warning|Notification):\s*(?P<message>.*)"
+)
 _VERSION_LINE = re.compile(r"v?([\d.]+)")
+
+# A diagnostic's message can span many real lines -- found live: omc reports a
+# failed C build as `Error building simulator. Build log: mingw32-make: Entering
+# directory '...'` and then prints the ENTIRE build log underneath it. Matching
+# line-by-line kept only that first line, so the repair loop was handed a
+# message containing literally no information about what failed (three of ten
+# consecutive Stage 3 attempts on the tank dataset burned this way). Blocks are
+# capped so a 2000-line build log can't flood the repair prompt either.
+_MAX_MESSAGE_LINES = 40
+_MAX_MESSAGE_CHARS = 4000
+# Real C-toolchain diagnostics inside a build log, which is the part of it that
+# actually says what went wrong.
+_BUILD_LOG_DETAIL = re.compile(r"(?:\berror\b|\bundefined reference\b|\bfatal\b)", re.IGNORECASE)
 
 _CATEGORY_KEYWORDS: list[tuple[str, ErrorCategory]] = [
     ("mismatched input", ErrorCategory.SYNTAX_ERROR),
@@ -118,37 +133,90 @@ def _classify(message: str) -> ErrorCategory:
     return ErrorCategory.UNKNOWN
 
 
-def _parse_errors_into(output: str, errors: list[CompileError]) -> None:
-    for line in output.splitlines():
-        bracketed = _ERROR_LINE.search(line)
-        if bracketed is not None:
-            message = bracketed.group("message").strip()
-            errors.append(
-                CompileError(
-                    error_id=f"ERR-{len(errors) + 1:03d}",
-                    severity="ERROR",
-                    category=_classify(message),
-                    file=Path(bracketed.group("file")).name,
-                    line=int(bracketed.group("line")),
-                    message=message,
-                    raw=line.strip(),
-                )
-            )
+def _condense_build_log(block_lines: list[str]) -> str:
+    """Keep the part of an `Error building simulator` block that says why.
+
+    omc prints the whole mingw/gcc build log under that one message. The
+    compiler's own diagnostics are a handful of lines buried in hundreds of
+    `mingw32-make: Entering directory ...` / command-echo lines, so keep the
+    real diagnostics and drop the rest.
+    """
+
+    detail = [line.strip() for line in block_lines if _BUILD_LOG_DETAIL.search(line)]
+    # Drop the `Error building simulator...` header itself; it is already the
+    # first sentence of the message this detail gets appended to.
+    detail = [line for line in detail if "Error building simulator" not in line]
+    if not detail:
+        return ""
+    seen: set[str] = set()
+    unique = [line for line in detail if not (line in seen or seen.add(line))]
+    return "\n".join(unique[:_MAX_MESSAGE_LINES])
+
+
+def _parse_errors_into(output: str, errors: list[CompileError], known_files: set[str] | None = None) -> None:
+    """Collect omc's diagnostics as whole multi-line blocks, not single lines.
+
+    `known_files` is the bundle's own filenames. Any other `.mo` path in a
+    location prefix belongs to OpenModelica's OWN sources (`BackendDAETransform.mo`,
+    `BackendDAEUtil.mo`, ...) -- found live: a discrete algebraic loop reported
+    six "errors" whose file/line all pointed into the compiler's internals, which
+    the repair loop then read as line numbers in the model it had just written.
+    Those locations are dropped so only the real message survives.
+    """
+
+    lines = output.splitlines()
+    starts = [i for i, line in enumerate(lines) if _MESSAGE_START.search(line)]
+    for position, index in enumerate(starts):
+        match = _MESSAGE_START.search(lines[index])
+        if match is None or match.group("kind") != "Error":
             continue
-        bare = _BARE_ERROR_LINE.search(line)
-        if bare is not None:
-            message = bare.group("message").strip()
-            errors.append(
-                CompileError(
-                    error_id=f"ERR-{len(errors) + 1:03d}",
-                    severity="ERROR",
-                    category=_classify(message),
-                    file="",
-                    line=None,
-                    message=message,
-                    raw=line.strip(),
-                )
+        stop = starts[position + 1] if position + 1 < len(starts) else len(lines)
+        block = lines[index:stop]
+        message = match.group("message").strip()
+
+        if message.startswith("Error building simulator"):
+            detail = _condense_build_log(block)
+            message = (
+                f"{message.split('Build log:')[0].strip()} The C build failed. Real toolchain output:\n{detail}"
+                if detail else
+                f"{message} (the build log contained no compiler diagnostic -- the generated C itself "
+                "could not be built; look for an identifier or class that omc accepted but cannot codegen)"
             )
+        else:
+            continuation = [line.rstrip() for line in block[1:] if line.strip() and line.strip() != '"']
+            if continuation:
+                message = "\n".join([message, *continuation[:_MAX_MESSAGE_LINES]])
+        message = message[:_MAX_MESSAGE_CHARS].strip()
+        if not message:
+            continue
+
+        file_name = Path(match.group("file")).name if match.group("file") else ""
+        line_number = int(match.group("line")) if match.group("line") else None
+        # A location inside OpenModelica's own sources is not a location in the
+        # generated model -- reporting it as one actively misleads the repair loop.
+        if file_name and known_files is not None and file_name not in known_files:
+            file_name, line_number = "", None
+
+        if any(existing.message == message for existing in errors):
+            continue
+        errors.append(
+            CompileError(
+                error_id=f"ERR-{len(errors) + 1:03d}",
+                severity="ERROR",
+                category=_classify(message),
+                file=file_name,
+                line=line_number,
+                message=message,
+                raw=lines[index].strip(),
+            )
+        )
+
+    # A failed backend transformation prints one informative message plus several
+    # bare "Internal error function X failed" follow-ups that add nothing. Keep
+    # the informative ones once anything else is present.
+    informative = [e for e in errors if not (e.message.startswith("Internal error") and "(" not in e.message)]
+    if informative and len(informative) < len(errors):
+        errors[:] = informative
 
 
 def _run_omc_script(omc_path: Path, script_name: str, workdir: Path, timeout: float) -> tuple[str, bool]:
@@ -293,6 +361,7 @@ def compile_files(
         # alphabetically breaks valid multi-file bundles when a system file is
         # loaded before the component classes it instantiates.
         mo_filenames = [name for name in files if name.endswith(".mo") and name != "package.mo"]
+        known_files = set(mo_filenames)
         for filename in mo_filenames:
             (workdir / filename).write_text(files[filename], encoding="utf-8")
 
@@ -319,7 +388,7 @@ def compile_files(
                 error_id="ERR-002", severity="ERROR", category=ErrorCategory.UNKNOWN, file="",
                 message=f"load step did not finish within {timeout:.0f}s (timed out)", raw=output,
             ))
-        _parse_errors_into(output, errors)
+        _parse_errors_into(output, errors, known_files)
 
         result_summary: dict[str, dict[str, float]] = {}
         if not errors:
@@ -348,7 +417,7 @@ def compile_files(
                     error_id="ERR-002", severity="ERROR", category=ErrorCategory.UNKNOWN, file="",
                     message=f"simulate() did not finish within {timeout:.0f}s (timed out)", raw=output,
                 ))
-            _parse_errors_into(output, errors)
+            _parse_errors_into(output, errors, known_files)
 
             # Real Result Validation (`new direction.txt` §22) needs the
             # actual simulated trajectory, not just a pass/fail string --

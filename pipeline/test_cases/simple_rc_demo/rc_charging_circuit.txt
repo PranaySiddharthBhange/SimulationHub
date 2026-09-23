@@ -1,0 +1,2 @@
+A 10 V DC source charges an initially uncharged 100 microfarad capacitor through a 1 kilohm resistor in a single series loop.
+Simulate for 1 second and report the capacitor voltage and the loop current.

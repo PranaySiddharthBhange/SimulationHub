@@ -1,12 +1,19 @@
 import { UserRoundCog } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-export default function ClarificationCard({ clarifications, onSubmit, onUseDefaults, busy }) {
+export default function ClarificationCard({ clarifications, stage, onSubmit, onUseDefaults, busy }) {
   const [answers, setAnswers] = useState({})
+  const hasDefaults = clarifications.length > 0 && clarifications.every((c) => c.suggested_value?.trim())
+  const clarificationSignature = clarifications
+    .map((c) => `${c.id}|${c.question}|${c.suggested_value}|${(c.options || []).join('\u001f')}`)
+    .join('\u001e')
+  const previousSignature = useRef(null)
 
   useEffect(() => {
+    if (previousSignature.current === clarificationSignature) return
+    previousSignature.current = clarificationSignature
     setAnswers(Object.fromEntries(clarifications.map((c) => [c.id, c.suggested_value])))
-  }, [clarifications])
+  }, [clarificationSignature, clarifications])
 
   const setAnswer = (id, value) => setAnswers((a) => ({ ...a, [id]: value }))
 
@@ -20,11 +27,13 @@ export default function ClarificationCard({ clarifications, onSubmit, onUseDefau
           <UserRoundCog className="h-4.5 w-4.5" />
         </div>
         <div>
-          <div className="text-sm font-semibold text-[var(--text)]">Stage 2 needs a decision</div>
+          <div className="text-sm font-semibold text-[var(--text)]">
+            {stage === 'clarify' ? 'Merge needs a decision' : 'SysML generation needs a decision'}
+          </div>
           <div className="text-[12px] text-[var(--text-muted)]">
-            The model paused on {clarifications.length} genuinely open question
-            {clarifications.length > 1 ? 's' : ''} before writing the SysML model. Pick an answer, or accept its
-            suggestion.
+            The pipeline paused on {clarifications.length} genuinely open question
+            {clarifications.length > 1 ? 's' : ''} before writing the SysML model.{' '}
+            {hasDefaults ? 'Pick an answer, or accept the suggested value.' : 'Provide an answer for each question to continue.'}
           </div>
         </div>
       </div>
@@ -69,7 +78,7 @@ export default function ClarificationCard({ clarifications, onSubmit, onUseDefau
                 placeholder={c.suggested_value}
                 className="font-mono w-full max-w-md rounded-lg border border-[var(--border-strong)] bg-white px-3 py-1.5 text-[12.5px] text-[var(--text)] outline-none focus:border-[var(--amber)]"
               />
-              {!c.options?.length && (
+              {!c.options?.length && c.suggested_value?.trim() && (
                 <span className="shrink-0 text-[11px] text-[var(--text-dim)]">
                   suggested: <span className="text-[var(--amber)]">{c.suggested_value}</span>
                 </span>
@@ -80,14 +89,16 @@ export default function ClarificationCard({ clarifications, onSubmit, onUseDefau
       </div>
 
       <div className="flex items-center justify-end gap-2 border-t border-[var(--border)] px-5 py-3.5">
-        <button
-          type="button"
-          disabled={busy}
-          onClick={onUseDefaults}
-          className="rounded-lg border border-[var(--border-strong)] px-3.5 py-2 text-[12.5px] font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--text)] disabled:opacity-50"
-        >
-          Accept all suggested defaults
-        </button>
+        {hasDefaults && (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={onUseDefaults}
+            className="rounded-lg border border-[var(--border-strong)] px-3.5 py-2 text-[12.5px] font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--text)] disabled:opacity-50"
+          >
+            Accept all suggested defaults
+          </button>
+        )}
         <button
           type="button"
           disabled={busy}

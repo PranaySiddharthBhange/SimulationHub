@@ -235,3 +235,27 @@
 - **Behavior included:** Dynamic service ports and reliable Ctrl+C cleanup, per-stage reruns, shared local/cloud extraction, accurate extraction of required durations and outputs, cloud cost records, five total generation attempts, connector preflight, individual simulation result graphs, and preserved human clarification flow.
 - **Review artifacts:** The generated tank project folder remains available for inspection together with its source copy, run log, extracted understanding, SysML, Modelica bundle, compiler output, and result graphs.
 - **Owner:** Pranay Bhange.
+
+### A35 Modelica prompt and catalog verification
+
+- **Review:** The Modelica prompt was audited against the implementation and Modelica language semantics.
+- **Correction:** Removed the unsupported universal StopTime-margin rule and softened one-writer, `noEvent`, timer, and event-layout rules into conservative generated-controller guidance.
+- **Catalog:** Added concrete tank and magnetic usage patterns showing connector directions, integrator/flow wiring, MMF source wiring, reluctance ports, branching, and grounding.
+- **Repair policy:** The verified catalog is the initial baseline. A compiler-supported repair may use an installed alternative when the baseline class or usage is incompatible, while preserving behavior and recording the correction.
+
+### A36 Modelica attempt preservation
+
+- **Change:** Every Stage 3 draft is archived under `modelica/generated/attempts/attempt_NNN/` with its files and attempt manifest before preflight or OpenModelica validation.
+- **Active output:** The latest bundle continues to populate the active generated directory and manifest used by Stage 4.
+- **Reruns:** Stage reruns clear only active Modelica files/results; archived failed and superseded attempts remain available for review.
+- **Verification:** Python compilation, prompt import, catalog construction, and diff checks pass.
+
+### A37 Sampled controller scan, and the latency it costs
+
+- **Change:** A discrete sequence controller is now modelled as the sampled device it physically is. The operator commands and measurements are latched on a scan period and one-shot edges are derived from the latched values (`startSample = sample(0, scanPeriod) and startButton; startPulse = edge(startSample);`). Added to the `batch_sequential_process` domain skill as general knowledge and to the Stage 3 prompt as the concrete form.
+- **Reason:** This is the structural remedy for the recurring OpenModelica failure `Purely discrete algebraic loops cannot be solved by iterative processes`. Within one scan every discrete value is computed from the previous scan's latched values, so the discrete equations are well-ordered by construction instead of depending on one another in the same instant. It removes that failure class at its root rather than detecting it afterwards.
+- **Trade-off — latency:** Sampling costs response time. With a 0.1 s scan, a STOP command arriving at 220.0 s takes effect at 220.1 s. Stage 4 flagged this against the brief's "exact event times" requirement. That is a genuine physical consequence of modelling a scanned controller, not a defect, but it is a real trade-off against the loop-elimination benefit.
+- **Guidance added:** Size the scan period against the timing tolerance the acceptance checks demand, not merely against the stated durations — a check requiring an action at an exact instant is failed by a scan that responds one period later. Where the brief demands exact event instants, capture the operator command edges as real events and clock only the internal sequencing, or make the period small enough that the latency falls inside the stated tolerance.
+- **Related changes in the same port:** `reinit` is permitted again in one specific shape (its own `when` in an equation section containing nothing but the `reinit`, with the mode dispatcher kept in a separate `algorithm` section, paired with a conditional-rate timer); an earlier blanket ban on it was too broad. `Modelica.Blocks.Sources.RadioButtonSource` is recorded as the component for momentary operator commands, including that `reset` takes a Boolean array and so must list each other button's `.on` output rather than the component instances. Library typed quantities (`Modelica.Units.SI.*`) are preferred over `Real x(unit="m")`.
+- **Provenance and generalization:** The technique was taken from the predecessor `local-simulation-agent` tank controller. Only the technique was carried over, stated as general controller knowledge; the predecessor's benchmark-specific prompt rules (a domain-keyed "hard tank controller rule", a quoted tank failure history, and a final overriding tank rule) were deliberately not carried over, consistent with A3. Inspection of that predecessor's own result CSV shows its tank model ignores the STOP at 220 s and never resumes at 280 s, so its reliability came from prompt-level memorization rather than a more correct model.
+- **Verification:** Live Stage 3 run passed the real compiler on the second attempt; the generated controller adopted the sampled scan and the SI quantities. All eight TP17 acceptance criteria were checked directly against the result CSV rather than from the Stage 4 narrative, and the state trace follows the specified sequence including the pause at 220 s, the resume at 280 s, and the 8 s inter-cycle restart.

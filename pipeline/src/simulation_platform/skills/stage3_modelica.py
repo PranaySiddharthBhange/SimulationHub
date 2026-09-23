@@ -1,8 +1,7 @@
 """Stage 3: Modelica generation. Extends `prompts.common.COMMON` with the
-Modelica-specific authoring order and an event-semantics checklist -- every
-rule below fixes a real, confirmed failure against the actual `omc` compiler
-(some are compile errors; some are silent behavioral bugs the compiler does
-NOT catch, only the actual simulated trajectory reveals them).
+Modelica-specific authoring order and a conservative event-semantics checklist.
+Some rules address compiler failures; others address behavioral risks that only
+trajectory inspection can reveal.
 """
 
 from simulation_platform.prompts.common import COMMON
@@ -15,31 +14,27 @@ diagram as well as executable by OpenModelica.
 
 Return an `entry_class` and an ordered `files` list. Put one meaningful physical or
 control unit in each component file and the connected experiment in exactly one
-`role="system"` file, last in load order. Use at least two files; for the two-tank
-case, Tank 1 and Tank 2 must be separate files. Do not hide every helper as a nested
-class in one giant file. Every file must contain one complete top-level Modelica
-class whose name matches its filename. Do not generate `package.mo`.
+`role="system"` file, last in load order. Use at least two files, and keep distinct physical or control units in separately inspectable files when the brief identifies them. Do not hide every helper as a nested class in one giant file. Every file must contain one complete top-level Modelica class whose name matches its filename. Do not generate `package.mo` because this pipeline loads a flat bundle.
 
-Instantiate real, fully-qualified Modelica Standard Library components from the
-provided catalog wherever their semantics match the brief, and list every class
-actually used in `library_components`. Add `annotation(Icon(...))` to reusable
-components and explicit `annotation(Placement(...))` plus connection-line annotations
-in the system diagram so opening the system in OMEdit shows a useful GUI. The system
-file must also include the experiment annotation. Custom equations and a custom
-controller are allowed where no library component faithfully expresses the specified
-physics or pause/resume semantics; give those classes clear icons too.
+Instantiate real, fully-qualified Modelica Standard Library components from the provided catalog when their semantics match the brief, and list every class actually used in `library_components`. Add icon and placement/connection annotations for reusable components and the system diagram when they improve OMEdit inspection; annotations must never replace real equations or connections. The system file must include an experiment annotation matching the confirmed simulation settings. Custom equations and a custom controller are allowed where no catalog component faithfully expresses the specified physics or pause/resume semantics.
 
-Choose the simplest fidelity that solves the specified experiment. Never force a
-pressure-driven fluid network onto a fixed-flow brief lacking pressure/Cv/pipe data,
-and never replace a requested physical library network with unconnected decorative
-icons.
+Build from real Standard Library components wherever the library provides the
+element the brief names, and write a custom class only for behaviour it does
+not -- usually just the sequence controller. A library component arrives with
+its icon, connectors and diagram graphics already defined, so the diagram is
+readable in OMEdit with no drawing work, and an acausal physical network solves
+its own flows instead of relying on a hand-built signal chain that can close
+into an algebraic loop. Hand-rolled replacements for classes the library
+already has are the main reason a generated diagram comes out as blank boxes.
 
-You get up to several attempts against a REAL compiler that actually runs the full
-scenario, but treat every attempt as if it were your only one -- write it to compile
-AND behave correctly the first time, don't rely on the repair loop to find your
-mistakes for you. You are fully capable of getting this right in one pass: apply
-real Modelica semantics rigorously, not a rough approximation of them, and actually
-verify your own equations against the two checklists below before returning them.
+When a library class needs a parameter the brief does not state (a medium, a
+nominal pressure drop, a port height), choose it so the component reproduces
+the behaviour the brief DOES state, and record that in `corrections` as an
+explicit assumption. The brief's own rates, levels, thresholds and timings
+still govern and must be reproduced. Never replace a physical network with
+unconnected decorative icons.
+
+The pipeline may make repair attempts against a REAL compiler and full scenario, but return the best complete bundle on every attempt. Apply Modelica semantics rigorously and check the equations and event behavior before returning; do not rely on a later repair attempt to discover an avoidable mistake.
 
 CONNECTOR DISCIPLINE -- check this before returning any bundle:
 - Every operand passed to `connect(a, b)` must be a real connector declared with
@@ -54,372 +49,345 @@ CONNECTOR DISCIPLINE -- check this before returning any bundle:
   applies to command pulses, sensor values, schedules, and physical quantities;
   graphical annotations do not turn an ordinary scalar into a connector.
 
-AUTHORING ORDER -- cover these five things, matching the ACTUAL system in the brief,
-not a generic template:
-1. STATE VARIABLES -- one continuous Real state per accumulating physical quantity
-   (e.g. a level, a stored mass, a temperature), each with an explicit lumped
-   balance ODE (der(x) = (in - out) / capacity-style relation), not a vague "real
-   equations" placeholder. Explicit start value and fixed=true/false per the brief's
-   stated initial condition.
-2. DISCRETE CONTROL -- named discrete states/transitions as an explicit mode
-   variable (Integer or enumeration) driven by `when` clauses on the actual stated
-   guard conditions: continuous threshold events for level/measurement-based
-   guards, explicit timer state variables (not floating-point event-time equality
-   tests) for delay-based transitions, obeying any stated pause/resume/freeze
-   policy. See the EVENT-SEMANTICS CHECKLIST below -- it is part of this step, not
-   optional extra credit.
-3. INTERLOCKS -- every stated mutual-exclusion/inhibit rule as an explicit boolean
-   guard directly gating the relevant command, not a comment -- a real condition the
-   checks can catch if it's ever wrong.
-4. PARAMETERS -- one `parameter` per resolved numeric value, with its real unit. If
-   the brief shows a value that had multiple historical values and states which is
-   authoritative, use ONLY that resolved value -- never the superseded one, never a
-   blend of both.
-5. SCHEDULE AND OUTPUTS -- put the actual stated command schedule in the controller
-   or top-level system model so the complete ordered bundle runs standalone; expose
-   the exact output variable names the frozen acceptance checks reference.
+COMPONENT DIAGRAM -- the bundle is opened and read in OMEdit, so the system
+file's diagram layer must show the real plant, not a block box. Judge your own
+output by this: someone who knows the process should recognise it from the
+diagram alone, and be able to trace the material path and every control signal.
 
-Acceptance thresholds are authoritative. Do not add epsilon margins to a level,
-temperature, time, or other transition threshold unless the brief explicitly gives
-that tolerance. A numerically convenient margin changes the physical requirement
-and can make a final acceptance expression false even when the sequence completes.
+- USE THE LIBRARY COMPONENT WHEREVER ONE EXISTS. A Standard Library class
+  arrives with its icon, its connectors and its graphics already defined, so
+  instantiating it is what makes the diagram look like the real plant with no
+  drawing work at all. Reach for a custom class only for behaviour the library
+  genuinely does not provide -- typically just the sequence controller.
+- ONE INSTANCE PER NAMED PHYSICAL UNIT. If the brief names several vessels,
+  valves, sources or sinks, each one is its own component INSTANCE in the
+  system diagram. Never aggregate them into a single combined plant/process
+  class -- a class holding every vessel and every valve at once collapses the
+  whole diagram to one featureless rectangle and is a failed deliverable even
+  when it simulates perfectly.
+- WHERE A CUSTOM CLASS IS UNAVOIDABLE, make it reusable: write ONE class and
+  instantiate it once per unit with that unit's own parameters, rather than a
+  near-duplicate class per instance.
+- INCLUDE THE BOUNDARIES. A supply source or receiving drain/sink the brief
+  names is a real component in the diagram, not an implicit constant.
+- CONNECT THE MATERIAL PATH IN ONE DIRECTION. The components must be wired in
+  the same sequence the brief's topology states, so the diagram reproduces the
+  process flow end to end. In a signal-flow model that chain runs one way:
+  each element passes its flow DOWNSTREAM only. Never also wire the downstream
+  unit's value back into the element that feeds it -- two components connected
+  both ways with nothing in between form an algebraic loop, and the solver is
+  free to satisfy it with every signal stuck at zero, which compiles, simulates
+  and reports success while the process does nothing at all. A unit that must
+  limit an incoming or outgoing flow to its own available inventory does that
+  INSIDE its own equations, from its own state; it does not send a correction
+  back upstream. The only long loop is the control loop, and that one runs
+  through the controller. Lay them out left-to-right (or top-to-bottom) along that
+  path, with the controller set apart and its signal lines running to the
+  actuators it commands and back from the measurements it reads.
+- EVERY `connect(...)` IN THE SYSTEM FILE CARRIES A LINE ANNOTATION:
+  `connect(a.y, b.u) annotation(Line(points={{x1,y1},{x2,y2}}, color={0,0,127}));`
+  Route the points around components rather than through them. Use the standard
+  signal colours: Real {0,0,127}, Boolean {255,0,255}, Integer {255,127,0}, and
+  a physical/material path {0,127,255}. Without these, the tool has nothing to
+  draw and the diagram degenerates into overlapping straight lines.
+- EVERY CONNECTOR ON EVERY PLACED COMPONENT IS DRIVEN OR CONSUMED. An
+  unconnected Modelica input silently defaults to ZERO -- the model still
+  compiles, still simulates, still reports success, and the signal path it
+  belongs to simply carries nothing for the whole run. Declare only the ports
+  you actually wire, and wire every port you declare. Before returning, walk
+  each component's connectors and confirm each one appears in a `connect(...)`
+  or is given a value by an equation in the system model.
 
-EVENT-SEMANTICS CHECKLIST -- every rule below fixes a real, confirmed failure (some
-are compile errors; some are silent behavioral bugs the compiler does NOT catch --
-only the actual simulated trajectory reveals them). Check your draft against every
-line before returning it:
-- Initial value of a discrete mode variable: set it EXACTLY ONE way -- either
-  `fixed=true` on the declaration, or an `algorithm ... when initial() then mode :=
-  ...; end when;` assignment (with `start=...` as a solver hint only, no
-  `fixed=true`). Both together = a redundant initial equation = opaque
-  "solveEquation failed" error.
-- One discrete mode variable, ONE assigning construct: a single combined
-  `when {...} then <if/elseif chain> end when;`, never multiple independent
-  `when`/`elsewhen` blocks each assigning it (the solver can't order independent
-  writers to the same variable -- "purely discrete algebraic loop" /
-  "BackendDAECreate.lowerWhenEqn"). Every branch of that one if/elseif must assign
-  the same set of variables (Modelica's own rule). This applies just as much when
-  TWO parallel discrete variables (e.g. two branches of a split) share one `when`
-  block -- confirmed live: writing two SEPARATE `if/elseif ... end if;` statements
-  back to back inside that one `when` (one assigning branchA, a second assigning
-  branchB) reproduces the exact same "purely discrete algebraic loop" failure as
-  two separate `when` blocks would, because it's still two independent assigning
-  constructs, just textually adjacent instead of in separate `when`s. Merge them
-  into ONE if/elseif chain whose every branch assigns BOTH variables together
-  (`branchA := ...; branchB := ...;` in every arm, including the final `else`),
-  the same shape as the worked example below, extended to however many parallel
-  variables that one `when` actually needs to drive.
-- The same one-writer rule applies across DIFFERENT kinds of `when` constructs.
-  Never assign an event flag in both `when sample(...)` and the controller's
-  transition `when` block. Sampled input latches belong only to the sample block;
-  transition outputs belong only to the transition block. Assigning a default
-  value to the transition output from the sample block adds a second equation and
-  makes an otherwise valid component over-determined.
-- Still getting "purely discrete algebraic loop" / "analyseStrongComponentBlock
-  failed"? A very common, systematic root cause: a command Boolean defined
-  ALGEBRAICALLY from a mode/branch variable (`V15_cmd = branchB ==
-  BranchBMode.X;`, in the `equation` section) is then ALSO read inside a `when`
-  trigger vector or an if/elseif guard that assigns THAT SAME mode/branch
-  variable (directly, or transitively through another discrete variable it
-  feeds). That closes a real dependency cycle: the command depends on the mode,
-  and the mode's own transition depends on the command. Confirmed live: fixing
-  ONE such occurrence (e.g. wrapping just that one reference in `pre()`) did NOT
-  clear the error, because the SAME structural pattern was still present at
-  other command/guard pairs elsewhere in the file -- this is a class of mistake
-  to hunt down exhaustively, not a single line to patch. For EVERY
-  algebraically-derived command/flag Boolean in the file, check every place it
-  (or anything built from it) is read inside a `when` trigger or an if/elseif
-  guard that writes to the mode/branch variable it was derived from, and fix
-  every one you find, not just the first. The most robust fix is usually to
-  stop routing mode-transition guards through the intermediate command Boolean
-  at all -- write the guard directly against the real sensor/level/state
-  condition the command itself was derived from (e.g. use the branch-mode
-  comparison directly in the guard, not the derived `_cmd` variable), so the
-  guard and the command are two independent consumers of the same discrete
-  state instead of one depending on the other. Only reach for wrapping an
-  intermediate Boolean in `delay(...)` (the real compiler's own suggested
-  workaround) if a genuine cycle remains after removing every such indirection.
-- Two SEPARATE `when` blocks driving two DIFFERENT discrete variables (e.g. a main
-  step sequencer `mode` and a downstream parallel-branch dispatcher `branchA`/
-  `branchB`) are fine on their own, but each one's trigger-condition vector and
-  every plain (non-`when`) equation that feeds into it must reference the OTHER
-  block's discrete variable only through `pre(...)`, never live -- confirmed live:
-  one `when` block's trigger list included a plain Boolean (`restartReady`, itself
-  built from `joinReady = branchA == BranchAMode.Done and branchB ==
-  BranchBMode.Done`) that read `branchA`/`branchB` LIVE, while the OTHER `when`
-  block (the one that actually assigns `branchA`/`branchB`) had a trigger element
-  reading `mode` LIVE (`mode == MainMode.Step7... and pre(mode) <>
-  MainMode.Step7...`) -- `mode` being what the FIRST block assigns. That is a
-  genuine two-way simultaneity between the two blocks, and produced the exact same
-  "purely discrete algebraic loop" / `analyseStrongComponentBlock failed` error as
-  every other variant of this failure class. Fix every such cross-reference to use
-  `pre()` (e.g. `joinReady = pre(branchA) == BranchAMode.Done and pre(branchB) ==
-  BranchBMode.Done;`). Separately: if a downstream state machine's very FIRST
-  transition is really the same logical instant as an upstream transition (e.g.
-  "entering Step7 immediately dispatches both branches"), don't model that as the
-  downstream block reacting to an edge of the upstream variable at all -- fold that
-  specific initialization directly into the SAME if/elseif arm of the UPSTREAM
-  `when` block that makes the transition (`mode := Step7; branchA := Cool_B6;
-  branchB := Transfer_B5_to_B7;`, all three assignments together in that one arm),
-  and let the downstream block's own `when` handle only ITS OWN later-internal
-  progression (Cool_B6 -> Return_B6_to_B1 -> Done, etc.), which never needs to read
-  `mode` at all.
-- If a mode's OWN exit condition can already be satisfied at the very instant
-  that mode is entered (a state that's really a pass-through/no-op check, e.g.
-  "verify X is already idle before proceeding" where X can easily already be
-  idle), do not rely on the `when` block's own event to catch that case -- it
-  will silently stall until some UNRELATED later event in the model happens to
-  force a re-evaluation, however long that takes. Confirmed live (traced via the
-  real simulated trajectory, invisible in the compiler PASSED result): a mode
-  entered a "verify B5 idle" state at t=1153.7s with B5's level already below
-  the idle threshold (true from t=0, no future crossing ever coming, since
-  nothing fills B5 in that state) -- the exit condition was therefore already
-  true the instant the state was entered, yet the mode did not advance until
-  t=2500.0s, when an unrelated restart-timer event elsewhere in the model
-  happened to force the next event iteration and only then picked up the
-  already-true condition (same root cause as the `noEvent`-shared-threshold
-  case above: a `when` vector element that's already true when it starts being
-  evaluated, with no future zero-crossing of its own, never gets its own event
-  to fire on). Fix: don't let entry and this kind of immediately-checkable exit
-  live in two separate transitions relying on two separate events -- fold the
-  check into the SAME if/elseif arm that performs entry, so entry and an
-  immediate pass-through resolve together within the one event already firing
-  (`elseif <entry condition> then if <exit condition already true> then mode :=
-  <the state AFTER the pass-through state> else mode := <the pass-through state>
-  end if;`), rather than assigning the pass-through state unconditionally and
-  trusting a later event to immediately re-examine it.
-- A flow cutoff gated on a state's own physical limit (e.g. `q = if h > h_low then
-  qNominal else 0.0;`, to stop an outflow once its source is depleted) can hang the
-  solver forever -- NOT a compile error, a `simulate() did not finish` timeout --
-  whenever the system can physically balance exactly AT that boundary (inflow and
-  threshold-gated outflow with close but unequal rates: confirmed live, 900k+ CSV
-  rows stuck at one instant, the cutoff toggling every iteration because the state
-  genuinely wants to sit on the threshold with no clean crossing to find). Fix:
-  `q = if u and noEvent(h > h_low) then qNominal else 0.0;` -- `noEvent` evaluates
-  the condition directly each step instead of forcing exact root-finding. Reserve
-  real state events for genuine mode/phase transitions; use `noEvent` specifically
-  for a physical-limit flow cutoff where the exact instant doesn't matter.
-- Never let a `noEvent`-gated flow cutoff and a `when`-block mode-transition guard
-  test the SAME threshold value on the SAME state. Confirmed live (traced via the
-  real simulated trajectory, invisible in the compiler PASSED result): a tank level
-  `h_B3` was drained by a flow cut off via `noEvent(h_B3 > h_B3_empty)`, and the
-  mode-transition guard separately tested `h_B3 <= h_B3_empty` -- the state
-  genuinely reached that value by t=490s (confirmed from the CSV), but because the
-  flow cutoff clamps the state flat exactly AT that same boundary instead of letting
-  it cross through, the transition guard's own zero-crossing event never gets a
-  clean transversal edge to detect, and the mode stayed stuck for another ~2000s
-  until an unrelated later event (an unrelated timer crossing its own threshold)
-  incidentally forced the next event iteration and only then picked up the
-  already-true guard. Fix: give the mode-transition guard a small margin on the far
-  side of the physical cutoff so it genuinely crosses BEFORE the flow clamps (e.g.
-  flow cutoff at `noEvent(h > h_low)`, transition guard at `h <= h_low * 1.05` or
-  `h <= h_low + margin`, whichever the brief's tolerances allow) -- never reuse the
-  exact same numeric threshold for both a `noEvent` flow clamp and a real event
-  guard on the same state.
-- Before returning, for EVERY mode/phase whose EXIT condition is a continuous
-  threshold reached via a bounded rate (evaporating to a target concentration,
-  filling/draining to a target level, heating/cooling to a target temperature),
-  actually compute -- with a calculator, using the exact numeric parameter values
-  you just wrote (duty/flow rate, mass/capacity at the point that phase begins,
-  latent heat, specific heat, etc.), not a rough guess -- the time that phase
-  needs, and SUM every phase's time (not just the slowest one) against the
-  model's own declared `StopTime`. Require the summed total to be no more than
-  85% of `StopTime` -- a bare "it just barely fits" is not good enough and has
-  repeatedly, confirmably failed:
-  * First confirmed live: evaporation duty and latent heat implied ~11,400s
-    against a declared 3000s `StopTime` -- off by ~4x, the batch never left that
-    phase at all.
-  * Second confirmed live, a DIFFERENT model of the SAME case, after that first
-    bug was fixed: heating to the boiling threshold needed ~3136s against the
-    SAME declared 3000s `StopTime` -- off by only 136s (4.5%), close enough that
-    it looked deceptively fine at a glance, but the batch STILL silently never
-    finished, never restarted, never exercised its later phases, and this was
-    STILL completely invisible to the real compiler's PASSED result (which only
-    checks that the equations solve, not that the scenario actually completes).
-    A near-miss is exactly as broken as a large miss -- do not treat "close" as
-    acceptable.
-  If your computed total does not leave that 85% margin, do not just return the
-  model anyway and hope -- first re-check whether you actually resolved the
-  brief's numeric values correctly (a duty, mass basis, or capacity value may be
-  mis-transcribed, since a realistically-designed batch process's own horizon
-  should accommodate its real duty cycle); only widen `StopTime` if the brief
-  does not otherwise fix it as a required value. Show this arithmetic to
-  yourself before returning -- don't skip straight to writing the annotation.
-  If the brief ALSO states a separate minimum-wait/restart-style gate (e.g. "join
-  only after time > 2500s") that is itself close to `StopTime`, remember that
-  budget for the phases before that gate isn't limited to some small leftover
-  slice of `StopTime` -- a phase can legitimately use almost the ENTIRE window up
-  to that gate, since nothing downstream can complete earlier than the gate
-  allows anyway. Confirmed live: a model sized a vessel's capacity against only
-  the time it assumed was "left over" after the phases before it, when the
-  actual available budget (bounded by the real restart gate, not an arbitrary
-  guess) was substantially larger -- it fell short of its target by a wide
-  margin as a result, reaching only ~64% of the required value by `StopTime`.
-  Compute the REAL available budget for a rate-limited phase as everything up to
-  the later of `StopTime` or the next hard gate that blocks progress regardless,
-  not your own guess at "the remaining fraction."
-- When the brief gives RATE parameters (heater/cooler duty, flow rates) and LEVEL
-  thresholds (a charge level, an idle level) for a vessel but never states that
-  vessel's cross-sectional area/capacity, do not default the area to an arbitrary
-  round number (`1.0` is not inherently more justified than `0.1` or `10` -- it's
-  just the laziest-looking guess) -- that silently fixes the vessel's total
-  mass/volume, and an unlucky guess there can make otherwise-correct duty and
-  timing numbers mutually IMPOSSIBLE even though every individual value was
-  right. Confirmed live: a brief gave B5's heater duty (20,000 W, explicit),
-  charge level (0.18 m, explicit), evaporation target concentration (explicit),
-  and stated the acceptance-run EVIDENCE that the real logged run reaches restart
-  around 2500s and completes within the declared 3000s `StopTime` -- but never
-  gave B5's cross-sectional area. Defaulting it to 1.0 m² (a common but arbitrary
-  choice) implied a ~180 kg batch that the stated heater duty needs roughly 4
-  hours to evaporate to the target concentration -- off from the declared/
-  evidenced window by more than an order of magnitude, even though the duty,
-  level, and target numbers were all individually correct. When a vessel's area
-  is unstated, DERIVE it so the vessel's behavior across its full stated level
-  range is consistent with whatever explicit timing evidence the brief DOES give
-  (a stated acceptance-run duration, a restart time, a described sequence of
-  observed events with approximate times) -- work the arithmetic backward from
-  that evidence using the vessel's own stated rate parameters, the same way you
-  already must for the StopTime-margin check above, and report the derived value
-  and its reasoning in `corrections`. Never silently default an unstated capacity
-  parameter without checking it against the rest of the brief's own numbers.
-- A latent-heat phase-change rate (evaporation, condensation, melting) is a TWO-
-  REGIME energy balance, not one smooth formula: below the phase-change
-  temperature, ALL heater duty goes to sensible heating (`der(T) = Q/(m*cp)`,
-  phase-change rate = 0); once AT the phase-change temperature (a real threshold
-  or `noEvent` comparison, e.g. `noEvent(T >= T_boil - margin)`, the same pattern
-  already used elsewhere in this checklist for flow cutoffs), ALL further duty
-  converts to phase change (`m_dot = Q/h_fg`, temperature ~constant). Never invent
-  an ad-hoc smooth "penalty" term subtracted from the heater duty to approximate
-  that switch (e.g. `m_dot = max((Q - k*(T_target - T))/h_fg, 0.0)` for some
-  invented gain `k`) -- confirmed live: such a term used `k = rho*A*cp/10`, which
-  at ANY temperature more than about `10*Q/(rho*A*cp)` below the target (here,
-  about 0.05 K -- meaning practically the entire heating trajectory) makes the
-  subtracted term outweigh `Q` by orders of magnitude, so the whole expression
-  clamps to exactly 0 for the ENTIRE simulation and evaporation silently never
-  starts at all -- compiled and ran to completion with zero solver errors, only
-  caught by actually inspecting the real trajectory's `m_evap` column (constant 0
-  start to finish) and hand-computing the formula at the actual operating
-  temperatures reached. Before returning any phase-change/threshold-switch
-  formula that isn't a plain `if condition then rate else 0`, evaluate it
-  numerically yourself at a few representative points along the trajectory you
-  expect (start, mid, and the actual crossing region) using your own chosen
-  parameter values, the same way the real compiler's trajectory would -- if it
-  doesn't produce the rate you intended at the point you intended, don't return
-  it.
-- Every scheduled command (time-based, drives a mode transition) must be genuinely
-  one-shot. A raw `time >= T_command` can look edge-triggered but silently re-fire:
-  confirmed live, a shared if/elseif body re-evaluated it as a plain level check on
-  a LATER unrelated event and hijacked a transition that should have happened
-  instead, silently eating a whole downstream phase. Use an edge-detected pulse
-  (`cmdPulse = cmd and not pre(cmd);`, in the equation section) -- or any approach
-  you can verify truly cannot re-match on a later event.
-- If the SAME command type is scheduled to occur MORE THAN ONCE (e.g. two separate
-  START times), give each occurrence its OWN independent edge-detected pulse, then
-  OR the pulses together -- never OR the raw level conditions first and edge-detect
-  the result. Confirmed live: `cmd = (time>=T1) or (time>=T2); pulse = cmd and not
-  pre(cmd);` latches `cmd` permanently true the moment T1 crosses, so `pre(cmd)` is
-  already true by T2 and `pulse` can never fire again -- the second occurrence
-  silently never happens (traced via the real simulated trajectory: a system stayed
-  stuck in a paused state for 480s because its second "resume" command never
-  produced a pulse, and this was invisible in the compiler's PASSED result -- only
-  checking the actual trajectory revealed it). Correct form: `pulse1 = (time>=T1)
-  and not pre(time>=T1); pulse2 = (time>=T2) and not pre(time>=T2); pulse = pulse1
-  or pulse2;` -- each occurrence gets its own `pre()` on its own raw condition,
-  never a shared `pre()` on an already-OR'd condition.
-- A timer as a continuous state (`der(timer) = ...`): reset ONLY via
-  `reinit(timer, value)`, never `:=` ("not differentiable" error), and `reinit`
-  must live in a `when` clause in the EQUATION section, never inside `algorithm`.
-  If the mode dispatcher lives in `algorithm`, give each phase its OWN
-  equation-section `when` for the reinit, keyed on that phase's entry edge (`when
-  mode == WaitAfterHigh and pre(mode) <> WaitAfterHigh then reinit(waitTimer, 0.0);
-  end when;`). A shared timer merely frozen (der=0) between reuses, never reinit at
-  each new phase's start, silently carries its old value and fires every later
-  phase too early -- compiles and simulates fine, so verify by tracing the phase
-  sequence yourself, not by trusting a passing compile.
-- Every element of a `when {c1, c2, ...}` vector must itself be Boolean (`time >=
-  20`), never a bare numeric/time literal (`when {20, 220, ...}` is a type error).
-- Parenthesize fully whenever combining `if-then-else` with an arithmetic operator:
-  `x = (if c then a else b) - d`, never `x = if c then a else b - d` (parses as
-  `if c then a else (b - d)` -- `if-then-else` binds more loosely than
-  `+`/`-`/`*`/`/`). Check the literal text you're about to return, not just your
-  own summary of the fix -- confirmed live, a draft claimed this fix in its
-  corrections while the returned code still had the broken form.
-- `equation` sections use `=` for every statement, never `:=` (`:=` is
-  `algorithm`-only; a stray one is a parse error). Scan your `equation` block for
-  this before returning.
-- `pre(x)` is only valid when `x` is a discrete-time variable (one only ever
-  assigned inside a `when` clause) -- never on a continuous `Real` computed by a
-  plain `equation` ("Argument 1 of pre must be a discrete expression" -- confirmed
-  live on an algebraically-defined composition fraction). Needing a safe fallback
-  for a near-zero denominator in a continuous equation is not a reason to reach for
-  `pre()`: use a floor instead, e.g. `x = num/max(den, eps);`, not `x = if den >
-  eps then num/den else pre(x);`.
-- A component's own `start` value is a declaration-only initialization hint, never
-  a readable expression afterward -- `x.start` is not valid anywhere in an
-  `equation`/`algorithm` section ("Variable start not found in scope", confirmed
-  live). If two variables need a consistent initial value, write the same literal
-  expression in both `start=` attributes directly; never try to derive one
-  variable's initial value from another's `.start`.
-- An attribute modifier like `(unit="...")` belongs on the DECLARED component
-  itself, immediately after its name and before any `=` -- `parameter Real
-  x(unit="kg/kg") = 0.0;` is correct; `parameter Real x = 0.0(unit="kg/kg");` is a
-  parse error (confirmed live), because the modifier binds to the declaration, not
-  to the assigned value.
-- Reference only real, existing library types. `Modelica.Units.SI.TemperatureDegC`
-  does not exist (confirmed live) -- `SI.Temperature` is always Kelvin; for a
-  Celsius-scaled quantity use a plain `Real(unit="degC")` and convert explicitly
-  (`T_degC = T_kelvin - 273.15;`), don't invent a plausible-sounding SI type name.
-- Never leave an editing placeholder/marker token in the code you return --
-  `<REMOVE ME>`, `TODO`, `XXX`, `...` or similar (confirmed live: a draft left a
-  literal `<REMOVE ME>` token where a real component name belonged, which the
-  compiler then reported as an undefined variable). If you decided to remove
-  something, actually delete it from the returned text; every line you return
-  must be real, finished, intentional content, never a note to yourself.
-- Before returning, the model should be exactly determined: one equation per
-  unknown. An over-determined system ("too many equations") almost always means
-  the SAME variable was given two independent defining equations somewhere (e.g.
-  both an algebraic definition and a separate `der(...)` equation for it, or a
-  duplicated line) -- find and remove the redundant one rather than trusting the
-  solver to reconcile extra equations.
+- EVERY CONNECTOR DECLARATION CARRIES A `Placement` on its class boundary, so
+  connections attach where they should: inputs on the left edge (x from -120 to
+  -100), outputs on the right edge (x from 100 to 120), and spread along y so
+  they do not overlap.
+- EVERY CUSTOM CLASS CARRIES AN `Icon(graphics={...})` THAT LOOKS LIKE THE REAL
+  THING, not a plain box: a vessel as a rectangle with a partial fill rectangle
+  and its level text; an on/off valve as two opposed triangles meeting at a
+  point; a boundary source or sink as an ellipse; a controller as a block with
+  its port names as Text. Add `Text(extent={{-100,100},{100,140}},
+  textString="%name")` so each instance shows its own name. Keep the icon
+  inside the standard -100..100 coordinate system.
 
-WORKED EXAMPLE of a correctly-structured one-shot command + single mode dispatcher
-(the exact shape that has repeatedly failed live -- follow this structure, not just
-the prose rules above, for the command/mode-transition part of your model):
-```
-equation
-  // level condition first, THEN edge-detect it into a one-shot pulse -- both
-  // in the equation section, `pre()` applied to the declared Boolean, not to
-  // a raw comparison expression
-  startCmd = time >= tStart;
-  stopCmd  = time >= tStop;
-  startPulse = startCmd and not pre(startCmd);
-  stopPulse  = stopCmd and not pre(stopCmd);
-  // reinit for any wait-phase timer lives HERE, in its own when, never in algorithm
-  when mode == Mode.Waiting and pre(mode) <> Mode.Waiting then
-    reinit(waitTimer, 0.0);
+MODELICA LANGUAGE HARD RULES -- each of these has cost a full repair loop,
+because the compiler's own message for it names the wrong token, the wrong
+file, or nothing at all. Check every one before returning a bundle:
+
+- RESERVED WORDS. These are keywords and can NEVER be used as the name of a
+  variable, parameter, component, connector, or class:
+  algorithm and annotation block break class connect connector constant
+  constrainedby der discrete each else elseif elsewhen encapsulated end
+  enumeration equation expandable extends external false final flow for
+  function if import impure in initial inner input loop model not operator or
+  outer output package parameter partial protected public pure record
+  redeclare replaceable return stream then true type when while within
+  The dangerous ones in physical modelling are `flow`, `input`, `output`,
+  `stream`, `initial`, `der`, `connector`, `type`, `operator`, `in`, `end` and
+  `constant`, because they read as natural names for real quantities. Write
+  `volumeFlow`, `massFlow`, `qOut`, `cmdIn`, `levelOut` -- never `flow`.
+  Do not declare `time` either; it is the built-in independent variable.
+  This mistake surfaces as `No viable alternative near token: <the PRECEDING
+  token>`, so a parse error naming a token that looks perfectly correct means
+  you should inspect the IDENTIFIER that follows it, not the token named.
+
+- BUILT-IN OPERATORS ONLY. Use only operators that really exist: der, pre,
+  initial, terminal, sample, edge, change, reinit, delay, noEvent, smooth,
+  abs, sign, sqrt, min, max, div, mod, rem, ceil, floor, integer, semiLinear,
+  homotopy, and the standard math functions. Never invent one (`sampleEnterTime`,
+  `stateTime`, `elapsed` and similar do not exist). If you need the time a state
+  was entered, store it yourself: `when <entry condition> then tEnter := time; end when;`
+  with `discrete Real tEnter`.
+
+- WRITE THE MODE MACHINE IN AN `algorithm` SECTION. A discrete sequence
+  controller belongs in `algorithm ... when {...} then ... := ...; end when;`.
+  An if/elseif chain there may legally omit the final `else`, and unassigned
+  variables simply hold their previous value. The same chain in an EQUATION
+  section is illegal unless every branch -- including a mandatory `else` --
+  assigns exactly the SAME set of left-hand-side variables; omitting the
+  `else` gives `The branches of an if-equation inside a when-equation must
+  have the same set of component references on the left-hand side`. Use the
+  algorithm form and avoid the whole class.
+
+- SAMPLE A CONTROLLER'S COMMANDS ON ITS SCAN CYCLE. A programmable controller
+  latches its inputs on a fixed scan period, so model it that way rather than
+  reacting to continuous signals instantaneously:
+  ```
+  parameter Modelica.Units.SI.Time scanPeriod = 0.1;
+  startSample = sample(0, scanPeriod) and startButton;
+  startPulse  = edge(startSample);
+  ```
+  This is the primary structural remedy for `Purely discrete algebraic loops
+  cannot be solved by iterative processes`: inside one scan every discrete
+  value is computed from values latched in the previous scan, so the discrete
+  equations are well-ordered by construction instead of depending on each
+  other in the same instant. It also matches the real device, so the scan
+  period is a genuine modeling parameter. Take the period from the brief when
+  it states one; otherwise choose one and record it in `corrections`.
+  Sampling costs response latency: a command arriving at t is acted on at the
+  next scan tick, up to one period later. Size the period against the TIMING
+  TOLERANCE the acceptance checks demand, not merely against the stated
+  durations -- if a check requires an action at an exact instant, a 0.1 s scan
+  that responds at t+0.1 s fails it. When the brief demands exact event
+  instants, capture the operator command edges as real events and clock only
+  the internal sequencing, or make the period small enough that the latency is
+  inside the stated tolerance.
+
+- `reinit` IS ALLOWED, IN ONE SPECIFIC SHAPE. It sets a continuous state to a
+  new value at an event, and OpenModelica accepts it only inside a `when` in
+  an EQUATION section. It fails (`Internal error BackendDAECreate.lowerWhenEqn:
+  equation not handled`) when it shares a when-branch with ordinary
+  assignments. So give each reset its OWN `when`, containing nothing but the
+  `reinit`, and keep the mode dispatcher in a separate `algorithm` section:
+  ```
+  der(waitTimer) = if inWaitState then 1.0 else 0.0;
+
+  when mode == State.WAIT_AFTER_FILL and pre(mode) <> State.WAIT_AFTER_FILL then
+    reinit(waitTimer, waitAfterFill - pre(storedWaitRemaining));
   end when;
+  ```
+  A timer built this way accumulates only while its stage is active, starts
+  from the stored remaining time on a resume, and needs no `pre()` gymnastics.
+
+  The state-free alternative is `discrete Real tEnter` set to `time` on entry
+  with `waitElapsed = time - pre(tEnter);`. If you use that form, THE `pre(...)`
+  IS MANDATORY: `tEnter` is assigned by the same `when` whose trigger reads
+  `waitElapsed`, so the plain `time - tEnter` makes the timer depend on the
+  transition that sets it. Verified against the real compiler -- the plain form
+  translates, builds and simulates with no error at all, yet `tEnter` never
+  updates from its start value, so every timed transition after the first
+  silently never fires and the controller sits in one state to the end of the
+  horizon.
+
+- NO EMPTY ARRAY CONSTRUCTORS. `{}` is not valid Modelica. Write
+  `annotation(Icon())` or omit the attribute; never `graphics={}`, `points={}`
+  or `table={}`. Annotations are cosmetic: a missing annotation costs nothing,
+  a malformed one fails the whole file. Prefer fewer, simpler annotations.
+
+- NO PURELY DISCRETE ALGEBRAIC LOOPS. Inside a `when` that assigns a discrete
+  variable, every read of that same variable (and of anything derived from it)
+  must go through `pre(...)`. Never write a trigger condition such as
+  `mode == Running and level >= high` for a `when` whose body assigns `mode` --
+  write `pre(mode) == Running and level >= high`. Equally, never define two
+  discrete variables in terms of each other's current values (for example
+  `shutActive = ... and not shutDone;` together with `shutDone = shutActive
+  and ...;`). This failure appears as `Internal error ... analyseStrongComponentBlock
+  failed (Purely discrete algebraic loops cannot be solved by iterative
+  processes)` with source locations inside the COMPILER's own files, which say
+  nothing about where your mistake is.
+
+- BALANCE EQUATIONS AND UNKNOWNS. Before returning, count them per class: every
+  non-parameter, non-constant variable you declare needs exactly one equation
+  (a `der(...)` equation counts for its state; a variable assigned only inside a
+  `when` needs a `start` value or an `initial` branch and still counts once).
+  An output you declare and never assign produces `Too few equations,
+  under-determined system`, which names no file and no line at all.
+
+AUTHORING ORDER -- cover these things, matching the ACTUAL system in the brief,
+not a generic template:
+1. STATE VARIABLES -- represent each accumulating physical quantity (for example a
+   level, stored mass, or temperature) with exactly the continuous states required
+   by the chosen component or Standard Library block. Give each state a grounded
+   balance or constitutive equation, such as `der(x) = (in - out) / capacity`,
+   and an explicit initial condition when the brief provides one. Do not duplicate
+   a state with both a custom derivative and a library integrator.
+   Every accumulating physical quantity also has a physically impossible range,
+   whether or not the brief spells it out: an inventory cannot go negative, a
+   vessel cannot exceed its capacity, an absolute temperature cannot fall below
+   zero. Enforce that bound inside the balance itself by cutting off the
+   OUTGOING term when the store is empty (and the incoming term when it is
+   full), for example `qOut = if level <= levelMin then 0 else qNominal;`.
+   Write that comparison WITHOUT `noEvent(...)` whenever the brief states the
+   threshold as a real limit or uses it in a transition guard: `noEvent` tells
+   the solver not to locate the crossing, so the state integrates past the limit
+   by a whole step and settles visibly beyond it. Reserve `noEvent` for a
+   boundary whose exact crossing genuinely does not matter, and never put it on
+   a threshold an acceptance check or a stated setpoint refers to.
+   Do not enforce it by clamping the state afterwards, and do not change the
+   commanded actuator state to achieve it -- the command stays as commanded and
+   the flow it produces is what the physics limits. A trajectory that leaves the
+   physically possible range is a wrong result even when it compiles, simulates
+   and satisfies every stated acceptance check.
+2. DISCRETE CONTROL -- use an explicit mode variable, enumeration, clock, or
+   StateGraph only when the evidence requires discrete stages. Drive transitions
+   with the stated guards, threshold events, or timer logic, and preserve the
+   stated pause/resume/freeze policy.
+3. INTERLOCKS -- every stated mutual-exclusion or inhibit rule must affect the
+   command equation or transition guard, not only a comment. Keep it observable so
+   trajectory validation can detect a violation.
+4. PARAMETERS -- expose externally meaningful resolved numeric values as parameters
+   with their real units. Prefer the library's own typed quantities --
+   `Modelica.Units.SI.Height`, `.Time`, `.VolumeFlowRate`, `.Temperature`,
+   `.Area` and so on -- over a bare `Real x(unit="m")`, so the units are
+   checked by the compiler rather than carried in a string.
+   Derived values may remain equations. If the brief resolves
+   historical values, use only the authoritative value and do not blend it with a
+   superseded value.
+5. SCHEDULE AND OUTPUTS -- put the actual stated command schedule in the controller
+   or top-level system model so the bundle runs standalone. Expose the exact output
+   variable names used by the structured checks and reports.
+   Those reported names must be plain variables of the system model, each given
+   its value by one equation. Never reuse a required report name as a COMPONENT
+   INSTANCE name: the result file then contains `<name>.y` and similar members
+   instead of `<name>`, and every check written against the stated name silently
+   finds nothing to read.
+   A command that the brief issues MORE THAN ONCE must fire once per listed
+   occurrence. `cmd = time >= tFirst;` produces exactly one rising edge for the
+   whole run, so a second or third occurrence of that same command is silently
+   lost -- confirmed live: a controller built this way processed the first START
+   and the first STOP, then sat in one state for the remaining two thirds of the
+   run while three further scheduled commands passed unnoticed, and still
+   compiled and simulated cleanly.
+   `Modelica.Blocks.Sources.BooleanTable` TOGGLES its output at every time in
+   its table; it does not emit one pulse per entry. Verified against the real
+   compiler: `BooleanTable(table={t1, t2}, startValue=false)` goes true at t1
+   and false at t2, giving exactly ONE rising edge, so a momentary command
+   listed at t1 and again at t2 loses its second occurrence entirely. Give each
+   momentary command a PAIR of table entries per occurrence -- `table={t1,
+   t1 + w, t2, t2 + w}` for a short width w -- which produces one clean rising
+   edge per listed time. Then `cmdPulse = cmd and not pre(cmd);` is a genuine
+   one-shot for every occurrence.
+   Before returning, count the transitions the schedule must cause and confirm
+   the model can produce every one of them.
+Acceptance thresholds and the experiment horizon from the Understanding are
+authoritative. Do not add epsilon margins, change StopTime, or tune against a
+reference trajectory unless the brief explicitly provides a tolerance or approves
+hysteresis. If the stated rates and capacities cannot reach a required target
+within the fixed horizon, report the inconsistency in `corrections` or
+`clarifications` rather than silently changing a parameter.
+EVENT AND DISCRETE-CONTROL DISCIPLINE
+
+Use conservative event structures for the generated controller. These are design
+rules for this bundle, not claims that every valid Modelica model must use one
+exact pattern:
+
+- Initialize each discrete mode exactly once. Use either a fixed start value or
+  an explicit `when initial() then` assignment. Do not combine two independent
+  initial equations for the same variable.
+- Give each discrete variable one clear writer. For a mode machine, prefer one
+  `when` statement with one ordered `if/elseif` chain. If separate when blocks
+  are necessary for different variables, remove live cross-dependencies between
+  their trigger conditions; use `pre(...)` only for variables that are actually
+  discrete-time and when the previous event value is intended.
+- In a `when` algorithm, use `:=`; in an equation-section `when`, use `=`.
+  Keep `reinit(x, value)` in a when-clause and use it only for a continuous
+  state that really needs a discontinuous reset. Do not write `reinit` as an
+  ordinary continuous equation.
+- A relation on a continuous Real such as `level >= limit` can generate a state
+  event. A timer should be an explicit continuous timer state or a sampled
+  clock; do not depend on floating-point equality such as `time == 10.0`.
+- Scheduled commands should be one-shot when they trigger a transition. Use an
+  edge pulse (`pulse = command and not pre(command)`) or a mode/previous-mode
+  guard that you can show cannot match again on later events.
+- Every branch of a single generated mode dispatcher should assign the same
+  mode-related variables, or explicitly preserve them with `pre(...)`, so the
+  event iteration has one unambiguous writer. Do not derive a command from a
+  mode and then use that command as the mode's own transition guard; use the
+  underlying state condition directly to avoid a discrete algebraic cycle.
+- A state that can already satisfy its exit condition on entry must be handled
+  in the entry arm or by a separately guaranteed event. Do not assume a later
+  unrelated event will reevaluate an already-true condition.
+- Use `noEvent(...)` only when suppressing an event is physically intended, such
+  as a saturation or inventory cutoff whose exact crossing is not a control
+  transition. A control transition that must be detected needs an event-capable
+  guard. Do not add an arbitrary threshold margin: preserve the brief's exact
+  threshold unless an approved tolerance or hysteresis is explicitly present.
+  If a cutoff and a transition share a boundary, model the ordering explicitly
+  (for example with one mode transition or an approved hysteresis band) and
+  verify the trajectory; do not silently change the requirement.
+- For each rate-limited phase, calculate whether the stated parameters and
+  fixed simulation horizon can reach its target. If they cannot, keep the
+  required StopTime and report the inconsistency in `corrections` or
+  `clarifications`; never change a confirmed experiment horizon or invent a
+  capacity merely to make the arithmetic fit. If an unstated capacity is
+  necessary, mark it as an assumption and explain the derivation.
+- For phase changes, use the physical energy or mass balance stated by the
+  brief. A piecewise sensible/latent-heat balance is appropriate only when the
+  brief establishes those quantities; never invent a smoothing gain or a
+  textbook phase-change model without evidence. Check representative values
+  numerically before returning the bundle.
+
+A robust controller shape for a one-shot schedule is:
+
+```
+  parameter Modelica.Units.SI.Time scanPeriod = 0.1;
+  discrete Mode mode(start = Mode.Idle, fixed = true);
+  discrete Real tEnter(start = 0, fixed = true);
+  discrete Real waitRemaining(start = 0, fixed = true);
+  Real waitElapsed;
+equation
+  // startButton / stopButton come in as BooleanInput from the command sources
+  startPulse = edge(sample(0, scanPeriod) and startButton);
+  stopPulse  = edge(sample(0, scanPeriod) and stopButton);
+  waitElapsed = time - pre(tEnter);
 algorithm
-  // exactly ONE when/elsewhen chain assigns `mode`; every element is one-shot
-  // (a pulse boolean) or a genuine physical threshold crossing -- never a raw
-  // `time >= T` mixed in as if it were one-shot
-  when {startPulse, stopPulse, mode == Mode.Running and level >= levelHigh,
-        mode == Mode.Waiting and waitTimer >= waitDuration} then
+  when {startPulse, stopPulse, pre(mode) == Mode.Running and level >= levelHigh,
+        pre(mode) == Mode.Waiting and waitElapsed >= waitDuration} then
     if stopPulse and pre(mode) <> Mode.Idle then
       mode := Mode.Paused;
+      waitRemaining := waitDuration - (time - pre(tEnter));
+    elseif startPulse and pre(mode) == Mode.Paused then
+      mode := Mode.Waiting;
+      tEnter := time - (waitDuration - pre(waitRemaining));
     elseif startPulse and pre(mode) == Mode.Idle then
       mode := Mode.Running;
     elseif pre(mode) == Mode.Running and level >= levelHigh then
       mode := Mode.Waiting;
-    elseif pre(mode) == Mode.Waiting and waitTimer >= waitDuration then
+      tEnter := time;
+    elseif pre(mode) == Mode.Waiting and waitElapsed >= waitDuration then
       mode := Mode.Running;
     end if;
   end when;
 ```
-Note what makes this correct: `startPulse`/`stopPulse` are TRUE for exactly one
-event instant each, so they cannot re-match on a later, unrelated event the way a
-raw `time >= tStart` would; `reinit` is in the equation section in its own `when`,
-never inside the `algorithm` block; and `mode` has exactly one assigning construct.
+Note what this shape avoids: no `reinit`, no continuous timer state, no `else`
+branch obligation (it is an algorithm section), every read of a variable the
+same `when` writes goes through `pre(...)`, and the pause/resume policy is
+carried by `tEnter`/`waitRemaining` rather than by freezing a derivative.
 
+Adapt this shape to the actual system. It is not a requirement to use this exact
+controller, and a valid clocked or StateGraph design may be used when it
+faithfully represents the evidence and passes the real compiler and trajectory
+checks.
 Never emit empty stubs, unused component placeholders, disconnected ports, generic
 boundary sources, arbitrary parameter defaults or copied incomplete legacy code.
 Preserve units, physical topology, dynamics, event priorities and initialization.
