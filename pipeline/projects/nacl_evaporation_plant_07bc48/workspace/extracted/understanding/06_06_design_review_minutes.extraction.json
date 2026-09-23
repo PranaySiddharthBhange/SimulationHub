@@ -1,0 +1,324 @@
+{
+  "document": "# Design Review DR-07 - NaCl Evaporation Bench\n\n**Date:** 2026-02-21  \n**Status:** Final / approved\n\n## Decisions\n1. Controller remains a sequential StateGraph with a parallel split after evaporation and a join before cycle reset.\n2. B5 heater permissive: `LIS-501 >= 0.05 m` and `FIS-801 >= 0.10 kg/s`.\n3. P1 and P2 require dry-run inhibit from source-tank level.\n4. Automated process valves are discrete and fail closed.\n5. K1 remains a physical condenser even if the legacy Modelica component combines evaporator and condenser equations.\n6. Junction volumes are mandatory where closed valve combinations could otherwise leave pressure/composition states undefined.\n7. StandardWater is a topology/control integration baseline only; intended physical variant remains WaterNaCl.\n\n## Open Actions\n- A-17: resolve return-header stream identity.\n- A-18: finalize B7 cooling completion temperature.\n- A-19: isolate WaterNaCl pump-start convergence issue.\n",
+  "subject": "Design Review DR-07 - NaCl Evaporation Bench",
+  "kind": "correspondence",
+  "entities": [
+    {
+      "name": "Controller",
+      "kind": "control element",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controller remains a sequential StateGraph with a parallel split after evaporation and a join before cycle reset."
+    },
+    {
+      "name": "StateGraph",
+      "kind": "control model",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "sequential StateGraph"
+    },
+    {
+      "name": "B5 heater",
+      "kind": "heater",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level permissive threshold",
+          "value": "0.05",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "`LIS-501 >= 0.05 m`"
+        },
+        {
+          "quantity": "flow permissive threshold",
+          "value": "0.10",
+          "unit": "kg/s",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "`FIS-801 >= 0.10 kg/s`"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B5 heater permissive: `LIS-501 >= 0.05 m` and `FIS-801 >= 0.10 kg/s`."
+    },
+    {
+      "name": "LIS-501",
+      "kind": "level indicator switch",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "threshold",
+          "value": "0.05",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "`LIS-501 >= 0.05 m`"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "`LIS-501 >= 0.05 m`"
+    },
+    {
+      "name": "FIS-801",
+      "kind": "flow indicator switch",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "threshold",
+          "value": "0.10",
+          "unit": "kg/s",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "`FIS-801 >= 0.10 kg/s`"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "`FIS-801 >= 0.10 kg/s`"
+    },
+    {
+      "name": "P1",
+      "kind": "pump",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 and P2 require dry-run inhibit from source-tank level."
+    },
+    {
+      "name": "P2",
+      "kind": "pump",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 and P2 require dry-run inhibit from source-tank level."
+    },
+    {
+      "name": "source-tank",
+      "kind": "tank",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "source-tank level"
+    },
+    {
+      "name": "Automated process valves",
+      "kind": "valves",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Automated process valves are discrete and fail closed."
+    },
+    {
+      "name": "K1",
+      "kind": "condenser",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "K1 remains a physical condenser"
+    },
+    {
+      "name": "legacy Modelica component",
+      "kind": "model component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "legacy Modelica component combines evaporator and condenser equations"
+    },
+    {
+      "name": "evaporator",
+      "kind": "process unit",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "combines evaporator and condenser equations"
+    },
+    {
+      "name": "condenser",
+      "kind": "process unit",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "combines evaporator and condenser equations"
+    },
+    {
+      "name": "Junction volumes",
+      "kind": "volume elements",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Junction volumes are mandatory"
+    },
+    {
+      "name": "StandardWater",
+      "kind": "physical variant",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "StandardWater is a topology/control integration baseline only"
+    },
+    {
+      "name": "WaterNaCl",
+      "kind": "physical variant",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "intended physical variant remains WaterNaCl"
+    },
+    {
+      "name": "B7",
+      "kind": "cooling step",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B7 cooling completion temperature"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "Controller",
+      "predicate": "has topology",
+      "object": "StateGraph",
+      "detail": "sequential with a parallel split after evaporation and a join before cycle reset",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controller remains a sequential StateGraph with a parallel split after evaporation and a join before cycle reset."
+    },
+    {
+      "subject": "B5 heater",
+      "predicate": "has permissive from",
+      "object": "LIS-501",
+      "detail": ">= 0.05 m",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B5 heater permissive: `LIS-501 >= 0.05 m` and `FIS-801 >= 0.10 kg/s`."
+    },
+    {
+      "subject": "B5 heater",
+      "predicate": "has permissive from",
+      "object": "FIS-801",
+      "detail": ">= 0.10 kg/s",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B5 heater permissive: `LIS-501 >= 0.05 m` and `FIS-801 >= 0.10 kg/s`."
+    },
+    {
+      "subject": "P1",
+      "predicate": "requires dry-run inhibit from",
+      "object": "source-tank",
+      "detail": "source-tank level",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 and P2 require dry-run inhibit from source-tank level."
+    },
+    {
+      "subject": "P2",
+      "predicate": "requires dry-run inhibit from",
+      "object": "source-tank",
+      "detail": "source-tank level",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 and P2 require dry-run inhibit from source-tank level."
+    },
+    {
+      "subject": "legacy Modelica component",
+      "predicate": "combines equations for",
+      "object": "evaporator",
+      "detail": "and condenser",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "legacy Modelica component combines evaporator and condenser equations"
+    },
+    {
+      "subject": "StandardWater",
+      "predicate": "is baseline only for",
+      "object": "WaterNaCl",
+      "detail": "topology/control integration baseline only; intended physical variant remains WaterNaCl",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "StandardWater is a topology/control integration baseline only; intended physical variant remains WaterNaCl."
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "P1 and P2 require dry-run inhibit from source-tank level.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "P1 and P2 require dry-run inhibit from source-tank level."
+    },
+    {
+      "category": "requirement",
+      "statement": "Junction volumes are mandatory where closed valve combinations could otherwise leave pressure/composition states undefined.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Junction volumes are mandatory where closed valve combinations could otherwise leave pressure/composition states undefined."
+    },
+    {
+      "category": "behavior",
+      "statement": "B5 heater permissive requires LIS-501 >= 0.05 m and FIS-801 >= 0.10 kg/s.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "B5 heater permissive: `LIS-501 >= 0.05 m` and `FIS-801 >= 0.10 kg/s`."
+    },
+    {
+      "category": "requirement",
+      "statement": "Automated process valves are discrete and fail closed.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Automated process valves are discrete and fail closed."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

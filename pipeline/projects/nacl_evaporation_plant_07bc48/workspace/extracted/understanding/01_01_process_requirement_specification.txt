@@ -1,0 +1,69 @@
+Subject: Process Requirement Specification - NaCl Evaporation Plant
+Document kind: requirement specification
+
+## Entities
+* B1 -- vessel  <[page 1]>
+* B2 -- vessel  <[page 1]>
+* B3 -- vessel  <[page 1]>
+* B4 -- vessel  <[page 1]>
+* B5 -- evaporator  <[page 1]>
+* K1 -- condenser  <[page 1]>
+* B6 -- cooler vessel  <[page 1]>
+* B7 -- cooler vessel  <[page 1]>
+* V8 -- valve  <[page 1]>
+* V9 -- valve  <[page 1]>
+* V11 -- valve  <[page 1]>
+* V12 -- valve  <[page 1]>
+* LIS-301 -- level indicator  <[page 1]>
+    - level threshold: 0.13 m [required]
+    - level threshold: 0.01 m [required]
+* QI-302 -- indicator  <[page 1]>
+* LIS-501 -- level indicator  <[page 1]>
+* QIS-502 -- indicator  <[page 1]>
+* central controller -- controller  <[page 1]>
+* P1 -- pump  <[page 1]>
+* P2 -- pump  <[page 1]>
+* P&ID; -- document/artifact  <[page 1]>
+* StandardWater configuration -- configuration  <[page 1]>
+* evaporator/condenser -- combined simulation component  <[page 1]>
+
+## Relationships
+* B1 initially charged with water  <[page 1]>
+* B2 initially charged with concentrated brine  <[page 1]>
+* V8 connects flow from B1 (to B3 when opened)  <[page 1]>
+* V9 connects flow from B2 (to B3 when opened)  <[page 1]>
+* V11 connects flow from B3 (to B4 when opened)  <[page 1]>
+* V12 connects flow from B4 (to B5 when opened)  <[page 1]>
+* P1 returns cooled process streams to charging-vessel header system  <[page 1]>
+* P2 returns cooled process streams to charging-vessel header system  <[page 1]>
+* central controller commands discrete on/off valves  <[page 1]>
+* controller parallel split and join occurs after evaporation  <[page 1]>
+
+## Requirements
+* The laboratory plant shall concentrate a water/sodium-chloride batch using staged charging, mixing, buffering, evaporation, condensation, cooling and return pumping. [approved]  <[page 1]>
+* Charge water phase required action: Open V8, B1 to B3. [approved]  <[page 1]>
+* Charge water completion condition: LIS-301 >= 0.13 m. [approved]  <[page 1]>
+* Charge brine / mix required action: Open V9, B2 to B3. [approved]  <[page 1]>
+* Charge brine / mix completion condition: QI-302 reaches recipe target. [approved]  <[page 1]>
+* Buffer transfer required action: Open V11, B3 to B4. [approved]  <[page 1]>
+* Buffer transfer completion condition: LIS-301 < 0.01 m. [approved]  <[page 1]>
+* Evaporator charge completion condition: LIS-501 reaches batch level. [approved]  <[page 1]>
+* Evaporation required action: Enable B5 heater. [approved]  <[page 1]>
+* Evaporation completion condition: QIS-502 reaches evaporation target. [approved]  <[page 1]>
+* Condensate branch required action: Cool B6, then return condensate. [approved]  <[page 1]>
+* Condensate branch completion condition: Cooling complete and B6 returned. [approved]  <[page 1]>
+* Concentrate branch required action: Transfer B5 to B7, cool B7, return concentrate. [approved]  <[page 1]>
+* Concentrate branch completion condition: Cooling complete and B7 returned. [approved]  <[page 1]>
+* Cycle reset required action: Wait for both branches. [approved]  <[page 1]>
+* The central controller shall command discrete on/off valves. [approved]  <[page 1]>
+* Automated valves shall fail closed. [approved]  <[page 1]>
+* Small junction volumes shall be used where multiple isolating pressure-drop components could otherwise leave undefined pressure, enthalpy or composition states. [approved]  <[page 1]>
+* All non-horizontal pipes shall include static head in their pressure-drop relationship. [approved]  <[page 1]>
+* The acceptance simulation shall demonstrate a full charge-mix-buffer-evaporate-cool-return cycle, including the controller parallel split and join after evaporation. [approved]  <[page 1]>
+* It shall continue beyond 2500 s to demonstrate cycle reset. [approved]  <[page 1]>
+
+## Constraints
+* Both complete and time > 2500 s. [approved]  <[page 1]>
+
+## Behaviors
+* When B5 is idle, open V12, B4 to B5. [approved]  <[page 1]>

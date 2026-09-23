@@ -1,0 +1,168 @@
+{
+  "document": "[tabular data: 201 rows, 15 columns]\ncolumns: time_s, I_rms_A, mmf_At, Phi_core_Wb, Phi_gap_Wb, Phi_leak_Wb, B_core_T, B_gap_T, H_core_A_m, H_gap_A_m, Vm_core_At, Vm_gap_At, U_exc_induced_V_rms, U_meas_induced_signed_V_rms, Phi_gap_over_Phi_core\nThese are RECORDED values -- an observation of a run that already happened, not a scenario input and not a command schedule.\nrange of each column across all 201 rows:\n  time_s: 0 .. 1\n  I_rms_A: 0 .. 2\n  mmf_At: 0 .. 1200\n  Phi_core_Wb: 0 .. 0.000524935\n  Phi_gap_Wb: 0 .. 0.000482941\n  Phi_leak_Wb: 0 .. 4.19948e-05\n  B_core_T: 0 .. 0.839897\n  B_gap_T: 0 .. 0.772705\n  H_core_A_m: 0 .. 556.974\n  H_gap_A_m: 0 .. 614899\n  Vm_core_At: 0 .. 277.651\n  Vm_gap_At: 0 .. 922.349\n  U_exc_induced_V_rms: 0 .. 98.948\n  U_meas_induced_signed_V_rms: -7.58601 .. -0\n  Phi_gap_over_Phi_core: 0 .. 0.92\nrows where a discrete column changes value, which is the event structure of this run (30 of 201 rows shown; the rest repeat the previous row's state):\n  time_s=0.0 | I_rms_A=0.0 | mmf_At=0.0 | Phi_core_Wb=0.0 | Phi_gap_Wb=0.0 | Phi_leak_Wb=0.0 | B_core_T=0.0 | B_gap_T=0.0 | H_core_A_m=0.0 | H_gap_A_m=0.0 | Vm_core_At=0.0 | Vm_gap_At=0.0 | U_exc_induced_V_rms=0.0 | U_meas_induced_signed_V_rms=-0.0 | Phi_gap_over_Phi_core=0.0\n  time_s=0.105 | I_rms_A=0.025 | mmf_At=14.999999999999972 | Phi_core_Wb=6.5616927088206305e-06 | Phi_gap_Wb=6.0367572921149805e-06 | Phi_leak_Wb=5.249354167056504e-07 | B_core_T=0.010498708334113007 | B_gap_T=0.009658811667383967 | H_core_A_m=6.962172197725679 | H_gap_A_m=7686.23810628915 | Vm_core_At=3.470642840566251 | Vm_gap_At=11.529357159433726 | U_exc_induced_V_rms=1.2368499365486763 | U_meas_induced_signed_V_rms=-0.09482516180206518 | Phi_gap_over_Phi_core=0.92\n  time_s=0.135 | I_rms_A=0.175 | mmf_At=105.00000000000001 | Phi_core_Wb=4.59318489617445e-05 | Phi_gap_Wb=4.225730104480494e-05 | Phi_leak_Wb=3.67454791693956e-06 | B_core_T=0.07349095833879118 | B_gap_T=0.06761168167168789 | H_core_A_m=48.73520538407984 | H_gap_A_m=53803.66674402415 | Vm_core_At=24.294499883963802 | Vm_gap_At=80.70550011603623 | U_exc_induced_V_rms=8.65794955584075 | U_meas_induced_signed_V_rms=-0.6637761326144574 | Phi_gap_over_Phi_core=0.9199999999999999\n  time_s=0.14 | I_rms_A=0.2 | mmf_At=120.00000000000003 | Phi_core_Wb=5.249354167056515e-05 | Phi_gap_Wb=4.8294058336919946e-05 | Phi_leak_Wb=4.199483333645213e-06 | B_core_T=0.08398966667290422 | B_gap_T=0.0772704933390719 | H_core_A_m=55.69737758180554 | H_gap_A_m=61489.90485031333 | Vm_core_At=27.76514272453006 | Vm_gap_At=92.23485727546999 | U_exc_induced_V_rms=9.89479949238943 | U_meas_induced_signed_V_rms=-0.758601294416523 | Phi_gap_over_Phi_core=0.9200000000000002\n  time_s=0.145 | I_rms_A=0.225 | mmf_At=134.99999999999994 | Phi_core_Wb=5.905523437938576e-05 | Phi_gap_Wb=5.43308156290349e-05 | Phi_leak_Wb=4.724418750350861e-06 | B_core_T=0.0944883750070172 | B_gap_T=0.08692930500645583 | H_core_A_m=62.659549779531204 | H_gap_A_m=69176.14295660246 | Vm_core_At=31.235785565096304 | Vm_gap_At=103.76421443490369 | U_exc_induced_V_rms=11.131649428938102 | U_meas_induced_signed_V_rms=-0.8534264562185878 | Phi_gap_over_Phi_core=0.92\n  time_s=0.17 | I_rms_A=0.35 | mmf_At=210.00000000000003 | Phi_core_Wb=9.1863697923489e-05 | Phi_gap_Wb=8.451460208960988e-05 | Phi_leak_Wb=7.34909583387912e-06 | B_core_T=0.14698191667758237 | B_gap_T=0.13522336334337579 | H_core_A_m=97.47041076815968 | H_gap_A_m=107607.3334880483 | Vm_core_At=48.588999767927604 | Vm_gap_At=161.41100023207247 | U_exc_induced_V_rms=17.3158991116815 | U_meas_induced_signed_V_rms=-1.327552265228915 | Phi_gap_over_Phi_core=0.9199999999999999\n  time_s=0.18 | I_rms_A=0.4 | mmf_At=239.99999999999994 | Phi_core_Wb=0.00010498708334113026 | Phi_gap_Wb=9.658811667383985e-05 | Phi_leak_Wb=8.398966667290422e-06 | B_core_T=0.1679793333458084 | B_gap_T=0.15454098667814373 | H_core_A_m=111.39475516361104 | H_gap_A_m=122979.8097006266 | Vm_core_At=55.5302854490601 | Vm_gap_At=184.4697145509399 | U_exc_induced_V_rms=19.789598984778852 | U_meas_induced_signed_V_rms=-1.5172025888330454 | Phi_gap_over_Phi_core=0.92\n  time_s=0.205 | I_rms_A=0.525 | mmf_At=315.0 | Phi_core_Wb=0.0001377955468852335 | Phi_gap_Wb=0.00012677190313441482 | Phi_leak_Wb=1.102364375081868e-05 | B_core_T=0.22047287501637353 | B_gap_T=0.2028350450150637 | H_core_A_m=146.20561615223951 | H_gap_A_m=161411.00023207246 | Vm_core_At=72.8834996518914 | Vm_gap_At=242.1165003481087 | U_exc_induced_V_rms=25.973848667522248 | U_meas_induced_signed_V_rms=-1.9913283978433725 | Phi_gap_over_Phi_core=0.9200000000000002\n  time_s=0.21 | I_rms_A=0.55 | mmf_At=329.99999999999994 | Phi_core_Wb=0.0001443572395940541 | Phi_gap_Wb=0.00013280866042652978 | Phi_leak_Wb=1.1548579167524329e-05 | B_core_T=0.23097158335048654 | B_gap_T=0.2124938566824476 | H_core_A_m=153.16778834996518 | H_gap_A_m=169097.23833836155 | Vm_core_At=76.35414249245764 | Vm_gap_At=253.64585750754233 | U_exc_induced_V_rms=27.21069860407092 | U_meas_induced_signed_V_rms=-2.0861535596454375 | Phi_gap_over_Phi_core=0.92\n  time_s=0.215 | I_rms_A=0.575 | mmf_At=345.0 | Phi_core_Wb=0.0001509189323028748 | Phi_gap_Wb=0.00013884541771864482 | Phi_leak_Wb=1.2073514584229983e-05 | B_core_T=0.2414702916845996 | B_gap_T=0.22215266834983166 | H_core_A_m=160.1299605476909 | H_gap_A_m=176783.4764446508 | Vm_core_At=79.82478533302391 | Vm_gap_At=265.1752146669762 | U_exc_induced_V_rms=28.447548540619607 | U_meas_induced_signed_V_rms=-2.180978721447503 | Phi_gap_over_Phi_core=0.9200000000000002\n  time_s=0.22 | I_rms_A=0.6 | mmf_At=360.0 | Phi_core_Wb=0.00015748062501169544 | Phi_gap_Wb=0.0001448821750107598 | Phi_leak_Wb=1.2598450000935636e-05 | B_core_T=0.25196900001871264 | B_gap_T=0.23181148001721563 | H_core_A_m=167.0921327454166 | H_gap_A_m=184469.71455093994 | Vm_core_At=83.29542817359017 | Vm_gap_At=276.7045718264099 | U_exc_induced_V_rms=29.684398477168287 | U_meas_induced_signed_V_rms=-2.2758038832495684 | Phi_gap_over_Phi_core=0.92\n  time_s=0.24 | I_rms_A=0.7 | mmf_At=419.9999999999999 | Phi_core_Wb=0.00018372739584697796 | Phi_gap_Wb=0.00016902920417921974 | Phi_leak_Wb=1.4698191667758237e-05 | B_core_T=0.2939638333551647 | B_gap_T=0.2704467266867515 | H_core_A_m=194.94082153631933 | H_gap_A_m=215214.66697609655 | Vm_core_At=97.1779995358552 | Vm_gap_At=322.8220004641448 | U_exc_induced_V_rms=34.63179822336299 | U_meas_induced_signed_V_rms=-2.6551045304578293 | Phi_gap_over_Phi_core=0.9200000000000002\n  time_s=0.245 | I_rms_A=0.725 | mmf_At=434.99999999999994 | Phi_core_Wb=0.0001902890885557986 | Phi_gap_Wb=0.00017506596147133472 | Phi_leak_Wb=1.5223127084463888e-05 | B_core_T=0.3044625416892777 | B_gap_T=0.2801055383541355 | H_core_A_m=201.90299373404503 | H_gap_A_m=222900.9050823857 | Vm_core_At=100.64864237642145 | Vm_gap_At=334.35135762357856 | U_exc_induced_V_rms=35.86864815991167 | U_meas_induced_signed_V_rms=-2.7499296922598946 | Phi_gap_over_Phi_core=0.92\n  time_s=0.31 | I_rms_A=1.05 | mmf_At=629.9999999999999 | Phi_core_Wb=0.000275591093770467 | Phi_gap_Wb=0.00025354380626882965 | Phi_leak_Wb=2.204728750163736e-05 | B_core_T=0.44094575003274705 | B_gap_T=0.4056700900301274 | H_core_A_m=292.41123230447903 | H_gap_A_m=322822.0004641449 | Vm_core_At=145.7669993037828 | Vm_gap_At=484.2330006962174 | U_exc_induced_V_rms=51.947697335044495 | U_meas_induced_signed_V_rms=-3.982656795686745 | Phi_gap_over_Phi_core=0.9200000000000002\n  time_s=0.315 | I_rms_A=1.075 | mmf_At=645.0 | Phi_core_Wb=0.00028215278647928765 | Phi_gap_Wb=0.00025958056356094463 | Phi_leak_Wb=2.2572222918343012e-05 | B_core_T=0.45144445836686015 | B_gap_T=0.41532890169751135 | H_core_A_m=299.3734045022047 | H_gap_A_m=330508.23857043404 | Vm_core_At=149.23764214434905 | Vm_gap_At=495.7623578556511 | U_exc_induced_V_rms=53.184547271593175 | U_meas_induced_signed_V_rms=-4.07748195748881 | Phi_gap_over_Phi_core=0.9199999999999999\n  time_s=0.32 | I_rms_A=1.1 | mmf_At=659.9999999999999 | Phi_core_Wb=0.0002887144791881082 | Phi_gap_Wb=0.00026561732085305956 | Phi_leak_Wb=2.3097158335048658e-05 | B_core_T=0.4619431667009731 | B_gap_T=0.4249877133648952 | H_core_A_m=306.33557669993036 | H_gap_A_m=338194.4766767231 | Vm_core_At=152.70828498491528 | Vm_gap_At=507.29171501508466 | U_exc_induced_V_rms=54.42139720814184 | U_meas_induced_signed_V_rms=-4.172307119290875 | Phi_gap_over_Phi_core=0.92\n  time_s=0.33 | I_rms_A=1.15 | mmf_At=690.0 | Phi_core_Wb=0.0003018378646057496 | Phi_gap_Wb=0.00027769083543728964 | Phi_leak_Wb=2.4147029168459966e-05 | B_core_T=0.4829405833691992 | B_gap_T=0.4443053366996633 | H_core_A_m=320.2599210953818 | H_gap_A_m=353566.9528893016 | Vm_core_At=159.64957066604782 | Vm_gap_At=530.3504293339524 | U_exc_induced_V_rms=56.895097081239214 | U_meas_induced_signed_V_rms=-4.361957442895006 | Phi_gap_over_Phi_core=0.9200000000000002\n  time_s=0.335 | I_rms_A=1.175 | mmf_At=705.0 | Phi_core_Wb=0.0003083995573145702 | Phi_gap_Wb=0.00028372759272940457 | Phi_leak_Wb=2.4671964585165615e-05 | B_core_T=0.49343929170331224 | B_gap_T=0.45396414836704724 | H_core_A_m=327.2220932931075 | H_gap_A_m=361253.19099559064 | Vm_core_At=163.12021350661408 | Vm_gap_At=541.879786493386 | U_exc_induced_V_rms=58.13194701778789 | U_meas_induced_signed_V_rms=-4.456782604697071 | Phi_gap_over_Phi_core=0.9199999999999999\n  time_s=0.34 | I_rms_A=1.2 | mmf_At=720.0 | Phi_core_Wb=0.0003149612500233909 | Phi_gap_Wb=0.0002897643500215196 | Phi_leak_Wb=2.519690000187127e-05 | B_core_T=0.5039380000374253 | B_gap_T=0.46362296003443126 | H_core_A_m=334.1842654908332 | H_gap_A_m=368939.4291018799 | Vm_core_At=166.59085634718033 | Vm_gap_At=553.4091436528198 | U_exc_induced_V_rms=59.368796954336574 | U_meas_induced_signed_V_rms=-4.551607766499137 | Phi_gap_over_Phi_core=0.92\n  time_s=0.355 | I_rms_A=1.275 | mmf_At=765.0 | Phi_core_Wb=0.0003346463281498528 | Phi_gap_Wb=0.0003078746218978646 | Phi_leak_Wb=2.6771706251988225e-05 | B_core_T=0.5354341250397644 | B_gap_T=0.4925993950365833 | H_core_A_m=355.0707820840103 | H_gap_A_m=391998.1434207474 | Vm_core_At=177.00278486887913 | Vm_gap_At=587.9972151311212 | U_exc_induced_V_rms=63.079346763982606 | U_meas_induced_signed_V_rms=-4.836083251905333 | Phi_gap_over_Phi_core=0.9200000000000002\n  time_s=0.36 | I_rms_A=1.3 | mmf_At=780.0 | Phi_core_Wb=0.0003412080208586734 | Phi_gap_Wb=0.00031391137918997954 | Phi_leak_Wb=2.7296641668693875e-05 | B_core_T=0.5459328333738773 | B_gap_T=0.5022582067039671 | H_core_A_m=362.03295428173595 | H_gap_A_m=399684.3815270365 | Vm_core_At=180.47342770944536 | Vm_gap_At=599.5265722905548 | U_exc_induced_V_rms=64.31619670053128 | U_meas_induced_signed_V_rms=-4.930908413707398 | Phi_gap_over_Phi_core=0.92\n  time_s=0.38 | I_rms_A=1.4 | mmf_At=840.0000000000001 | Phi_core_Wb=0.000367454791693956 | Phi_gap_Wb=0.00033805840835843953 | Phi_leak_Wb=2.939638333551648e-05 | B_core_T=0.5879276667103295 | B_gap_T=0.5408934533735031 | H_core_A_m=389.8816430726387 | H_gap_A_m=430429.3339521932 | Vm_core_At=194.35599907171041 | Vm_gap_At=645.6440009282899 | U_exc_induced_V_rms=69.263596446726 | U_meas_induced_signed_V_rms=-5.31020906091566 | Phi_gap_over_Phi_core=0.9199999999999999\n  time_s=0.385 | I_rms_A=1.425 | mmf_At=855.0 | Phi_core_Wb=0.00037401648440277664 | Phi_gap_Wb=0.0003440951656505545 | Phi_leak_Wb=2.992131875222213e-05 | B_core_T=0.5984263750444425 | B_gap_T=0.5505522650408872 | H_core_A_m=396.8438152703644 | H_gap_A_m=438115.5720584824 | Vm_core_At=197.82664191227667 | Vm_gap_At=657.1733580877236 | U_exc_induced_V_rms=70.50044638327468 | U_meas_induced_signed_V_rms=-5.405034222717725 | Phi_gap_over_Phi_core=0.92\n  time_s=0.4 | I_rms_A=1.5 | mmf_At=900.0000000000001 | Phi_core_Wb=0.0003937015625292386 | Phi_gap_Wb=0.0003622054375268995 | Phi_leak_Wb=3.149612500233909e-05 | B_core_T=0.6299225000467816 | B_gap_T=0.5795287000430391 | H_core_A_m=417.73033186354155 | H_gap_A_m=461174.28637734987 | Vm_core_At=208.23857043397547 | Vm_gap_At=691.7614295660248 | U_exc_induced_V_rms=74.21099619292072 | U_meas_induced_signed_V_rms=-5.689509708123921 | Phi_gap_over_Phi_core=0.9199999999999999\n  time_s=0.405 | I_rms_A=1.525 | mmf_At=915.0000000000001 | Phi_core_Wb=0.00040026325523805924 | Phi_gap_Wb=0.0003682421948190145 | Phi_leak_Wb=3.202106041904474e-05 | B_core_T=0.6404212083808947 | B_gap_T=0.589187511710423 | H_core_A_m=424.69250406126724 | H_gap_A_m=468860.524483639 | Vm_core_At=211.70921327454172 | Vm_gap_At=703.2907867254585 | U_exc_induced_V_rms=75.4478461294694 | U_meas_induced_signed_V_rms=-5.784334869925987 | Phi_gap_over_Phi_core=0.92\n  time_s=0.425 | I_rms_A=1.625 | mmf_At=974.9999999999999 | Phi_core_Wb=0.00042651002607334174 | Phi_gap_Wb=0.0003923892239874744 | Phi_leak_Wb=3.412080208586734e-05 | B_core_T=0.6824160417173466 | B_gap_T=0.6278227583799589 | H_core_A_m=452.5411928521699 | H_gap_A_m=499605.4769087956 | Vm_core_At=225.5917846368067 | Vm_gap_At=749.4082153631934 | U_exc_induced_V_rms=80.39524587566409 | U_meas_induced_signed_V_rms=-6.163635517134247 | Phi_gap_over_Phi_core=0.9199999999999999\n  time_s=0.43 | I_rms_A=1.65 | mmf_At=989.9999999999998 | Phi_core_Wb=0.0004330717187821623 | Phi_gap_Wb=0.0003984259812795893 | Phi_leak_Wb=3.4645737502572986e-05 | B_core_T=0.6929147500514595 | B_gap_T=0.6374815700473427 | H_core_A_m=459.5033650498955 | H_gap_A_m=507291.7150150846 | Vm_core_At=229.0624274773729 | Vm_gap_At=760.937572522627 | U_exc_induced_V_rms=81.63209581221275 | U_meas_induced_signed_V_rms=-6.258460678936311 | Phi_gap_over_Phi_core=0.92\n  time_s=0.445 | I_rms_A=1.725 | mmf_At=1035.0 | Phi_core_Wb=0.00045275679690862434 | Phi_gap_Wb=0.00041653625315593443 | Phi_leak_Wb=3.622054375268995e-05 | B_core_T=0.7244108750537988 | B_gap_T=0.6664580050494949 | H_core_A_m=480.38988164307267 | H_gap_A_m=530350.4293339523 | Vm_core_At=239.47435599907172 | Vm_gap_At=795.5256440009284 | U_exc_induced_V_rms=85.34264562185881 | U_meas_induced_signed_V_rms=-6.5429361643425095 | Phi_gap_over_Phi_core=0.9200000000000002\n  time_s=0.45 | I_rms_A=1.75 | mmf_At=1049.9999999999998 | Phi_core_Wb=0.0004593184896174449 | Phi_gap_Wb=0.0004225730104480493 | Phi_leak_Wb=3.674547916939559e-05 | B_core_T=0.7349095833879117 | B_gap_T=0.6761168167168787 | H_core_A_m=487.3520538407983 | H_gap_A_m=538036.6674402413 | Vm_core_At=242.94499883963795 | Vm_gap_At=807.0550011603619 | U_exc_induced_V_rms=86.57949555840747 | U_meas_induced_signed_V_rms=-6.637761326144573 | Phi_gap_over_Phi_core=0.92\n  time_s=1.0 | I_rms_A=2.0 | mmf_At=1200.0 | Phi_core_Wb=0.0005249354167056515 | Phi_gap_Wb=0.00048294058336919936 | Phi_leak_Wb=4.1994833336452115e-05 | B_core_T=0.8398966667290422 | B_gap_T=0.7727049333907189 | H_core_A_m=556.9737758180554 | H_gap_A_m=614899.0485031332 | Vm_core_At=277.6514272453006 | Vm_gap_At=922.3485727546998 | U_exc_induced_V_rms=98.94799492389429 | U_meas_induced_signed_V_rms=-7.586012944165229 | Phi_gap_over_Phi_core=0.92",
+  "subject": "RECORDED values -- an observation of a run that already happened",
+  "kind": "dataset",
+  "entities": [
+    {
+      "name": "run",
+      "kind": "observed run",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "row count",
+          "value": "201",
+          "unit": "rows",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "[tabular data: 201 rows, 15 columns]"
+        },
+        {
+          "quantity": "column count",
+          "value": "15",
+          "unit": "columns",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "[tabular data: 201 rows, 15 columns]"
+        },
+        {
+          "quantity": "time_s",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "time_s: 0 .. 1"
+        },
+        {
+          "quantity": "I_rms_A",
+          "value": "0 .. 2",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "I_rms_A: 0 .. 2"
+        },
+        {
+          "quantity": "mmf_At",
+          "value": "0 .. 1200",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "mmf_At: 0 .. 1200"
+        },
+        {
+          "quantity": "Phi_core_Wb",
+          "value": "0 .. 0.000524935",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Phi_core_Wb: 0 .. 0.000524935"
+        },
+        {
+          "quantity": "Phi_gap_Wb",
+          "value": "0 .. 0.000482941",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Phi_gap_Wb: 0 .. 0.000482941"
+        },
+        {
+          "quantity": "Phi_leak_Wb",
+          "value": "0 .. 4.19948e-05",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Phi_leak_Wb: 0 .. 4.19948e-05"
+        },
+        {
+          "quantity": "B_core_T",
+          "value": "0 .. 0.839897",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B_core_T: 0 .. 0.839897"
+        },
+        {
+          "quantity": "B_gap_T",
+          "value": "0 .. 0.772705",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B_gap_T: 0 .. 0.772705"
+        },
+        {
+          "quantity": "H_core_A_m",
+          "value": "0 .. 556.974",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "H_core_A_m: 0 .. 556.974"
+        },
+        {
+          "quantity": "H_gap_A_m",
+          "value": "0 .. 614899",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "H_gap_A_m: 0 .. 614899"
+        },
+        {
+          "quantity": "Vm_core_At",
+          "value": "0 .. 277.651",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Vm_core_At: 0 .. 277.651"
+        },
+        {
+          "quantity": "Vm_gap_At",
+          "value": "0 .. 922.349",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Vm_gap_At: 0 .. 922.349"
+        },
+        {
+          "quantity": "U_exc_induced_V_rms",
+          "value": "0 .. 98.948",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "U_exc_induced_V_rms: 0 .. 98.948"
+        },
+        {
+          "quantity": "U_meas_induced_signed_V_rms",
+          "value": "-7.58601 .. -0",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "U_meas_induced_signed_V_rms: -7.58601 .. -0"
+        },
+        {
+          "quantity": "Phi_gap_over_Phi_core",
+          "value": "0 .. 0.92",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Phi_gap_over_Phi_core: 0 .. 0.92"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "These are RECORDED values -- an observation of a run that already happened, not a scenario input and not a command schedule."
+    }
+  ],
+  "relationships": [],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "The rest of the rows repeat the previous row's state except where a discrete column changes value.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "rows where a discrete column changes value, which is the event structure of this run (30 of 201 rows shown; the rest repeat the previous row's state):"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

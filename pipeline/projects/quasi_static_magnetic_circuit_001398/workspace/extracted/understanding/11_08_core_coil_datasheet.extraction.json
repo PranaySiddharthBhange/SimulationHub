@@ -1,0 +1,185 @@
+{
+  "document": "[page 1]\n          Core and Coil Data Sheet - Rev B\n\n\nSynthetic composite core/coil datasheet. Approved project change records may supersede catalog values.\n\n1. Core and geometry\n\n Property                               Released value                           Legacy/catalog value\n Core material                                 Linear benchmark iron                                 -\n Effective mu_r                          1200                                  1000 in catalog Rev A\n Cross-section                           25 mm x 25 mm                       same\n Nominal air gap                             1.50 mm                            same\n As-built prototype gap                       1.58 mm                                           test configuration only\n\n2. Exciting coil\n\n Property                                   Value\n Turns                                     600\n Reference frequency                         50 Hz\n Current definition                     RMS phasor magnitude\n Final benchmark current                          2.0 A RMS\n Polarity                                             Positive current -> positive mmf\n\n3. Measuring coil\n\n Property                               Released value                            Old prototype note\n Turns                                 50                                       40\n Location                                      Air-gap region                           same\n Induced-voltage orientation                  Negative relative to useful flux arrow               not frozen\n[page 1 also supplied as visual image 1]",
+  "subject": "Core and Coil Data Sheet - Rev B",
+  "kind": "datasheet",
+  "entities": [
+    {
+      "name": "core",
+      "kind": "component",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "effective mu_r",
+          "value": "1200",
+          "unit": "",
+          "status": "released",
+          "supersedes": "",
+          "quote": "Effective mu_r                          1200"
+        },
+        {
+          "quantity": "effective mu_r",
+          "value": "1000",
+          "unit": "",
+          "status": "archived",
+          "supersedes": "1200",
+          "quote": "1000 in catalog Rev A"
+        },
+        {
+          "quantity": "cross-section",
+          "value": "25 mm x 25 mm",
+          "unit": "mm x mm",
+          "status": "released",
+          "supersedes": "",
+          "quote": "Cross-section                           25 mm x 25 mm"
+        },
+        {
+          "quantity": "nominal air gap",
+          "value": "1.50",
+          "unit": "mm",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "Nominal air gap                             1.50 mm"
+        },
+        {
+          "quantity": "prototype gap",
+          "value": "1.58",
+          "unit": "mm",
+          "status": "as-built",
+          "supersedes": "",
+          "quote": "As-built prototype gap                       1.58 mm"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "1. Core and geometry"
+    },
+    {
+      "name": "exciting coil",
+      "kind": "coil",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "600",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Turns                                     600"
+        },
+        {
+          "quantity": "reference frequency",
+          "value": "50",
+          "unit": "Hz",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Reference frequency                         50 Hz"
+        },
+        {
+          "quantity": "final benchmark current",
+          "value": "2.0",
+          "unit": "A RMS",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Final benchmark current                          2.0 A RMS"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "2. Exciting coil"
+    },
+    {
+      "name": "measuring coil",
+      "kind": "coil",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "50",
+          "unit": "",
+          "status": "released",
+          "supersedes": "",
+          "quote": "Turns                                 50"
+        },
+        {
+          "quantity": "turns",
+          "value": "40",
+          "unit": "",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "40"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "3. Measuring coil"
+    },
+    {
+      "name": "positive current",
+      "kind": "control element",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Positive current -> positive mmf"
+    },
+    {
+      "name": "positive mmf",
+      "kind": "control element",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Positive current -> positive mmf"
+    },
+    {
+      "name": "useful flux arrow",
+      "kind": "reference direction",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Negative relative to useful flux arrow"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "positive current",
+      "predicate": "corresponds to",
+      "object": "positive mmf",
+      "detail": "polarity",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Positive current -> positive mmf"
+    },
+    {
+      "subject": "measuring coil",
+      "predicate": "located in",
+      "object": "core",
+      "detail": "Air-gap region",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Location                                      Air-gap region"
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "Positive current -> positive mmf",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Positive current -> positive mmf"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

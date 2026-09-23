@@ -1,0 +1,39 @@
+Subject: TEST ENGINEER SCRATCH NOTES - 04 APR 2026
+Document kind: operator log
+
+## Entities
+* tank1 -- tank; aliases: TK-101, T1
+    - display level: ~0.05 m [observed]
+* tank2 -- tank; aliases: TK-102, T2
+    - display level: ~0.05 m [observed]
+* valve1 -- valve; aliases: XV-101, V1
+* valve2 -- valve; aliases: XV-102
+* valve3 -- valve; aliases: XV-103
+* E-stop -- control
+* shut -- command
+    - time: 700 s [observed]
+* Start -- command
+    - time: 20 s [observed]
+    - time: 280 s [observed]
+* Stop -- command
+    - time: 220 s [observed]
+    - time: 650 s [observed]
+* Jin's old model -- model
+    - high target: 0.78 [archived]
+
+## Relationships
+* shut is controlled drain
+* E-stop is outside scope of this demo
+
+## Behaviors
+* V1 drops out at the high target. [observed]
+* Stop at 220 kills all valve lamps. [observed]
+* Start at 280 picks transfer back up; it does NOT go back to fill. [observed]
+* transfer + drain lamps are on together during SHUT, and this is intentional, not an interlock failure. [observed]
+
+## Scheduled commands
+* Start at 20 s. [observed]
+* Stop at 220. [observed]
+* Start at 280. [observed]
+* Stop at 650. [observed]
+* Shut at 700. [observed]

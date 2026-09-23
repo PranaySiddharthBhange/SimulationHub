@@ -1,0 +1,257 @@
+{
+  "document": "{\n  \"drawing_id\": \"MC-101 Rev B\",\n  \"units\": \"m\",\n  \"nominal\": {\n    \"a\": 0.025,\n    \"l\": 0.15,\n    \"delta\": 0.0015,\n    \"cross_section\": {\n      \"shape\": \"square\",\n      \"side\": 0.025,\n      \"area\": 0.0006250000000000001\n    },\n    \"mean_flux_line\": {\n      \"left_leg\": 0.125,\n      \"upper_yoke\": 0.125,\n      \"right_leg_iron\": 0.1235,\n      \"lower_yoke\": 0.125\n    }\n  },\n  \"as_built_prototype_MCB_02\": {\n    \"air_gap_measured\": 0.00158,\n    \"measurement_method\": \"shim stack + feeler gauge cross-check\",\n    \"uncertainty_m\": 2e-05\n  },\n  \"configuration_note\": \"AV-11 uses nominal geometry. As-built data is retained for a separate prototype validation configuration.\"\n}",
+  "subject": "geometry metrology export",
+  "kind": "dataset",
+  "entities": [
+    {
+      "name": "MC-101 Rev B",
+      "kind": "drawing",
+      "aliases": [],
+      "values": [],
+      "ref": "MC-101 Rev B",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"drawing_id\": \"MC-101 Rev B\""
+    },
+    {
+      "name": "nominal",
+      "kind": "geometry configuration",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "a",
+          "value": "0.025",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "\"a\": 0.025"
+        },
+        {
+          "quantity": "l",
+          "value": "0.15",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "\"l\": 0.15"
+        },
+        {
+          "quantity": "delta",
+          "value": "0.0015",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "\"delta\": 0.0015"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"nominal\": {"
+    },
+    {
+      "name": "cross_section",
+      "kind": "cross section",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "side",
+          "value": "0.025",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "\"side\": 0.025"
+        },
+        {
+          "quantity": "area",
+          "value": "0.0006250000000000001",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "\"area\": 0.0006250000000000001"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"cross_section\": {"
+    },
+    {
+      "name": "mean_flux_line",
+      "kind": "mean flux line",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"mean_flux_line\": {"
+    },
+    {
+      "name": "left_leg",
+      "kind": "mean flux line segment",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "0.125",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "\"left_leg\": 0.125"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"left_leg\": 0.125"
+    },
+    {
+      "name": "upper_yoke",
+      "kind": "mean flux line segment",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "0.125",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "\"upper_yoke\": 0.125"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"upper_yoke\": 0.125"
+    },
+    {
+      "name": "right_leg_iron",
+      "kind": "mean flux line segment",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "0.1235",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "\"right_leg_iron\": 0.1235"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"right_leg_iron\": 0.1235"
+    },
+    {
+      "name": "lower_yoke",
+      "kind": "mean flux line segment",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "0.125",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "\"lower_yoke\": 0.125"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"lower_yoke\": 0.125"
+    },
+    {
+      "name": "as_built_prototype_MCB_02",
+      "kind": "prototype configuration",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "air_gap_measured",
+          "value": "0.00158",
+          "unit": "m",
+          "status": "measured",
+          "supersedes": "",
+          "quote": "\"air_gap_measured\": 0.00158"
+        },
+        {
+          "quantity": "uncertainty_m",
+          "value": "2e-05",
+          "unit": "m",
+          "status": "measured",
+          "supersedes": "",
+          "quote": "\"uncertainty_m\": 2e-05"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"as_built_prototype_MCB_02\": {"
+    },
+    {
+      "name": "AV-11",
+      "kind": "configuration",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"AV-11 uses nominal geometry. As-built data is retained for a separate prototype validation configuration.\""
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "AV-11",
+      "predicate": "uses",
+      "object": "nominal",
+      "detail": "geometry",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"AV-11 uses nominal geometry. As-built data is retained for a separate prototype validation configuration.\""
+    },
+    {
+      "subject": "mean_flux_line",
+      "predicate": "includes",
+      "object": "left_leg",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"left_leg\": 0.125"
+    },
+    {
+      "subject": "mean_flux_line",
+      "predicate": "includes",
+      "object": "upper_yoke",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"upper_yoke\": 0.125"
+    },
+    {
+      "subject": "mean_flux_line",
+      "predicate": "includes",
+      "object": "right_leg_iron",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"right_leg_iron\": 0.1235"
+    },
+    {
+      "subject": "mean_flux_line",
+      "predicate": "includes",
+      "object": "lower_yoke",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"lower_yoke\": 0.125"
+    }
+  ],
+  "facts": [],
+  "unreadable": [],
+  "unverified_quotes": []
+}

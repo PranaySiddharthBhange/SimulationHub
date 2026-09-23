@@ -1,0 +1,27 @@
+Subject: Core and Coil Data Sheet - Rev B
+Document kind: datasheet
+
+## Entities
+* core -- component  <[page 1]>
+    - effective mu_r: 1200 [approved/released]
+    - effective mu_r: 1000 [archived] (supersedes/superseded: 1200)
+    - cross-section: 25 mm x 25 mm mm x mm [approved/released]
+    - nominal air gap: 1.50 mm [nominal]
+    - prototype gap: 1.58 mm [as_built/as-built]
+* exciting coil -- coil  <[page 1]>
+    - turns: 600
+    - reference frequency: 50 Hz
+    - final benchmark current: 2.0 A RMS [approved]
+* measuring coil -- coil  <[page 1]>
+    - turns: 50 [approved/released]
+    - turns: 40 [archived]
+* positive current -- control element  <[page 1]>
+* positive mmf -- control element  <[page 1]>
+* useful flux arrow -- reference direction  <[page 1]>
+
+## Relationships
+* positive current corresponds to positive mmf (polarity)  <[page 1]>
+* measuring coil located in core (Air-gap region)  <[page 1]>
+
+## Physical relationships
+* Positive current -> positive mmf  <[page 1]>

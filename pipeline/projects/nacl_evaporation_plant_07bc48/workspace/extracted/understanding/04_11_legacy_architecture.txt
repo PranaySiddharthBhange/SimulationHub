@@ -1,0 +1,31 @@
+Subject: Legacy Evaporation Plant Architecture - Draft
+Document kind: legacy model
+
+## Entities
+* B1 -- component
+* B2 -- component
+* B3 -- component
+* B4 -- component
+* B5 -- component
+* B6 -- component
+* B7 -- component
+* K1 -- component
+* P1 -- component
+* P2 -- component
+* Controller -- component
+
+## Relationships
+* B1 connects to B3 (V8)
+* B2 connects to B3 (V9)
+* B3 connects to B4 (V11)
+* B4 connects to B5 (V12)
+* B5 connects to K1 (vapor)
+* K1 connects to B6 (condensate)
+* B5 connects to B7 (V15)
+* B7 connects to P1
+* B6 connects to P2
+* Controller signals to B3 (LIS301/QI302)
+* Controller signals to B5 (LIS501/QIS502)
+
+## Unreadable
+* Return-header destinations unresolved.

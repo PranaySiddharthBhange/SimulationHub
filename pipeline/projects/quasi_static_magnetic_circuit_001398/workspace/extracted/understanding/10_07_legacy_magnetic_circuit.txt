@@ -1,0 +1,44 @@
+Subject: MagneticCircuit_v1
+Document kind: legacy model
+
+## Entities
+* MagneticCircuit_v1 -- model
+* Modelica.Magnetic.QuasiStatic.FluxTubes -- import
+* a -- parameter
+    - length: 0.025
+* l -- parameter
+    - length: 0.150
+* delta -- parameter
+    - length: 0.0015
+* mu_r -- parameter  <CR-MAG-004>
+    - relative permeability: 1000 [superseded] (supersedes/superseded: 1200)
+* sigma -- parameter  <CR-MAG-006>
+    - sigma: 0.05 [superseded] (supersedes/superseded: 0.08)
+* N_exc -- parameter
+    - turns: 600
+* N_meas -- parameter
+    - turns: 40 [superseded] (supersedes/superseded: 50)
+* f -- parameter
+    - frequency: 50
+* leftLeg -- component
+* upperYoke -- component
+* rightLeg -- component
+* airGap -- component
+* leakage -- component
+* lowerYoke -- component
+* Phi_gap -- variable
+* Phi_core -- variable
+* Electric and magnetic grounds -- ground
+* EP-03 -- document
+
+## Relationships
+* leftLeg connects_to upperYoke (series topology note)
+* upperYoke connects_to rightLeg (series topology note)
+* rightLeg connects_to airGap (parallel branch after rightLeg)
+* rightLeg connects_to leakage (parallel branch after rightLeg)
+* airGap connects_to lowerYoke (parallel path to lowerYoke)
+* leakage connects_to lowerYoke (parallel path to lowerYoke)
+* airGap in_parallel_with leakage
+
+## Physical relationships
+* Phi_gap = (1-sigma)*Phi_core

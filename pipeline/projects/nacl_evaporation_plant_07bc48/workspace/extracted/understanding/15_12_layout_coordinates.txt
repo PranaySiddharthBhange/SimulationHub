@@ -1,0 +1,51 @@
+Subject: layout coordinates
+Document kind: dataset
+
+## Entities
+* B1 -- equipment
+    - x: 1.8 m
+    - y: 7.8 m
+    - z_base: 4.8 m
+* B2 -- equipment
+    - x: 8.4 m
+    - y: 7.8 m
+    - z_base: 4.8 m
+* B3 -- equipment
+    - x: 5.1 m
+    - y: 6.1 m
+    - z_base: 3.5 m
+* B4 -- equipment
+    - x: 2.5 m
+    - y: 4.5 m
+    - z_base: 2.6 m
+* B5 -- equipment
+    - x: 3.2 m
+    - y: 2.7 m
+    - z_base: 1.5 m
+* K1 -- equipment
+    - x: 6.0 m
+    - y: 4.1 m
+    - z_base: 2.8 m
+* B6 -- equipment
+    - x: 8.3 m
+    - y: 2.7 m
+    - z_base: 1.5 m
+* B7 -- equipment
+    - x: 5.2 m
+    - y: 1.6 m
+    - z_base: 0.7 m
+* P1 -- equipment
+    - x: 1.3 m
+    - y: 0.3 m
+    - z_base: 0.0 m
+* P2 -- equipment
+    - x: 8.9 m
+    - y: 0.3 m
+    - z_base: 0.0 m
+
+## Constraints
+* use relative elevation for gravity pressure-drop constraints.
+
+## Physical relationships
+* z_positive = up
+* origin = south-west floor datum

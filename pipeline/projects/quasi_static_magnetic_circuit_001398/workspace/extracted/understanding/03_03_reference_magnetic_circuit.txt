@@ -1,0 +1,22 @@
+Subject: reference magnetic circuit
+Document kind: engineering diagram
+
+## Entities
+* yoke -- magnetic circuit component
+* leg -- magnetic circuit component
+* coil -- electromagnetic coil
+* N.I -- magnetomotive force
+* Φσ -- magnetic flux
+* cross section -- geometric feature
+* l -- dimension
+    - length: l
+* a -- dimension
+    - size: a
+* δ -- dimension
+    - gap: δ
+
+## Relationships
+* coil is on leg
+* Φσ is at δ
+* cross section has dimension a (square cross-section with both sides labeled a)
+* yoke connects to leg (forming a rectangular magnetic core)

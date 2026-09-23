@@ -1,0 +1,11 @@
+{
+  "project_id": "quasi_static_magnetic_circuit_001398",
+  "name": "Quasi-Static Magnetic Circuit",
+  "mode": "cloud",
+  "stage1_backend": "openai",
+  "source_path": "C:\\Users\\Pranay Bhange\\Desktop\\Hackathon\\pipeline\\test_cases\\magnetic_circuit_sysmlv2_full_dataset",
+  "status": "stage1_ready",
+  "extraction_status": "completed",
+  "document_count": 15,
+  "documents_understood": 15
+}

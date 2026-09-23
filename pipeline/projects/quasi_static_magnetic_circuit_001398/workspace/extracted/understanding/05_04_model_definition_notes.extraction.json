@@ -1,0 +1,547 @@
+{
+  "document": "Model Definition Notes - Magnetic Circuit, Rev C\nSynthetic hackathon engineering evidence\n1. Network structure\nModel the left leg, upper yoke, right leg iron, and lower yoke as series linear flux-tube reluctances. Insert a branch after the right-leg iron where GAP-1 and LEAK-1 are parallel. The two branches rejoin before the lower yoke. The exciting coil provides the magnetic potential source N*I.\n2. Mean flux-line geometry\nElement | Area | Mean length | Relative permeability\nLeft leg | a*a | l-a | mu_r\nUpper yoke | a*a | l-a | mu_r\nRight leg iron | a*a | l-a-delta | mu_r\nAir gap | a*a | delta | 1\nLower yoke | a*a | l-a | mu_r\n3. Quasi-static phasor conventions\nCurrent I, flux Phi, flux density B, field strength H, magnetic potential difference Vm, and induced voltage U are complex phasor-valued quantities.\nInput current values in EP-03 are RMS phasor magnitudes. Do not convert them to peak values in the SysML parameter model unless an explicit representation conversion is modeled.\nFor linear real permeability, Rm is real and Vm is in phase with Phi.\nThe exciting coil induced voltage is positive under the defined coil polarity; the measuring coil uses the opposite electric orientation.\n4. Leakage element\nUse the coefficient form Phi_gap/Phi_core = 1-sigma. The corresponding equivalent leakage reluctance is derived so that the air-gap and leakage branches have the same magnetic potential difference.\nR_leak = R_gap*(1-sigma)/sigma\n5. Grounds\nBoth the electrical and magnetic domains require a reference potential. Include ElectricGround in the electrical coil circuit and MagneticGround in the magnetic flux-tube network.\n6. Revision-sensitive values\nQuantity | Legacy | Released | Authority\nmu_r | 1000 | 1200 | CR-MAG-004\nsigma | 0.05 | 0.08 | CR-MAG-006\nMeasuring turns | 40 | 50 | Coil Data Rev B\nGap | 1.50 mm nominal | 1.50 mm nominal; 1.58 mm as-built prototype | Drawing MC-101 / Metrology note",
+  "subject": "Magnetic Circuit",
+  "kind": "engineering note",
+  "entities": [
+    {
+      "name": "left leg",
+      "kind": "flux-tube reluctance element",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "Area",
+          "value": "a*a",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Left leg | a*a | l-a | mu_r"
+        },
+        {
+          "quantity": "Mean length",
+          "value": "l-a",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Left leg | a*a | l-a | mu_r"
+        },
+        {
+          "quantity": "Relative permeability",
+          "value": "mu_r",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Left leg | a*a | l-a | mu_r"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Model the left leg, upper yoke, right leg iron, and lower yoke as series linear flux-tube reluctances."
+    },
+    {
+      "name": "upper yoke",
+      "kind": "flux-tube reluctance element",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "Area",
+          "value": "a*a",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Upper yoke | a*a | l-a | mu_r"
+        },
+        {
+          "quantity": "Mean length",
+          "value": "l-a",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Upper yoke | a*a | l-a | mu_r"
+        },
+        {
+          "quantity": "Relative permeability",
+          "value": "mu_r",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Upper yoke | a*a | l-a | mu_r"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Model the left leg, upper yoke, right leg iron, and lower yoke as series linear flux-tube reluctances."
+    },
+    {
+      "name": "right leg iron",
+      "kind": "flux-tube reluctance element",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "Area",
+          "value": "a*a",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Right leg iron | a*a | l-a-delta | mu_r"
+        },
+        {
+          "quantity": "Mean length",
+          "value": "l-a-delta",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Right leg iron | a*a | l-a-delta | mu_r"
+        },
+        {
+          "quantity": "Relative permeability",
+          "value": "mu_r",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Right leg iron | a*a | l-a-delta | mu_r"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Model the left leg, upper yoke, right leg iron, and lower yoke as series linear flux-tube reluctances."
+    },
+    {
+      "name": "lower yoke",
+      "kind": "flux-tube reluctance element",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "Area",
+          "value": "a*a",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Lower yoke | a*a | l-a | mu_r"
+        },
+        {
+          "quantity": "Mean length",
+          "value": "l-a",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Lower yoke | a*a | l-a | mu_r"
+        },
+        {
+          "quantity": "Relative permeability",
+          "value": "mu_r",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Lower yoke | a*a | l-a | mu_r"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Model the left leg, upper yoke, right leg iron, and lower yoke as series linear flux-tube reluctances."
+    },
+    {
+      "name": "GAP-1",
+      "kind": "parallel branch element",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Insert a branch after the right-leg iron where GAP-1 and LEAK-1 are parallel."
+    },
+    {
+      "name": "LEAK-1",
+      "kind": "parallel branch element",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Insert a branch after the right-leg iron where GAP-1 and LEAK-1 are parallel."
+    },
+    {
+      "name": "exciting coil",
+      "kind": "coil",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The exciting coil provides the magnetic potential source N*I."
+    },
+    {
+      "name": "Air gap",
+      "kind": "flux-tube reluctance element",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "Area",
+          "value": "a*a",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Air gap | a*a | delta | 1"
+        },
+        {
+          "quantity": "Mean length",
+          "value": "delta",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Air gap | a*a | delta | 1"
+        },
+        {
+          "quantity": "Relative permeability",
+          "value": "1",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Air gap | a*a | delta | 1"
+        },
+        {
+          "quantity": "Gap",
+          "value": "1.50",
+          "unit": "mm",
+          "status": "legacy",
+          "supersedes": "",
+          "quote": "Gap | 1.50 mm nominal | 1.50 mm nominal; 1.58 mm as-built prototype | Drawing MC-101 / Metrology note"
+        },
+        {
+          "quantity": "Gap",
+          "value": "1.50",
+          "unit": "mm",
+          "status": "released",
+          "supersedes": "",
+          "quote": "Gap | 1.50 mm nominal | 1.50 mm nominal; 1.58 mm as-built prototype | Drawing MC-101 / Metrology note"
+        },
+        {
+          "quantity": "Gap",
+          "value": "1.58",
+          "unit": "mm",
+          "status": "as-built",
+          "supersedes": "",
+          "quote": "Gap | 1.50 mm nominal | 1.50 mm nominal; 1.58 mm as-built prototype | Drawing MC-101 / Metrology note"
+        }
+      ],
+      "ref": "Drawing MC-101 / Metrology note",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Air gap | a*a | delta | 1"
+    },
+    {
+      "name": "EP-03",
+      "kind": "reference",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Input current values in EP-03 are RMS phasor magnitudes."
+    },
+    {
+      "name": "Rm",
+      "kind": "magnetic quantity",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "For linear real permeability, Rm is real and Vm is in phase with Phi."
+    },
+    {
+      "name": "Vm",
+      "kind": "magnetic quantity",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Current I, flux Phi, flux density B, field strength H, magnetic potential difference Vm, and induced voltage U are complex phasor-valued quantities."
+    },
+    {
+      "name": "Phi",
+      "kind": "magnetic quantity",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Current I, flux Phi, flux density B, field strength H, magnetic potential difference Vm, and induced voltage U are complex phasor-valued quantities."
+    },
+    {
+      "name": "measuring coil",
+      "kind": "coil",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "40",
+          "unit": "",
+          "status": "legacy",
+          "supersedes": "",
+          "quote": "Measuring turns | 40 | 50 | Coil Data Rev B"
+        },
+        {
+          "quantity": "turns",
+          "value": "50",
+          "unit": "",
+          "status": "released",
+          "supersedes": "",
+          "quote": "Measuring turns | 40 | 50 | Coil Data Rev B"
+        }
+      ],
+      "ref": "Coil Data Rev B",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The exciting coil induced voltage is positive under the defined coil polarity; the measuring coil uses the opposite electric orientation."
+    },
+    {
+      "name": "ElectricGround",
+      "kind": "reference potential",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Include ElectricGround in the electrical coil circuit and MagneticGround in the magnetic flux-tube network."
+    },
+    {
+      "name": "MagneticGround",
+      "kind": "reference potential",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Include ElectricGround in the electrical coil circuit and MagneticGround in the magnetic flux-tube network."
+    },
+    {
+      "name": "mu_r",
+      "kind": "quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "mu_r",
+          "value": "1000",
+          "unit": "",
+          "status": "legacy",
+          "supersedes": "",
+          "quote": "mu_r | 1000 | 1200 | CR-MAG-004"
+        },
+        {
+          "quantity": "mu_r",
+          "value": "1200",
+          "unit": "",
+          "status": "released",
+          "supersedes": "",
+          "quote": "mu_r | 1000 | 1200 | CR-MAG-004"
+        }
+      ],
+      "ref": "CR-MAG-004",
+      "anchor": "",
+      "from_image": false,
+      "quote": "mu_r | 1000 | 1200 | CR-MAG-004"
+    },
+    {
+      "name": "sigma",
+      "kind": "quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "sigma",
+          "value": "0.05",
+          "unit": "",
+          "status": "legacy",
+          "supersedes": "",
+          "quote": "sigma | 0.05 | 0.08 | CR-MAG-006"
+        },
+        {
+          "quantity": "sigma",
+          "value": "0.08",
+          "unit": "",
+          "status": "released",
+          "supersedes": "",
+          "quote": "sigma | 0.05 | 0.08 | CR-MAG-006"
+        }
+      ],
+      "ref": "CR-MAG-006",
+      "anchor": "",
+      "from_image": false,
+      "quote": "sigma | 0.05 | 0.08 | CR-MAG-006"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "left leg",
+      "predicate": "in series with",
+      "object": "upper yoke",
+      "detail": "series linear flux-tube reluctances",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Model the left leg, upper yoke, right leg iron, and lower yoke as series linear flux-tube reluctances."
+    },
+    {
+      "subject": "upper yoke",
+      "predicate": "in series with",
+      "object": "right leg iron",
+      "detail": "series linear flux-tube reluctances",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Model the left leg, upper yoke, right leg iron, and lower yoke as series linear flux-tube reluctances."
+    },
+    {
+      "subject": "right leg iron",
+      "predicate": "in series with",
+      "object": "lower yoke",
+      "detail": "series linear flux-tube reluctances",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Model the left leg, upper yoke, right leg iron, and lower yoke as series linear flux-tube reluctances."
+    },
+    {
+      "subject": "right leg iron",
+      "predicate": "branches to parallel elements",
+      "object": "GAP-1",
+      "detail": "branch after the right-leg iron",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Insert a branch after the right-leg iron where GAP-1 and LEAK-1 are parallel."
+    },
+    {
+      "subject": "right leg iron",
+      "predicate": "branches to parallel elements",
+      "object": "LEAK-1",
+      "detail": "branch after the right-leg iron",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Insert a branch after the right-leg iron where GAP-1 and LEAK-1 are parallel."
+    },
+    {
+      "subject": "GAP-1",
+      "predicate": "in parallel with",
+      "object": "LEAK-1",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Insert a branch after the right-leg iron where GAP-1 and LEAK-1 are parallel."
+    },
+    {
+      "subject": "GAP-1",
+      "predicate": "rejoins before",
+      "object": "lower yoke",
+      "detail": "The two branches rejoin before the lower yoke.",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The two branches rejoin before the lower yoke."
+    },
+    {
+      "subject": "LEAK-1",
+      "predicate": "rejoins before",
+      "object": "lower yoke",
+      "detail": "The two branches rejoin before the lower yoke.",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The two branches rejoin before the lower yoke."
+    },
+    {
+      "subject": "exciting coil",
+      "predicate": "provides",
+      "object": "N*I",
+      "detail": "magnetic potential source",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The exciting coil provides the magnetic potential source N*I."
+    },
+    {
+      "subject": "ElectricGround",
+      "predicate": "included in",
+      "object": "exciting coil",
+      "detail": "electrical coil circuit",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Include ElectricGround in the electrical coil circuit and MagneticGround in the magnetic flux-tube network."
+    },
+    {
+      "subject": "MagneticGround",
+      "predicate": "included in",
+      "object": "left leg",
+      "detail": "magnetic flux-tube network",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Include ElectricGround in the electrical coil circuit and MagneticGround in the magnetic flux-tube network."
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "Do not convert them to peak values in the SysML parameter model unless an explicit representation conversion is modeled.",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Do not convert them to peak values in the SysML parameter model unless an explicit representation conversion is modeled."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Phi_gap/Phi_core = 1-sigma",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Use the coefficient form Phi_gap/Phi_core = 1-sigma."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "R_leak = R_gap*(1-sigma)/sigma",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "R_leak = R_gap*(1-sigma)/sigma"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Rm is real and Vm is in phase with Phi.",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "For linear real permeability, Rm is real and Vm is in phase with Phi."
+    },
+    {
+      "category": "requirement",
+      "statement": "Both the electrical and magnetic domains require a reference potential.",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Both the electrical and magnetic domains require a reference potential."
+    },
+    {
+      "category": "requirement",
+      "statement": "Include ElectricGround in the electrical coil circuit and MagneticGround in the magnetic flux-tube network.",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Include ElectricGround in the electrical coil circuit and MagneticGround in the magnetic flux-tube network."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

@@ -1,0 +1,84 @@
+Subject: RECORDED values -- an observation of a run that already happened
+Document kind: dataset
+
+## Entities
+* B3 -- tank
+    - level: 0.005 .. 0.22 m [observed]
+    - NaCl mass fraction: 0 .. 0.08 [observed]
+* B4 -- tank
+    - level: 0.005 .. 0.195 m [observed]
+* B5 -- tank
+    - level: 0.005 .. 0.18 m [observed]
+    - NaCl mass fraction: 0.08 .. 0.18 [observed]
+    - temperature: 20 .. 108 C [observed]
+* B6 -- tank
+    - level: 0.005 .. 0.09 m [observed]
+    - temperature: 19 .. 80 C [observed]
+* B7 -- tank
+    - level: 0.005 .. 0.105 m [observed]
+    - temperature: 20 .. 76 C [observed]
+* FIS801 -- flow indicator
+    - mass flow: 0.12 .. 0.16 kg_s [observed]
+* P1 -- pump command
+    - command: 0 .. 1 [observed]
+* P2 -- pump command
+    - command: 0 .. 1 [observed]
+* B5_heater -- heater command
+    - command: 0 .. 1 [observed]
+* B6_cooler -- cooler command
+    - command: 0 .. 1 [observed]
+* B7_cooler -- cooler command
+    - command: 0 .. 1 [observed]
+* V1 -- valve command
+    - open: 0 .. 1 [observed]
+* V3 -- valve command
+    - open: 0 .. 1 [observed]
+* V5 -- valve command
+    - open: 0 .. 1 [observed]
+* V6 -- valve command
+    - open: 0 .. 1 [observed]
+* V8 -- valve command
+    - open: 0 .. 1 [observed]
+* V9 -- valve command
+    - open: 0 .. 1 [observed]
+* V11 -- valve command
+    - open: 0 .. 1 [observed]
+* V12 -- valve command
+    - open: 0 .. 1 [observed]
+* V15 -- valve command
+    - open: 0 .. 1 [observed]
+* V18 -- valve command
+    - open: 0 .. 1 [observed]
+* V20 -- valve command
+    - open: 0 .. 1 [observed]
+* V22 -- valve command
+    - open: 0 .. 1 [observed]
+* V23 -- valve command
+    - open: 0 .. 1 [observed]
+* V24 -- valve command
+    - open: 0 .. 1 [observed]
+* V25 -- valve command
+    - open: 0 .. 1 [observed]
+* controller_state -- state variable
+    - time range: 0 .. 3000 s [observed]
+* region -- region variable
+
+## Physical relationships
+* This run is a recorded observation rather than a scenario input or command schedule. [observed]
+* The run started at time_s=0 in controller_state=Initial and region=Single. [observed]
+* At time_s=20 the controller_state changed to Step1 while region remained Single. [observed]
+* At time_s=180 the controller_state changed to Step2 while region remained Single. [observed]
+* At time_s=340 the controller_state changed to Step3 while region remained Single. [observed]
+* At time_s=500 the controller_state changed to Step4 while region remained Single. [observed]
+* At time_s=560 the controller_state changed to Step5 while region remained Single. [observed]
+* At time_s=720 the controller_state changed to Step6 while region remained Single. [observed]
+* At time_s=1600 the run entered controller_state=Parallel:Step12+Step8 and region=A+B. [observed]
+* At time_s=1770 the controller_state changed to Parallel:Step12+Step9 in region=A+B. [observed]
+* At time_s=1900 the controller_state changed to Parallel:Step13+Step9 in region=A+B. [observed]
+* At time_s=2050 the controller_state changed to Parallel:Step13+Step10 in region=A+B. [observed]
+* At time_s=2200 the controller_state changed to Parallel:DoneA+Step10 in region=A+B. [observed]
+* At time_s=2250 the controller_state changed to JoinWait and region=Join. [observed]
+* At time_s=2505 the controller_state changed to Step1_cycle2 and region=Single. [observed]
+* At time_s=2665 the controller_state changed to Step2_cycle2 and region=Single. [observed]
+* At time_s=2825 the controller_state changed to Step3_cycle2 and region=Single. [observed]
+* At time_s=2985 the controller_state changed to Step4_cycle2 and region=Single. [observed]

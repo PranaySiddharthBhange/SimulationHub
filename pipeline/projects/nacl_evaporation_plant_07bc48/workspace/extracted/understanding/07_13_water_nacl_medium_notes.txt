@@ -1,0 +1,92 @@
+Subject: Water-NaCl Medium and Tank Modeling Note
+Document kind: design note
+
+## Entities
+* WaterNaCl -- medium  <[page 1]>; aliases: custom water-NaCl medium
+* PartialMedium -- medium hierarchy element  <[page 1]>
+* PartialMixtureMedium -- medium hierarchy element  <[page 1]>
+* PartialMixtureTwoPhaseMedium -- medium hierarchy element  <[page 1]>
+* medium -- medium state  <[page 1]>
+* p_ambient -- pressure variable  <[page 1]>
+* V -- volume variable  <[page 1]>
+* area -- area variable  <[page 1]>
+* level -- level variable  <[page 1]>
+* V0 -- volume offset variable  <[page 1]>
+* m -- mass variable  <[page 1]>
+* mXi -- component mass variable  <[page 1]>
+* U -- internal energy variable  <[page 1]>
+* topPorts -- port collection  <[page 1]>
+* ports -- port collection  <[page 1]>
+* HeatB5 -- heater/heat-flow element  <[page 1]>
+    - Q_flow: 20000
+* controller.actuators.T5_Heater -- actuator command  <[page 1]>
+* Q_up -- heat-flow threshold variable  <[page 1]>
+* heatPort -- heat port  <[page 1]>
+* m_con -- condensate mass-flow variable  <[page 1]>
+    - mass flow: 0
+* hv -- enthalpy variable  <[page 1]>
+* hl -- enthalpy variable  <[page 1]>
+* Xi[1] -- composition variable  <[page 1]>
+* cp -- specific heat variable  <[page 1]>
+* dT_dX -- derivative variable  <[page 1]>
+* dhl_dX -- derivative variable  <[page 1]>
+* K1 -- condenser  <[page 1]>
+* B5 evaporator model -- evaporator model  <[page 1]>; aliases: B5
+* rho -- property function  <[page 1]>
+* h -- property function  <[page 1]>
+* p_sat -- property function  <[page 1]>
+* eta -- property function  <[page 1]>
+* c1 -- coefficient  <[page 1]>
+    - coefficient: -6.83241E-07
+* c2 -- coefficient  <[page 1]>
+    - coefficient: 0.000765676
+* c3 -- coefficient  <[page 1]>
+    - coefficient: -0.297018665
+* c4 -- coefficient  <[page 1]>
+    - coefficient: -0.299730079
+* c5 -- coefficient  <[page 1]>
+    - coefficient: 2.065267182
+* c6 -- coefficient  <[page 1]>
+    - coefficient: 1.546491257
+* c7 -- coefficient  <[page 1]>
+    - coefficient: 31.57571595
+* StandardWater -- medium configuration  <[page 1]>
+* return pump -- pump  <[page 1]>
+
+## Relationships
+* PartialMedium precedes in intended hierarchy PartialMixtureMedium (Intended hierarchy)  <[page 1]>
+* PartialMixtureMedium precedes in intended hierarchy PartialMixtureTwoPhaseMedium (Intended hierarchy)  <[page 1]>
+* PartialMixtureTwoPhaseMedium precedes in intended hierarchy WaterNaCl (Intended hierarchy)  <[page 1]>
+* medium equals pressure p_ambient  <[page 1]>
+* V depends on area (V = area*level + V0)  <[page 1]>
+* V depends on level (V = area*level + V0)  <[page 1]>
+* V depends on V0 (V = area*level + V0)  <[page 1]>
+* m depends on V (m = V*medium.d)  <[page 1]>
+* mXi depends on m (mXi = m*medium.Xi)  <[page 1]>
+* U depends on m (U = m*medium.u)  <[page 1]>
+* der(m) equals sum of topPorts (sum(topPorts.m_flow) + sum(ports.m_flow))  <[page 1]>
+* der(m) equals sum of ports (sum(topPorts.m_flow) + sum(ports.m_flow))  <[page 1]>
+* K1 is physically separate from B5 evaporator model  <[page 1]>
+* B5 evaporator model exports condensate through additional fluid port  <[page 1]>
+
+## Requirements
+* For an incompressible formulation, the p_ambient*der(V) contribution may be omitted to avoid small artificial temperature changes.  <[page 1]>
+* Preferred treatment: asymmetric loss factors with a regularized quadratic flow law.  <[page 1]>
+* When a port is above liquid level, use a very large outflow loss factor (default 1e5) and small inflow factor (default 0.01).  <[page 1]>
+* Apply hysteresis based on port diameter around level crossing.  <[page 1]>
+* Required properties: density rho(T,p,w), enthalpy h(T,p,w), cp(T,w), saturation pressure p_sat(T,w), and viscosity eta(T,w).  <[page 1]>
+
+## Behaviors
+* HeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;  <[page 1]>
+* if Q_up > heatPort.Q_flow then m_con = 0; else m_con = -(heatPort.Q_flow - Q_up) / (hv - hl + Xi[1]*(cp*dT_dX + dhl_dX)); end if;  <[page 1]>
+
+## Physical relationships
+* medium.p = p_ambient;  <[page 1]>
+* V = area*level + V0; m = V*medium.d;  <[page 1]>
+* mXi = m*medium.Xi; U = m*medium.u;  <[page 1]>
+* der(m) = sum(topPorts.m_flow) + sum(ports.m_flow);  <[page 1]>
+* der(U) = sum(H_flow) - p_ambient*der(V);  <[page 1]>
+* eta(T,w) = exp(c1*T^3 + c2*T^2 + c3*T + c4 + c5*w + c6*w^2 + c7*w^3)  <[page 1]>
+
+## Unreadable
+* The entity name for "additional fluid port" is not given beyond the descriptive phrase "additional fluid port".

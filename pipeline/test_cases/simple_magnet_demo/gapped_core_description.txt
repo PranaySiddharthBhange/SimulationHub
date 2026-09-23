@@ -1,0 +1,2 @@
+A 500 turn coil carries a steady 2 A and drives flux around a closed iron core of 4 square centimetre cross-section, 0.4 m mean iron path length and relative permeability 2000, interrupted by a single 2 mm air gap in series with the iron.
+Simulate for 1 second and report the core flux, the core flux density and the magnetic potential drops across the iron and across the air gap.

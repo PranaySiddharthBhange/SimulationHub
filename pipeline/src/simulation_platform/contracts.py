@@ -174,3 +174,154 @@ class SyntaxIssue(Record):
     file: str
     line: int | None = None
     message: str
+
+
+# --- Stage 1 cloud extraction -------------------------------------------
+# The local model writes free text (constrained decoding is slow and
+# hang-prone on it). A cloud extraction has no such limit, so it returns a
+# typed result instead: every field is validated, no section can go missing,
+# and -- most importantly -- each item carries the exact source span it came
+# from, which makes fabrication mechanically detectable rather than a
+# judgement call. See `_verify_quotes` in `reasoner_pipeline.py`.
+
+_EXTRACTION_CATEGORIES = Literal[
+    "requirement",
+    "constraint",
+    "behavior",
+    "physical_relationship",
+    "control_law",
+    "scheduled_command",
+]
+
+# What KIND of document this is, which is what decides how much weight a
+# statement in it carries. Confirmed necessary: resolving the tank benchmark
+# required treating an operator's shift note as an observation that loses to an
+# approved requirement and a test procedure, and nothing in the extraction
+# recorded that distinction -- Merge had to re-derive it from prose.
+CANONICAL_DOCUMENT_KIND = (
+    "requirement_spec",
+    # A multi-sheet engineering register: requirements alongside equipment
+    # schedules, IO lists, operating parameters and a change log. Every dataset
+    # in this benchmark has one, and it is neither a pure specification nor a
+    # recorded dataset -- classifying it as either loses what it is.
+    "engineering_register",
+    "datasheet",
+    "test_procedure",
+    "design_note",
+    "correspondence",
+    "legacy_model",
+    "operator_log",
+    "dataset",
+    "drawing",
+    "other",
+)
+
+# Whether a value governs or has been replaced. The benchmark datasets are built
+# around this: one states a high-level setpoint twice with different numbers, one
+# gives a nominal and an as-built gap, one carries a literal "STALE: superseded
+# by CR-017" marker. Across the three datasets there are ~300 such status words.
+#
+# Deliberately a free string rather than a closed enum. Confirmed live: a strict
+# Literal rejected `status="released"` -- a word the tank URS genuinely uses --
+# and failed the whole extraction call. Document vocabulary is open ("released",
+# "issued", "final", "Rev B"), and losing an entire document because it used an
+# unanticipated but perfectly valid word is far worse than accepting the word and
+# normalising it afterwards. `reasoner_pipeline._canonical_status` maps the common
+# variants onto CANONICAL_STATUS for machine use while the raw word is preserved.
+CANONICAL_STATUS = (
+    "current", "approved", "nominal", "as_built", "measured",
+    "observed", "proposed", "archived", "superseded", "unknown",
+)
+
+
+class ExtractedValue(Record):
+    """One numeric value with its unit and its standing in the evidence."""
+
+    quantity: str
+    # Exactly as written, without normalising or converting.
+    value: str
+    unit: str = ""
+    status: str = "unknown"
+    # What this value replaces, or what replaces it, when the document says so
+    # ("superseded by CR-017", "supersedes Legacy Model v1.0").
+    supersedes: str = ""
+    quote: str
+
+
+class ExtractedEntity(Record):
+    """One real component, actor or control element named by the document."""
+
+    name: str
+    kind: str
+    aliases: list[str] = Field(default_factory=list)
+    values: list[ExtractedValue] = Field(default_factory=list)
+    # The document's own identifier for this item, when it has one.
+    ref: str = ""
+    # The "[page N]" or "[sheet X]" marker this came from, copied verbatim from
+    # the document text. `sources.py` emits these; nothing used to keep them.
+    anchor: str = ""
+    # True when this was read from an accompanying image rather than the
+    # document text. A diagram carries no quotable substring, so quote
+    # verification skips these and `quote` holds where in the image it was
+    # seen. Without this the quote rule silently emptied image-only
+    # documents -- a reference control diagram, the single most
+    # topology-rich file in its dataset, extracted nothing at all because
+    # the model correctly refused to invent a quote for it.
+    from_image: bool = False
+    quote: str
+
+
+class ExtractedRelationship(Record):
+    """A connection, containment, control or arrangement between two entities."""
+
+    subject: str
+    predicate: str
+    object: str
+    detail: str = ""
+    ref: str = ""
+    anchor: str = ""
+    # True when this was read from an accompanying image rather than the
+    # document text. A diagram carries no quotable substring, so quote
+    # verification skips these and `quote` holds where in the image it was
+    # seen. Without this the quote rule silently emptied image-only
+    # documents -- a reference control diagram, the single most
+    # topology-rich file in its dataset, extracted nothing at all because
+    # the model correctly refused to invent a quote for it.
+    from_image: bool = False
+    quote: str
+
+
+class ExtractedFact(Record):
+    """A requirement, constraint, behavior, equation, control law or command."""
+
+    category: _EXTRACTION_CATEGORIES
+    statement: str
+    # The requirement/criterion id the document gives it -- "AC-01", "CR-017",
+    # "URS-M-003". These are the traceability anchors the acceptance checks
+    # carry through to `Check.source`.
+    ref: str = ""
+    anchor: str = ""
+    status: str = "unknown"
+    # True when this was read from an accompanying image rather than the
+    # document text. A diagram carries no quotable substring, so quote
+    # verification skips these and `quote` holds where in the image it was
+    # seen. Without this the quote rule silently emptied image-only
+    # documents -- a reference control diagram, the single most
+    # topology-rich file in its dataset, extracted nothing at all because
+    # the model correctly refused to invent a quote for it.
+    from_image: bool = False
+    quote: str
+
+
+class ExtractedDocument(Record):
+    document: str
+    # What kind of system this document is about, in the document's own terms.
+    # Not a classification into a fixed taxonomy -- that happens in Merge.
+    subject: str
+    kind: str = "other"
+    entities: list[ExtractedEntity] = Field(default_factory=list)
+    relationships: list[ExtractedRelationship] = Field(default_factory=list)
+    facts: list[ExtractedFact] = Field(default_factory=list)
+    # Anything present but unreadable (a figure with no legend, a truncated
+    # formula). Recorded rather than guessed at.
+    unreadable: list[str] = Field(default_factory=list)

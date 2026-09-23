@@ -1,0 +1,364 @@
+{
+  "document": "within SyntheticMagnetics;\nmodel MagneticCircuit_v1\n  import Modelica.Magnetic.QuasiStatic.FluxTubes;\n\n  parameter SI.Length a = 0.025;\n  parameter SI.Length l = 0.150;\n  parameter SI.Length delta = 0.0015;\n  parameter Real mu_r = 1000;       // STALE: CR-MAG-004 -> 1200\n  parameter Real sigma = 0.05;      // STALE: CR-MAG-006 -> 0.08\n  parameter Integer N_exc = 600;\n  parameter Integer N_meas = 40;    // STALE: Coil Data B -> 50\n  parameter SI.Frequency f = 50;\n\n  // Simplified topology notes:\n  // leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke\n  // Phi_gap = (1-sigma)*Phi_core\n  // Electric and magnetic grounds are instantiated in the complete example.\n\nequation\n  // Legacy benchmark current was interpreted inconsistently in comments:\n  // some notes call 2 A \"amplitude\"; released EP-03 defines 2 A RMS phasor magnitude.\nend MagneticCircuit_v1;\n",
+  "subject": "MagneticCircuit_v1",
+  "kind": "legacy model",
+  "entities": [
+    {
+      "name": "MagneticCircuit_v1",
+      "kind": "model",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "model MagneticCircuit_v1"
+    },
+    {
+      "name": "Modelica.Magnetic.QuasiStatic.FluxTubes",
+      "kind": "import",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "import Modelica.Magnetic.QuasiStatic.FluxTubes;"
+    },
+    {
+      "name": "a",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "0.025",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "parameter SI.Length a = 0.025;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter SI.Length a = 0.025;"
+    },
+    {
+      "name": "l",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "0.150",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "parameter SI.Length l = 0.150;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter SI.Length l = 0.150;"
+    },
+    {
+      "name": "delta",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "0.0015",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "parameter SI.Length delta = 0.0015;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter SI.Length delta = 0.0015;"
+    },
+    {
+      "name": "mu_r",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "relative permeability",
+          "value": "1000",
+          "unit": "",
+          "status": "superseded",
+          "supersedes": "1200",
+          "quote": "parameter Real mu_r = 1000;       // STALE: CR-MAG-004 -> 1200"
+        }
+      ],
+      "ref": "CR-MAG-004",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real mu_r = 1000;       // STALE: CR-MAG-004 -> 1200"
+    },
+    {
+      "name": "sigma",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "sigma",
+          "value": "0.05",
+          "unit": "",
+          "status": "superseded",
+          "supersedes": "0.08",
+          "quote": "parameter Real sigma = 0.05;      // STALE: CR-MAG-006 -> 0.08"
+        }
+      ],
+      "ref": "CR-MAG-006",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real sigma = 0.05;      // STALE: CR-MAG-006 -> 0.08"
+    },
+    {
+      "name": "N_exc",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "600",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "parameter Integer N_exc = 600;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Integer N_exc = 600;"
+    },
+    {
+      "name": "N_meas",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "40",
+          "unit": "",
+          "status": "superseded",
+          "supersedes": "50",
+          "quote": "parameter Integer N_meas = 40;    // STALE: Coil Data B -> 50"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Integer N_meas = 40;    // STALE: Coil Data B -> 50"
+    },
+    {
+      "name": "f",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "frequency",
+          "value": "50",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "parameter SI.Frequency f = 50;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter SI.Frequency f = 50;"
+    },
+    {
+      "name": "leftLeg",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "name": "upperYoke",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "name": "rightLeg",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "name": "airGap",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "name": "leakage",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "name": "lowerYoke",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "name": "Phi_gap",
+      "kind": "variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Phi_gap = (1-sigma)*Phi_core"
+    },
+    {
+      "name": "Phi_core",
+      "kind": "variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Phi_gap = (1-sigma)*Phi_core"
+    },
+    {
+      "name": "Electric and magnetic grounds",
+      "kind": "ground",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Electric and magnetic grounds are instantiated in the complete example."
+    },
+    {
+      "name": "EP-03",
+      "kind": "document",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "released EP-03 defines 2 A RMS phasor magnitude."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "leftLeg",
+      "predicate": "connects_to",
+      "object": "upperYoke",
+      "detail": "series topology note",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "subject": "upperYoke",
+      "predicate": "connects_to",
+      "object": "rightLeg",
+      "detail": "series topology note",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "subject": "rightLeg",
+      "predicate": "connects_to",
+      "object": "airGap",
+      "detail": "parallel branch after rightLeg",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "subject": "rightLeg",
+      "predicate": "connects_to",
+      "object": "leakage",
+      "detail": "parallel branch after rightLeg",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "subject": "airGap",
+      "predicate": "connects_to",
+      "object": "lowerYoke",
+      "detail": "parallel path to lowerYoke",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "subject": "leakage",
+      "predicate": "connects_to",
+      "object": "lowerYoke",
+      "detail": "parallel path to lowerYoke",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    },
+    {
+      "subject": "airGap",
+      "predicate": "in_parallel_with",
+      "object": "leakage",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "Phi_gap = (1-sigma)*Phi_core",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Phi_gap = (1-sigma)*Phi_core"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

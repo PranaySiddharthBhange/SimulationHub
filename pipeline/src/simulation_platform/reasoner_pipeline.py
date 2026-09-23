@@ -42,6 +42,7 @@ from typing import Callable
 
 from simulation_platform.config import PlatformSettings
 from simulation_platform.contracts import (
+    CANONICAL_STATUS,
     Check, Clarification, MergeClarification, MermaidDraft, ModelicaDraft, Simulation, SysMLDraft, Understanding, ValidationReport,
 )
 from simulation_platform.project_store import ProjectStore
@@ -62,6 +63,24 @@ from simulation_platform.workspace import Workspace
 # budget alongside the system prompt and response, even for the largest
 # single chunk. See module docstring for the real bug this exists to avoid.
 _MAX_CHARS_PER_CHUNK = 6000
+
+# A cloud extraction has no reason to be split at the local model's budget.
+# Measured across the three benchmark datasets, a whole project is 19k-31k
+# tokens and the largest single document is well under that, so every document
+# fits in one call. Splitting them was actively harmful: an engineering
+# register carries a value and the note that supersedes it thousands of
+# characters apart, and no 6000-char chunk ever saw both, which made the
+# supersession reasoning structurally impossible at Stage 1. The ceiling here
+# exists only so a pathological file still gets split rather than rejected.
+_CLOUD_MAX_CHARS_PER_CHUNK = 400_000
+
+# A table this long is a recorded trajectory, not a scenario input. Sending it
+# verbatim wastes most of the call and invites the model to treat a reference
+# output as a forcing function, which `prompts/common.py` explicitly forbids.
+_TABLE_SAMPLE_ROWS = 15
+_TABLE_MAX_EVENT_ROWS = 40
+_TABLE_DISCRETE_MAX_DISTINCT = 25
+_MAX_QUOTE_REPAIRS = 1
 
 
 @contextmanager
@@ -751,6 +770,310 @@ def _chunk_source_text(text: str) -> list[str]:
 _IMAGE_ONLY_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tif", ".tiff"}
 
 
+def _sendable_text(source: Source) -> str:
+    """The document text one Stage 1 call should actually see.
+
+    A parsed CSV/TSV arrives with `table` populated. Those files in this
+    benchmark are recorded run trajectories of hundreds of rows, and the useful
+    evidence in them is the column schema, the range each quantity covers, and
+    WHEN things changed -- not the numbers themselves.
+
+    Sampling the first N rows, which is what this did first, is the worst
+    possible slice of a trajectory: confirmed live on a 901-row, 900-second run
+    whose first command lands at t=20, the head sample was fifteen identical
+    all-zero rows from the dead time before anything happened. It showed no
+    event at all and read as though the command schedule were empty. Rows are
+    now chosen where a discrete column actually CHANGES, which puts the real
+    event structure in the same space.
+    """
+
+    if source.table is None or len(source.table) <= _TABLE_SAMPLE_ROWS:
+        return source.text
+
+    rows = source.table
+    columns = list(rows[0])
+
+    def numbers(column: str) -> list[float]:
+        values = []
+        for row in rows:
+            try:
+                values.append(float(row[column]))
+            except (TypeError, ValueError):
+                return []
+        return values
+
+    # Step-like columns (few distinct values) carry the events; a column with a
+    # different value in every row is a continuously varying signal.
+    discrete = [
+        c for c in columns
+        if 1 < len({row.get(c) for row in rows}) <= _TABLE_DISCRETE_MAX_DISTINCT
+    ]
+
+    summary = []
+    for column in columns:
+        values = numbers(column)
+        if values:
+            summary.append(f"  {column}: {min(values):g} .. {max(values):g}")
+        else:
+            seen = {str(row.get(column)) for row in rows}
+            if len(seen) <= _TABLE_DISCRETE_MAX_DISTINCT:
+                summary.append(f"  {column}: {', '.join(sorted(seen))}")
+
+    if discrete:
+        cardinality = {c: len({row.get(c) for row in rows}) for c in discrete}
+        # Score each change by the most selective column that moved: a mode or a
+        # valve command has very few distinct values, a countdown timer has many.
+        # Thinning purely by position dropped a stage transition because timer
+        # decrements crowded it out, so rank by significance and keep the top
+        # ones rather than every n-th.
+        events: list[tuple[int, int]] = [(0, 0)]
+        previous = tuple(rows[0].get(c) for c in discrete)
+        for index, row in enumerate(rows[1:], 1):
+            current = tuple(row.get(c) for c in discrete)
+            if current != previous:
+                moved = [c for c, before, after in zip(discrete, previous, current) if before != after]
+                events.append((index, min(cardinality[c] for c in moved)))
+                previous = current
+        if events[-1][0] != len(rows) - 1:
+            events.append((len(rows) - 1, 0))
+        if len(events) > _TABLE_MAX_EVENT_ROWS:
+            events = sorted(events, key=lambda e: (e[1], e[0]))[:_TABLE_MAX_EVENT_ROWS]
+        picked = sorted(index for index, _ in events)
+        heading = (
+            f"rows where a discrete column changes value, which is the event structure of this run "
+            f"({len(picked)} of {len(rows)} rows shown; the rest repeat the previous row's state):"
+        )
+    else:
+        step = max(1, len(rows) // _TABLE_SAMPLE_ROWS)
+        picked = list(range(0, len(rows), step))[:_TABLE_SAMPLE_ROWS]
+        heading = (
+            f"no column changes in steps, so {len(picked)} evenly spaced rows of {len(rows)} are "
+            "shown as a sample:"
+        )
+
+    sample = "\n".join(
+        "  " + " | ".join(f"{c}={rows[i].get(c, '')}" for c in columns) for i in picked
+    )
+    return (
+        f"[tabular data: {len(rows)} rows, {len(columns)} columns]\n"
+        f"columns: {', '.join(columns)}\n"
+        "These are RECORDED values -- an observation of a run that already happened, not a "
+        "scenario input and not a command schedule.\n"
+        f"range of each column across all {len(rows)} rows:\n" + "\n".join(summary) + "\n"
+        f"{heading}\n{sample}"
+    )
+
+
+def _normalise(text: str) -> str:
+    """Whitespace-insensitive form used only for quote matching."""
+
+    return re.sub(r"\s+", " ", text).strip().lower()
+
+
+def _verify_quotes(extracted, source_text: str) -> list[str]:
+    """Every quote must really occur in the document. Returns the ones that don't.
+
+    This is the whole point of asking for quotes: it turns "did the model make
+    this up?" from a judgement call into a substring test. Confirmed necessary --
+    an earlier free-text Stage 1 invented component tags and a requirement that
+    appear nowhere in the source documents, and nothing detected it until the
+    fabricated entities surfaced three stages later.
+    """
+
+    haystack = _normalise(source_text)
+    bad: list[str] = []
+    values = [(entity, value) for entity in extracted.entities for value in entity.values]
+    for entity, value in values:
+        if entity.from_image:
+            continue
+        quote = (value.quote or "").strip()
+        if not quote or _normalise(quote) not in haystack:
+            bad.append(
+                f"{entity.name}/{value.quantity!r} = {value.value!r}: "
+                + ("no quote given" if not quote else f"quote not found -- {quote[:100]!r}")
+            )
+    for item in [*extracted.entities, *extracted.relationships, *extracted.facts]:
+        if item.from_image:
+            continue  # a diagram has no substring to match
+        quote = (item.quote or "").strip()
+        label = getattr(item, "name", None) or getattr(item, "statement", None) or getattr(item, "subject", "?")
+        if not quote:
+            bad.append(f"{label!r}: no quote given")
+        elif _normalise(quote) not in haystack:
+            bad.append(f"{label!r}: quote not found in the document -- {quote[:120]!r}")
+    return bad
+
+
+_STATUS_SYNONYMS = {
+    "released": "approved", "issued": "approved", "final": "approved",
+    "effective": "current", "active": "current", "in_force": "current",
+    "latest": "current", "applicable": "current",
+    "stale": "superseded", "obsolete": "superseded", "replaced": "superseded",
+    "deprecated": "superseded", "legacy": "archived", "historical": "archived",
+    "draft": "proposed", "candidate": "proposed", "recommended": "proposed",
+    "typical": "nominal", "rated": "nominal", "design": "nominal",
+    "as-built": "as_built", "asbuilt": "as_built", "commissioned": "as_built",
+    "recorded": "measured", "test": "measured", "reported": "observed",
+}
+
+
+def _canonical_status(status: str) -> str:
+    """Map a document's own status wording onto a canonical value.
+
+    The field is free text on purpose (a strict enum failed a whole extraction
+    on `released`), so normalisation happens here instead: the raw word stays in
+    the sidecar, and this gives the comparable form.
+    """
+
+    raw = (status or "").strip().lower().replace(" ", "_")
+    if raw in CANONICAL_STATUS:
+        return raw
+    return _STATUS_SYNONYMS.get(raw, _STATUS_SYNONYMS.get(raw.replace("_", "-"), raw or "unknown"))
+
+
+def _tag(item) -> str:
+    """Trailing provenance: the document's own id for an item and its page/sheet."""
+
+    bits = [b for b in (getattr(item, "ref", ""), getattr(item, "anchor", "")) if b]
+    return f"  <{' '.join(bits)}>" if bits else ""
+
+
+def _render_extraction(extracted) -> str:
+    """Render a typed extraction into the same eight-section note format.
+
+    Merge reads these notes as text, so the structure stays an internal quality
+    mechanism rather than a new handoff format: the cloud path gains schema
+    validation and quote checking without changing anything downstream.
+    """
+
+    category_heading = {
+        "requirement": "Requirements",
+        "constraint": "Constraints",
+        "behavior": "Behaviors",
+        "physical_relationship": "Physical relationships",
+        "control_law": "Control laws",
+        "scheduled_command": "Scheduled commands",
+    }
+    lines = [f"Subject: {extracted.subject}", f"Document kind: {extracted.kind}", ""]
+
+    if extracted.entities:
+        lines.append("## Entities")
+        for entity in extracted.entities:
+            parts = [f"* {entity.name} -- {entity.kind}{_tag(entity)}"]
+            if entity.aliases:
+                parts.append(f"aliases: {', '.join(entity.aliases)}")
+            lines.append("; ".join(parts))
+            for value in entity.values:
+                unit = f" {value.unit}" if value.unit else ""
+                canonical = _canonical_status(value.status)
+                shown = canonical if canonical == value.status.strip().lower() else f"{canonical}/{value.status}"
+                status = "" if canonical == "unknown" else f" [{shown}]"
+                replaces = f" (supersedes/superseded: {value.supersedes})" if value.supersedes else ""
+                lines.append(f"    - {value.quantity}: {value.value}{unit}{status}{replaces}")
+        lines.append("")
+
+    if extracted.relationships:
+        lines.append("## Relationships")
+        for rel in extracted.relationships:
+            detail = f" ({rel.detail})" if rel.detail else ""
+            lines.append(f"* {rel.subject} {rel.predicate} {rel.object}{detail}{_tag(rel)}")
+        lines.append("")
+
+    for category, heading in category_heading.items():
+        items = [f for f in extracted.facts if f.category == category]
+        if not items:
+            continue
+        lines.append(f"## {heading}")
+        lines.extend(
+            f"* {item.statement}{'' if _canonical_status(item.status) == 'unknown' else f' [{_canonical_status(item.status)}]'}{_tag(item)}"
+            for item in items
+        )
+        lines.append("")
+
+    if extracted.unreadable:
+        lines.append("## Unreadable")
+        lines.extend(f"* {item}" for item in extracted.unreadable)
+        lines.append("")
+
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def _extract_structured(reasoner, packet, chunk_text: str, rel: str, out_path: Path, run_log: RunLog | None) -> str:
+    """One cloud extraction: typed result, quotes verified against the source.
+
+    The structure is an internal quality mechanism -- the note written to disk
+    is still the eight-section text Merge already reads. The typed result is
+    kept beside it as `.extraction.json` so a reviewer can see exactly which
+    span of the document every recorded fact came from.
+    """
+
+    from simulation_platform.contracts import ExtractedDocument
+    from simulation_platform.skills.stage1_understanding import CLOUD_EXTRACTION_PROMPT
+
+    context = ""
+    extracted = None
+    for attempt in range(_MAX_QUOTE_REPAIRS + 1):
+        try:
+            extracted = reasoner.ask(CLOUD_EXTRACTION_PROMPT, context, ExtractedDocument, packet)
+        except Exception as exc:
+            # A schema rejection must not end a run that may be extracting
+            # dozens of documents. Found live: the model returned a status word
+            # the schema did not list, and the whole document was lost. Hand the
+            # validation error back once rather than failing the stage.
+            if extracted is not None or attempt == _MAX_QUOTE_REPAIRS:
+                raise
+            print(f"    [Stage 1] {rel}: response rejected, retrying once -- {type(exc).__name__}", flush=True)
+            if run_log is not None:
+                run_log.event("extraction_invalid_response", stage=1, document=rel, detail=str(exc)[:1500])
+            context = (
+                "Your previous answer could not be accepted:\n\n"
+                f"{str(exc)[:2000]}\n\n"
+                "Return the extraction again, correcting exactly what the message reports "
+                "and changing nothing else."
+            )
+            continue
+        unverified = _verify_quotes(extracted, chunk_text)
+        if not unverified:
+            break
+        print(f"    [Stage 1] {rel}: {len(unverified)} unverifiable quote(s)", flush=True)
+        if run_log is not None:
+            run_log.event(
+                "extraction_quotes_unverified", stage=1, document=rel,
+                attempt=attempt + 1, count=len(unverified), items=unverified[:20],
+            )
+        if attempt == _MAX_QUOTE_REPAIRS:
+            # Keep the items rather than dropping them silently; they are marked
+            # in the note so Merge can weigh them, and the sidecar records which.
+            break
+        context = (
+            "Your previous answer contained items whose `quote` is not an exact "
+            "substring of the document you were given:\n\n"
+            + "\n".join(f"- {item}" for item in unverified)
+            + "\n\nRe-read the document and return the extraction again. For each item "
+            "above, either copy the real supporting text verbatim as its quote, or "
+            "remove the item entirely because the document does not support it. Do "
+            "not reword the document to make a quote match."
+        )
+
+    unverified = _verify_quotes(extracted, chunk_text)
+    out_path.with_suffix(".extraction.json").write_text(
+        json.dumps(
+            {**extracted.model_dump(), "unverified_quotes": unverified},
+            indent=2, ensure_ascii=False,
+        ) + "\n",
+        encoding="utf-8",
+    )
+    note = _render_extraction(extracted)
+    if unverified:
+        note += (
+            "\n## Unverified\n"
+            "The following items could not be matched to text in this document and "
+            "may be unreliable:\n"
+            + "\n".join(f"* {item}" for item in unverified) + "\n"
+        )
+    return note
+
+
 def _understand_documents(ws: Workspace, project_id: str, run_log: RunLog | None = None, stage1_backend: str | None = None) -> list[Path]:
     """Understand documents with a selectable Stage 1 backend.
 
@@ -794,24 +1117,31 @@ def _understand_documents(ws: Workspace, project_id: str, run_log: RunLog | None
             print(f"    [Stage 1] skipping {rel}: {exc}", flush=True)
             continue
 
-        if is_image_only:
-            packet = Packet([source])
-            text = reasoner.ask_free_text(DOCUMENT_UNDERSTANDING_PROMPT, "", packet)
-            out_path = understanding_dir / f"{doc_index}_{doc_path.stem}.txt"
-            out_path.write_text(text, encoding="utf-8")
-            written.append(out_path)
-            print(f"    [Stage 1:{backend}] document {doc_index}/{len(doc_paths)}: {rel} (visual)", flush=True)
-            continue
-
-        chunks = _chunk_source_text(source.text) if len(source.text) > _MAX_CHARS_PER_CHUNK else [source.text]
+        budget = _CLOUD_MAX_CHARS_PER_CHUNK if backend == "openai" else _MAX_CHARS_PER_CHUNK
+        body = _sendable_text(source)
+        chunks = _chunk_source_text(body) if len(body) > budget else [body]
         for chunk_index, chunk_text in enumerate(chunks):
-            chunk_source = Source(rel, chunk_text, images=[])
+            # Images ride with the first chunk. They used to be dropped for every
+            # document that was not a pure image file, which silently discarded
+            # four page/embedded images per benchmark dataset -- diagram pages of
+            # a URS, a datasheet and a test procedure among them -- even though
+            # the parser had already extracted them.
+            chunk_source = Source(rel, chunk_text, images=source.images if chunk_index == 0 else [])
             packet = Packet([chunk_source])
             label = f"{rel}" + (f" (chunk {chunk_index + 1}/{len(chunks)})" if len(chunks) > 1 else "")
-            print(f"    [Stage 1:{backend}] document {doc_index}/{len(doc_paths)}: {label}", flush=True)
-            text = reasoner.ask_free_text(DOCUMENT_UNDERSTANDING_PROMPT, "", packet)
+            attached = f", {len(chunk_source.images)} image(s)" if chunk_source.images else ""
+            print(f"    [Stage 1:{backend}] document {doc_index}/{len(doc_paths)}: {label}{attached}", flush=True)
+
             suffix = f"_chunk{chunk_index:02d}" if len(chunks) > 1 else ""
             out_path = understanding_dir / f"{doc_index:02d}_{doc_path.stem}{suffix}.txt"
+
+            if backend == "openai":
+                text = _extract_structured(
+                    reasoner, packet, chunk_text, rel, out_path, run_log,
+                )
+            else:
+                text = reasoner.ask_free_text(DOCUMENT_UNDERSTANDING_PROMPT, "", packet)
+
             out_path.write_text(text, encoding="utf-8")
             written.append(out_path)
 

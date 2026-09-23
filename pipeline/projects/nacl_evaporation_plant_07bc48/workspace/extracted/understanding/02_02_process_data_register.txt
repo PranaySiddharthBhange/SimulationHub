@@ -1,0 +1,155 @@
+Subject: NaCl Evaporation Plant - Synthetic Engineering Evidence Register
+Document kind: engineering register
+
+## Entities
+* B1 -- tank  <[sheet Equipment]>; aliases: Charging tank
+    - area: 0.07 m^2 [current]
+    - height: 0.6 m [current]
+    - max level: 0.5 m [current]
+    - port level note: 0.12 m [current]
+    - initial NaCl mass fraction: 0.000 [current]
+* B2 -- tank  <[sheet Equipment]>; aliases: Charging tank
+    - area: 0.07 m^2 [current]
+    - height: 0.6 m [current]
+    - max level: 0.5 m [current]
+    - port level note: 0.12 m [current]
+    - initial NaCl mass fraction: 0.250 [current]
+* B3 -- tank  <[sheet Equipment]>; aliases: Mixing tank
+    - area: 0.05 m^2 [current]
+    - height: 0.45 m [current]
+    - max level: 0.38 m [current]
+    - port level note: 0.1 m [current]
+* B4 -- tank  <[sheet Equipment]>; aliases: Buffer tank
+    - area: 0.055 m^2 [current]
+    - height: 0.45 m [current]
+    - max level: 0.4 m [current]
+    - port level note: 0.1 m [current]
+* B5 -- evaporator tank  <[sheet Equipment]>; aliases: Evaporator vessel
+    - area: 0.06 m^2 [current]
+    - height: 0.45 m [current]
+    - max level: 0.4 m [current]
+    - port level note: 0.12 m [current]
+    - heater duty: 20 kW [current]
+* K1 -- condenser  <[sheet Equipment]>; aliases: Condenser
+* B6 -- cooling tank  <[sheet Equipment]>; aliases: Cooling tank
+    - area: 0.05 m^2 [current]
+    - height: 0.4 m [current]
+    - max level: 0.35 m [current]
+    - port level note: 0.1 m [current]
+    - cooling target: 20 C [current]
+* B7 -- cooling tank  <[sheet Equipment]>; aliases: Cooling tank
+    - area: 0.05 m^2 [current]
+    - height: 0.4 m [current]
+    - max level: 0.35 m [current]
+    - port level note: 0.1 m [current]
+    - cooling target: 25 C [current]
+* P1 -- pump  <[sheet Equipment]>; aliases: Return pump
+* P2 -- pump  <[sheet Equipment]>; aliases: Return pump
+* M-301 -- motor/agitator  <[sheet Equipment]>; aliases: Agitator
+* V8 -- automated valve  <[sheet Valves]>
+    - command type: Boolean [current]
+* V9 -- automated valve  <[sheet Valves]>
+    - command type: Boolean [current]
+* V11 -- automated valve  <[sheet Valves]>
+    - command type: Boolean [current]
+* V12 -- automated valve  <[sheet Valves]>
+    - command type: Boolean [current]
+* V15 -- automated valve  <[sheet Valves]>
+    - command type: Boolean [current]
+* V18 -- automated valve  <[sheet Valves]>
+    - command type: Boolean [current]
+* V20 -- automated valve  <[sheet Valves]>
+    - command type: Boolean [current]
+* V22 -- automated valve  <[sheet Valves]>
+    - command type: Boolean [current]
+* V23 -- automated valve  <[sheet Valves]>
+    - command type: Boolean [current]
+* V24 -- automated valve  <[sheet Valves]>
+    - command type: Boolean [current]
+* V25 -- automated valve  <[sheet Valves]>
+    - command type: Boolean [current]
+* LIS-301 -- instrument  <[sheet Instruments]>
+    - range: 0..0.45 m [current]
+* QI-302 -- instrument  <[sheet Instruments]>
+    - range: 0..0.30 kg/kg [current]
+* LIS-501 -- instrument  <[sheet Instruments]>
+    - range: 0..0.45 m [current]
+* QIS-502 -- instrument  <[sheet Instruments]>
+    - range: 0..0.30 kg/kg [current]
+* TIS-602 -- instrument  <[sheet Instruments]>
+    - range: 0..120 degC [current]
+* TIS-702 -- instrument  <[sheet Instruments]>
+    - range: 0..120 degC [current]
+* FIS-801 -- instrument  <[sheet Instruments]>
+    - range: 0..0.50 kg/s [current]
+* Central controller -- controller  <[sheet Interfaces]>
+
+## Relationships
+* B1 connects_to V8 (bottom port to inlet)  <IF-PROC-01 [sheet Interfaces]>
+* V8 connects_to B3 (outlet to top port)  <IF-PROC-02 [sheet Interfaces]>
+* B2 connects_to V9 (bottom port to inlet)  <IF-PROC-03 [sheet Interfaces]>
+* V9 connects_to B3 (outlet to top port)  <IF-PROC-04 [sheet Interfaces]>
+* B3 connects_to V11 (bottom port to inlet)  <IF-PROC-05 [sheet Interfaces]>
+* V11 connects_to B4 (outlet to top port)  <IF-PROC-06 [sheet Interfaces]>
+* B4 connects_to V12 (bottom port to inlet)  <IF-PROC-07 [sheet Interfaces]>
+* V12 connects_to B5 (outlet to feed port)  <IF-PROC-08 [sheet Interfaces]>
+* B5 connects_to K1 (vapor/condensate port to process side)  <IF-PROC-09 [sheet Interfaces]>
+* K1 connects_to B6 (condensate outlet to top port)  <IF-PROC-10 [sheet Interfaces]>
+* B5 connects_to V15 (concentrate outlet to inlet)  <IF-PROC-11 [sheet Interfaces]>
+* V15 connects_to B7 (outlet to top port)  <IF-PROC-12 [sheet Interfaces]>
+* B6 connects_to P2 (bottom port to suction)  <IF-RET-01 [sheet Interfaces]>
+* P2 connects_to B1 (discharge header to return inlet)  <IF-RET-02 [sheet Interfaces]>
+* B7 connects_to P1 (bottom port to suction)  <IF-RET-03 [sheet Interfaces]>
+* P1 connects_to B2 (discharge header to return inlet)  <IF-RET-04 [sheet Interfaces]>
+* CW header connects_to K1 (supply to cooling-water inlet)  <IF-UTIL-01 [sheet Interfaces]>
+* CW header connects_to B6 (supply to coil inlet)  <IF-UTIL-02 [sheet Interfaces]>
+* CW header connects_to B7 (supply to coil inlet)  <IF-UTIL-03 [sheet Interfaces]>
+
+## Requirements
+* The plant shall prepare a mixed water/NaCl batch in B3 using liquid from B1 and B2. [current]  <REQ-FUN-001 [sheet Requirements]>
+* The B3 target NaCl mass fraction shall be 0.080 kg/kg. [current]  <REQ-PER-001 [sheet Requirements]>
+* B5 heating demand shall be 20,000 W when the heater actuator is enabled. [current]  <REQ-THM-001 [sheet Requirements]>
+* The B5 evaporation concentration target shall be 0.180 kg/kg NaCl mass fraction. [current]  <REQ-PER-002 [sheet Requirements]>
+* After evaporation completes, the sequence shall split into parallel condensate and concentrate branches. [current]  <REQ-FUN-008 [sheet Requirements]>
+* The condensate branch shall cool B6 to 20 degC or below before return pumping. [current]  <REQ-FUN-009 [sheet Requirements]>
+* The concentrate branch shall cool B7 to 25 degC or below before return pumping. [current]  <REQ-FUN-010 [sheet Requirements]>
+* The B7/P1 return branch opens V18,V23,V22,V1,V3. [superseded]  <REQ-ROU-001 [sheet Requirements]>
+* The B6/P2 return branch opens V20,V24,V25,V5,V6. [superseded]  <REQ-ROU-002 [sheet Requirements]>
+* The recovered condensate stream from B6 shall be returned to B1 using P2 and the B1 return valve group. [current]  <REQ-ROU-003 [sheet Requirements]>
+* The cooled concentrated stream from B7 shall be returned to B2 using P1 and the B2 return valve group. [current]  <REQ-ROU-004 [sheet Requirements]>
+* All automated process valves shall be Boolean, discrete open/closed actuators. [current]  <REQ-CTL-002 [sheet Requirements]>
+* All automated process valves shall fail closed on loss of actuator power. [current]  <REQ-SAF-002 [sheet Requirements]>
+* The baseline integration test shall use Modelica.Media.Water.StandardWater to validate plant topology and control sequence. [current]  <REQ-MOD-001 [sheet Requirements]>
+* The intended physical medium model shall represent a water-NaCl mixture and expose density, enthalpy, heat capacity, saturation pressure and viscosity as composition-dependent properties. [current]  <REQ-MOD-002 [sheet Requirements]>
+* The WaterNaCl implementation shall document the known unresolved pump-start convergence issue separately from plant functional requirements. [current]  <REQ-MOD-003 [sheet Requirements]>
+* Tank ports that can cross the liquid level shall use the regularized asymmetric loss-factor approach with hysteresis as the default implementation. [current]  <REQ-MOD-004 [sheet Requirements]>
+* Small junction volumes shall be inserted wherever multiple pressure-drop-only valve/pipe elements can be isolated simultaneously. [current]  <REQ-MOD-005 [sheet Requirements]>
+* Non-horizontal pipes shall include gravity pressure drop based on relative elevation. [current]  <REQ-MOD-006 [sheet Requirements]>
+* Controller sensor inputs shall include LIS-301, QI-302, LIS-501, QIS-502, TIS-602, TIS-702 and FIS-801. [current]  <REQ-DAT-001 [sheet Requirements]>
+* Controller actuator outputs shall include the 15 automated valve commands, P1, P2, B5 heater, B6 cooler and B7 cooler. [current]  <REQ-DAT-002 [sheet Requirements]>
+* A complete acceptance simulation shall run through at least one parallel-branch split and rejoin and continue beyond 2500 s. [current]  <REQ-VV-001 [sheet Requirements]>
+* The acceptance run shall demonstrate B3 target concentration, B5 target concentration, B6 cooling target, B7 cooling target and correct return routing. [current]  <REQ-VV-002 [sheet Requirements]>
+
+## Behaviors
+* The controller shall open V8 to transfer B1 liquid to B3 until LIS-301 is at least 0.13 m. [current]  <REQ-FUN-002 [sheet Requirements]>
+* After the B1 fill portion, the controller shall open V9 and continue charging B3 until QI-302 reaches the batch concentration target. [current]  <REQ-FUN-003 [sheet Requirements]>
+* V11 shall transfer the mixed batch from B3 to B4 until LIS-301 is below 0.01 m. [current]  <REQ-FUN-004 [sheet Requirements]>
+* The controller shall not charge B5 unless B5 is idle, defined by LIS-501 <0.01 m and V15 closed. [current]  <REQ-FUN-005 [sheet Requirements]>
+* V12 shall transfer B4 contents to B5 until LIS-501 reaches 0.18 m. [current]  <REQ-FUN-006 [sheet Requirements]>
+* B5 heating shall be inhibited unless FIS-801 proves condenser cooling-water flow of at least 0.10 kg/s. [current]  <REQ-SAF-001 [sheet Requirements]>
+* B5 heating/evaporation shall continue until QIS-502 reaches the evaporation concentration target. [current]  <REQ-FUN-007 [sheet Requirements]>
+* The cycle shall not restart until both parallel return branches are complete and simulation/process time exceeds 2500 s. [current]  <REQ-CTL-001 [sheet Requirements]>
+* P1 shall be inhibited when LIS-701 <=0.02 m. [current]  <REQ-SAF-003 [sheet Requirements]>
+* P2 shall be inhibited when LIS-601 <=0.02 m. [current]  <REQ-SAF-004 [sheet Requirements]>
+* The heater shall be inhibited when LIS-501 <0.05 m. [current]  <REQ-SAF-005 [sheet Requirements]>
+* LIS-301 >= 0.13 m causes transition from Step1 to Step2.  <[sheet State_Sequence]>
+* QI-302 >= 0.080 kg/kg causes transition from Step2 to Step3.  <[sheet State_Sequence]>
+* LIS-301 < 0.01 m causes transition from Step3 to Step4.  <[sheet State_Sequence]>
+* LIS-501 <0.01 m AND NOT V15 causes transition from Step4 to Step5.  <[sheet State_Sequence]>
+* LIS-501 >=0.18 m causes transition from Step5 to Step6.  <[sheet State_Sequence]>
+* QIS-502 >=0.180 kg/kg causes transition from Step6 to Split.  <[sheet State_Sequence]>
+* TIS-602 <=20 degC causes transition from Step12 to Step13.  <[sheet State_Sequence]>
+* LIS-701 <0.01 m causes transition from Step7 to Step8.  <[sheet State_Sequence]>
+* LIS-501 <0.01 m causes transition from Step8 to Step9.  <[sheet State_Sequence]>
+* TIS-702 <=25 degC causes transition from Step9 to Step10/11.  <[sheet State_Sequence]>
+* A complete AND B complete AND time>2500 s causes transition from Join to Initial.  <[sheet State_Sequence]>

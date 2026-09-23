@@ -1,0 +1,88 @@
+Subject: reference PID
+Document kind: engineering drawing
+
+## Entities
+* B1 -- vessel
+* LIS 101 -- instrument  <101>; aliases: LIS101
+* QI 102 -- instrument  <102>; aliases: QI102
+* V1 -- valve
+* V2 -- valve
+* V3 -- valve
+* V8 -- valve
+* B2 -- vessel
+* LIS 201 -- instrument  <201>; aliases: LIS201
+* QI 202 -- instrument  <202>; aliases: QI202
+* V6 -- valve
+* V7 -- valve
+* V4 -- valve
+* V5 -- valve
+* B3 -- vessel
+* M -- motor
+* LIS 301 -- instrument  <301>; aliases: LIS301
+* QI 302 -- instrument  <302>; aliases: QI302
+* V9 -- valve
+* salt -- material
+* H2O -- material
+* B4 -- vessel
+* V11 -- valve
+* LIS 401 -- instrument  <401>; aliases: LIS401
+* V12 -- valve
+* B5 -- vessel
+* LIS 501 -- instrument  <501>; aliases: LIS501
+* QIS 502 -- instrument  <502>; aliases: QIS502
+* TI 503 -- instrument  <503>; aliases: TI503
+* V16 -- valve
+* V17 -- valve
+* K1 -- heat exchanger
+* FIS 801 -- instrument  <801>; aliases: FIS801
+* V13 -- valve
+* cooling water -- material
+* B6 -- vessel
+* LIS 601 -- instrument  <601>; aliases: LIS601
+* TIS 602 -- instrument  <602>; aliases: TIS602
+* V29 -- valve
+* V14 -- valve
+* B7 -- vessel
+* LIS 701 -- instrument  <701>; aliases: LIS701
+* TIS 702 -- instrument  <702>; aliases: TIS702
+* V15 -- valve
+* V10 -- valve
+* V18 -- valve
+* V19 -- valve
+* P1 -- pump
+* PIS 901 -- instrument  <901>; aliases: PIS901
+* V20 -- valve
+* V21 -- valve
+* V22 -- valve
+* V23 -- valve
+* V24 -- valve
+* V25 -- valve
+* V26 -- valve
+* V27 -- valve
+* P2 -- pump
+* PIS 1001 -- instrument  <1001>; aliases: PIS1001
+
+## Relationships
+* B1 connected_to B3 (line from bottom of B1 through V8 to B3)
+* B2 connected_to B3 (line from B2 through V9 to B3)
+* salt flows_to B3 (inlet arrow points into B3)
+* M drives B3 (motor symbol above vessel with shaft/arrow into top)
+* B3 connected_to B4 (line from B3 lower side through V11 branch to B4 top)
+* B4 connected_to B5 (line from bottom of B4 through V12 to top of B5)
+* B4 connected_to K1 (line from side of B4 to left side of K1)
+* K1 connected_to B6 (line from right/lower side of K1 to top of B6)
+* cooling water flows_to K1 (arrowed line through V13 enters K1)
+* cooling water flows_to B6 (arrowed line through V29 enters B6 coil)
+* cooling water flows_to B7 (arrowed line through V17/V15 enters B7 coil circuit)
+* B5 connected_to B7 (bottom outlet from B5 joins line through V15 to B7 top and through lower branch near V16/V17)
+* B6 connected_to lower manifold (bottom outlet drops to lower horizontal network)
+* P1 connected_to bottom manifold (pump installed in bottom-left horizontal line)
+* P2 connected_to bottom manifold (pump installed in bottom-right horizontal line)
+* left vertical header connected_to top header (outer piping loop around drawing perimeter)
+* top header connected_to right vertical header (outer piping loop around drawing perimeter)
+* right vertical header connected_to bottom manifold (outer piping loop around drawing perimeter)
+* bottom manifold connected_to left vertical header (outer piping loop around drawing perimeter)
+
+## Unreadable
+* Some pipe arrow directions and unlabeled junction purposes are ambiguous from the image alone.
+* No legend is visible to define instrument code meanings beyond the tag letters and numbers.

@@ -1,0 +1,1363 @@
+{
+  "document": "nacl_evaporation_sysmlv2_full_dataset/02_engineering_data/02_process_data_register.xlsx",
+  "subject": "NaCl Evaporation Plant - Synthetic Engineering Evidence Register",
+  "kind": "engineering register",
+  "entities": [
+    {
+      "name": "B1",
+      "kind": "tank",
+      "aliases": [
+        "Charging tank"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.07",
+          "unit": "m^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E4=0.07"
+        },
+        {
+          "quantity": "height",
+          "value": "0.6",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "F4=0.6"
+        },
+        {
+          "quantity": "max level",
+          "value": "0.5",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "G4=0.5"
+        },
+        {
+          "quantity": "port level note",
+          "value": "0.12",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "H4=0.12"
+        },
+        {
+          "quantity": "initial NaCl mass fraction",
+          "value": "0.000",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Initial w_NaCl = 0.000."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment]",
+      "from_image": false,
+      "quote": "A4=B1 | B4=Charging tank | C4=Initial pure-water charge / recovered-water vessel | D4=Tank | E4=0.07 | F4=0.6 | G4=0.5 | H4=0.12 | I4=LIS-101; QI-102 | J4=Generic Tank | K4=Initial w_NaCl = 0.000. Return routing revised by CR-017."
+    },
+    {
+      "name": "B2",
+      "kind": "tank",
+      "aliases": [
+        "Charging tank"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.07",
+          "unit": "m^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E5=0.07"
+        },
+        {
+          "quantity": "height",
+          "value": "0.6",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "F5=0.6"
+        },
+        {
+          "quantity": "max level",
+          "value": "0.5",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "G5=0.5"
+        },
+        {
+          "quantity": "port level note",
+          "value": "0.12",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "H5=0.12"
+        },
+        {
+          "quantity": "initial NaCl mass fraction",
+          "value": "0.250",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Initial w_NaCl = 0.250."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment]",
+      "from_image": false,
+      "quote": "A5=B2 | B5=Charging tank | C5=Initial concentrated brine charge / recovered-concentrate vessel | D5=Tank | E5=0.07 | F5=0.6 | G5=0.5 | H5=0.12 | I5=LIS-201; QI-202 | J5=Generic Tank | K5=Initial w_NaCl = 0.250. Return routing revised by CR-017."
+    },
+    {
+      "name": "B3",
+      "kind": "tank",
+      "aliases": [
+        "Mixing tank"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.05",
+          "unit": "m^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E6=0.05"
+        },
+        {
+          "quantity": "height",
+          "value": "0.45",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "F6=0.45"
+        },
+        {
+          "quantity": "max level",
+          "value": "0.38",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "G6=0.38"
+        },
+        {
+          "quantity": "port level note",
+          "value": "0.1",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "H6=0.1"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment]",
+      "from_image": false,
+      "quote": "A6=B3 | B6=Mixing tank | C6=Batch water/brine mixing | D6=Tank | E6=0.05 | F6=0.45 | G6=0.38 | H6=0.1 | I6=LIS-301; QI-302 | J6=Generic Tank | K6=Agitator M-301 fitted; no independent mixer actuator in legacy model."
+    },
+    {
+      "name": "B4",
+      "kind": "tank",
+      "aliases": [
+        "Buffer tank"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.055",
+          "unit": "m^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E7=0.055"
+        },
+        {
+          "quantity": "height",
+          "value": "0.45",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "F7=0.45"
+        },
+        {
+          "quantity": "max level",
+          "value": "0.4",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "G7=0.4"
+        },
+        {
+          "quantity": "port level note",
+          "value": "0.1",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "H7=0.1"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment]",
+      "from_image": false,
+      "quote": "A7=B4 | B7=Buffer tank | C7=Decouples batch mixing from evaporator availability | D7=Tank | E7=0.055 | F7=0.45 | G7=0.4 | H7=0.1 | I7=LIS-401 | J7=Generic Tank | K7=Gravity feed to B5 through V12."
+    },
+    {
+      "name": "B5",
+      "kind": "evaporator tank",
+      "aliases": [
+        "Evaporator vessel"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.06",
+          "unit": "m^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E8=0.06"
+        },
+        {
+          "quantity": "height",
+          "value": "0.45",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "F8=0.45"
+        },
+        {
+          "quantity": "max level",
+          "value": "0.4",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "G8=0.4"
+        },
+        {
+          "quantity": "port level note",
+          "value": "0.12",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "H8=0.12"
+        },
+        {
+          "quantity": "heater duty",
+          "value": "20",
+          "unit": "kW",
+          "status": "current",
+          "supersedes": "",
+          "quote": "20 kW heater"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment]",
+      "from_image": false,
+      "quote": "A8=B5 | B8=Evaporator vessel | C8=Heats mixture and evaporates water | D8=Evaporator tank | E8=0.06 | F8=0.45 | G8=0.4 | H8=0.12 | I8=LIS-501; QIS-502; TI-503 | J8=TankWithEvaporator | K8=20 kW heater; vapor/condensate port to K1/B6."
+    },
+    {
+      "name": "K1",
+      "kind": "condenser",
+      "aliases": [
+        "Condenser"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Equipment]",
+      "from_image": false,
+      "quote": "A9=K1 | B9=Condenser | C9=Condenses B5 vapor using cooling water | D9=Condenser | I9=FIS-801 | J9=Integrated with B5 in legacy Modelica | K9=Physical equipment exists separately despite combined legacy simulation component."
+    },
+    {
+      "name": "B6",
+      "kind": "cooling tank",
+      "aliases": [
+        "Cooling tank"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.05",
+          "unit": "m^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E10=0.05"
+        },
+        {
+          "quantity": "height",
+          "value": "0.4",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "F10=0.4"
+        },
+        {
+          "quantity": "max level",
+          "value": "0.35",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "G10=0.35"
+        },
+        {
+          "quantity": "port level note",
+          "value": "0.1",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "H10=0.1"
+        },
+        {
+          "quantity": "cooling target",
+          "value": "20",
+          "unit": "C",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Cooling target <=20 C."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment]",
+      "from_image": false,
+      "quote": "A10=B6 | B10=Cooling tank | C10=Cools condensate before return | D10=Cooling tank | E10=0.05 | F10=0.4 | G10=0.35 | H10=0.1 | I10=LIS-601; TIS-602 | J10=TankWithHeatPort | K10=Cooling target <=20 C."
+    },
+    {
+      "name": "B7",
+      "kind": "cooling tank",
+      "aliases": [
+        "Cooling tank"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.05",
+          "unit": "m^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E11=0.05"
+        },
+        {
+          "quantity": "height",
+          "value": "0.4",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "F11=0.4"
+        },
+        {
+          "quantity": "max level",
+          "value": "0.35",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "G11=0.35"
+        },
+        {
+          "quantity": "port level note",
+          "value": "0.1",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "H11=0.1"
+        },
+        {
+          "quantity": "cooling target",
+          "value": "25",
+          "unit": "C",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Cooling target <=25 C."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment]",
+      "from_image": false,
+      "quote": "A11=B7 | B11=Cooling tank | C11=Cools concentrate before return | D11=Cooling tank | E11=0.05 | F11=0.4 | G11=0.35 | H11=0.1 | I11=LIS-701; TIS-702 | J11=TankWithHeatPort | K11=Cooling target <=25 C."
+    },
+    {
+      "name": "P1",
+      "kind": "pump",
+      "aliases": [
+        "Return pump"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Equipment]",
+      "from_image": false,
+      "quote": "A12=P1 | B12=Return pump | C12=Return concentrated-solution branch | D12=Pump | I12=PIS-901 | J12=Modelica_Fluid pump | K12=Discharge header selectable by manual/automatic routing valves."
+    },
+    {
+      "name": "P2",
+      "kind": "pump",
+      "aliases": [
+        "Return pump"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Equipment]",
+      "from_image": false,
+      "quote": "A13=P2 | B13=Return pump | C13=Return condensate branch | D13=Pump | I13=PIS-1001 | J13=Modelica_Fluid pump | K13=Discharge header selectable by manual/automatic routing valves."
+    },
+    {
+      "name": "M-301",
+      "kind": "motor/agitator",
+      "aliases": [
+        "Agitator"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Equipment]",
+      "from_image": false,
+      "quote": "A14=M-301 | B14=Agitator | C14=Mixing in B3 | D14=Motor/agitator | J14=Physical-only detail | K14=Not shown as controller output in the original StateGraph extract."
+    },
+    {
+      "name": "V8",
+      "kind": "automated valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command type",
+          "value": "Boolean",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C8=Boolean"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Valves]",
+      "from_image": false,
+      "quote": "A8=V8 | B8=Automated on/off | C8=Boolean | D8=Closed | E8=PLC actuator output | F8=ValveDiscrete | G8=Fully open or fully closed; fail/de-energized closed"
+    },
+    {
+      "name": "V9",
+      "kind": "automated valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command type",
+          "value": "Boolean",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C9=Boolean"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Valves]",
+      "from_image": false,
+      "quote": "A9=V9 | B9=Automated on/off | C9=Boolean | D9=Closed | E9=PLC actuator output | F9=ValveDiscrete | G9=Fully open or fully closed; fail/de-energized closed"
+    },
+    {
+      "name": "V11",
+      "kind": "automated valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command type",
+          "value": "Boolean",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C10=Boolean"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Valves]",
+      "from_image": false,
+      "quote": "A10=V11 | B10=Automated on/off | C10=Boolean | D10=Closed | E10=PLC actuator output | F10=ValveDiscrete | G10=Fully open or fully closed; fail/de-energized closed"
+    },
+    {
+      "name": "V12",
+      "kind": "automated valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command type",
+          "value": "Boolean",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C11=Boolean"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Valves]",
+      "from_image": false,
+      "quote": "A11=V12 | B11=Automated on/off | C11=Boolean | D11=Closed | E11=PLC actuator output | F11=ValveDiscrete | G11=Fully open or fully closed; fail/de-energized closed"
+    },
+    {
+      "name": "V15",
+      "kind": "automated valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command type",
+          "value": "Boolean",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C12=Boolean"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Valves]",
+      "from_image": false,
+      "quote": "A12=V15 | B12=Automated on/off | C12=Boolean | D12=Closed | E12=PLC actuator output | F12=ValveDiscrete | G12=Fully open or fully closed; fail/de-energized closed"
+    },
+    {
+      "name": "V18",
+      "kind": "automated valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command type",
+          "value": "Boolean",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C13=Boolean"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Valves]",
+      "from_image": false,
+      "quote": "A13=V18 | B13=Automated on/off | C13=Boolean | D13=Closed | E13=PLC actuator output | F13=ValveDiscrete | G13=Fully open or fully closed; fail/de-energized closed"
+    },
+    {
+      "name": "V20",
+      "kind": "automated valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command type",
+          "value": "Boolean",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C14=Boolean"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Valves]",
+      "from_image": false,
+      "quote": "A14=V20 | B14=Automated on/off | C14=Boolean | D14=Closed | E14=PLC actuator output | F14=ValveDiscrete | G14=Fully open or fully closed; fail/de-energized closed"
+    },
+    {
+      "name": "V22",
+      "kind": "automated valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command type",
+          "value": "Boolean",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C15=Boolean"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Valves]",
+      "from_image": false,
+      "quote": "A15=V22 | B15=Automated on/off | C15=Boolean | D15=Closed | E15=PLC actuator output | F15=ValveDiscrete | G15=Fully open or fully closed; fail/de-energized closed"
+    },
+    {
+      "name": "V23",
+      "kind": "automated valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command type",
+          "value": "Boolean",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C16=Boolean"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Valves]",
+      "from_image": false,
+      "quote": "A16=V23 | B16=Automated on/off | C16=Boolean | D16=Closed | E16=PLC actuator output | F16=ValveDiscrete | G16=Fully open or fully closed; fail/de-energized closed"
+    },
+    {
+      "name": "V24",
+      "kind": "automated valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command type",
+          "value": "Boolean",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C17=Boolean"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Valves]",
+      "from_image": false,
+      "quote": "A17=V24 | B17=Automated on/off | C17=Boolean | D17=Closed | E17=PLC actuator output | F17=ValveDiscrete | G17=Fully open or fully closed; fail/de-energized closed"
+    },
+    {
+      "name": "V25",
+      "kind": "automated valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command type",
+          "value": "Boolean",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C18=Boolean"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Valves]",
+      "from_image": false,
+      "quote": "A18=V25 | B18=Automated on/off | C18=Boolean | D18=Closed | E18=PLC actuator output | F18=ValveDiscrete | G18=Fully open or fully closed; fail/de-energized closed"
+    },
+    {
+      "name": "LIS-301",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "range",
+          "value": "0..0.45",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E8=0..0.45"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Instruments]",
+      "from_image": false,
+      "quote": "A8=LIS-301 | B8=B3 | C8=Level | D8=m | E8=0..0.45 | F8=Analog | G8=Controller | H8=Step1, Step3 transitions"
+    },
+    {
+      "name": "QI-302",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "range",
+          "value": "0..0.30",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E9=0..0.30"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Instruments]",
+      "from_image": false,
+      "quote": "A9=QI-302 | B9=B3 | C9=NaCl concentration | D9=kg/kg | E9=0..0.30 | F9=Analog | G9=Controller | H9=Step2 transition at 0.080"
+    },
+    {
+      "name": "LIS-501",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "range",
+          "value": "0..0.45",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E11=0..0.45"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Instruments]",
+      "from_image": false,
+      "quote": "A11=LIS-501 | B11=B5 | C11=Level | D11=m | E11=0..0.45 | F11=Analog | G11=Controller | H11=Idle and batch-fill logic"
+    },
+    {
+      "name": "QIS-502",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "range",
+          "value": "0..0.30",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E12=0..0.30"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Instruments]",
+      "from_image": false,
+      "quote": "A12=QIS-502 | B12=B5 | C12=NaCl concentration | D12=kg/kg | E12=0..0.30 | F12=Analog | G12=Controller | H12=Heating/evaporation stop at 0.180"
+    },
+    {
+      "name": "TIS-602",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "range",
+          "value": "0..120",
+          "unit": "degC",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E15=0..120"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Instruments]",
+      "from_image": false,
+      "quote": "A15=TIS-602 | B15=B6 | C15=Temperature | D15=degC | E15=0..120 | F15=Analog | G15=Controller | H15=Cooling complete <=20 C"
+    },
+    {
+      "name": "TIS-702",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "range",
+          "value": "0..120",
+          "unit": "degC",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E17=0..120"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Instruments]",
+      "from_image": false,
+      "quote": "A17=TIS-702 | B17=B7 | C17=Temperature | D17=degC | E17=0..120 | F17=Analog | G17=Controller | H17=Cooling complete <=25 C"
+    },
+    {
+      "name": "FIS-801",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "range",
+          "value": "0..0.50",
+          "unit": "kg/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "E18=0..0.50"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Instruments]",
+      "from_image": false,
+      "quote": "A18=FIS-801 | B18=K1 CW | C18=Cooling-water flow | D18=kg/s | E18=0..0.50 | F18=Analog | G18=Interlock | H18=Heater permissive >=0.10 kg/s"
+    },
+    {
+      "name": "Central controller",
+      "kind": "controller",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A24=IF-CTL-02 | B24=Central controller | C24=actuators | D24=Automated valves/pumps/thermal actuators | E24=commands | F24=Boolean/Real commands | G24=Controller -> plant | H24=StateGraph actuator bundle"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "B1",
+      "predicate": "connects_to",
+      "object": "V8",
+      "detail": "bottom port to inlet",
+      "ref": "IF-PROC-01",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A4=IF-PROC-01 | B4=B1 | C4=bottom port | D4=V8 | E4=inlet | F4=Water-rich liquid | G4=B1 -> B3 | H4=Automated V8"
+    },
+    {
+      "subject": "V8",
+      "predicate": "connects_to",
+      "object": "B3",
+      "detail": "outlet to top port",
+      "ref": "IF-PROC-02",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A5=IF-PROC-02 | B5=V8 | C5=outlet | D5=B3 | E5=top port | F5=Water-rich liquid | G5=B1 -> B3 | H5=Step1"
+    },
+    {
+      "subject": "B2",
+      "predicate": "connects_to",
+      "object": "V9",
+      "detail": "bottom port to inlet",
+      "ref": "IF-PROC-03",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A6=IF-PROC-03 | B6=B2 | C6=bottom port | D6=V9 | E6=inlet | F6=Brine | G6=B2 -> B3 | H6=Automated V9"
+    },
+    {
+      "subject": "V9",
+      "predicate": "connects_to",
+      "object": "B3",
+      "detail": "outlet to top port",
+      "ref": "IF-PROC-04",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A7=IF-PROC-04 | B7=V9 | C7=outlet | D7=B3 | E7=top port | F7=Brine | G7=B2 -> B3 | H7=Step2"
+    },
+    {
+      "subject": "B3",
+      "predicate": "connects_to",
+      "object": "V11",
+      "detail": "bottom port to inlet",
+      "ref": "IF-PROC-05",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A8=IF-PROC-05 | B8=B3 | C8=bottom port | D8=V11 | E8=inlet | F8=Mixed batch | G8=B3 -> B4 | H8=Automated V11"
+    },
+    {
+      "subject": "V11",
+      "predicate": "connects_to",
+      "object": "B4",
+      "detail": "outlet to top port",
+      "ref": "IF-PROC-06",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A9=IF-PROC-06 | B9=V11 | C9=outlet | D9=B4 | E9=top port | F9=Mixed batch | G9=B3 -> B4 | H9=Step3"
+    },
+    {
+      "subject": "B4",
+      "predicate": "connects_to",
+      "object": "V12",
+      "detail": "bottom port to inlet",
+      "ref": "IF-PROC-07",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A10=IF-PROC-07 | B10=B4 | C10=bottom port | D10=V12 | E10=inlet | F10=Mixed batch | G10=B4 -> B5 | H10=Automated V12"
+    },
+    {
+      "subject": "V12",
+      "predicate": "connects_to",
+      "object": "B5",
+      "detail": "outlet to feed port",
+      "ref": "IF-PROC-08",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A11=IF-PROC-08 | B11=V12 | C11=outlet | D11=B5 | E11=feed port | F11=Mixed batch | G11=B4 -> B5 | H11=Step5"
+    },
+    {
+      "subject": "B5",
+      "predicate": "connects_to",
+      "object": "K1",
+      "detail": "vapor/condensate port to process side",
+      "ref": "IF-PROC-09",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A12=IF-PROC-09 | B12=B5 | C12=vapor/condensate port | D12=K1 | E12=process side | F12=Water vapor/condensate | G12=B5 -> K1 -> B6 | H12=Legacy model combines B5+K1"
+    },
+    {
+      "subject": "K1",
+      "predicate": "connects_to",
+      "object": "B6",
+      "detail": "condensate outlet to top port",
+      "ref": "IF-PROC-10",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A13=IF-PROC-10 | B13=K1 | C13=condensate outlet | D13=B6 | E13=top port | F13=Condensate | G13=K1 -> B6 | H13=Cooling in B6"
+    },
+    {
+      "subject": "B5",
+      "predicate": "connects_to",
+      "object": "V15",
+      "detail": "concentrate outlet to inlet",
+      "ref": "IF-PROC-11",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A14=IF-PROC-11 | B14=B5 | C14=concentrate outlet | D14=V15 | E14=inlet | F14=Concentrated brine | G14=B5 -> B7 | H14=Step8"
+    },
+    {
+      "subject": "V15",
+      "predicate": "connects_to",
+      "object": "B7",
+      "detail": "outlet to top port",
+      "ref": "IF-PROC-12",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A15=IF-PROC-12 | B15=V15 | C15=outlet | D15=B7 | E15=top port | F15=Concentrated brine | G15=B5 -> B7 | H15=Step8"
+    },
+    {
+      "subject": "B6",
+      "predicate": "connects_to",
+      "object": "P2",
+      "detail": "bottom port to suction",
+      "ref": "IF-RET-01",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A16=IF-RET-01 | B16=B6 | C16=bottom port | D16=P2 | E16=suction | F16=Condensate | G16=B6 -> P2 | H16=Corrected routing per CR-017"
+    },
+    {
+      "subject": "P2",
+      "predicate": "connects_to",
+      "object": "B1",
+      "detail": "discharge header to return inlet",
+      "ref": "IF-RET-02",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A17=IF-RET-02 | B17=P2 | C17=discharge header | D17=B1 | E17=return inlet | F17=Condensate | G17=P2 -> B1 | H17=Uses V20/V24/V25 plus B1 routing group after CR-017"
+    },
+    {
+      "subject": "B7",
+      "predicate": "connects_to",
+      "object": "P1",
+      "detail": "bottom port to suction",
+      "ref": "IF-RET-03",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A18=IF-RET-03 | B18=B7 | C18=bottom port | D18=P1 | E18=suction | F18=Concentrate | G18=B7 -> P1 | H18=Corrected routing per CR-017"
+    },
+    {
+      "subject": "P1",
+      "predicate": "connects_to",
+      "object": "B2",
+      "detail": "discharge header to return inlet",
+      "ref": "IF-RET-04",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A19=IF-RET-04 | B19=P1 | C19=discharge header | D19=B2 | E19=return inlet | F19=Concentrate | G19=P1 -> B2 | H19=Uses V18/V23/V22 plus B2 routing group after CR-017"
+    },
+    {
+      "subject": "CW header",
+      "predicate": "connects_to",
+      "object": "K1",
+      "detail": "supply to cooling-water inlet",
+      "ref": "IF-UTIL-01",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A20=IF-UTIL-01 | B20=CW header | C20=supply | D20=K1 | E20=cooling-water inlet | F20=Cooling water | G20=Utility -> K1 | H20=FIS-801 proves flow"
+    },
+    {
+      "subject": "CW header",
+      "predicate": "connects_to",
+      "object": "B6",
+      "detail": "supply to coil inlet",
+      "ref": "IF-UTIL-02",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A21=IF-UTIL-02 | B21=CW header | C21=supply | D21=B6 | E21=coil inlet | F21=Cooling water | G21=Utility -> B6 | H21=V29 manual/local in source drawing"
+    },
+    {
+      "subject": "CW header",
+      "predicate": "connects_to",
+      "object": "B7",
+      "detail": "supply to coil inlet",
+      "ref": "IF-UTIL-03",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A22=IF-UTIL-03 | B22=CW header | C22=supply | D22=B7 | E22=coil inlet | F22=Cooling water | G22=Utility -> B7 | H22=V17 manual/local in source drawing"
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "The plant shall prepare a mixed water/NaCl batch in B3 using liquid from B1 and B2.",
+      "ref": "REQ-FUN-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A4=REQ-FUN-001 | B4=Process URS Rev A | C4=The plant shall prepare a mixed water/NaCl batch in B3 using liquid from B1 and B2. | D4=Functional | E4=Must | F4=Active | H4=Inspection/Test"
+    },
+    {
+      "category": "behavior",
+      "statement": "The controller shall open V8 to transfer B1 liquid to B3 until LIS-301 is at least 0.13 m.",
+      "ref": "REQ-FUN-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A5=REQ-FUN-002 | B5=Process URS Rev A | C5=The controller shall open V8 to transfer B1 liquid to B3 until LIS-301 is at least 0.13 m. | D5=Functional | E5=Must | F5=Active | H5=Test"
+    },
+    {
+      "category": "behavior",
+      "statement": "After the B1 fill portion, the controller shall open V9 and continue charging B3 until QI-302 reaches the batch concentration target.",
+      "ref": "REQ-FUN-003",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A6=REQ-FUN-003 | B6=Process URS Rev A | C6=After the B1 fill portion, the controller shall open V9 and continue charging B3 until QI-302 reaches the batch concentration target. | D6=Functional | E6=Must | F6=Active | H6=Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The B3 target NaCl mass fraction shall be 0.080 kg/kg.",
+      "ref": "REQ-PER-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A7=REQ-PER-001 | B7=Batch Recipe Rev B | C7=The B3 target NaCl mass fraction shall be 0.080 kg/kg. | D7=Performance | E7=Must | F7=Active | H7=Analysis/Test"
+    },
+    {
+      "category": "behavior",
+      "statement": "V11 shall transfer the mixed batch from B3 to B4 until LIS-301 is below 0.01 m.",
+      "ref": "REQ-FUN-004",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A8=REQ-FUN-004 | B8=Control Design Rev B | C8=V11 shall transfer the mixed batch from B3 to B4 until LIS-301 is below 0.01 m. | D8=Functional | E8=Must | F8=Active | H8=Test"
+    },
+    {
+      "category": "behavior",
+      "statement": "The controller shall not charge B5 unless B5 is idle, defined by LIS-501 <0.01 m and V15 closed.",
+      "ref": "REQ-FUN-005",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A9=REQ-FUN-005 | B9=Control Design Rev B | C9=The controller shall not charge B5 unless B5 is idle, defined by LIS-501 <0.01 m and V15 closed. | D9=Control | E9=Must | F9=Active | H9=Test"
+    },
+    {
+      "category": "behavior",
+      "statement": "V12 shall transfer B4 contents to B5 until LIS-501 reaches 0.18 m.",
+      "ref": "REQ-FUN-006",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A10=REQ-FUN-006 | B10=Control Design Rev B | C10=V12 shall transfer B4 contents to B5 until LIS-501 reaches 0.18 m. | D10=Functional | E10=Must | F10=Active | H10=Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "B5 heating demand shall be 20,000 W when the heater actuator is enabled.",
+      "ref": "REQ-THM-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A11=REQ-THM-001 | B11=Evaporator Design Note | C11=B5 heating demand shall be 20,000 W when the heater actuator is enabled. | D11=Thermal | E11=Must | F11=Active | H11=Inspection/Test"
+    },
+    {
+      "category": "behavior",
+      "statement": "B5 heating shall be inhibited unless FIS-801 proves condenser cooling-water flow of at least 0.10 kg/s.",
+      "ref": "REQ-SAF-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A12=REQ-SAF-001 | B12=DR-07 | C12=B5 heating shall be inhibited unless FIS-801 proves condenser cooling-water flow of at least 0.10 kg/s. | D12=Safety | E12=Must | F12=Active | H12=Test"
+    },
+    {
+      "category": "behavior",
+      "statement": "B5 heating/evaporation shall continue until QIS-502 reaches the evaporation concentration target.",
+      "ref": "REQ-FUN-007",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A13=REQ-FUN-007 | B13=Control Design Rev B | C13=B5 heating/evaporation shall continue until QIS-502 reaches the evaporation concentration target. | D13=Functional | E13=Must | F13=Active | H13=Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The B5 evaporation concentration target shall be 0.180 kg/kg NaCl mass fraction.",
+      "ref": "REQ-PER-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A14=REQ-PER-002 | B14=Batch Recipe Rev B | C14=The B5 evaporation concentration target shall be 0.180 kg/kg NaCl mass fraction. | D14=Performance | E14=Must | F14=Active | H14=Analysis/Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "After evaporation completes, the sequence shall split into parallel condensate and concentrate branches.",
+      "ref": "REQ-FUN-008",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A15=REQ-FUN-008 | B15=Control Design Rev B | C15=After evaporation completes, the sequence shall split into parallel condensate and concentrate branches. | D15=Behavior | E15=Must | F15=Active | H15=Model review/Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The condensate branch shall cool B6 to 20 degC or below before return pumping.",
+      "ref": "REQ-FUN-009",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A16=REQ-FUN-009 | B16=Control Design Rev B | C16=The condensate branch shall cool B6 to 20 degC or below before return pumping. | D16=Thermal | E16=Must | F16=Active | H16=Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The concentrate branch shall cool B7 to 25 degC or below before return pumping.",
+      "ref": "REQ-FUN-010",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A17=REQ-FUN-010 | B17=CR-017 | C17=The concentrate branch shall cool B7 to 25 degC or below before return pumping. | D17=Thermal | E17=Must | F17=Active | H17=Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The B7/P1 return branch opens V18,V23,V22,V1,V3.",
+      "ref": "REQ-ROU-001",
+      "anchor": "[sheet Requirements]",
+      "status": "superseded",
+      "from_image": false,
+      "quote": "A18=REQ-ROU-001 | B18=Legacy StateGraph Extract | C18=The B7/P1 return branch opens V18,V23,V22,V1,V3. | D18=Routing | E18=Must | F18=Superseded | G18=CR-017 | H18=Model review"
+    },
+    {
+      "category": "requirement",
+      "statement": "The B6/P2 return branch opens V20,V24,V25,V5,V6.",
+      "ref": "REQ-ROU-002",
+      "anchor": "[sheet Requirements]",
+      "status": "superseded",
+      "from_image": false,
+      "quote": "A19=REQ-ROU-002 | B19=Legacy StateGraph Extract | C19=The B6/P2 return branch opens V20,V24,V25,V5,V6. | D19=Routing | E19=Must | F19=Superseded | G19=CR-017 | H19=Model review"
+    },
+    {
+      "category": "requirement",
+      "statement": "The recovered condensate stream from B6 shall be returned to B1 using P2 and the B1 return valve group.",
+      "ref": "REQ-ROU-003",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A20=REQ-ROU-003 | B20=CR-017 | C20=The recovered condensate stream from B6 shall be returned to B1 using P2 and the B1 return valve group. | D20=Routing | E20=Must | F20=Active | H20=Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The cooled concentrated stream from B7 shall be returned to B2 using P1 and the B2 return valve group.",
+      "ref": "REQ-ROU-004",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A21=REQ-ROU-004 | B21=CR-017 | C21=The cooled concentrated stream from B7 shall be returned to B2 using P1 and the B2 return valve group. | D21=Routing | E21=Must | F21=Active | H21=Test"
+    },
+    {
+      "category": "behavior",
+      "statement": "The cycle shall not restart until both parallel return branches are complete and simulation/process time exceeds 2500 s.",
+      "ref": "REQ-CTL-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A22=REQ-CTL-001 | B22=Control Design Rev B | C22=The cycle shall not restart until both parallel return branches are complete and simulation/process time exceeds 2500 s. | D22=Control | E22=Must | F22=Active | H22=Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "All automated process valves shall be Boolean, discrete open/closed actuators.",
+      "ref": "REQ-CTL-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A23=REQ-CTL-002 | B23=Control Design Rev B | C23=All automated process valves shall be Boolean, discrete open/closed actuators. | D23=Control | E23=Must | F23=Active | H23=Inspection"
+    },
+    {
+      "category": "requirement",
+      "statement": "All automated process valves shall fail closed on loss of actuator power.",
+      "ref": "REQ-SAF-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A24=REQ-SAF-002 | B24=Valve Data Rev C | C24=All automated process valves shall fail closed on loss of actuator power. | D24=Safety | E24=Must | F24=Active | H24=Inspection/Test"
+    },
+    {
+      "category": "behavior",
+      "statement": "P1 shall be inhibited when LIS-701 <=0.02 m.",
+      "ref": "REQ-SAF-003",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A25=REQ-SAF-003 | B25=Pump Protection Note | C25=P1 shall be inhibited when LIS-701 <=0.02 m. | D25=Safety | E25=Must | F25=Active | H25=Test"
+    },
+    {
+      "category": "behavior",
+      "statement": "P2 shall be inhibited when LIS-601 <=0.02 m.",
+      "ref": "REQ-SAF-004",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A26=REQ-SAF-004 | B26=Pump Protection Note | C26=P2 shall be inhibited when LIS-601 <=0.02 m. | D26=Safety | E26=Must | F26=Active | H26=Test"
+    },
+    {
+      "category": "behavior",
+      "statement": "The heater shall be inhibited when LIS-501 <0.05 m.",
+      "ref": "REQ-SAF-005",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A27=REQ-SAF-005 | B27=DR-07 | C27=The heater shall be inhibited when LIS-501 <0.05 m. | D27=Safety | E27=Must | F27=Active | H27=Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The baseline integration test shall use Modelica.Media.Water.StandardWater to validate plant topology and control sequence.",
+      "ref": "REQ-MOD-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A28=REQ-MOD-001 | B28=Simulation Guideline Rev A | C28=The baseline integration test shall use Modelica.Media.Water.StandardWater to validate plant topology and control sequence. | D28=Modeling | E28=Should | F28=Active | H28=Simulation"
+    },
+    {
+      "category": "requirement",
+      "statement": "The intended physical medium model shall represent a water-NaCl mixture and expose density, enthalpy, heat capacity, saturation pressure and viscosity as composition-dependent properties.",
+      "ref": "REQ-MOD-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A29=REQ-MOD-002 | B29=Simulation Guideline Rev A | C29=The intended physical medium model shall represent a water-NaCl mixture and expose density, enthalpy, heat capacity, saturation pressure and viscosity as composition-dependent properties. | D29=Modeling | E29=Must | F29=Active | H29=Model review"
+    },
+    {
+      "category": "requirement",
+      "statement": "The WaterNaCl implementation shall document the known unresolved pump-start convergence issue separately from plant functional requirements.",
+      "ref": "REQ-MOD-003",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A30=REQ-MOD-003 | B30=Medium Research Note | C30=The WaterNaCl implementation shall document the known unresolved pump-start convergence issue separately from plant functional requirements. | D30=Modeling | E30=Should | F30=Active | H30=Review"
+    },
+    {
+      "category": "requirement",
+      "statement": "Tank ports that can cross the liquid level shall use the regularized asymmetric loss-factor approach with hysteresis as the default implementation.",
+      "ref": "REQ-MOD-004",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A31=REQ-MOD-004 | B31=Tank Modeling Standard | C31=Tank ports that can cross the liquid level shall use the regularized asymmetric loss-factor approach with hysteresis as the default implementation. | D31=Modeling | E31=Should | F31=Active | H31=Simulation"
+    },
+    {
+      "category": "requirement",
+      "statement": "Small junction volumes shall be inserted wherever multiple pressure-drop-only valve/pipe elements can be isolated simultaneously.",
+      "ref": "REQ-MOD-005",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A32=REQ-MOD-005 | B32=Tank Modeling Standard | C32=Small junction volumes shall be inserted wherever multiple pressure-drop-only valve/pipe elements can be isolated simultaneously. | D32=Modeling | E32=Must | F32=Active | H32=Model review/Simulation"
+    },
+    {
+      "category": "requirement",
+      "statement": "Non-horizontal pipes shall include gravity pressure drop based on relative elevation.",
+      "ref": "REQ-MOD-006",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A33=REQ-MOD-006 | B33=Tank Modeling Standard | C33=Non-horizontal pipes shall include gravity pressure drop based on relative elevation. | D33=Modeling | E33=Must | F33=Active | H33=Model review"
+    },
+    {
+      "category": "requirement",
+      "statement": "Controller sensor inputs shall include LIS-301, QI-302, LIS-501, QIS-502, TIS-602, TIS-702 and FIS-801.",
+      "ref": "REQ-DAT-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A34=REQ-DAT-001 | B34=ICD-04 | C34=Controller sensor inputs shall include LIS-301, QI-302, LIS-501, QIS-502, TIS-602, TIS-702 and FIS-801. | D34=Interface | E34=Must | F34=Active | H34=Inspection/Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "Controller actuator outputs shall include the 15 automated valve commands, P1, P2, B5 heater, B6 cooler and B7 cooler.",
+      "ref": "REQ-DAT-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A35=REQ-DAT-002 | B35=ICD-04 | C35=Controller actuator outputs shall include the 15 automated valve commands, P1, P2, B5 heater, B6 cooler and B7 cooler. | D35=Interface | E35=Must | F35=Active | H35=Inspection/Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "A complete acceptance simulation shall run through at least one parallel-branch split and rejoin and continue beyond 2500 s.",
+      "ref": "REQ-VV-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A36=REQ-VV-001 | B36=BAT-09 | C36=A complete acceptance simulation shall run through at least one parallel-branch split and rejoin and continue beyond 2500 s. | D36=Verification | E36=Must | F36=Active | H36=Simulation"
+    },
+    {
+      "category": "requirement",
+      "statement": "The acceptance run shall demonstrate B3 target concentration, B5 target concentration, B6 cooling target, B7 cooling target and correct return routing.",
+      "ref": "REQ-VV-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A37=REQ-VV-002 | B37=BAT-09 | C37=The acceptance run shall demonstrate B3 target concentration, B5 target concentration, B6 cooling target, B7 cooling target and correct return routing. | D37=Verification | E37=Must | F37=Active | H37=Simulation"
+    },
+    {
+      "category": "behavior",
+      "statement": "LIS-301 >= 0.13 m causes transition from Step1 to Step2.",
+      "ref": "",
+      "anchor": "[sheet State_Sequence]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "A5=Step1 | B5=Water charge to B3 | C5=V8=OPEN | D5=LIS-301 >= 0.13 m | E5=Step2 | F5=Single"
+    },
+    {
+      "category": "behavior",
+      "statement": "QI-302 >= 0.080 kg/kg causes transition from Step2 to Step3.",
+      "ref": "",
+      "anchor": "[sheet State_Sequence]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "A6=Step2 | B6=Brine charge / mix | C6=V9=OPEN | D6=QI-302 >= 0.080 kg/kg | E6=Step3 | F6=Single"
+    },
+    {
+      "category": "behavior",
+      "statement": "LIS-301 < 0.01 m causes transition from Step3 to Step4.",
+      "ref": "",
+      "anchor": "[sheet State_Sequence]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "A7=Step3 | B7=B3 to B4 | C7=V11=OPEN | D7=LIS-301 < 0.01 m | E7=Step4 | F7=Single"
+    },
+    {
+      "category": "behavior",
+      "statement": "LIS-501 <0.01 m AND NOT V15 causes transition from Step4 to Step5.",
+      "ref": "",
+      "anchor": "[sheet State_Sequence]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "A8=Step4 | B8=Wait for B5 idle | C8=No transfer actuator | D8=LIS-501 <0.01 m AND NOT V15 | E8=Step5 | F8=Single"
+    },
+    {
+      "category": "behavior",
+      "statement": "LIS-501 >=0.18 m causes transition from Step5 to Step6.",
+      "ref": "",
+      "anchor": "[sheet State_Sequence]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "A9=Step5 | B9=B4 to B5 | C9=V12=OPEN | D9=LIS-501 >=0.18 m | E9=Step6 | F9=Single"
+    },
+    {
+      "category": "behavior",
+      "statement": "QIS-502 >=0.180 kg/kg causes transition from Step6 to Split.",
+      "ref": "",
+      "anchor": "[sheet State_Sequence]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "A10=Step6 | B10=Heat / evaporate B5 | C10=B5_Heater=ON | D10=QIS-502 >=0.180 kg/kg | E10=Split | F10=Single"
+    },
+    {
+      "category": "behavior",
+      "statement": "TIS-602 <=20 degC causes transition from Step12 to Step13.",
+      "ref": "",
+      "anchor": "[sheet State_Sequence]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "A11=Step12 | B11=Cool condensate in B6 | C11=B6_Cooler=ON | D11=TIS-602 <=20 degC | E11=Step13 | F11=Parallel A"
+    },
+    {
+      "category": "behavior",
+      "statement": "LIS-701 <0.01 m causes transition from Step7 to Step8.",
+      "ref": "",
+      "anchor": "[sheet State_Sequence]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "A13=Step7 | B13=Wait for B7 idle | C13=No transfer actuator | D13=LIS-701 <0.01 m | E13=Step8 | F13=Parallel B"
+    },
+    {
+      "category": "behavior",
+      "statement": "LIS-501 <0.01 m causes transition from Step8 to Step9.",
+      "ref": "",
+      "anchor": "[sheet State_Sequence]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "A14=Step8 | B14=B5 concentrate to B7 | C14=V15=OPEN | D14=LIS-501 <0.01 m | E14=Step9 | F14=Parallel B"
+    },
+    {
+      "category": "behavior",
+      "statement": "TIS-702 <=25 degC causes transition from Step9 to Step10/11.",
+      "ref": "",
+      "anchor": "[sheet State_Sequence]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "A15=Step9 | B15=Cool concentrate in B7 | C15=B7_Cooler=ON | D15=TIS-702 <=25 degC | E15=Step10 | F15=Parallel B"
+    },
+    {
+      "category": "behavior",
+      "statement": "A complete AND B complete AND time>2500 s causes transition from Join to Initial.",
+      "ref": "",
+      "anchor": "[sheet State_Sequence]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "A17=Join | B17=Wait for both branches | C17=No transfer actuator | D17=A complete AND B complete AND time>2500 s | E17=Initial | F17=Join"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

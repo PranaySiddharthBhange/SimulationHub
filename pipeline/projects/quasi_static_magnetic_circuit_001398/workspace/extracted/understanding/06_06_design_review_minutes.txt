@@ -1,0 +1,37 @@
+Subject: Magnetic Circuit Design Review - DR-MAG-03
+Document kind: engineering register
+
+## Entities
+* released case -- model
+* current input -- input
+* leakage branch -- branch
+    - effective coefficient: 0.08 [approved]
+* Useful air-gap flux -- flux
+* air gap -- gap
+    - air gap: 1.50 mm [nominal]
+    - measurement: 1.58 mm [as_built/as-built]
+* mu_r -- parameter
+    - mu_r: 1200 [approved]
+* Measuring coil -- coil
+    - turns: 50 [approved]
+* Exciting coil -- coil
+    - turns: 600 [approved]
+* Electric ground -- ground
+* magnetic ground -- ground
+* baseline -- model scope
+* model -- model
+* V&V -- actor
+* AV-11 -- document
+* Modeling team -- actor
+* legacy v1.0 -- legacy model
+
+## Relationships
+* Useful air-gap flux is defined as released case (`(1-sigma)*Phi_core`)
+* legacy v1.0 has superseded parameters Modeling team (sigma, mu_r and measuring-coil turns tagged as superseded)
+
+## Requirements
+* Electric and magnetic grounds are both required. [approved]
+* The model shall preserve the distinction between model parameter, as-built measurement, and verification configuration. [approved]
+
+## Physical relationships
+* Useful air-gap flux is `(1-sigma)*Phi_core`. [approved]

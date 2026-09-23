@@ -1,0 +1,84 @@
+Subject: Two-Tank Fill/Transfer/Drain Controller
+Document kind: design note
+
+## Entities
+* CDS-02 -- document  <CDS-02>
+* CR-004 -- change request  <CR-004>
+* URS-001 Rev A -- requirement document  <URS-001 Rev A>
+* DR-02 -- design review  <DR-02>
+* IDLE -- controller state  <2. State Definitions>
+* FILL_T1 -- controller state  <2. State Definitions>; aliases: FILL
+* WAIT_AFTER_FILL -- controller state  <2. State Definitions>; aliases: HOLD1
+* TRANSFER_T1_T2 -- controller state  <2. State Definitions>; aliases: TRANSFER
+* WAIT_AFTER_TRANSFER -- controller state  <2. State Definitions>; aliases: HOLD2
+* DRAIN_T2 -- controller state  <2. State Definitions>; aliases: DRAIN
+* WAIT_AFTER_DRAIN -- controller state  <2. State Definitions>; aliases: HOLD3
+* PAUSED -- controller state  <2. State Definitions>
+* SHUTDOWN -- controller state  <2. State Definitions>
+* V1 -- valve command  <2. State Definitions>
+* V2 -- valve command  <2. State Definitions>
+* V3 -- valve command  <2. State Definitions>
+* XV-101 -- valve  <2. State Definitions>; aliases: V1
+* XV-102 -- valve  <2. State Definitions>; aliases: V2
+* XV-103 -- valve  <2. State Definitions>; aliases: V3
+* LT-101 -- level threshold signal  <2. State Definitions>
+* LT-102 -- level threshold signal  <2. State Definitions>
+* T1_High -- level limit  <8. Open Items at Release>
+    - baseline level: 0.78 m [archived]
+* T1_Low -- level limit  <2. State Definitions>
+* T2_Low -- level limit  <2. State Definitions>
+* START -- command  <3. Command Priority and Edge Semantics>
+* STOP -- command  <3. Command Priority and Edge Semantics>
+* SHUT -- command  <3. Command Priority and Edge Semantics>
+* stored state -- resume context  <6. State Transition Table>
+
+## Relationships
+* FILL maps to FILL_T1  <7. Naming Cross-Reference>
+* HOLD1 maps to WAIT_AFTER_FILL  <7. Naming Cross-Reference>
+* TRANSFER maps to TRANSFER_T1_T2  <7. Naming Cross-Reference>
+* HOLD2 maps to WAIT_AFTER_TRANSFER  <7. Naming Cross-Reference>
+* DRAIN maps to DRAIN_T2  <7. Naming Cross-Reference>
+* HOLD3 maps to WAIT_AFTER_DRAIN  <7. Naming Cross-Reference>
+* XV-101 is command alias V1  <2. State Definitions>
+* XV-102 is command alias V2  <2. State Definitions>
+* XV-103 is command alias V3  <2. State Definitions>
+
+## Requirements
+* Numeric setpoints and delays shall follow the latest approved parameter/change records. [current]  <1. Objective>
+* A new START is required after shutdown has completed and the controller has returned to IDLE.  <3. Command Priority and Edge Semantics>
+* When STOP occurs in WAIT_AFTER_FILL, WAIT_AFTER_TRANSFER or WAIT_AFTER_DRAIN, the remaining delay shall be retained.  <4. Timer Resume Rule>
+* START shall resume with that remaining delay.  <4. Timer Resume Rule>
+* V1 and V2 shall never be open simultaneously.  <5. Interlocks and Constraints>
+* V2 and V3 shall not be open simultaneously during normal automatic operation.  <5. Interlocks and Constraints>
+* All valves are de-energize-to-close.  <5. Interlocks and Constraints>
+* On controller power loss, output commands shall be false.  <5. Interlocks and Constraints>
+* Level threshold comparisons shall include equality (>= high, <= low).  <5. Interlocks and Constraints>
+
+## Constraints
+* The V2/V3 simultaneous-open restriction is explicitly waived in SHUTDOWN.  <5. Interlocks and Constraints>
+
+## Behaviors
+* A START edge begins FILL_T1.  <2. State Definitions>
+* Transition when LT-101 >= T1_High.  <2. State Definitions>
+* STOP freezes remaining time.  <2. State Definitions>
+* Transition when LT-101 <= T1_Low.  <2. State Definitions>
+* STOP freezes remaining time.  <2. State Definitions>
+* Transition when LT-102 <= T2_Low.  <2. State Definitions>
+* Hold for inter-cycle wait, then return to FILL_T1 automatically.  <2. State Definitions>
+* START resumes the stored state.  <2. State Definitions>
+* Remain in SHUTDOWN until both tanks are at or below their low-level limits, then close all valves and go to IDLE.  <2. State Definitions>
+* A valid SHUT edge immediately abandons any stored resume context and enters SHUTDOWN.  <3. Command Priority and Edge Semantics>
+* STOP is accepted from any normal running or wait state and places the controller in PAUSED with all valve outputs false.  <3. Command Priority and Edge Semantics>
+* START from IDLE begins FILL_T1; START from PAUSED restores the interrupted state. START while already running is ignored.  <3. Command Priority and Edge Semantics>
+* Commands received while SHUTDOWN is active do not interrupt the shutdown sequence.  <3. Command Priority and Edge Semantics>
+* IDLE | START edge | FILL_T1 | V1=1 | new cycle  <6. State Transition Table>
+* FILL_T1 | LT-101 >= T1_High | WAIT_AFTER_FILL | V1=0; start timer  <6. State Transition Table>
+* WAIT_AFTER_FILL | timer expired | TRANSFER_T1_T2 | V2=1  <6. State Transition Table>
+* TRANSFER_T1_T2 | LT-101 <= T1_Low | WAIT_AFTER_TRANSFER | V2=0; start timer  <6. State Transition Table>
+* WAIT_AFTER_TRANSFER | timer expired | DRAIN_T2 | V3=1  <6. State Transition Table>
+* DRAIN_T2 | LT-102 <= T2_Low | WAIT_AFTER_DRAIN | V3=0; start timer  <6. State Transition Table>
+* WAIT_AFTER_DRAIN | timer expired | FILL_T1 | V1=1 | automatic repeat  <6. State Transition Table>
+* normal/wait | STOP edge | PAUSED | all valves 0 | store state + remaining wait  <6. State Transition Table>
+* PAUSED | START edge | stored state | restore state outputs | resume  <6. State Transition Table>
+* any non-shutdown | SHUT edge | SHUTDOWN | V1=0,V2=1,V3=1 | clear resume context  <6. State Transition Table>
+* SHUTDOWN | LT-101 <= T1_Low AND LT-102 <= T2_Low | IDLE | V2=0,V3=0 | shutdown complete  <6. State Transition Table>

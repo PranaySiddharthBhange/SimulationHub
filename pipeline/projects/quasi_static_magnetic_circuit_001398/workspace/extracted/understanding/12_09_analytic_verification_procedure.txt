@@ -1,0 +1,57 @@
+Subject: Analytic Verification AV-11 - Rev B
+Document kind: test procedure
+
+## Entities
+* magnetic circuit -- system  <AV-11 [page 1]>
+* a -- parameter  <[page 1]>
+    - value: 0.025 m [current]
+* l -- parameter  <[page 1]>
+    - value: 0.150 m [current]
+* delta -- parameter  <[page 1]>
+    - value: 0.00150 m [nominal]
+* mu_r -- parameter  <[page 1]>
+    - value: 1200 [current]
+* sigma -- parameter  <[page 1]>
+    - value: 0.08 [current]
+* N_exc -- winding  <[page 1]>; aliases: exciting
+    - turns: 600 turns [current]
+* N_meas -- winding  <[page 1]>; aliases: measuring
+    - turns: 50 turns [current]
+* Frequency -- parameter  <[page 1]>
+    - frequency: 50 Hz [current]
+* Current ramp -- test input  <[page 1]>
+    - current: 0 A [current]
+    - time: 0.10 s [current]
+    - current: 2.0 A RMS [current]
+    - time: 0.50 s [current]
+    - time: 1.0 s [current]
+* Total core reluctance -- analytic quantity  <[page 1]>
+    - expected reluctance: 5.289249e+05 A/Wb [expected]
+* Air-gap reluctance -- analytic quantity  <[page 1]>
+    - expected reluctance: 1.909859e+06 A/Wb [expected]
+* Equivalent gap/leak reluctance -- analytic quantity  <[page 1]>
+    - expected reluctance: 1.757071e+06 A/Wb [expected]
+* Total core flux -- analytic quantity  <[page 1]>
+    - expected flux: 5.249354e-04 Wb [expected]
+* Useful air-gap flux -- analytic quantity  <[page 1]>
+    - expected flux: 4.829406e-04 Wb [expected]
+* Leakage flux -- analytic quantity  <[page 1]>
+    - expected flux: 4.199483e-05 Wb [expected]
+* Core B -- analytic quantity  <[page 1]>
+    - expected flux density: 0.839897 T [expected]
+* Gap B -- analytic quantity  <[page 1]>
+    - expected flux density: 0.772705 T [expected]
+* Core magnetic drop -- analytic quantity  <[page 1]>
+    - expected magnetic drop: 277.651 A-turn [expected]
+* Gap magnetic drop -- analytic quantity  <[page 1]>
+    - expected magnetic drop: 922.349 A-turn [expected]
+* Exciting induced |U| -- analytic quantity  <[page 1]>
+    - expected induced voltage magnitude: 98.948 V RMS [expected]
+* Measuring induced |U| -- analytic quantity  <[page 1]>
+    - expected induced voltage magnitude: 7.586 V RMS [expected]
+
+## Requirements
+* Verify the released nominal magnetic circuit against closed-form analytic calculations under the linear quasi-static assumptions. [current]  <AV-11 [page 1]>
+* MMF balance residual shall be within 0.5% of N*I. [current]  <[page 1]>
+* Useful/core flux ratio shall be 0.92 within 0.002 absolute. [current]  <[page 1]>
+* Flux, B, H and induced-voltage magnitudes shall each agree within 1% of the released analytic result. [current]  <[page 1]>

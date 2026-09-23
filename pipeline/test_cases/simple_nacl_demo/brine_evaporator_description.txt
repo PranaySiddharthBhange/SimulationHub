@@ -1,0 +1,3 @@
+An evaporator vessel starts with 50 kg of brine at 5 percent salt by mass, and the salt stays in the vessel while only pure water leaves as vapour.
+A 30 kW heater runs at constant duty and boils water off at the rate that duty supports, taking a latent heat of vaporisation of 2257 kJ per kg, and the heater switches off once the salt mass fraction reaches 20 percent.
+Simulate for 3000 seconds and report the vessel mass, the salt mass fraction and the heater state.

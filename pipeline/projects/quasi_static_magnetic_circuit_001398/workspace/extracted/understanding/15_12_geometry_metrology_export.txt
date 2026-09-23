@@ -1,0 +1,32 @@
+Subject: geometry metrology export
+Document kind: dataset
+
+## Entities
+* MC-101 Rev B -- drawing  <MC-101 Rev B>
+* nominal -- geometry configuration
+    - a: 0.025 m [nominal]
+    - l: 0.15 m [nominal]
+    - delta: 0.0015 m [nominal]
+* cross_section -- cross section
+    - side: 0.025 m [nominal]
+    - area: 0.0006250000000000001 m [nominal]
+* mean_flux_line -- mean flux line
+* left_leg -- mean flux line segment
+    - length: 0.125 m [nominal]
+* upper_yoke -- mean flux line segment
+    - length: 0.125 m [nominal]
+* right_leg_iron -- mean flux line segment
+    - length: 0.1235 m [nominal]
+* lower_yoke -- mean flux line segment
+    - length: 0.125 m [nominal]
+* as_built_prototype_MCB_02 -- prototype configuration
+    - air_gap_measured: 0.00158 m [measured]
+    - uncertainty_m: 2e-05 m [measured]
+* AV-11 -- configuration
+
+## Relationships
+* AV-11 uses nominal (geometry)
+* mean_flux_line includes left_leg
+* mean_flux_line includes upper_yoke
+* mean_flux_line includes right_leg_iron
+* mean_flux_line includes lower_yoke

@@ -1,0 +1,114 @@
+Subject: Tank Filling/Emptying System - Synthetic Requirements Register
+Document kind: engineering register
+
+## Entities
+* PLC-101 -- controller  <[sheet Equipment_Schedule]>; aliases: tankController, The controller, Controller
+    - scan time: 100 ms ms [current]
+    - scan time: 0.1 s [current]
+* TK-101 -- tank  <[sheet Equipment_Schedule]>; aliases: tank1, Tank 1, T1
+    - cross-section area: 1.2 m^2
+    - height: 1 m
+    - max working level: 0.9 m
+    - initial level: 0.05 m [current]
+    - high level limit: 0.78 m [superseded] (supersedes/superseded: CR-004)
+    - high level limit: 0.8 m [approved]
+    - low level limit: 0.05 m [current]
+* TK-102 -- tank  <[sheet Equipment_Schedule]>; aliases: tank2, Tank 2, T2
+    - cross-section area: 1.4 m^2
+    - height: 1 m
+    - max working level: 0.9 m
+    - initial level: 0.05 m [current]
+    - low level limit: 0.05 m [current]
+* XV-101 -- on-off valve  <[sheet Equipment_Schedule]>; aliases: valve1, V1
+    - nominal flow: 0.006 m^3/s
+    - fail position: Closed
+    - full-open time: 0.8 s
+    - nominal inlet flow: 0.006 m^3/s [current]
+* XV-102 -- on-off valve  <[sheet Equipment_Schedule]>; aliases: valve2, V2
+    - nominal flow: 0.0045 m^3/s
+    - fail position: Closed
+    - nominal transfer flow: 0.0045 m^3/s [current]
+* XV-103 -- on-off valve  <[sheet Equipment_Schedule]>; aliases: valve3, V3
+    - nominal flow: 0.005 m^3/s
+    - fail position: Closed
+    - nominal drain flow: 0.005 m^3/s [current]
+* LT-101 -- level transmitter  <[sheet Equipment_Schedule]>; aliases: level1
+    - signal range: 4-20 mA
+    - mapped range: 0.0-1.0 m
+* LT-102 -- level transmitter  <[sheet Equipment_Schedule]>; aliases: level2
+    - signal range: 4-20 mA
+    - mapped range: 0.0-1.0 m
+* PB-START -- momentary pushbutton  <[sheet Equipment_Schedule]>; aliases: start, START
+* PB-STOP -- momentary pushbutton  <[sheet Equipment_Schedule]>; aliases: stop, STOP
+* PB-SHUT -- momentary pushbutton  <[sheet Equipment_Schedule]>; aliases: shut, SHUT
+* SRC-101 -- boundary source  <[sheet Equipment_Schedule]>; aliases: source
+* DRN-101 -- boundary sink  <[sheet Equipment_Schedule]>; aliases: ambient1, drain
+* AI-101 -- I/O tag  <[sheet IO_List]>
+* AI-102 -- I/O tag  <[sheet IO_List]>
+* DI-101 -- I/O tag  <[sheet IO_List]>
+* DI-102 -- I/O tag  <[sheet IO_List]>
+* DI-103 -- I/O tag  <[sheet IO_List]>
+* DO-101 -- I/O tag  <[sheet IO_List]>
+* DO-102 -- I/O tag  <[sheet IO_List]>
+* DO-103 -- I/O tag  <[sheet IO_List]>
+
+## Relationships
+* SRC-101 supplies XV-101 (fluidOut to inlet)  <IF-HYD-01 [sheet Interface_Matrix]>
+* XV-101 feeds TK-101 (outlet to inlet)  <IF-HYD-02 [sheet Interface_Matrix]>
+* TK-101 flows to XV-102 (outlet to inlet)  <IF-HYD-03 [sheet Interface_Matrix]>
+* XV-102 feeds TK-102 (outlet to inlet)  <IF-HYD-04 [sheet Interface_Matrix]>
+* TK-102 flows to XV-103 (outlet to inlet)  <IF-HYD-05 [sheet Interface_Matrix]>
+* XV-103 drains to DRN-101 (outlet to fluidIn)  <IF-HYD-06 [sheet Interface_Matrix]>
+* TK-101 measured by LT-101 (TK-101 level)  <[sheet Equipment_Schedule]>
+* TK-102 measured by LT-102 (TK-102 level)  <[sheet Equipment_Schedule]>
+* LT-101 signals to PLC-101 (AI-101 to level1)  <IF-CTL-01 [sheet Interface_Matrix]>
+* LT-102 signals to PLC-101 (AI-102 to level2)  <IF-CTL-02 [sheet Interface_Matrix]>
+* PB-START commands PLC-101 (DI-101 start)  <IF-CTL-03 [sheet Interface_Matrix]>
+* PB-STOP commands PLC-101 (DI-102 stop)  <IF-CTL-04 [sheet Interface_Matrix]>
+* PB-SHUT commands PLC-101 (DI-103 shut)  <IF-CTL-05 [sheet Interface_Matrix]>
+* PLC-101 commands XV-101 (valve1 via DO-101)  <IF-CTL-06 [sheet Interface_Matrix]>
+* PLC-101 commands XV-102 (valve2 via DO-102)  <IF-CTL-07 [sheet Interface_Matrix]>
+* PLC-101 commands XV-103 (valve3 via DO-103)  <IF-CTL-08 [sheet Interface_Matrix]>
+
+## Requirements
+* The controller shall start the automatic fill-transfer-drain sequence upon a valid START command when the process is idle or paused. [current]  <URS-FUN-001 [sheet Requirements_Register]>
+* The automatic sequence shall open inlet valve V1 to fill Tank 1. [current]  <URS-FUN-002 [sheet Requirements_Register]>
+* After Tank 1 reaches the high-level limit, the controller shall wait 10 s before opening V2. [current]  <URS-FUN-004 [sheet Requirements_Register]>
+* V2 shall transfer liquid from Tank 1 to Tank 2 until Tank 1 reaches its low-level limit. [current]  <URS-FUN-005 [sheet Requirements_Register]>
+* After Tank 1 reaches the low-level limit, the controller shall wait 10 s before opening V3. [superseded]  <URS-FUN-006 [sheet Requirements_Register]>
+* V3 shall drain Tank 2 until Tank 2 reaches its low-level limit. [current]  <URS-FUN-007 [sheet Requirements_Register]>
+* After Tank 2 reaches its low-level limit, the controller shall return to the Tank 1 filling operation after 10 s. [superseded]  <URS-FUN-008 [sheet Requirements_Register]>
+* STOP shall close V1, V2 and V3 and place the controller in a paused condition. [current]  <URS-MOD-001 [sheet Requirements_Register]>
+* A START command following STOP shall continue the sequence from the point at which STOP was accepted. [current]  <URS-MOD-002 [sheet Requirements_Register]>
+* SHUT shall command V2 and V3 open to drain both tanks and shall inhibit V1. [current]  <URS-MOD-003 [sheet Requirements_Register]>
+* After shutdown draining is complete, all three valves shall be closed and the controller shall be in the initial idle configuration. [current]  <URS-MOD-004 [sheet Requirements_Register]>
+* On loss of controller power, all process valves shall move to or remain in the closed position. [current]  <URS-SAF-001 [sheet Requirements_Register]>
+* SHUT shall have higher command priority than STOP; STOP shall have higher priority than START. [current]  <URS-SAF-002 [sheet Requirements_Register]>
+* V1 shall never be commanded open while V2 is open. [current]  <URS-SAF-003 [sheet Requirements_Register]>
+* During normal automatic operation, V2 and V3 shall not be open simultaneously. [current]  <URS-SAF-004 [sheet Requirements_Register]>
+* During SHUT mode, V2 and V3 may be open simultaneously. [current]  <URS-SAF-005 [sheet Requirements_Register]>
+* Tank 1 high-level setpoint shall be 0.78 m. [superseded]  <URS-PER-001 [sheet Requirements_Register]>
+* Tank 1 high-level setpoint shall be 0.80 m. [current]  <URS-PER-002 [sheet Requirements_Register]>
+* Tank 1 low-level setpoint shall be 0.05 m. [current]  <URS-PER-003 [sheet Requirements_Register]>
+* Tank 2 low-level setpoint shall be 0.05 m. [current]  <URS-PER-004 [sheet Requirements_Register]>
+* The post-transfer waiting time shall be 12 s. [current]  <URS-PER-005 [sheet Requirements_Register]>
+* The inter-cycle waiting time after Tank 2 reaches low level shall be 8 s. [current]  <URS-PER-006 [sheet Requirements_Register]>
+* The controller shall receive two analog level measurements designated LT-101 and LT-102. [current]  <URS-INT-001 [sheet Requirements_Register]>
+* The controller shall receive momentary START, STOP and SHUT digital commands. [current]  <URS-INT-002 [sheet Requirements_Register]>
+* The controller shall provide three discrete valve-open commands to XV-101, XV-102 and XV-103. [current]  <URS-INT-003 [sheet Requirements_Register]>
+* A STOP command received during a wait state shall freeze the wait timer rather than restart it. [current]  <URS-CTL-001 [sheet Requirements_Register]>
+* START commands received while already running shall be ignored. [current]  <URS-CTL-002 [sheet Requirements_Register]>
+* STOP commands received during SHUT mode shall be ignored until shutdown is complete. [current]  <URS-CTL-003 [sheet Requirements_Register]>
+* START commands received during SHUT mode shall be ignored until shutdown is complete. [current]  <URS-CTL-004 [sheet Requirements_Register]>
+* Shutdown completion shall require Tank 1 and Tank 2 to both be at or below their low-level setpoints. [current]  <URS-CTL-005 [sheet Requirements_Register]>
+* The demonstration run shall simulate from 0 s through 900 s. [current]  <URS-TST-001 [sheet Requirements_Register]>
+* Valve commands shall be represented as Boolean open/closed commands. [current]  <URS-DAT-002 [sheet Requirements_Register]>
+
+## Constraints
+* Level values shall be represented internally in metres with a nominal valid range of 0.0 to 1.0 m. [current]  <URS-DAT-001 [sheet Requirements_Register]>
+
+## Behaviors
+* When Tank 1 reaches its high-level limit, V1 shall close. [current]  <URS-FUN-003 [sheet Requirements_Register]>
+
+## Scheduled commands
+* The demonstration run shall apply START at 20 s, STOP at 220 s, START at 280 s, STOP at 650 s and SHUT at 700 s. [current]  <URS-TST-002 [sheet Requirements_Register]>

@@ -1,0 +1,20 @@
+Subject: Partial Magnetic Architecture - Draft
+Document kind: architecture diagram
+
+## Entities
+* CurrentRamp -- component
+* ExcitingCoil -- component
+* IronCore -- component
+* AirGap -- component
+* FluxSensor -- component
+* MeasuringCoil -- component
+
+## Relationships
+* CurrentRamp connects to ExcitingCoil (current phasor)
+* ExcitingCoil connects to IronCore (mmf / flux)
+* IronCore connects to AirGap (flux)
+* AirGap connects to FluxSensor (Phi)
+* AirGap connects to MeasuringCoil (induction)
+
+## Constraints
+* Draft model does not expose leakage branch, element-wise core segmentation, electric ground, magnetic ground, and revision/configuration values. [proposed]

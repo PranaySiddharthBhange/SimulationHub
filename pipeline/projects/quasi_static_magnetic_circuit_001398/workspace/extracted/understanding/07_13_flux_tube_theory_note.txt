@@ -1,0 +1,44 @@
+Subject: Quasi-Static Magnetic Flux Tube Theory Note
+Document kind: design note
+
+## Entities
+* flux tube -- magnetic element  <[page 1]>
+* magnetic node -- node  <[page 1]>
+* linear reluctance -- magnetic element  <[page 1]>
+* released leakage model -- model  <[page 1]>; aliases: leakage model
+* sigma -- parameter  <[page 1]>
+* GAP-1 -- magnetic element  <[page 1]>
+* LEAK-1 -- magnetic element  <[page 1]>
+* R_leak -- reluctance  <[page 1]>
+* R_gap -- reluctance  <[page 1]>
+* R_parallel -- reluctance  <[page 1]>
+* Phi_core -- flux  <[page 1]>
+* Phi_gap -- flux  <[page 1]>
+* Phi_leak -- flux  <[page 1]>
+* R_core -- reluctance  <[page 1]>
+* exciting coils -- coil  <[page 1]>
+* measuring coils -- coil  <[page 1]>
+* nonlinear B-H curve -- magnetic characteristic  <[page 1]>
+* hysteresis -- phenomenon  <[page 1]>
+* eddy-current loss -- loss mechanism  <[page 1]>
+* frequency-dependent permeability -- material property  <[page 1]>
+* nonlinear inductor example -- example  <[page 1]>
+
+## Relationships
+* GAP-1 in parallel with LEAK-1 (they have equal magnetic potential difference)  <[page 1]>
+* exciting coils opposite induced-voltage orientation to measuring coils  <[page 1]>
+
+## Physical relationships
+* Phi = integral_A B_n dA  <[page 1]>
+* Vm = integral_l H_n dl  <[page 1]>
+* Rm = Vm/Phi  <[page 1]>
+* For constant A and l: Rm = l/(mu0*mu_r*A)  <[page 1]>
+* B = Phi/A  <[page 1]>
+* H_iron = B/(mu0*mu_r)  <[page 1]>
+* H_air = B/mu0  <[page 1]>
+* Phi_gap/Phi_core = 1-sigma  <[page 1]>
+* Phi_leak/Phi_core = sigma  <[page 1]>
+* R_leak = R_gap*(1-sigma)/sigma  <[page 1]>
+* R_parallel = 1/(1/R_gap + 1/R_leak)  <[page 1]>
+* Phi_core = N*I / (R_core + R_parallel)  <[page 1]>
+* induced-voltage magnitude is 2*pi*f*N*|Phi|  <[page 1]>

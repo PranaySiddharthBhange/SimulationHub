@@ -1,0 +1,1025 @@
+{
+  "document": "magnetic_circuit_sysmlv2_full_dataset/02_engineering_data/02_magnetic_engineering_register.xlsx",
+  "subject": "Quasi-Static Magnetic Circuit",
+  "kind": "engineering register",
+  "entities": [
+    {
+      "name": "iron core",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet README]",
+      "from_image": false,
+      "quote": "quasi-static magnetic circuit with an iron core"
+    },
+    {
+      "name": "discrete air gap",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet README]",
+      "from_image": false,
+      "quote": "discrete air gap"
+    },
+    {
+      "name": "leakage branch",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet README]",
+      "from_image": false,
+      "quote": "leakage branch"
+    },
+    {
+      "name": "exciting coil",
+      "kind": "component",
+      "aliases": [
+        "ExcitingCoil"
+      ],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "600",
+          "unit": "turn",
+          "status": "effective",
+          "supersedes": "",
+          "quote": "A12=PAR-NEXC | B12=Exciting coil | C12=Turns | D12=600 | E12=turn | F12=Coil Data Rev B | G12=Effective"
+        },
+        {
+          "quantity": "turns",
+          "value": "600",
+          "unit": "turn",
+          "status": "active",
+          "supersedes": "",
+          "quote": "A14=REQ-ELC-001 | B14=Coil Data Rev B | C14=The exciting coil shall have 600 turns. | D14=Electrical | E14=Must | F14=Active | H14=Inspection"
+        },
+        {
+          "quantity": "turns",
+          "value": "600",
+          "unit": "turn",
+          "status": "released",
+          "supersedes": "",
+          "quote": "A9=2026-02-18 | B9=Coil Data | C9=B | D9=Released | E9=Exciting coil=600 turns; measuring coil=50 turns; polarity dots frozen. | F9=Current"
+        },
+        {
+          "quantity": "turns",
+          "value": "600",
+          "unit": "turn",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A14=Exciting coil turns | B14=600"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet README]",
+      "from_image": false,
+      "quote": "exciting coil"
+    },
+    {
+      "name": "measuring coil",
+      "kind": "component",
+      "aliases": [
+        "MeasuringCoil"
+      ],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "40",
+          "unit": "turn",
+          "status": "superseded",
+          "supersedes": "50",
+          "quote": "A13=PAR-NMEAS-OLD | B13=Measuring coil | C13=Turns | D13=40 | E13=turn | F13=Prototype Note | G13=Superseded"
+        },
+        {
+          "quantity": "turns",
+          "value": "50",
+          "unit": "turn",
+          "status": "effective",
+          "supersedes": "",
+          "quote": "A14=PAR-NMEAS | B14=Measuring coil | C14=Turns | D14=50 | E14=turn | F14=Coil Data Rev B | G14=Effective"
+        },
+        {
+          "quantity": "turns",
+          "value": "50",
+          "unit": "turn",
+          "status": "active",
+          "supersedes": "",
+          "quote": "A15=REQ-ELC-002 | B15=Coil Data Rev B | C15=The measuring coil in the air gap shall have 50 turns. | D15=Electrical | E15=Must | F15=Active | H15=Inspection"
+        },
+        {
+          "quantity": "turns",
+          "value": "40",
+          "unit": "turn",
+          "status": "draft",
+          "supersedes": "",
+          "quote": "A5=2026-01-16 | B5=Prototype Note | C5=0.3 | D5=Draft | E5=Measuring coil documented as 40 turns. | F5=Superseded"
+        },
+        {
+          "quantity": "turns",
+          "value": "40",
+          "unit": "turn",
+          "status": "released",
+          "supersedes": "",
+          "quote": "A6=2026-01-22 | B6=Legacy Model | C6=1.0 | D6=Released | E6=Leakage coefficient sigma=0.05; 40-turn measuring coil. | F6=Superseded by approved changes"
+        },
+        {
+          "quantity": "turns",
+          "value": "50",
+          "unit": "turn",
+          "status": "released",
+          "supersedes": "",
+          "quote": "A9=2026-02-18 | B9=Coil Data | C9=B | D9=Released | E9=Exciting coil=600 turns; measuring coil=50 turns; polarity dots frozen. | F9=Current"
+        },
+        {
+          "quantity": "turns",
+          "value": "50",
+          "unit": "turn",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A15=Measuring coil turns | B15=50"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet README]",
+      "from_image": false,
+      "quote": "measuring coil"
+    },
+    {
+      "name": "flux sensor",
+      "kind": "sensor",
+      "aliases": [
+        "FluxSensor"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet README]",
+      "from_image": false,
+      "quote": "flux sensor"
+    },
+    {
+      "name": "electric ground",
+      "kind": "reference",
+      "aliases": [
+        "ElectricGround"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet README]",
+      "from_image": false,
+      "quote": "electric/magnetic grounds"
+    },
+    {
+      "name": "magnetic grounds",
+      "kind": "reference",
+      "aliases": [
+        "MagneticGround"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet README]",
+      "from_image": false,
+      "quote": "electric/magnetic grounds"
+    },
+    {
+      "name": "left leg",
+      "kind": "magnetic element",
+      "aliases": [
+        "CORE-L"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.0006250000000000001",
+          "unit": "m^2",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A4=CORE-L | B4=Left leg | C4=FixedShape.GenericFluxTube | D4=Iron core | E4=0.0006250000000000001 | F4=0.125 | G4=1200 | H4=Carries total core flux"
+        },
+        {
+          "quantity": "length",
+          "value": "0.125",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A4=CORE-L | B4=Left leg | C4=FixedShape.GenericFluxTube | D4=Iron core | E4=0.0006250000000000001 | F4=0.125 | G4=1200 | H4=Carries total core flux"
+        },
+        {
+          "quantity": "relative permeability",
+          "value": "1200",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A4=CORE-L | B4=Left leg | C4=FixedShape.GenericFluxTube | D4=Iron core | E4=0.0006250000000000001 | F4=0.125 | G4=1200 | H4=Carries total core flux"
+        }
+      ],
+      "ref": "CORE-L",
+      "anchor": "[sheet Magnetic_Elements]",
+      "from_image": false,
+      "quote": "A4=CORE-L | B4=Left leg | C4=FixedShape.GenericFluxTube | D4=Iron core | E4=0.0006250000000000001 | F4=0.125 | G4=1200 | H4=Carries total core flux"
+    },
+    {
+      "name": "upper yoke",
+      "kind": "magnetic element",
+      "aliases": [
+        "CORE-U"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.0006250000000000001",
+          "unit": "m^2",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A5=CORE-U | B5=Upper yoke | C5=FixedShape.GenericFluxTube | D5=Iron core | E5=0.0006250000000000001 | F5=0.125 | G5=1200 | H5=Carries total core flux"
+        },
+        {
+          "quantity": "length",
+          "value": "0.125",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A5=CORE-U | B5=Upper yoke | C5=FixedShape.GenericFluxTube | D5=Iron core | E5=0.0006250000000000001 | F5=0.125 | G5=1200 | H5=Carries total core flux"
+        },
+        {
+          "quantity": "relative permeability",
+          "value": "1200",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A5=CORE-U | B5=Upper yoke | C5=FixedShape.GenericFluxTube | D5=Iron core | E5=0.0006250000000000001 | F5=0.125 | G5=1200 | H5=Carries total core flux"
+        }
+      ],
+      "ref": "CORE-U",
+      "anchor": "[sheet Magnetic_Elements]",
+      "from_image": false,
+      "quote": "A5=CORE-U | B5=Upper yoke | C5=FixedShape.GenericFluxTube | D5=Iron core | E5=0.0006250000000000001 | F5=0.125 | G5=1200 | H5=Carries total core flux"
+    },
+    {
+      "name": "right leg",
+      "kind": "magnetic element",
+      "aliases": [
+        "CORE-R"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.0006250000000000001",
+          "unit": "m^2",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A6=CORE-R | B6=Right leg | C6=FixedShape.GenericFluxTube | D6=Iron core | E6=0.0006250000000000001 | F6=0.1235 | G6=1200 | H6=Carries total core flux; gap excluded from length"
+        },
+        {
+          "quantity": "length",
+          "value": "0.1235",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A6=CORE-R | B6=Right leg | C6=FixedShape.GenericFluxTube | D6=Iron core | E6=0.0006250000000000001 | F6=0.1235 | G6=1200 | H6=Carries total core flux; gap excluded from length"
+        },
+        {
+          "quantity": "relative permeability",
+          "value": "1200",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A6=CORE-R | B6=Right leg | C6=FixedShape.GenericFluxTube | D6=Iron core | E6=0.0006250000000000001 | F6=0.1235 | G6=1200 | H6=Carries total core flux; gap excluded from length"
+        }
+      ],
+      "ref": "CORE-R",
+      "anchor": "[sheet Magnetic_Elements]",
+      "from_image": false,
+      "quote": "A6=CORE-R | B6=Right leg | C6=FixedShape.GenericFluxTube | D6=Iron core | E6=0.0006250000000000001 | F6=0.1235 | G6=1200 | H6=Carries total core flux; gap excluded from length"
+    },
+    {
+      "name": "air gap",
+      "kind": "magnetic element",
+      "aliases": [
+        "GAP-1"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.0006250000000000001",
+          "unit": "m^2",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A7=GAP-1 | B7=Air gap | C7=FixedShape.GenericFluxTube | D7=Air | E7=0.0006250000000000001 | F7=0.0015 | G7=1 | H7=Carries useful flux"
+        },
+        {
+          "quantity": "length",
+          "value": "0.0015",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A7=GAP-1 | B7=Air gap | C7=FixedShape.GenericFluxTube | D7=Air | E7=0.0006250000000000001 | F7=0.0015 | G7=1 | H7=Carries useful flux"
+        },
+        {
+          "quantity": "relative permeability",
+          "value": "1",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A7=GAP-1 | B7=Air gap | C7=FixedShape.GenericFluxTube | D7=Air | E7=0.0006250000000000001 | F7=0.0015 | G7=1 | H7=Carries useful flux"
+        }
+      ],
+      "ref": "GAP-1",
+      "anchor": "[sheet Magnetic_Elements]",
+      "from_image": false,
+      "quote": "A7=GAP-1 | B7=Air gap | C7=FixedShape.GenericFluxTube | D7=Air | E7=0.0006250000000000001 | F7=0.0015 | G7=1 | H7=Carries useful flux"
+    },
+    {
+      "name": "lower yoke",
+      "kind": "magnetic element",
+      "aliases": [
+        "CORE-D"
+      ],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.0006250000000000001",
+          "unit": "m^2",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A8=CORE-D | B8=Lower yoke | C8=FixedShape.GenericFluxTube | D8=Iron core | E8=0.0006250000000000001 | F8=0.125 | G8=1200 | H8=Carries total core flux"
+        },
+        {
+          "quantity": "length",
+          "value": "0.125",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A8=CORE-D | B8=Lower yoke | C8=FixedShape.GenericFluxTube | D8=Iron core | E8=0.0006250000000000001 | F8=0.125 | G8=1200 | H8=Carries total core flux"
+        },
+        {
+          "quantity": "relative permeability",
+          "value": "1200",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A8=CORE-D | B8=Lower yoke | C8=FixedShape.GenericFluxTube | D8=Iron core | E8=0.0006250000000000001 | F8=0.125 | G8=1200 | H8=Carries total core flux"
+        }
+      ],
+      "ref": "CORE-D",
+      "anchor": "[sheet Magnetic_Elements]",
+      "from_image": false,
+      "quote": "A8=CORE-D | B8=Lower yoke | C8=FixedShape.GenericFluxTube | D8=Iron core | E8=0.0006250000000000001 | F8=0.125 | G8=1200 | H8=Carries total core flux"
+    },
+    {
+      "name": "leakage path",
+      "kind": "magnetic element",
+      "aliases": [
+        "LEAK-1"
+      ],
+      "values": [],
+      "ref": "LEAK-1",
+      "anchor": "[sheet Magnetic_Elements]",
+      "from_image": false,
+      "quote": "A9=LEAK-1 | B9=Leakage path | C9=LeakageWithCoefficient | D9=Air equivalent | H9=Parallel with GAP-1; useful/core flux ratio = 1-sigma = 0.92"
+    },
+    {
+      "name": "CurrentRamp",
+      "kind": "source",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A4=IF-EL-01 | B4=CurrentRamp | C4=i_ref | D4=ExcitingCoil | E4=electric current | F4=Complex current phasor | G4=Positive current creates positive mmf"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "CurrentRamp",
+      "predicate": "supplies",
+      "object": "exciting coil",
+      "detail": "i_ref to electric current",
+      "ref": "IF-EL-01",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A4=IF-EL-01 | B4=CurrentRamp | C4=i_ref | D4=ExcitingCoil | E4=electric current | F4=Complex current phasor | G4=Positive current creates positive mmf"
+    },
+    {
+      "subject": "exciting coil",
+      "predicate": "referenced_to",
+      "object": "electric ground",
+      "detail": "pin_p/pin_n to reference",
+      "ref": "IF-EL-02",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A5=IF-EL-02 | B5=ExcitingCoil | C5=pin_p/pin_n | D5=ElectricGround | E5=reference | F5=Electric potential | G5=Ground defines zero electric potential"
+    },
+    {
+      "subject": "exciting coil",
+      "predicate": "magnetically_coupled_to",
+      "object": "left leg",
+      "detail": "magnetic ports; Electromagnetic conversion N*I",
+      "ref": "IF-MAG-01",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A6=IF-MAG-01 | B6=ExcitingCoil | C6=magnetic ports | D6=CORE-L | E6=magnetic port | F6=Phi / Vm | G6=Electromagnetic conversion N*I"
+    },
+    {
+      "subject": "left leg",
+      "predicate": "in_series_with",
+      "object": "upper yoke",
+      "detail": "Series core path",
+      "ref": "IF-MAG-02",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A7=IF-MAG-02 | B7=CORE-L | C7=port_n | D7=CORE-U | E7=port_p | F7=Phi / Vm | G7=Series core path"
+    },
+    {
+      "subject": "upper yoke",
+      "predicate": "in_series_with",
+      "object": "right leg",
+      "detail": "Series core path",
+      "ref": "IF-MAG-03",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A8=IF-MAG-03 | B8=CORE-U | C8=port_n | D8=CORE-R | E8=port_p | F8=Phi / Vm | G8=Series core path"
+    },
+    {
+      "subject": "right leg",
+      "predicate": "branches_to",
+      "object": "air gap",
+      "detail": "Useful branch",
+      "ref": "IF-MAG-04",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A9=IF-MAG-04 | B9=CORE-R | C9=branch node | D9=GAP-1 | E9=port_p | F9=Phi / Vm | G9=Useful branch"
+    },
+    {
+      "subject": "right leg",
+      "predicate": "branches_to",
+      "object": "leakage path",
+      "detail": "Leakage branch",
+      "ref": "IF-MAG-05",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A10=IF-MAG-05 | B10=CORE-R | C10=branch node | D10=LEAK-1 | E10=port_p | F10=Phi / Vm | G10=Leakage branch"
+    },
+    {
+      "subject": "air gap",
+      "predicate": "rejoins_at",
+      "object": "lower yoke",
+      "detail": "Useful branch rejoin",
+      "ref": "IF-MAG-06",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A11=IF-MAG-06 | B11=GAP-1 | C11=port_n | D11=CORE-D | E11=port_p | F11=Phi / Vm | G11=Useful branch rejoin"
+    },
+    {
+      "subject": "leakage path",
+      "predicate": "rejoins_at",
+      "object": "lower yoke",
+      "detail": "Leakage branch rejoin",
+      "ref": "IF-MAG-07",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A12=IF-MAG-07 | B12=LEAK-1 | C12=port_n | D12=CORE-D | E12=port_p | F12=Phi / Vm | G12=Leakage branch rejoin"
+    },
+    {
+      "subject": "lower yoke",
+      "predicate": "referenced_to",
+      "object": "magnetic grounds",
+      "detail": "Zero magnetic potential",
+      "ref": "IF-MAG-08",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A13=IF-MAG-08 | B13=CORE-D | C13=port_n | D13=MagneticGround | E13=reference | F13=Magnetic scalar potential | G13=Zero magnetic potential"
+    },
+    {
+      "subject": "air gap",
+      "predicate": "sensed_by",
+      "object": "flux sensor",
+      "detail": "useful flux to Phi_gap",
+      "ref": "IF-SEN-01",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A14=IF-SEN-01 | B14=GAP-1 | C14=useful flux | D14=FluxSensor | E14=Phi_gap | F14=Complex magnetic flux | G14=Arrow direction defines positive sign"
+    },
+    {
+      "subject": "air gap",
+      "predicate": "magnetically_coupled_to",
+      "object": "measuring coil",
+      "detail": "Phi_gap to magnetic coupling; Induced voltage",
+      "ref": "IF-IND-01",
+      "anchor": "[sheet Interfaces]",
+      "from_image": false,
+      "quote": "A15=IF-IND-01 | B15=GAP-1 | C15=Phi_gap | D15=MeasuringCoil | E15=magnetic coupling | F15=Induced voltage | G15=Negative electric orientation"
+    },
+    {
+      "subject": "leakage path",
+      "predicate": "in_parallel_with",
+      "object": "air gap",
+      "detail": "useful/core flux ratio = 1-sigma = 0.92",
+      "ref": "LEAK-1",
+      "anchor": "[sheet Magnetic_Elements]",
+      "from_image": false,
+      "quote": "A9=LEAK-1 | B9=Leakage path | C9=LeakageWithCoefficient | D9=Air equivalent | H9=Parallel with GAP-1; useful/core flux ratio = 1-sigma = 0.92"
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "The electromagnetic converter shall create positive magnetic mmf when positive exciting-coil current is applied.",
+      "ref": "REQ-FUN-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A4=REQ-FUN-001 | B4=System Requirements Rev A | C4=The electromagnetic converter shall create positive magnetic mmf when positive exciting-coil current is applied. | D4=Functional | E4=Must | F4=Active | H4=Analytic/Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The core magnetic circuit shall include left leg, upper yoke, right leg, lower yoke and one discrete air gap.",
+      "ref": "REQ-FUN-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A5=REQ-FUN-002 | B5=System Requirements Rev A | C5=The core magnetic circuit shall include left leg, upper yoke, right leg, lower yoke and one discrete air gap. | D5=Structural | E5=Must | F5=Active | H5=Inspection"
+    },
+    {
+      "category": "requirement",
+      "statement": "The magnetic circuit shall include a leakage flux path in parallel with the useful air-gap path.",
+      "ref": "REQ-FUN-003",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A6=REQ-FUN-003 | B6=System Requirements Rev A | C6=The magnetic circuit shall include a leakage flux path in parallel with the useful air-gap path. | D6=Structural | E6=Must | F6=Active | H6=Inspection/Analysis"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Useful air-gap flux shall be modeled as (1-sigma) times total core flux.",
+      "ref": "REQ-FUN-004",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A7=REQ-FUN-004 | B7=Magnetic Design Note Rev C | C7=Useful air-gap flux shall be modeled as (1-sigma) times total core flux. | D7=Functional | E7=Must | F7=Active | H7=Analysis"
+    },
+    {
+      "category": "requirement",
+      "statement": "The effective leakage coefficient sigma shall be 0.08 for the released benchmark configuration.",
+      "ref": "REQ-PER-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A8=REQ-PER-001 | B8=CR-MAG-006 | C8=The effective leakage coefficient sigma shall be 0.08 for the released benchmark configuration. | D8=Parameter | E8=Must | F8=Active | H8=Analytic/Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The released effective relative permeability of the iron core shall be 1200 under the linear benchmark assumption.",
+      "ref": "REQ-PER-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A9=REQ-PER-002 | B9=CR-MAG-004 | C9=The released effective relative permeability of the iron core shall be 1200 under the linear benchmark assumption. | D9=Parameter | E9=Must | F9=Active | H9=Analytic/Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The square core cross section shall have side a = 25 mm.",
+      "ref": "REQ-GEO-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A10=REQ-GEO-001 | B10=Drawing MC-101 Rev B | C10=The square core cross section shall have side a = 25 mm. | D10=Geometry | E10=Must | F10=Active | H10=Inspection"
+    },
+    {
+      "category": "requirement",
+      "statement": "The mean outside magnetic-circuit dimension l shall be 150 mm as defined on the reference drawing.",
+      "ref": "REQ-GEO-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A11=REQ-GEO-002 | B11=Drawing MC-101 Rev B | C11=The mean outside magnetic-circuit dimension l shall be 150 mm as defined on the reference drawing. | D11=Geometry | E11=Must | F11=Active | H11=Inspection"
+    },
+    {
+      "category": "requirement",
+      "statement": "The nominal air-gap length delta shall be 1.50 mm.",
+      "ref": "REQ-GEO-003",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A12=REQ-GEO-003 | B12=Drawing MC-101 Rev B | C12=The nominal air-gap length delta shall be 1.50 mm. | D12=Geometry | E12=Must | F12=Active | H12=Inspection"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Mean flux-line lengths shall be l-a for left leg, upper yoke and lower yoke, and l-a-delta for the right leg iron section.",
+      "ref": "REQ-GEO-004",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A13=REQ-GEO-004 | B13=Drawing MC-101 Rev B | C13=Mean flux-line lengths shall be l-a for left leg, upper yoke and lower yoke, and l-a-delta for the right leg iron section. | D13=Geometry | E13=Must | F13=Active | H13=Analysis"
+    },
+    {
+      "category": "requirement",
+      "statement": "The exciting coil shall have 600 turns.",
+      "ref": "REQ-ELC-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A14=REQ-ELC-001 | B14=Coil Data Rev B | C14=The exciting coil shall have 600 turns. | D14=Electrical | E14=Must | F14=Active | H14=Inspection"
+    },
+    {
+      "category": "requirement",
+      "statement": "The measuring coil in the air gap shall have 50 turns.",
+      "ref": "REQ-ELC-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A15=REQ-ELC-002 | B15=Coil Data Rev B | C15=The measuring coil in the air gap shall have 50 turns. | D15=Electrical | E15=Must | F15=Active | H15=Inspection"
+    },
+    {
+      "category": "requirement",
+      "statement": "The exciting current RMS phasor magnitude shall ramp from 0 A to 2.0 A between 0.10 s and 0.50 s and then remain at 2.0 A through 1.0 s.",
+      "ref": "REQ-ELC-003",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A16=REQ-ELC-003 | B16=Excitation Profile EP-03 | C16=The exciting current RMS phasor magnitude shall ramp from 0 A to 2.0 A between 0.10 s and 0.50 s and then remain at 2.0 A through 1.0 s. | D16=Electrical | E16=Must | F16=Active | H16=Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The quasi-static excitation frequency shall be 50 Hz.",
+      "ref": "REQ-ELC-004",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A17=REQ-ELC-004 | B17=Excitation Profile EP-03 | C17=The quasi-static excitation frequency shall be 50 Hz. | D17=Electrical | E17=Must | F17=Active | H17=Test"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "For each linear flux-tube element, reluctance shall be Rm = length/(mu0*mu_r*A).",
+      "ref": "REQ-MAG-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A18=REQ-MAG-001 | B18=Magnetic Design Note Rev C | C18=For each linear flux-tube element, reluctance shall be Rm = length/(mu0*mu_r*A). | D18=Equation | E18=Must | F18=Active | H18=Analysis"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Flux density shall be B = Phi/A for constant cross-section elements.",
+      "ref": "REQ-MAG-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A19=REQ-MAG-002 | B19=Magnetic Design Note Rev C | C19=Flux density shall be B = Phi/A for constant cross-section elements. | D19=Equation | E19=Must | F19=Active | H19=Analysis"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Core field strength shall be H = B/(mu0*mu_r), and air-gap field strength shall be H = B/mu0.",
+      "ref": "REQ-MAG-003",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A20=REQ-MAG-003 | B20=Magnetic Design Note Rev C | C20=Core field strength shall be H = B/(mu0*mu_r), and air-gap field strength shall be H = B/mu0. | D20=Equation | E20=Must | F20=Active | H20=Analysis"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Magnetic potential difference of each element shall equal H multiplied by its mean flux-line length.",
+      "ref": "REQ-MAG-004",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A21=REQ-MAG-004 | B21=Magnetic Design Note Rev C | C21=Magnetic potential difference of each element shall equal H multiplied by its mean flux-line length. | D21=Equation | E21=Must | F21=Active | H21=Analysis"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "The sum of series core magnetic potential drops plus the air-gap branch magnetic potential shall equal N*I.",
+      "ref": "REQ-MAG-005",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A22=REQ-MAG-005 | B22=Magnetic Design Note Rev C | C22=The sum of series core magnetic potential drops plus the air-gap branch magnetic potential shall equal N*I. | D22=Conservation | E22=Must | F22=Active | H22=Analysis/Test"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Magnetic potential difference across GAP-1 and LEAK-1 shall be equal because the elements are connected in parallel.",
+      "ref": "REQ-MAG-006",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A23=REQ-MAG-006 | B23=Magnetic Design Note Rev C | C23=Magnetic potential difference across GAP-1 and LEAK-1 shall be equal because the elements are connected in parallel. | D23=Conservation | E23=Must | F23=Active | H23=Analysis"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Flux continuity shall be satisfied at the split: Phi_core = Phi_gap + Phi_leak.",
+      "ref": "REQ-MAG-007",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A24=REQ-MAG-007 | B24=Magnetic Design Note Rev C | C24=Flux continuity shall be satisfied at the split: Phi_core = Phi_gap + Phi_leak. | D24=Conservation | E24=Must | F24=Active | H24=Analysis"
+    },
+    {
+      "category": "requirement",
+      "statement": "Magnetic flux, flux density, field strength and magnetic potential shall be represented as quasi-static phasor quantities.",
+      "ref": "REQ-QS-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A25=REQ-QS-001 | B25=QS Modeling Standard | C25=Magnetic flux, flux density, field strength and magnetic potential shall be represented as quasi-static phasor quantities. | D25=Modeling | E25=Must | F25=Active | H25=Model Review"
+    },
+    {
+      "category": "requirement",
+      "statement": "For linear reluctance elements, reluctance shall remain a real-valued quantity and magnetic potential difference and flux shall have the same phasor angle.",
+      "ref": "REQ-QS-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A26=REQ-QS-002 | B26=QS Modeling Standard | C26=For linear reluctance elements, reluctance shall remain a real-valued quantity and magnetic potential difference and flux shall have the same phasor angle. | D26=Modeling | E26=Must | F26=Active | H26=Model Review"
+    },
+    {
+      "category": "requirement",
+      "statement": "The exciting coil induced voltage shall be oriented positive with respect to the defined positive electric direction.",
+      "ref": "REQ-IND-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A27=REQ-IND-001 | B27=Coil Data Rev B | C27=The exciting coil induced voltage shall be oriented positive with respect to the defined positive electric direction. | D27=Induction | E27=Must | F27=Active | H27=Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The measuring coil induced voltage shall be oriented negative with respect to the air-gap flux direction shown in the reference configuration.",
+      "ref": "REQ-IND-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A28=REQ-IND-002 | B28=Coil Data Rev B | C28=The measuring coil induced voltage shall be oriented negative with respect to the air-gap flux direction shown in the reference configuration. | D28=Induction | E28=Must | F28=Active | H28=Test"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Induced-voltage phasor magnitude for a sinusoidal flux shall satisfy |U| = 2*pi*f*N*|Phi|.",
+      "ref": "REQ-IND-003",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A29=REQ-IND-003 | B29=QS Modeling Standard | C29=Induced-voltage phasor magnitude for a sinusoidal flux shall satisfy |U| = 2*pi*f*N*|Phi|. | D29=Induction | E29=Must | F29=Active | H29=Analysis/Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The electrical network shall contain an electric ground defining zero electric potential.",
+      "ref": "REQ-GND-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A30=REQ-GND-001 | B30=QS Modeling Standard | C30=The electrical network shall contain an electric ground defining zero electric potential. | D30=Interface | E30=Must | F30=Active | H30=Inspection"
+    },
+    {
+      "category": "requirement",
+      "statement": "The magnetic network shall contain a magnetic ground defining zero magnetic scalar potential.",
+      "ref": "REQ-GND-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A31=REQ-GND-002 | B31=QS Modeling Standard | C31=The magnetic network shall contain a magnetic ground defining zero magnetic scalar potential. | D31=Interface | E31=Must | F31=Active | H31=Inspection"
+    },
+    {
+      "category": "requirement",
+      "statement": "Force interaction shall not be modeled.",
+      "ref": "REQ-ASM-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A32=REQ-ASM-001 | B32=Benchmark Assumptions | C32=Force interaction shall not be modeled. | D32=Assumption | E32=Must | F32=Active | H32=Model Review"
+    },
+    {
+      "category": "requirement",
+      "statement": "Core reluctance shall be linear with constant effective relative permeability for this benchmark.",
+      "ref": "REQ-ASM-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A33=REQ-ASM-002 | B33=Benchmark Assumptions | C33=Core reluctance shall be linear with constant effective relative permeability for this benchmark. | D33=Assumption | E33=Must | F33=Active | H33=Model Review"
+    },
+    {
+      "category": "constraint",
+      "statement": "At 2.0 A RMS, analytic and simulated total mmf balance shall agree within 0.5%.",
+      "ref": "REQ-VV-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A34=REQ-VV-001 | B34=Analytic Verification AV-11 | C34=At 2.0 A RMS, analytic and simulated total mmf balance shall agree within 0.5%. | D34=Verification | E34=Must | F34=Active | H34=Test"
+    },
+    {
+      "category": "constraint",
+      "statement": "At 2.0 A RMS, the simulated useful/core flux ratio shall equal 0.92 within 0.2 percentage points.",
+      "ref": "REQ-VV-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A35=REQ-VV-002 | B35=Analytic Verification AV-11 | C35=At 2.0 A RMS, the simulated useful/core flux ratio shall equal 0.92 within 0.2 percentage points. | D35=Verification | E35=Must | F35=Active | H35=Test"
+    },
+    {
+      "category": "constraint",
+      "statement": "At 2.0 A RMS, simulated flux, B, H and induced-voltage magnitudes shall agree with the released analytic calculation within 1%.",
+      "ref": "REQ-VV-003",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A36=REQ-VV-003 | B36=Analytic Verification AV-11 | C36=At 2.0 A RMS, simulated flux, B, H and induced-voltage magnitudes shall agree with the released analytic calculation within 1%. | D36=Verification | E36=Must | F36=Active | H36=Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "Flux sensor output shall expose the useful air-gap flux with positive sign in the arrow direction shown on the reference model.",
+      "ref": "REQ-DAT-001",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A37=REQ-DAT-001 | B37=ICD-MAG-02 | C37=Flux sensor output shall expose the useful air-gap flux with positive sign in the arrow direction shown on the reference model. | D37=Interface | E37=Must | F37=Active | H37=Inspection/Test"
+    },
+    {
+      "category": "requirement",
+      "statement": "Current, flux, magnetic potential and induced-voltage channels shall retain explicit units and phasor convention metadata.",
+      "ref": "REQ-DAT-002",
+      "anchor": "[sheet Requirements]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A38=REQ-DAT-002 | B38=ICD-MAG-02 | C38=Current, flux, magnetic potential and induced-voltage channels shall retain explicit units and phasor convention metadata. | D38=Data | E38=Must | F38=Active | H38=Inspection"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "l_core = 3*(l-a)+(l-a-delta)",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A19=Total iron length | B19=l_core | C19=3*(l-a)+(l-a-delta) | D19==3*(C7-C5)+(C7-C5-C8) [cached value=0.4985; formula not recalculated] | E19=m"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "R_core = l_core/(mu0*mu_r*A)",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A20=Core reluctance | B20=R_core | C20=l_core/(mu0*mu_r*A) | D20==D19/(C4*C9*C6) [cached value=528924.9275420654; formula not recalculated] | E20=A/Wb"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "R_gap = delta/(mu0*A)",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A21=Gap reluctance | B21=R_gap | C21=delta/(mu0*A) | D21==C8/(C4*C6) [cached value=1909859.3171027435; formula not recalculated] | E21=A/Wb"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "R_leak = R_gap*(1-sigma)/sigma",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A22=Leakage reluctance | B22=R_leak | C22=R_gap*(1-sigma)/sigma | D22==D21*(1-C10)/C10 [cached value=21963382.14668155; formula not recalculated] | E22=A/Wb"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "R_par = 1/(1/R_gap+1/R_leak)",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A23=Equivalent gap/leak reluctance | B23=R_par | C23=1/(1/R_gap+1/R_leak) | D23==1/(1/D21+1/D22) [cached value=1757070.5717345239; formula not recalculated] | E23=A/Wb"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "R_total = R_core+R_par",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A24=Total reluctance | B24=R_total | C24=R_core+R_par | D24==D20+D23 [cached value=2285995.499276589; formula not recalculated] | E24=A/Wb"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "F=N*I",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A25=Applied mmf | B25=F=N*I | C25=N_exc*I | D25==C11*C14 [cached value=1200; formula not recalculated] | E25=A-turn"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Phi_core = F/R_total",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A26=Total core flux | B26=Phi_core | C26=F/R_total | D26==D25/D24 [cached value=0.0005249354167056515; formula not recalculated] | E26=Wb"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Phi_gap = (1-sigma)*Phi_core",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A27=Useful air-gap flux | B27=Phi_gap | C27=(1-sigma)*Phi_core | D27==(1-C10)*D26 [cached value=0.00048294058336919936; formula not recalculated] | E27=Wb"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Phi_leak = sigma*Phi_core",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A28=Leakage flux | B28=Phi_leak | C28=sigma*Phi_core | D28==C10*D26 [cached value=4.1994833336452115e-05; formula not recalculated] | E28=Wb"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "B_core = Phi_core/A",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A29=Core flux density | B29=B_core | C29=Phi_core/A | D29==D26/C6 [cached value=0.8398966667290422; formula not recalculated] | E29=T"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "B_gap = Phi_gap/A",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A30=Air-gap flux density | B30=B_gap | C30=Phi_gap/A | D30==D27/C6 [cached value=0.7727049333907189; formula not recalculated] | E30=T"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "H_core = B_core/(mu0*mu_r)",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A31=Core field strength | B31=H_core | C31=B_core/(mu0*mu_r) | D31==D29/(C4*C9) [cached value=556.9737758180554; formula not recalculated] | E31=A/m"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "H_gap = B_gap/mu0",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A32=Air-gap field strength | B32=H_gap | C32=B_gap/mu0 | D32==D30/C4 [cached value=614899.0485031332; formula not recalculated] | E32=A/m"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Vm_core = H_core*l_core",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A33=Core magnetic potential drop | B33=Vm_core | C33=H_core*l_core | D33==D31*D19 [cached value=277.6514272453006; formula not recalculated] | E33=A-turn"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Vm_gap = H_gap*delta",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A34=Gap branch magnetic potential | B34=Vm_gap | C34=H_gap*delta | D34==D32*C8 [cached value=922.3485727546998; formula not recalculated] | E34=A-turn"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "residual = N*I - Vm_core - Vm_gap",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A35=MMF balance residual | B35=residual | C35=N*I - Vm_core - Vm_gap | D35==D25-D33-D34 [cached value=-4.547473508864641e-13; formula not recalculated] | E35=A-turn"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Uexc = 2*pi*f*N_exc*Phi_core",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A36=Exciting-coil induced |U| | B36=Uexc | C36=2*pi*f*N_exc*Phi_core | D36==2*PI()*C13*C11*D26 [cached value=98.94799492389429; formula not recalculated] | E36=V RMS"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Umeas = 2*pi*f*N_meas*Phi_gap",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A37=Measuring-coil induced |U| | B37=Umeas | C37=2*pi*f*N_meas*Phi_gap | D37==2*PI()*C13*C12*D27 [cached value=7.586012944165229; formula not recalculated] | E37=V RMS"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "ratio = Phi_gap/Phi_core",
+      "ref": "",
+      "anchor": "[sheet Analytic_Calculation]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A38=Useful/core flux ratio | B38=ratio | C38=Phi_gap/Phi_core | D38==D27/D26 [cached value=0.92; formula not recalculated] | E38=1"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

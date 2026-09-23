@@ -1,0 +1,317 @@
+{
+  "document": "From: s.patel@synthetic-controls.example\nDate: Thu, 12 Mar 2026 09:14:00 +0530\nSubject: RE: Tank demo timing / high-level tuning and shutdown semantics\n\nAsha / Jin,\n\nCR-004 is now approved. Please treat 0.80 m as the effective T1 high limit. Also use 12 s after T1 reaches low level before opening the drain valve, and 8 s after T2 reaches low before the next fill starts.\n\nNo state-logic change from DR-02: SHUT remains higher priority than STOP; during SHUT, V2 and V3 stay commanded open until both low-level conditions are satisfied. START during SHUT is ignored.\n\nJin - the archived Modelica demo still says 0.78 / 10 / 10. Please do not use those three values as configuration authority for the hackathon test log.\n\nRegards,\nSamir\n\n-----Original Message-----\nFrom: a.mehta@synthetic-customer.example\nSent: Tuesday, March 10, 2026 16:42\nTo: s.patel@synthetic-controls.example\nSubject: RE: Tank demo timing\n\nWe can accept 0.80 m for T1 high. The operators also prefer a little longer settling after transfer, so make that 12 s. The 10 s dead time after tank 2 is empty feels unnecessarily slow; 8 s is acceptable.\n\n-----Original Message-----\nFrom: j.lin@synthetic-sim.example\nSent: Monday, February 16, 2026 11:05\nTo: s.patel@synthetic-controls.example\nSubject: Model parameters used in demo\n\nMy current model has T1_high=0.78 m and all three waits at 10 s. STOP is implemented as a latch that forces all valves closed; START clears it. I have not modeled the SHUT priority question yet.\n",
+  "subject": "Tank demo timing / high-level tuning and shutdown semantics",
+  "kind": "correspondence",
+  "entities": [
+    {
+      "name": "CR-004",
+      "kind": "change request",
+      "aliases": [],
+      "values": [],
+      "ref": "CR-004",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CR-004 is now approved."
+    },
+    {
+      "name": "DR-02",
+      "kind": "design reference",
+      "aliases": [],
+      "values": [],
+      "ref": "DR-02",
+      "anchor": "",
+      "from_image": false,
+      "quote": "No state-logic change from DR-02"
+    },
+    {
+      "name": "T1",
+      "kind": "tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "high limit",
+          "value": "0.80",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "0.78 m",
+          "quote": "CR-004 is now approved. Please treat 0.80 m as the effective T1 high limit."
+        },
+        {
+          "quantity": "high",
+          "value": "0.80",
+          "unit": "m",
+          "status": "proposed",
+          "supersedes": "",
+          "quote": "We can accept 0.80 m for T1 high."
+        },
+        {
+          "quantity": "high",
+          "value": "0.78",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "My current model has T1_high=0.78 m"
+        },
+        {
+          "quantity": "high",
+          "value": "0.78",
+          "unit": "m",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "the archived Modelica demo still says 0.78 / 10 / 10"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Please treat 0.80 m as the effective T1 high limit."
+    },
+    {
+      "name": "T2",
+      "kind": "tank",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "8 s after T2 reaches low before the next fill starts."
+    },
+    {
+      "name": "V2",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "during SHUT, V2 and V3 stay commanded open"
+    },
+    {
+      "name": "V3",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "during SHUT, V2 and V3 stay commanded open"
+    },
+    {
+      "name": "SHUT",
+      "kind": "state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "SHUT remains higher priority than STOP"
+    },
+    {
+      "name": "STOP",
+      "kind": "state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "SHUT remains higher priority than STOP"
+    },
+    {
+      "name": "START",
+      "kind": "command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "START during SHUT is ignored."
+    },
+    {
+      "name": "drain valve",
+      "kind": "valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "delay after T1 reaches low level before opening",
+          "value": "12",
+          "unit": "s",
+          "status": "approved",
+          "supersedes": "10 s",
+          "quote": "Also use 12 s after T1 reaches low level before opening the drain valve"
+        },
+        {
+          "quantity": "delay after T1 reaches low level before opening",
+          "value": "12",
+          "unit": "s",
+          "status": "proposed",
+          "supersedes": "",
+          "quote": "make that 12 s."
+        },
+        {
+          "quantity": "wait",
+          "value": "10",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "all three waits at 10 s"
+        },
+        {
+          "quantity": "wait",
+          "value": "10",
+          "unit": "s",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "the archived Modelica demo still says 0.78 / 10 / 10"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "opening the drain valve"
+    },
+    {
+      "name": "next fill",
+      "kind": "process step",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "delay after T2 reaches low before start",
+          "value": "8",
+          "unit": "s",
+          "status": "approved",
+          "supersedes": "10 s",
+          "quote": "8 s after T2 reaches low before the next fill starts."
+        },
+        {
+          "quantity": "delay after tank 2 is empty",
+          "value": "8",
+          "unit": "s",
+          "status": "proposed",
+          "supersedes": "",
+          "quote": "8 s is acceptable."
+        },
+        {
+          "quantity": "wait",
+          "value": "10",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "all three waits at 10 s"
+        },
+        {
+          "quantity": "wait",
+          "value": "10",
+          "unit": "s",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "the archived Modelica demo still says 0.78 / 10 / 10"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the next fill starts"
+    },
+    {
+      "name": "Modelica demo",
+      "kind": "model",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the archived Modelica demo still says 0.78 / 10 / 10"
+    },
+    {
+      "name": "hackathon test log",
+      "kind": "test log",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the hackathon test log"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "SHUT",
+      "predicate": "higher priority than",
+      "object": "STOP",
+      "detail": "state logic",
+      "ref": "DR-02",
+      "anchor": "",
+      "from_image": false,
+      "quote": "SHUT remains higher priority than STOP"
+    },
+    {
+      "subject": "V2",
+      "predicate": "commanded open during",
+      "object": "SHUT",
+      "detail": "until both low-level conditions are satisfied",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "during SHUT, V2 and V3 stay commanded open until both low-level conditions are satisfied"
+    },
+    {
+      "subject": "V3",
+      "predicate": "commanded open during",
+      "object": "SHUT",
+      "detail": "until both low-level conditions are satisfied",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "during SHUT, V2 and V3 stay commanded open until both low-level conditions are satisfied"
+    }
+  ],
+  "facts": [
+    {
+      "category": "behavior",
+      "statement": "After T1 reaches low level, open the drain valve after 12 s.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Also use 12 s after T1 reaches low level before opening the drain valve"
+    },
+    {
+      "category": "behavior",
+      "statement": "After T2 reaches low, the next fill starts after 8 s.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "8 s after T2 reaches low before the next fill starts."
+    },
+    {
+      "category": "behavior",
+      "statement": "During SHUT, V2 and V3 stay commanded open until both low-level conditions are satisfied.",
+      "ref": "DR-02",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "during SHUT, V2 and V3 stay commanded open until both low-level conditions are satisfied."
+    },
+    {
+      "category": "behavior",
+      "statement": "START during SHUT is ignored.",
+      "ref": "DR-02",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "START during SHUT is ignored."
+    },
+    {
+      "category": "behavior",
+      "statement": "STOP is implemented as a latch that forces all valves closed; START clears it.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "STOP is implemented as a latch that forces all valves closed; START clears it."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

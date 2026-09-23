@@ -1,0 +1,43 @@
+Subject: RECORDED values -- an observation of a run that already happened
+Document kind: dataset
+
+## Entities
+* cmd_start -- command signal
+    - range: 0 .. 1 [observed]
+* cmd_stop -- command signal
+    - range: 0 .. 1 [observed]
+* cmd_shut -- command signal
+    - range: 0 .. 1 [observed]
+* tank1_level_m -- measured level
+    - range: 0.05 .. 0.8 m [observed]
+* tank2_level_m -- measured level
+    - range: 0.05 .. 0.69286 m [observed]
+* valve1_open -- valve state
+    - range: 0 .. 1 [observed]
+* valve2_open -- valve state
+    - range: 0 .. 1 [observed]
+* valve3_open -- valve state
+    - range: 0 .. 1 [observed]
+* controller_state -- controller state
+    - states observed: DRAIN_T2, FILL_T1, IDLE, PAUSED, SHUTDOWN, TRANSFER_T1_T2, WAIT_AFTER_DRAIN, WAIT_AFTER_FILL, WAIT_AFTER_TRANSFER [observed]
+* wait_remaining_s -- timer value
+    - range: 0 .. 12 s [observed]
+
+## Physical relationships
+* The recorded run spans time_s from 0 to 900 s. [observed]
+* At time_s=0 the run is in IDLE with all three valves closed and both tank levels at 0.05 m. [observed]
+* At time_s=20, cmd_start becomes 1 and the run is in FILL_T1 with valve1_open=1. [observed]
+* At time_s=169, FILL_T1 reaches tank1_level_m=0.8 and wait_remaining_s=10 while valve1_open=1. [observed]
+* At time_s=170, the run transitions to WAIT_AFTER_FILL with all valves closed and wait_remaining_s=9. [observed]
+* At time_s=180, the run transitions to TRANSFER_T1_T2 with valve2_open=1. [observed]
+* At time_s=220, cmd_stop becomes 1 and the run is in PAUSED with all valves closed. [observed]
+* At time_s=280, cmd_start becomes 1 and the run resumes TRANSFER_T1_T2 with valve2_open=1. [observed]
+* At time_s=439, TRANSFER_T1_T2 reaches tank1_level_m=0.05 and tank2_level_m=0.69286 with wait_remaining_s=12. [observed]
+* At time_s=440, the run transitions to WAIT_AFTER_TRANSFER with all valves closed and wait_remaining_s=11. [observed]
+* At time_s=452, the run transitions to DRAIN_T2 with valve3_open=1. [observed]
+* At time_s=632, the run transitions to WAIT_AFTER_DRAIN with all valves closed and wait_remaining_s=7. [observed]
+* At time_s=640, the run transitions to FILL_T1 with valve1_open=1. [observed]
+* At time_s=650, cmd_stop becomes 1 and the run is in PAUSED with all valves closed. [observed]
+* At time_s=700, cmd_shut becomes 1 and the run is in SHUTDOWN with valve2_open=1 and valve3_open=1. [observed]
+* At time_s=714, the run returns to IDLE with all valves closed and both tank levels at 0.05 m. [observed]
+* At time_s=900, the run remains in IDLE with all valves closed and both tank levels at 0.05 m. [observed]

@@ -1,0 +1,767 @@
+{
+  "document": "[page 1]\n  Water-NaCl Medium and Tank Modeling Note - Rev A\n1. Scope\nThe benchmark uses a custom water-NaCl medium because a suitable mixture was not available in the baseline Modelica.Media set\nused by the source study. Intended hierarchy: PartialMedium -> PartialMixtureMedium -> PartialMixtureTwoPhaseMedium ->\nWaterNaCl, with a one-phase specialization where required.\n2. Tank balance equations\nmedium.p = p_ambient;\nV = area*level + V0; m = V*medium.d;\nmXi = m*medium.Xi; U = m*medium.u;\nder(m) = sum(topPorts.m_flow) + sum(ports.m_flow);\nder(U) = sum(H_flow) - p_ambient*der(V);\nFor an incompressible formulation, the p_ambient*der(V) contribution may be omitted to avoid small artificial temperature changes.\n3. Port crossing and numerical robustness\nPreferred treatment: asymmetric loss factors with a regularized quadratic flow law. When a port is above liquid level, use a very large\noutflow loss factor (default 1e5) and small inflow factor (default 0.01). Apply hysteresis based on port diameter around level crossing.\nState-machine and declarative curve-switch alternatives are historical options only.\n4. Evaporator/condensation logic\nHeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;\nif Q_up > heatPort.Q_flow then\nm_con = 0;\nelse\nm_con = -(heatPort.Q_flow - Q_up) /\n(hv - hl + Xi[1]*(cp*dT_dX + dhl_dX));\nend if;\nQ_up suppresses repeated switching around the boiling point when colder feed enters. K1 is physically separate, while the legacy\nsimulation combines condenser behavior into the B5 evaporator model and exports condensate through an additional fluid port.\n5. Composition-dependent properties\nRequired properties: density rho(T,p,w), enthalpy h(T,p,w), cp(T,w), saturation pressure p_sat(T,w), and viscosity eta(T,w). Some\nsource correlations omit numeric coefficients and those coefficients are intentionally absent from this benchmark evidence.\n\neta(T,w) = exp(c1*T^3 + c2*T^2 + c3*T + c4 + c5*w + c6*w^2 + c7*w^3)\nc1=-6.83241E-07 c2=0.000765676 c3=-0.297018665\nc4=-0.299730079 c5=2.065267182 c6=1.546491257 c7=31.57571595\n6. Known issue\nThe legacy study reports that the full plant runs with StandardWater but the WaterNaCl configuration can stop when a return pump is\nscheduled to start. Treat this as a known numerical/modeling issue, not evidence that the physical pump should be omitted.\n[page 1 also supplied as visual image 1]",
+  "subject": "Water-NaCl Medium and Tank Modeling Note",
+  "kind": "design note",
+  "entities": [
+    {
+      "name": "WaterNaCl",
+      "kind": "medium",
+      "aliases": [
+        "custom water-NaCl medium"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The benchmark uses a custom water-NaCl medium"
+    },
+    {
+      "name": "PartialMedium",
+      "kind": "medium hierarchy element",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "PartialMedium -> PartialMixtureMedium -> PartialMixtureTwoPhaseMedium ->\nWaterNaCl"
+    },
+    {
+      "name": "PartialMixtureMedium",
+      "kind": "medium hierarchy element",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "PartialMedium -> PartialMixtureMedium -> PartialMixtureTwoPhaseMedium ->\nWaterNaCl"
+    },
+    {
+      "name": "PartialMixtureTwoPhaseMedium",
+      "kind": "medium hierarchy element",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "PartialMedium -> PartialMixtureMedium -> PartialMixtureTwoPhaseMedium ->\nWaterNaCl"
+    },
+    {
+      "name": "medium",
+      "kind": "medium state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "medium.p = p_ambient;"
+    },
+    {
+      "name": "p_ambient",
+      "kind": "pressure variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "medium.p = p_ambient;"
+    },
+    {
+      "name": "V",
+      "kind": "volume variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V = area*level + V0; m = V*medium.d;"
+    },
+    {
+      "name": "area",
+      "kind": "area variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V = area*level + V0; m = V*medium.d;"
+    },
+    {
+      "name": "level",
+      "kind": "level variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V = area*level + V0; m = V*medium.d;"
+    },
+    {
+      "name": "V0",
+      "kind": "volume offset variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V = area*level + V0; m = V*medium.d;"
+    },
+    {
+      "name": "m",
+      "kind": "mass variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V = area*level + V0; m = V*medium.d;"
+    },
+    {
+      "name": "mXi",
+      "kind": "component mass variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "mXi = m*medium.Xi; U = m*medium.u;"
+    },
+    {
+      "name": "U",
+      "kind": "internal energy variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "mXi = m*medium.Xi; U = m*medium.u;"
+    },
+    {
+      "name": "topPorts",
+      "kind": "port collection",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "der(m) = sum(topPorts.m_flow) + sum(ports.m_flow);"
+    },
+    {
+      "name": "ports",
+      "kind": "port collection",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "der(m) = sum(topPorts.m_flow) + sum(ports.m_flow);"
+    },
+    {
+      "name": "HeatB5",
+      "kind": "heater/heat-flow element",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "Q_flow",
+          "value": "20000",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "HeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "HeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;"
+    },
+    {
+      "name": "controller.actuators.T5_Heater",
+      "kind": "actuator command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "HeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;"
+    },
+    {
+      "name": "Q_up",
+      "kind": "heat-flow threshold variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "if Q_up > heatPort.Q_flow then"
+    },
+    {
+      "name": "heatPort",
+      "kind": "heat port",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "if Q_up > heatPort.Q_flow then"
+    },
+    {
+      "name": "m_con",
+      "kind": "condensate mass-flow variable",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "mass flow",
+          "value": "0",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "m_con = 0;"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "m_con = 0;"
+    },
+    {
+      "name": "hv",
+      "kind": "enthalpy variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "(hv - hl + Xi[1]*(cp*dT_dX + dhl_dX));"
+    },
+    {
+      "name": "hl",
+      "kind": "enthalpy variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "(hv - hl + Xi[1]*(cp*dT_dX + dhl_dX));"
+    },
+    {
+      "name": "Xi[1]",
+      "kind": "composition variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "(hv - hl + Xi[1]*(cp*dT_dX + dhl_dX));"
+    },
+    {
+      "name": "cp",
+      "kind": "specific heat variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "(hv - hl + Xi[1]*(cp*dT_dX + dhl_dX));"
+    },
+    {
+      "name": "dT_dX",
+      "kind": "derivative variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "(hv - hl + Xi[1]*(cp*dT_dX + dhl_dX));"
+    },
+    {
+      "name": "dhl_dX",
+      "kind": "derivative variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "(hv - hl + Xi[1]*(cp*dT_dX + dhl_dX));"
+    },
+    {
+      "name": "K1",
+      "kind": "condenser",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "K1 is physically separate"
+    },
+    {
+      "name": "B5 evaporator model",
+      "kind": "evaporator model",
+      "aliases": [
+        "B5"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "the B5 evaporator model"
+    },
+    {
+      "name": "rho",
+      "kind": "property function",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "density rho(T,p,w)"
+    },
+    {
+      "name": "h",
+      "kind": "property function",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "enthalpy h(T,p,w)"
+    },
+    {
+      "name": "p_sat",
+      "kind": "property function",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "saturation pressure p_sat(T,w)"
+    },
+    {
+      "name": "eta",
+      "kind": "property function",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "viscosity eta(T,w)"
+    },
+    {
+      "name": "c1",
+      "kind": "coefficient",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "coefficient",
+          "value": "-6.83241E-07",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "c1=-6.83241E-07"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "c1=-6.83241E-07"
+    },
+    {
+      "name": "c2",
+      "kind": "coefficient",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "coefficient",
+          "value": "0.000765676",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "c2=0.000765676"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "c2=0.000765676"
+    },
+    {
+      "name": "c3",
+      "kind": "coefficient",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "coefficient",
+          "value": "-0.297018665",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "c3=-0.297018665"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "c3=-0.297018665"
+    },
+    {
+      "name": "c4",
+      "kind": "coefficient",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "coefficient",
+          "value": "-0.299730079",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "c4=-0.299730079"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "c4=-0.299730079"
+    },
+    {
+      "name": "c5",
+      "kind": "coefficient",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "coefficient",
+          "value": "2.065267182",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "c5=2.065267182"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "c5=2.065267182"
+    },
+    {
+      "name": "c6",
+      "kind": "coefficient",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "coefficient",
+          "value": "1.546491257",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "c6=1.546491257"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "c6=1.546491257"
+    },
+    {
+      "name": "c7",
+      "kind": "coefficient",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "coefficient",
+          "value": "31.57571595",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "c7=31.57571595"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "c7=31.57571595"
+    },
+    {
+      "name": "StandardWater",
+      "kind": "medium configuration",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "the full plant runs with StandardWater"
+    },
+    {
+      "name": "return pump",
+      "kind": "pump",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "when a return pump is\nscheduled to start"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "PartialMedium",
+      "predicate": "precedes in intended hierarchy",
+      "object": "PartialMixtureMedium",
+      "detail": "Intended hierarchy",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Intended hierarchy: PartialMedium -> PartialMixtureMedium -> PartialMixtureTwoPhaseMedium ->\nWaterNaCl"
+    },
+    {
+      "subject": "PartialMixtureMedium",
+      "predicate": "precedes in intended hierarchy",
+      "object": "PartialMixtureTwoPhaseMedium",
+      "detail": "Intended hierarchy",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Intended hierarchy: PartialMedium -> PartialMixtureMedium -> PartialMixtureTwoPhaseMedium ->\nWaterNaCl"
+    },
+    {
+      "subject": "PartialMixtureTwoPhaseMedium",
+      "predicate": "precedes in intended hierarchy",
+      "object": "WaterNaCl",
+      "detail": "Intended hierarchy",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Intended hierarchy: PartialMedium -> PartialMixtureMedium -> PartialMixtureTwoPhaseMedium ->\nWaterNaCl"
+    },
+    {
+      "subject": "medium",
+      "predicate": "equals pressure",
+      "object": "p_ambient",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "medium.p = p_ambient;"
+    },
+    {
+      "subject": "V",
+      "predicate": "depends on",
+      "object": "area",
+      "detail": "V = area*level + V0",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V = area*level + V0; m = V*medium.d;"
+    },
+    {
+      "subject": "V",
+      "predicate": "depends on",
+      "object": "level",
+      "detail": "V = area*level + V0",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V = area*level + V0; m = V*medium.d;"
+    },
+    {
+      "subject": "V",
+      "predicate": "depends on",
+      "object": "V0",
+      "detail": "V = area*level + V0",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V = area*level + V0; m = V*medium.d;"
+    },
+    {
+      "subject": "m",
+      "predicate": "depends on",
+      "object": "V",
+      "detail": "m = V*medium.d",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V = area*level + V0; m = V*medium.d;"
+    },
+    {
+      "subject": "mXi",
+      "predicate": "depends on",
+      "object": "m",
+      "detail": "mXi = m*medium.Xi",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "mXi = m*medium.Xi; U = m*medium.u;"
+    },
+    {
+      "subject": "U",
+      "predicate": "depends on",
+      "object": "m",
+      "detail": "U = m*medium.u",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "mXi = m*medium.Xi; U = m*medium.u;"
+    },
+    {
+      "subject": "der(m)",
+      "predicate": "equals sum of",
+      "object": "topPorts",
+      "detail": "sum(topPorts.m_flow) + sum(ports.m_flow)",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "der(m) = sum(topPorts.m_flow) + sum(ports.m_flow);"
+    },
+    {
+      "subject": "der(m)",
+      "predicate": "equals sum of",
+      "object": "ports",
+      "detail": "sum(topPorts.m_flow) + sum(ports.m_flow)",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "der(m) = sum(topPorts.m_flow) + sum(ports.m_flow);"
+    },
+    {
+      "subject": "K1",
+      "predicate": "is physically separate from",
+      "object": "B5 evaporator model",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "K1 is physically separate, while the legacy\nsimulation combines condenser behavior into the B5 evaporator model"
+    },
+    {
+      "subject": "B5 evaporator model",
+      "predicate": "exports condensate through",
+      "object": "additional fluid port",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "exports condensate through an additional fluid port."
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "medium.p = p_ambient;",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "medium.p = p_ambient;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "V = area*level + V0; m = V*medium.d;",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "V = area*level + V0; m = V*medium.d;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "mXi = m*medium.Xi; U = m*medium.u;",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "mXi = m*medium.Xi; U = m*medium.u;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "der(m) = sum(topPorts.m_flow) + sum(ports.m_flow);",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "der(m) = sum(topPorts.m_flow) + sum(ports.m_flow);"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "der(U) = sum(H_flow) - p_ambient*der(V);",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "der(U) = sum(H_flow) - p_ambient*der(V);"
+    },
+    {
+      "category": "requirement",
+      "statement": "For an incompressible formulation, the p_ambient*der(V) contribution may be omitted to avoid small artificial temperature changes.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "For an incompressible formulation, the p_ambient*der(V) contribution may be omitted to avoid small artificial temperature changes."
+    },
+    {
+      "category": "requirement",
+      "statement": "Preferred treatment: asymmetric loss factors with a regularized quadratic flow law.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Preferred treatment: asymmetric loss factors with a regularized quadratic flow law."
+    },
+    {
+      "category": "requirement",
+      "statement": "When a port is above liquid level, use a very large outflow loss factor (default 1e5) and small inflow factor (default 0.01).",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "When a port is above liquid level, use a very large\noutflow loss factor (default 1e5) and small inflow factor (default 0.01)."
+    },
+    {
+      "category": "requirement",
+      "statement": "Apply hysteresis based on port diameter around level crossing.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Apply hysteresis based on port diameter around level crossing."
+    },
+    {
+      "category": "behavior",
+      "statement": "HeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "HeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;"
+    },
+    {
+      "category": "behavior",
+      "statement": "if Q_up > heatPort.Q_flow then m_con = 0; else m_con = -(heatPort.Q_flow - Q_up) / (hv - hl + Xi[1]*(cp*dT_dX + dhl_dX)); end if;",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "if Q_up > heatPort.Q_flow then\nm_con = 0;\nelse\nm_con = -(heatPort.Q_flow - Q_up) /\n(hv - hl + Xi[1]*(cp*dT_dX + dhl_dX));\nend if;"
+    },
+    {
+      "category": "requirement",
+      "statement": "Required properties: density rho(T,p,w), enthalpy h(T,p,w), cp(T,w), saturation pressure p_sat(T,w), and viscosity eta(T,w).",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Required properties: density rho(T,p,w), enthalpy h(T,p,w), cp(T,w), saturation pressure p_sat(T,w), and viscosity eta(T,w)."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "eta(T,w) = exp(c1*T^3 + c2*T^2 + c3*T + c4 + c5*w + c6*w^2 + c7*w^3)",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "eta(T,w) = exp(c1*T^3 + c2*T^2 + c3*T + c4 + c5*w + c6*w^2 + c7*w^3)"
+    }
+  ],
+  "unreadable": [
+    "The entity name for \"additional fluid port\" is not given beyond the descriptive phrase \"additional fluid port\"."
+  ],
+  "unverified_quotes": []
+}

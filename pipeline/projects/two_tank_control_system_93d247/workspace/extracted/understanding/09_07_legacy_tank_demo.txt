@@ -1,0 +1,90 @@
+Subject: TankDemo_Rev12
+Document kind: legacy model
+
+## Entities
+* TankDemo_Rev12 -- model
+* A1 -- parameter
+    - area: 1.20 m2 [archived]
+    - area: 1.20 m2
+* A2 -- parameter
+    - area: 1.40 m2 [archived]
+    - area: 1.40 m2
+* h0 -- parameter
+    - level: 0.05 m [archived]
+    - level: 0.05 m
+* h1High -- parameter
+    - level: 0.78 m [archived]
+    - level: 0.78 m
+* h1Low -- parameter
+    - level: 0.05 m [archived]
+    - level: 0.05 m
+* h2Low -- parameter
+    - level: 0.05 m [archived]
+    - level: 0.05 m
+* qFill -- parameter
+    - flow rate: 0.0060 m3/s [archived]
+    - flow rate: 0.0060 m3/s
+* qTransfer -- parameter
+    - flow rate: 0.0045 m3/s [archived]
+    - flow rate: 0.0045 m3/s
+* qDrain -- parameter
+    - flow rate: 0.0050 m3/s [archived]
+    - flow rate: 0.0050 m3/s
+* wait1 -- parameter
+    - time: 10 s [archived]
+    - time: 10 s
+* wait2 -- parameter
+    - time: 10 s [archived]
+    - time: 10 s
+* wait3 -- parameter
+    - time: 10 s [archived]
+    - time: 10 s
+* tank1Level -- level state
+* tank2Level -- level state
+* valve1 -- boolean control element
+* valve2 -- boolean control element
+* valve3 -- boolean control element
+* startCmd -- boolean command
+* stopCmd -- boolean command
+* shutCmd -- boolean command
+* StepState -- enumeration type
+* IDLE -- enumeration value
+* FILL -- enumeration value
+* HOLD1 -- enumeration value
+* TRANSFER -- enumeration value
+* HOLD2 -- enumeration value
+* DRAIN -- enumeration value
+* HOLD3 -- enumeration value
+* seq -- discrete state
+* stopped -- discrete boolean state
+* SyntheticTankDemo -- package
+
+## Relationships
+* TankDemo_Rev12 within SyntheticTankDemo
+* seq has initial state IDLE (start=StepState.IDLE)
+* tank1Level has start value from h0
+* tank2Level has start value from h0
+* valve1 true when seq ((seq == StepState.FILL) and not stopped)
+* valve2 true when seq ((seq == StepState.TRANSFER) and not stopped)
+* valve3 true when seq ((seq == StepState.DRAIN) and not stopped)
+* tank1Level depends on inflow from qFill ((if valve1 then qFill else 0)/A1)
+* tank1Level depends on outflow from qTransfer ((if valve2 then qTransfer else 0)/A1)
+* tank2Level depends on inflow from qTransfer ((if valve2 then qTransfer else 0)/A2)
+* tank2Level depends on outflow from qDrain ((if valve3 then qDrain else 0)/A2)
+
+## Constraints
+* SHUT handling was not completed in this revision. [archived]
+
+## Behaviors
+* when edge(startCmd) then stopped := false; [archived]
+* when edge(stopCmd) then stopped := true; [archived]
+
+## Physical relationships
+* der(tank1Level) = (if valve1 then qFill else 0)/A1 - (if valve2 then qTransfer else 0)/A1; [archived]
+* der(tank2Level) = (if valve2 then qTransfer else 0)/A2 - (if valve3 then qDrain else 0)/A2; [archived]
+
+## Scheduled commands
+* A test harness supplies button edges at 20, 220, 280, 650 and 700 seconds. [archived]
+
+## Unreadable
+* State transition details omitted from this archived fragment.

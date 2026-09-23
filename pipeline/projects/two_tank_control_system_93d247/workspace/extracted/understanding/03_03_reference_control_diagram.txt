@@ -1,0 +1,40 @@
+Subject: tankController1
+Document kind: engineering diagram
+
+## Entities
+* system -- configuration element
+* g -- parameter
+    - value: 9.8
+* source -- source
+* valve1 -- valve
+* tank1 -- tank
+    - level: 0.05
+* start -- command input
+* stop -- command input
+* shut -- command input
+* tankController1 -- controller
+* level1 -- signal
+* tank1.level -- measurement signal
+* level2 -- signal
+* tank2.level -- measurement signal
+* valve2 -- valve
+* tank2 -- tank
+    - level: 0.05
+* ambient1 -- ambient source
+* valve3 -- valve
+
+## Relationships
+* source connects_to valve1
+* valve1 connects_to tank1
+* tank1 connects_to valve2
+* valve2 connects_to tank2
+* ambient1 connects_to valve3
+* valve3 connects_to tank2
+* start feeds tankController1
+* stop feeds tankController1
+* shut feeds tankController1
+* tank1.level feeds tankController1 (via level1)
+* tank2.level feeds tankController1 (via level2)
+* tankController1 controls valve1
+* tankController1 controls valve2
+* tankController1 controls valve3

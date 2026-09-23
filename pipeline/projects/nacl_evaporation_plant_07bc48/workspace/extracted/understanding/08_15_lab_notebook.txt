@@ -1,0 +1,33 @@
+Subject: simulation bench notes
+Document kind: engineering note
+
+## Entities
+* StandardWater -- topology
+    - run duration: 2500 s [observed]
+* WaterNaCl -- system/model
+* pump transition -- control element
+* pump states -- control element
+* hysteresis -- control element
+* Q_up -- fix
+* B5 -- component
+* B7 -- component
+    - temperature: 20 C [archived]
+    - temperature: 25 C [proposed] (supersedes/superseded: 20 C)
+* CR-017 -- change request  <CR-017>
+* K1 -- component
+* B5/K1 -- simulation abstraction; aliases: combined B5/K1
+* P&ID -- document
+* valves -- component
+* StateGraph -- model
+* controller ports -- control element
+
+## Relationships
+* pump transition becomes active in WaterNaCl
+* Q_up stopped switching of B5 (boil/no-boil switching)
+* B5/K1 is abstraction combining B5
+* B5/K1 is abstraction combining K1
+* P&ID shows more of valves (than the StateGraph)
+
+## Requirements
+* Do NOT delete pump states.
+* Determine ownership before generating controller ports.

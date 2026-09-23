@@ -1,5 +1,0 @@
-## Entities
-*   occupants_person: Actor, Number of occupants (4)
-*   outdoor_co2_ppm: Sensor, Carbon dioxide concentration in ppm (300.0)
-*   outdoor_co2_mass_fraction_kgkg: Sensor, Carbon dioxide mass fraction in kg/kg (0.00045569999999999996)
-*   room_co2_ppm: Sensor, Carbon dioxide concentration in ppm (716.2138231559358, 714.5747895917482, 713.0485456977341, 711.6268948297909, 709.067783
