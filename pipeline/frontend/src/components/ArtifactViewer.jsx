@@ -18,9 +18,10 @@ import { useEffect, useId, useRef, useState } from 'react'
 import mermaid from 'mermaid'
 import { getArtifact } from '../api'
 import FileBrowser from './FileBrowser'
+import MarkdownView from './MarkdownView'
 
 const TABS = [
-  { key: 'understanding', label: 'Understanding', icon: FileText, kind: 'prose' },
+  { key: 'understanding', label: 'Understanding', icon: FileText, kind: 'markdown' },
   { key: 'diagram', label: 'Flow diagram', icon: GitBranch, kind: 'diagram' },
   { key: 'sysml', label: 'SysML v2', icon: FileCode2, kind: 'code' },
   { key: 'modelica', label: 'Modelica', icon: FileCode2, kind: 'code' },
@@ -419,6 +420,7 @@ export default function ArtifactViewer({ projectId, available, refreshToken }) {
           </div>
         )}
         {active.kind === 'files' && <FileBrowser projectId={projectId} refreshToken={refreshToken} />}
+        {!loading && available[tab] && content && active.kind === 'markdown' && <MarkdownView text={content} />}
         {!loading && available[tab] && content && active.kind === 'prose' && (
           <div className="fade-up whitespace-pre-wrap px-5 py-4 text-[13.5px] leading-relaxed text-[var(--text)]">
             {content}
