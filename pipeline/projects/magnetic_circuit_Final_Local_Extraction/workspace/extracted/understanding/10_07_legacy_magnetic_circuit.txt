@@ -1,0 +1,45 @@
+## Entities
+*   a (Length): 0.025
+*   l (Length): 0.150
+*   delta (Length): 0.0015
+*   mu_r (Real): 1000
+*   sigma (Real): 0.05
+*   N_exc (Integer): 600
+*   N_meas (Integer): 40
+*   f (Frequency): 50
+*   upperYoke
+*   rightLeg
+*   lowerYoke
+*   airGap
+*   leakage
+*   Phi_gap
+
+## Relationships
+*   a is connected_to l
+*   delta is connected_to l
+*   mu_r is connected_to N_exc
+*   sigma is connected_to N_exc
+*   N_exc is connected_to N_meas
+*   N_meas is connected_to f
+
+## Requirements
+*   None
+
+## Behaviors
+*   None
+
+## Constraints
+*   mu_r >= 1000
+*   sigma >= 0.05
+
+## Physical relationships
+*   Phi_gap = (1-sigma)*Phi_core
+
+## Control laws
+*   None
+
+## Scheduled commands
+*   None
+
+## Scheduled commands
+*   None

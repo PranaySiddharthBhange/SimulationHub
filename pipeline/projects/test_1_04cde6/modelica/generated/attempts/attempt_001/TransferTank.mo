@@ -1,0 +1,30 @@
+model TransferTank
+  parameter Modelica.Units.SI.Area crossArea = 1 "Assumed constant cross-sectional area";
+  parameter Modelica.Units.SI.Height levelHigh = 1 "Assumed high switch level";
+  parameter Modelica.Units.SI.Height levelLow = 0.1 "Assumed low switch level";
+  parameter Modelica.Units.SI.Height level_start = 0 "Assumed initial level";
+  Modelica.Blocks.Interfaces.RealInput qIn annotation(Placement(transformation(extent={{-120,40},{-100,60}})));
+  Modelica.Blocks.Interfaces.RealInput qOutCmd annotation(Placement(transformation(extent={{-120,-60},{-100,-40}})));
+  Modelica.Blocks.Interfaces.RealOutput level annotation(Placement(transformation(extent={{100,50},{120,70}})));
+  Modelica.Blocks.Interfaces.BooleanOutput highReached annotation(Placement(transformation(extent={{100,10},{120,30}})));
+  Modelica.Blocks.Interfaces.BooleanOutput lowReached annotation(Placement(transformation(extent={{100,-30},{120,-10}})));
+  Modelica.Blocks.Interfaces.RealOutput qOutActual annotation(Placement(transformation(extent={{100,-70},{120,-50}})));
+protected 
+  Modelica.Units.SI.Height h(start=level_start, fixed=true);
+  Modelica.Units.SI.VolumeFlowRate qOutLimited;
+equation
+  qOutLimited = if h <= 0 and qOutCmd > qIn then qIn else qOutCmd;
+  der(h) = if h >= levelHigh and qIn > qOutLimited then (-qOutLimited)/crossArea else (qIn - qOutLimited)/crossArea;
+  level = h;
+  highReached = h >= levelHigh;
+  lowReached = h <= levelLow;
+  qOutActual = qOutLimited;
+annotation(
+  Icon(graphics={
+    Rectangle(extent={{-60,-100},{60,80}}, lineColor={0,0,255}, fillColor={230,230,255}, fillPattern=FillPattern.Solid),
+    Rectangle(extent={{-56,-100},{56,-20}}, lineColor={0,128,255}, fillColor={0,128,255}, fillPattern=FillPattern.Solid),
+    Text(extent={{-100,100},{100,140}}, textString="%name"),
+    Text(extent={{-50,-10},{50,30}}, textString="h")}),
+  Diagram(graphics={Text(extent={{-90,88},{92,104}}, textString="Signal-flow tank with level switches")})
+);
+end TransferTank;

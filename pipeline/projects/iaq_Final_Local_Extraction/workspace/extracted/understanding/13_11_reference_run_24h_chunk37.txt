@@ -1,0 +1,19 @@
+## Entities
+*   clock_time: Type: String
+*   occupants_person: Type: Integer
+*   outdoor_co2_ppm: Type: Integer
+*   outdoor_co2_mass_fraction_kgkg: Type: Float
+*   room_co2_ppm: Type: Integer
+*   room_co2_mass_fraction_kgkg: Type: Float
+*   normalized_co2_feedback: Type: Float
+*   normalized_setpoint: Type: Float
+*   ach_command_1_per_h: Type: Float
+*   source_m_flow_command_kg_s: Type: Float
+*   physical_supply_m_flow_kg_s: Type: Float
+*   people_source_carrier_m_flow_kg_s: Type: Float
+*   actual_co2_generation_kg_s: Type: Float
+*   controller_mode: Type: String
+*   AUTO_MIN: Type: String
+
+## Relationships
+*   clock_time corresponds to 71700, 71760, 71820, 71880, 

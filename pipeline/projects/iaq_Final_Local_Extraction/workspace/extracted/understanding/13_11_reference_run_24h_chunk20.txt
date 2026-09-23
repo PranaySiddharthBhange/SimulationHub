@@ -1,0 +1,9 @@
+## Entities
+
+*   `time_s`: Time in seconds
+*   `clock_time`: Time of day (HH:MM:SS)
+*   `occupants_person`: Number of occupants (integer)
+*   `outdoor_co2_ppm`: Outdoor CO2 concentration in parts per million (float)
+*   `outdoor_co2_mass_fraction_kgkg`: Outdoor CO2 mass fraction in kilograms per kilogram (float)
+*   `room_co2_ppm`: Room CO2 concentration in parts per million (float)
+*   `room_co2_mass_fraction_kgkg`: Room CO2 mass fraction in kilograms per kilogram (float)

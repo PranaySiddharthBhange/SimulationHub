@@ -1,0 +1,38 @@
+## Entities
+*   Left leg
+*   Upper yoke
+*   Right leg iron
+*   Lower yoke
+*   GAP-1
+*   LEAK-1
+*   Exciting coil
+*   Measuring coil
+*   ElectricGround
+*   MagneticGround
+
+## Relationships
+*   Exciting coil supplies magnetic potential source N*I
+*   GAP-1 and LEAK-1 are in parallel with the right-leg iron branch
+*   The two branches rejoin before the lower yoke
+*   Measuring coil uses the opposite electric orientation to the exciting coil
+
+## Requirements
+*   Measuring turns: 40 (Legacy) -> 50 (Released)
+*   Gap: 1.50 mm nominal (Legacy) -> 1.50 mm nominal; 1.58 mm as-built prototype (Released)
+
+## Behaviors
+*   None
+
+## Constraints
+*   mu_r: 1000 (Legacy) -> 1200 (Released)
+*   sigma: 0.05 (Legacy) -> 0.08 (Released)
+
+## Physical relationships
+*   Phi_gap/Phi_core = 1-sigma
+*   R_leak = R_gap*(1-sigma)/sigma
+
+## Scheduled commands
+*   None
+
+## Notes
+The model represents a magnetic circuit with a series arrangement of linear flux-tube reluctances. A branch with GAP-1 and LEAK-1 in parallel is introduced after the right-leg iron. The exciting coil provides the magnetic potential source N*I. The model uses complex phasor conventions for current, flux, flux density, and magnetic potential difference. Leakage reluctance is calculated using the coefficient form Phi_gap/Phi_core = 1-sigma. Reference potentials are included for both electrical and magnetic domains. Revision-sensitive values for mu_r and sigma are tracked with legacy and released values. The measuring coil is oriented opposite to the exciting coil. (page 4)

@@ -1,0 +1,57 @@
+## Entities
+*   B3_level_m
+*   B4_level_m
+*   B5_level_m
+*   B6_level_m
+*   B7_level_m
+*   B3_w_NaCl
+*   B5_w_NaCl
+*   B5_temp_C
+*   B6_temp_C
+*   B7_temp_C
+*   FIS801
+*   kg_s
+*   P1_cmd
+*   P2_cmd
+*   B5_heater_cmd
+*   B6_cooler_cmd
+*   B7_cooler_cmd
+*   V1_open
+*   V3_open
+*   V5_open
+*   V6_open
+*   V8_open
+*   V9_open
+*   V11_open
+*   V12_open
+*   V15_open
+*   V18_open
+*   V20_open
+*   V22_open
+*   V23_open
+*   V24_open
+*   V25_open
+*   Step6
+*   Step12
+*   Step8
+*   A
+*   B
+
+## Relationships
+*   time_s depends_on Step6
+*   time_s depends_on Step12
+*   time_s depends_on Step8
+*   time_s depends_on A
+*   time_s depends_on B
+*   B3_level_m depends_on Step6
+*   B4_level_m depends_on Step6
+*   B5_level_m depends_on Step6
+*   B6_level_m depends_on Step6
+*   B7_level_m depends_on Step6
+*   B3_w_NaCl depends_on Step6
+*   B5_w_NaCl depends_on Step6
+*   B5_temp_C depends_on Step6
+*   B6_temp_C depends_on Step6
+*   B7_temp_C depends_on Step6
+*   FIS801 depends_on kg_s
+*   P1

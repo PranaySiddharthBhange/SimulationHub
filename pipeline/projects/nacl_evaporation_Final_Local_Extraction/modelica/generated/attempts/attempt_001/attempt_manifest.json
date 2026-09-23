@@ -1,0 +1,30 @@
+{
+  "attempt": 1,
+  "entry_class": "NaClEvaporationSystem",
+  "files": [
+    {
+      "filename": "SimpleTank.mo",
+      "role": "component"
+    },
+    {
+      "filename": "NaClEvaporationController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "NaClEvaporationSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Sources.Constant",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Executable simplification only: the brief does not provide a complete approved condensate-branch state list, full WaterNaCl property set, cross-linked tank geometry/equations, P2 dry-run source-level permissive, or enough hydraulic/thermal data for a faithful physical model. Any executable bundle therefore requires assumptions beyond the evidence.",
+    "The generated draft is not evidence-complete for the required parallel split/rejoin semantics because the provided notes explicitly say the detailed condensate branch states are incomplete."
+  ],
+  "references": []
+}

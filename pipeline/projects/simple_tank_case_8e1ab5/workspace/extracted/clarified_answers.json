@@ -1,0 +1,10 @@
+{
+  "questions": [
+    "Is the low-level sensing represented by one canonical Low-level switch element used for both tanks, or by two distinct low-level switches, one on Tank 1 and one on Tank 2?",
+    "What is the exact flow topology of the Inlet valve, Transfer valve, and Drain valve relative to Tank 1, Tank 2, source, and drain/sink?"
+  ],
+  "answers": {
+    "clarify-low-level-switch-identity": "Two distinct low-level switches exist: one for Tank 1 and one for Tank 2, both referred to generically as Low-level switch.",
+    "clarify-valve-topology": "Only the stated generic connection is modeled: Tank 1 and Tank 2 are connected by the Inlet valve, Transfer valve, and Drain valve, with no further endpoint detail."
+  }
+}

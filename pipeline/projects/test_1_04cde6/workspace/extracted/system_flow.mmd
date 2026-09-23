@@ -1,0 +1,32 @@
+flowchart TD
+    A["Simulation start"] --> B{"Operator command?"}
+    B -->|START| C{"Resuming after STOP?"}
+    B -->|STOP| S1["Close inlet valve<br/>Close transfer valve<br/>Close drain valve<br/>Pause sequence"]
+    B -->|SHUT| H1["Inlet inhibited<br/>Open transfer path<br/>Open drain path"]
+    B -->|No command| B
+    C -->|Yes| R1["Resume interrupted state"]
+    C -->|No| D1["Fill Tank 1"]
+    R1 --> E1{"Interrupted state?"}
+    E1 -->|Fill Tank 1| D1
+    E1 -->|Wait after Tank 1 high-level| W1["Wait 10 s"]
+    E1 -->|Transfer to Tank 2| D2["Transfer liquid from Tank 1 to Tank 2"]
+    E1 -->|Wait after Tank 1 low-level| W2["Wait 10 s"]
+    E1 -->|Drain Tank 2| D3["Drain Tank 2"]
+    D1 --> G1{"Tank 1 high-level switch reached?"}
+    G1 -->|No| D1
+    G1 -->|Yes| W1
+    W1 --> D2
+    D2 --> G2{"Shared low-level switch sensing Tank 1 reached?"}
+    G2 -->|No| D2
+    G2 -->|Yes| W2
+    W2 --> D3
+    D3 --> G3{"Shared low-level switch sensing Tank 2 reached?"}
+    G3 -->|No| D3
+    G3 -->|Yes| Z1{"Experiment time = 900 s?"}
+    S1 --> B
+    H1 --> H2{"Both tanks empty?"}
+    H2 -->|No| H1
+    H2 -->|Yes| Q1["State after SHUT emptying unresolved"]
+    Q1 --> Z1
+    Z1 -->|No| B
+    Z1 -->|Yes| R2["Report tank levels<br/>Report valve commands"]

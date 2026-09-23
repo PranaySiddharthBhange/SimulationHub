@@ -1,0 +1,45 @@
+## Entities
+
+*   B3_level_m
+*   B4_level_m
+*   B5_level_m
+*   B6_level_m
+*   B7_level_m
+*   B3_w_NaCl
+*   B5_w_NaCl
+*   B5_temp_C
+*   B6_temp_C
+*   B7_temp_C
+*   FIS801
+*   P1_cmd
+*   P2_cmd
+*   B5_heater_cmd
+*   B6_cooler_cmd
+*   B7_cooler_cmd
+*   V1_open
+*   V3_open
+*   V5_open
+*   V6_open
+*   V8_open
+*   V9_open
+*   V11_open
+*   V12_open
+*   V15_open
+*   V18_open
+*   V20_open
+*   V22_open
+*   V23_open
+*   V24_open
+*   V25_open
+
+## Relationships
+
+*   time_s depends_on 990
+*   time_s depends_on 995
+*   time_s depends_on 1000
+*   time_s depends_on 1005
+*   time_s depends_on 1010
+*   time_s depends_on 1015
+*   time_s depends_on 1020
+*   time_s depends_on 1025
+*   

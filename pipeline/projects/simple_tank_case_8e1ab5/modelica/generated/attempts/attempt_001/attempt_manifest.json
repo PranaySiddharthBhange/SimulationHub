@@ -1,0 +1,39 @@
+{
+  "attempt": 1,
+  "entry_class": "SingleTankTransferSystem",
+  "files": [
+    {
+      "filename": "GenericTankLevel.mo",
+      "role": "component"
+    },
+    {
+      "filename": "OnOffValveCommand.mo",
+      "role": "component"
+    },
+    {
+      "filename": "SingleTankTransferController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "SingleTankTransferSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Blocks.Sources.BooleanExpression"
+  ],
+  "corrections": [
+    "Assumption: because the brief does not specify equations, conservation relationships, valve flow laws, tank geometries, capacities, initial levels, switch thresholds, or exact valve endpoints, the returned bundle cannot faithfully model physical tank filling, transfer, or draining behavior from the evidence alone.",
+    "Assumption: a 0.1 s controller scan period is chosen because the brief does not state one.",
+    "Assumption: simulation StartTime=0 s, Tolerance=1e-6, and Interval=0.1 s are chosen because only the 900 s experiment duration is stated.",
+    "Limitation: the clarified topology confirms only a generic connection among Tank 1, Tank 2, and the three valves, with no source/sink endpoint detail, so a physically connected hydraulic network was not derivable from the evidence.",
+    "Limitation: the command schedule times for START, STOP, and SHUT are not provided in the brief; the included BooleanTable schedules are placeholder assumptions needed only to make the standalone experiment executable and are not evidence-grounded."
+  ],
+  "references": []
+}

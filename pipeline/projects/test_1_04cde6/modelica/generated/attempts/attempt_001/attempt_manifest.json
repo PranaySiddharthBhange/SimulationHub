@@ -1,0 +1,39 @@
+{
+  "attempt": 1,
+  "entry_class": "SingleTankTransferSystem",
+  "files": [
+    {
+      "filename": "TransferTank.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ValveCommandSource.mo",
+      "role": "component"
+    },
+    {
+      "filename": "TransferController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "SingleTankTransferSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Assumption from evidence gap: the brief does not provide continuous hydraulic equations, tank geometry, flow law, initial conditions, switch thresholds, command event schedule, solver tolerance, or simulation interval. To make an executable standalone model, this bundle uses a signal-flow interpretation with constant-area tanks, fixed nominal valve flows, assumed initial levels of 0 m in both tanks, assumed high and low switch thresholds of 1 m and 0.1 m, and assumed operator command pulses at 10 s START, 80 s STOP, 200 s START resume, and 500 s SHUT. These are executable assumptions, not source facts.",
+    "Assumption from unresolved routing evidence: the brief and clarification do not define explicit physical endpoints for the inlet, transfer, and drain valves from source material. To create an executable model, the system assumes inlet valve supplies Tank 1, transfer valve moves liquid from Tank 1 to Tank 2, and drain valve removes liquid from Tank 2 to a sink. This is a modeling assumption recorded because the evidence is silent on routing and the clarification states endpoints should only be defined after clarification from source material.",
+    "Interpretation of the single shared low-level switch: the source confirms one shared logical low-level switch entity but the executable model represents separate Boolean measurements from Tank 1 low level and Tank 2 low level into the controller so the controller can apply the shared completion logic in different states. This is an implementation choice for executability, not a claim that the physical source defined two distinct low-level switch hardware units.",
+    "Assumption for shutdown completion: the source states shutdown opens transfer and drain paths until both tanks are empty and does not specify final transfer/drain valve commands in Shutdown_complete. This model closes all valves implicitly by leaving only ShutdownEmptying with transfer/drain open and all other states closed; after both tanks are empty, mode becomes ShutdownComplete with inlet inhibited and all valve commands false.",
+    "Assumption for controller scan and experiment settings: the brief states only a 900-second experiment duration. This model assumes controller scanPeriod = 0.1 s, experiment Interval = 0.1 s, and Tolerance = 1e-6 to provide executable sampled control and experiment annotation; these values are not stated in the evidence."
+  ],
+  "references": []
+}

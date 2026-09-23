@@ -1,0 +1,71 @@
+## NaCl Evaporation System - Engineering Notes
+
+**Entities**
+
+*   V8: Valve
+*   V9: Valve
+*   V11: Valve
+*   V12: Valve
+*   B1: Vessel
+*   B2: Vessel
+*   B3: Vessel
+*   B4: Vessel
+*   B5: Evaporator
+*   B6: Cooler
+*   B7: Cooler
+*   K1: Condenser
+*   P1: Pump
+*   P2: Pump
+*   LIS-301: Level Sensor
+*   QI-302: Instrument
+*   QIS-502: Instrument
+
+**Relationships**
+
+*   V8 is connected_to B1 and B3
+*   V9 is connected_to B2 and B3
+*   V11 is connected_to B3 and B4
+*   V12 is connected_to B4 and B5
+*   B5 supplies to K1
+*   B6 receives from K1
+*   B6 is connected_to P2
+*   B7 receives from B5
+*   B7 is connected_to P2
+*   P1 returns to B1
+*   P2 returns to B1
+*   LIS-301 >= 0.13 m (Level sensor reading)
+*   QI-302 reaches recipe target (Instrument reading)
+*   QIS-502 reaches evaporation target (Instrument reading)
+
+**Requirements**
+
+*   LIS-301 >= 0.13 m (Level sensor reading must be >= 0.13 m)
+*   QI-302 reaches recipe target (Instrument reading must reach a target)
+*   QIS-502 reaches evaporation target (Instrument reading must reach an evaporation target)
+*   Simulation shall continue beyond 2500 s to demonstrate cycle reset.
+
+**Behaviors**
+
+*   IF LIS-301 >= 0.13 m THEN Open V8, B1 to B3
+*   IF QI-302 reaches recipe target THEN Open V9, B2 to B3
+*   IF LIS-301 < 0.01 m THEN Open V11, B3 to B4
+*   IF B5 is idle THEN Open V12, B4 to B5
+*   WHEN B5 is idle THEN Enable B5 heater
+*   WHEN QIS-502 reaches evaporation target THEN Cool B6, then return condensate
+*   WHEN Cooling complete and B6 returned THEN Transfer B5 to B7, cool B7, return concentrate
+*   WHEN Cooling complete and B7 returned THEN Wait for both branches
+*   WHEN Both complete and time > 2500 s THEN Cycle reset
+
+**Constraints**
+
+*   Tank connections can pass above or below the liquid level.
+*   Small junction volumes shall be used.
+*   All non-horizontal pipes shall include static head in their pressure-drop relationship.
+
+**Physical relationships**
+
+*   None
+
+**Scheduled commands**
+
+*   None

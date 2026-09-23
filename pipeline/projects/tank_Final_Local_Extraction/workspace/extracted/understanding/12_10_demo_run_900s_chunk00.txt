@@ -1,0 +1,25 @@
+## Entities
+tank1_level_m: Tank 1 Level, Tank 1, tank1
+tank2_level_m: Tank 2 Level, Tank 2, tank2
+valve1_open: Valve 1, valve1
+valve2_open: Valve 2, valve2
+valve3_open: Valve 3, valve3
+controller_state: Controller, controller
+
+## Relationships
+None
+
+## Requirements
+None
+
+## Behaviors
+None
+
+## Constraints
+None
+
+## Physical relationships
+None
+
+## Scheduled commands
+None

@@ -1,0 +1,49 @@
+## Entities
+*   coil (type: electrical)
+*   measuring coil (type: electrical)
+*   air-gap (type: physical)
+*   shim (type: physical)
+*   core (type: physical)
+*   ground (type: electrical)
+
+## Relationships
+*   coil connects to air-gap
+*   measuring coil connects to air-gap
+*   ground connects to coil
+*   ground connects to measuring coil
+*   Phi_core depends_on Phi_gap
+*   Phi_gap = 0.92 * Phi_core
+*   Phi_leak = 0.08 * Phi_core
+*   B and H depends_on Phi_core
+*   Exciting induced-voltage magnitude depends_on Phi_core
+*   Measuring induced-voltage magnitude depends_on Phi_core
+
+## Requirements
+*   experiment duration: 1.0 s (hold)
+*   report: N*I, Phi_core, Phi_gap, Phi_leak, B and H, Exciting induced-voltage magnitude, Measuring induced-voltage magnitude
+
+## Behaviors
+*   IF N*I increases, THEN Phi_core increases linearly
+*   IF N*I increases, THEN B and H increases linearly
+*   IF N*I increases, THEN Exciting induced-voltage magnitude increases linearly
+*   IF N*I increases, THEN Measuring induced-voltage magnitude increases linearly
+
+## Constraints
+*   gap: 1.50 mm (nominal)
+*   gap: 1.58 mm (as-built prototype comparison)
+
+## Physical relationships
+*   N*I = 0.92 * Phi_core
+*   Phi_leak = 0.08 * Phi_core
+
+## Scheduled commands
+*   Apply 50 Hz quasi-static excitation with an RMS current-phasor magnitude ramp: 0 A until 0.10 s, linear ramp to 2.0 A by 0.50 s, then hold to 1.0 s
+
+## Notes
+*   The coil must be connected with the documented polarity dot orientation.
+*   The measuring coil must have its recorded induced voltage negative relative to the positive air-gap flux arrow.
+*   Electrical and magnetic grounds must be instantiated in the simulation model.
+*   The 1.50 mm gap should be used for AV-11; the 1.58 mm shim value is for prototype comparison only.
+*   A sqrt(2) mismatch occurs if 2.0 A is used as a peak rather than RMS phasor magnitude.
+*   Applying total core flux to the air gap instead of useful flux overpredicts air-gap B.
+*   Omitting one of the grounds can leave the corresponding potential reference undefined.

@@ -1,0 +1,42 @@
+## Entities
+B3_level_m, type: float
+B4_level_m, type: float
+B5_level_m, type: float
+B6_level_m, type: float
+B7_level_m, type: float
+B3_w_NaCl, type: float
+B5_w_NaCl, type: float
+B5_temp_C, type: float
+B6_temp_C, type: float
+B7_temp_C, type: float
+FIS801_kg_s, type: float
+P1_cmd, type: float
+P2_cmd, type: float
+B5_heater_cmd, type: float
+B6_cooler_cmd, type: float
+B7_cooler_cmd, type: float
+V1_open, type: bool
+V3_open, type: bool
+V5_open, type: bool
+V6_open, type: bool
+V8_open, type: bool
+V9_open, type: bool
+V11_open, type: bool
+V12_open, type: bool
+V15_open, type: bool
+V18_open, type: bool
+V20_open, type: bool
+V22_open, type: bool
+V23_open, type: bool
+V24_open, type: bool
+V25_open, type: bool
+region, type: string
+controller_state, type: string
+time_s, type: float
+Step3, type: string
+Step4, type: string
+Step5, type: string
+Step6, type: string
+
+## Relationships
+(time

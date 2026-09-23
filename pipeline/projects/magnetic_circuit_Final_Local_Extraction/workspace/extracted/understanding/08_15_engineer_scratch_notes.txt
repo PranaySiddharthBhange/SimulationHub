@@ -1,0 +1,23 @@
+## Entities
+Gap, Leakage, Core, Measurement Coil, Excitation
+
+## Relationships
+None
+
+## Requirements
+None
+
+## Behaviors
+None
+
+## Constraints
+Gap: 1.50 mm (analytic case), 1.58 mm (physical prototype)
+
+## Physical relationships
+None
+
+## Control laws
+None
+
+## Scheduled commands
+None

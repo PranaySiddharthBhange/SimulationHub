@@ -1,0 +1,104 @@
+## Entities
+
+*   Room CO2 Feedback-Control System
+*   Supply-air path
+*   Exhaust path
+*   Ventilation controller
+*   Room CO2 concentration
+*   Outdoor-air CO2 concentration
+*   Occupied-room CO2 concentration
+*   1000 ppm
+*   300 ppm
+*   CO2 generation
+*   Occupants
+*   Controlled room air volume
+*   100 m^3
+*   Nominal air density
+*   1.2 kg/m^3
+*   Trace-substance concentration
+*   Carrier mass-flow command
+*   Numerical modeling device
+*   Sensor
+*   ACH (Air Changes per Hour)
+*   Source mass-flow magnitude
+*   Simulation source component
+*   Absolute 1000 ppm room concentration
+*   Controller proportional gain
+*   Output bias
+*   Integral action
+*   PID
+
+## Relationships
+
+*   Room CO2 Feedback-Control System *contains* Supply-air path
+*   Room CO2 Feedback-Control System *contains* Exhaust path
+*   Ventilation controller *modulates* fresh-air mass flow *using* Room CO2 concentration
+*   Room CO2 concentration *feeds into* Ventilation controller
+*   Outdoor-air CO2 concentration *used by* Demonstration model
+*   Occupants *contribute* CO2 *to* Room CO2 concentration
+*   Controlled room air volume *equals* 100 m^3
+*   Nominal air density *used in* ACH-to-mass-flow gain
+*   Trace-substance concentration *used in* PeopleSource implementation
+*   Carrier mass-flow command *derived from* Occupant CO2 generation
+*   Numerical modeling device *used in* PeopleSource implementation
+*   Sensor *normalizes* Room CO2 concentration
+*   ACH *calculated from* Room volume, Nominal air density, and 3600 s/h
+*   Simulation source component *uses* negative mass-flow sign *for* air entering the room
+*   Absolute 1000 ppm room concentration *used as* compliance limit
+
+## Requirements
+
+*   The system shall provide outdoor air to the room through the supply-air path and discharge room air through the exhaust path. (IAQ-FUN-001)
+*   The ventilation controller shall modulate fresh-air mass flow using measured room CO2 concentration as feedback. (IAQ-FUN-002)
+*   The occupied-room CO2 concentration shall not exceed 1000 ppm under the design occupancy schedule. (IAQ-FUN-003)
+*   The outdoor-air CO2 concentration used by the demonstration model shall be 300 ppm. (IAQ-FUN-004)
+*   CO2 generation shall be proportional to the number of occupants scheduled in the room. (IAQ-FUN-005)
+*   The controlled room air volume shall be 100 m^3. (IAQ-PER-001)
+*   The nominal air density for ventilation mass-flow conversion shall be 1.2 kg/m^3. (IAQ-PER-002)
+*   Each occupant shall contribute 8.18E-6 kg/s of CO2 at the design activity level. (IAQ-PER-003)
+*   The controller input shall be normalized such that a measured concentration of 1.519E-3 kg/kg produces a normalized value of 1.0. (IAQ-CTL-001)
+*   The CO2 setpoint presented to the controller shall be 1.0 in normalized concentration units. (IAQ-CTL-002)
+*   The ventilation controller output shall represent an air-change-rate command in ACH. (IAQ-CTL-003)
+*   The ventilation command shall be limited to 0.2 through 6.0 ACH during automatic operation. (IAQ-CTL-004)
+*   The ACH command shall be converted to source mass-flow magnitude using room volume, nominal air density and 3600 s/h. (IAQ-CTL-005)
+*   The simulation source component shall use negative mass-flow sign for air entering the room because of the source-port sign convention. (IAQ-CTL-006)
+*   The controller shall use the absolute 1000 ppm room concentration as its compliance limit. (IAQ-CTL-007)
+*   The controller proportional gain shall be 4.0 ACH per normalized concentration error. (IAQ-CTL-008)
+*   The controller proportional gain shall be 6.0 ACH per normalized concentration error with an output bias of 3.5 ACH. (IAQ-CTL-009)
+*   Integral action shall be disabled in the released hackathon reference run to avoid negative windup during long unoccupied periods. (IAQ-CTL-010)
+
+## Behaviors
+
+*   Ventilation controller *modulates* fresh-air mass flow *based on* Room CO2 concentration *feedback*
+*   Ventilation controller *sets* air-change-rate command *in* ACH
+*   Controller *normalizes* Room CO2 concentration *to* 1.0
+*   Controller *sets* CO2 setpoint *to* 1.0
+*   Controller *converts* ACH command *to* source mass-flow magnitude
+*   Simulation source component *uses* negative mass-flow sign *for* air entering the room
+
+## Constraints
+
+*   Ventilation command *limited to* 0.2 through 6.0 ACH during automatic operation.
+
+## Physical relationships
+
+*   m_air = ACH*V*rho/3600 (where m_air is source mass-flow magnitude, ACH is air-change-rate, V is room volume, rho is nominal air density, and 3600 s/h is the conversion factor)
+
+## Scheduled commands
+
+*   None
+
+## Notes
+
+*   Topology shown in the reference control diagram. (IAQ-FUN-001)
+*   Feedback loop uses room trace-substance concentration. (IAQ-FUN-002)
+*   1000 ppm is an absolute concentration, not ppm above outdoors. (IAQ-FUN-003)
+*   Equivalent mass fraction defined separately. (IAQ-FUN-004)
+*   Emission rate per person defined in IAQ-PER-003. (IAQ-FUN-005)
+*   Single well-mixed zone approximation. (IAQ-PER-009)
+*   Used by ACH-to-mass-flow gain. (IAQ-PER-010)
+*   Corresponds to 1000 ppm under the project conversion convention. (IAQ-PER-013)
+*   Closes ambiguity from an email suggesting 1000 ppm above outdoors. (IAQ-CTL-007)
+*   Legacy tuning produced slow response. (IAQ-CTL-008)
+*   Prevents zero ventilation and caps fan/source capacity. (IAQ-CTL-004)
+*   Block may still be named PID in the legacy model. (IAQ-CTL-010)

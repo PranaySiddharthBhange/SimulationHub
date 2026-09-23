@@ -1,0 +1,35 @@
+## Entities
+tank1_level_m: Tank 1 Level, Tank 1, Tank 1 Level, Tank 1 Level Meter
+tank2_level_m: Tank 2 Level, Tank 2, Tank 2 Level, Tank 2 Level Meter
+valve1_open: Valve 1, Valve 1 Control, Valve 1 Actuator
+valve2_open: Valve 2, Valve 2 Control, Valve 2 Actuator
+valve3_open: Valve 3, Valve 3 Control, Valve 3 Actuator
+controller_state: Controller, Main Controller
+
+## Relationships
+(tank1_level_m, supplies, tank1)
+(tank2_level_m, supplies, tank2)
+(valve1_open, controls, tank1_level_m)
+(valve2_open, controls, tank2_level_m)
+(valve3_open, controls, tank1_level_m)
+(controller_state, controls, valve1_open)
+(controller_state, controls, valve2_open)
+(controller_state, controls, valve3_open)
+(tank1_level_m, depends_on, controller_state)
+(tank2_level_m, depends_on, controller_state)
+
+## Requirements
+- report tank1_level_m for 277 seconds
+- report tank2_level_m for 277 seconds
+- report valve1_open for 277 seconds
+- report valve2_open for 277 seconds
+- report valve3_open for 277 seconds
+- report controller_state for 277 seconds
+
+## Behaviors
+(time_s = 161) : IF tank1_level_m > 0.76 THEN cmd_start = 0, cmd_stop = 0, cmd_shut = 0, valve1_open = 1, valve2_open = 0, valve3_open = 0, controller_state = FILL_T1, wait_remaining_s = 0
+(time_s = 162) : IF tank1_level_m > 0.765 THEN cmd_start = 0, cmd_stop = 0, cmd_shut = 0, valve1_open = 1, valve2_open = 0, valve3_open = 0, controller_state = FILL_T1, wait_remaining_s = 0
+(time_s = 163) : IF tank1_level_m > 0.77 THEN cmd_start = 0, cmd_stop = 0, cmd_shut = 0, valve1_open = 1, valve2_open = 0, valve3_open = 0, controller_state = FILL_T1, wait_remaining_s = 0
+(time_s = 164) : IF tank1_level_m > 0.775 THEN cmd_start = 0, cmd_stop = 0, cmd_shut = 0, valve1_open = 1, valve2_open = 0, valve3_open = 0, controller_state = FILL_T1, wait_remaining_s = 0
+(time_s = 165) : IF tank1_level_m > 0.78 THEN cmd_start = 0, cmd_stop = 0, cmd_shut = 0, valve1_open = 1, valve2_open = 0, valve3_open = 0, controller_state = FILL_T1, wait_remaining_s = 0
+(time_s = 166) : IF tank1_level_m > 0.785 THEN cmd_start = 0, cmd_stop = 0, cmd_shut = 0, valve1_open = 1, valve2_open = 0, valve3_open = 

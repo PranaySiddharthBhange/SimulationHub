@@ -1,0 +1,31 @@
+## Entities
+*   Core material: Linear benchmark iron
+*   Effective mu_r: 1200
+*   Cross-section: 25 mm x 25 mm
+*   Nominal air gap: 1.50 mm
+*   As-built prototype gap: 1.58 mm
+*   Exciting coil: Turns (600), Reference frequency (50 Hz), Current definition (RMS phasor magnitude), Final benchmark current (2.0 A RMS), Polarity (Positive current -> positive mmf)
+*   Measuring coil: Turns (50), Location (Air-gap region), Induced-voltage orientation (Negative relative to useful flux arrow)
+
+## Relationships
+*   Effective mu_r is related to Core material (1200 is the released value for Linear benchmark iron)
+*   Final benchmark current is related to Exciting coil (2.0 A RMS)
+*   Polarity is related to Exciting coil (Positive current -> positive mmf)
+
+## Requirements
+*   None
+
+## Behaviors
+*   None
+
+## Constraints
+*   None
+
+## Physical relationships
+*   None
+
+## Control laws
+*   None
+
+## Scheduled commands
+*   None

@@ -1,0 +1,87 @@
+Okay, here's a breakdown of the engineering document, organized into the seven specified sections, reflecting my understanding of the system.
+
+## Entities
+
+*   **ZON-201:** Component and Functional Block Schedule - Well-mixed room volume
+*   **SRC-OA-201:** freshAir - Outdoor air supply
+*   **BND-201:** boundary4 - Room exhaust sink
+*   **SRC-CO2-201:** peopleSource - Trace-substance mass source
+*   **SCH-OCC-201:** NumberOfPeople - Occupancy schedule
+*   **SEN-CO2-201:** traceVolume - CO2 trace sensor
+*   **GAIN-NORM-201:** gainSensor - Normalize CO2 measurement
+*   **CTL-CO2-201:** PID - PID/P controller
+*   **SET-CO2-201:** CO2Set - Constant setpoint
+*   **GAIN-AIR-201:** gain1 - ACH to source mass flow
+*   **GAIN-PEO-201:** gain - People count to carrier mass flow
+*   **IAQ-SCH-001:** Schedule
+*   **IAQ-SCH-002:** Schedule
+*   **ICD-IAQ-03:** Interface
+*   **DR-IAQ-05:** Safety
+*   **CP-23 Rev C:** Component and Functional Block Schedule
+*   **MDS-IAQ-01:** MDS-IAQ-01
+*   **URS/ICD:** URS/ICD
+*   **CDS-IAQ-02:** CDS-IAQ-02
+*   **MOD-NT-03:** MOD-NT-03
+*   **OCC-SCH-04:** Occupancy schedule
+*   **V18, V23, V22, V1, V3:** Valve names (as listed in the schedule)
+
+## Relationships
+
+*   ZON-201 *contains* Volume (100 m^3)
+*   SRC-OA-201 *supplies* Outdoor air supply (300 ppm)
+*   BND-201 *supplies* Room exhaust sink (101325 Pa)
+*   SRC-CO2-201 *supplies* Trace-substance mass source (100 kg/kg)
+*   SCH-OCC-201 *supplies* People count source (15 person)
+*   SEN-CO2-201 *measures* Room trace state (C_room)
+*   GAIN-NORM-201 *normalizes* CO2 measurement (y_CO2)
+*   CTL-CO2-201 *controls* Ventilation feedback (ACH/normalized)
+*   SET-CO2-201 *sets* Normalized CO2 limit (CO2_set)
+*   GAIN-AIR-201 *controls* ACH to source mass flow (m_flow command)
+*   GAIN-PEO-201 *controls* People count to carrier mass flow (peopleSource.m_flow)
+*   IAQ-SCH-001 *defines* Occupancy schedule
+*   IAQ-SCH-002 *defines* Occupancy schedule
+*   ICD-IAQ-03 *provides* Interface
+*   DR-IAQ-05 *provides* Safety
+*   CP-23 Rev C *provides* Component and Functional Block Schedule
+*   MDS-IAQ-01 *is used in* Well-mixed room volume
+*   URS/ICD *is used in* Outdoor trace concentration
+*   CDS-IAQ-02 *is used in* Normalize CO2 measurement
+*   MOD-NT-03 *is used in* People count to carrier mass flow
+*   OCC-SCH-04 *is used in* Occupancy schedule
+
+## Requirements
+
+*   The controller demonstration shall use the approved weekday occupancy schedule with a maximum of 15 occupants. (IAQ-SCH-001)
+*   The number-of-people signal shall be piecewise constant between defined schedule change times. (IAQ-SCH-002)
+*   The room CO2 measurement shall be represented internally as a Real-valued trace-substance mass fraction in kg/kg. (IAQ-INT-001)
+*   The controller shall provide a Real-valued ACH command to the airflow conversion gain. (IAQ-INT-002)
+*   The occupancy schedule shall provide an integer-valued people count to the CO2 source calculation. (IAQ-INT-003)
+*   The fresh-air source shall receive both a mass-flow command and a trace-substance concentration parameter. (IAQ-INT-004)
+*   If the room CO2 sensor signal is invalid for more than 60 s, the controller shall command 4.0 ACH and raise a sensor-fault indication. (IAQ-SAF-001)
+*   The 24-hour reference simulation shall log room CO2, outdoor CO2, occupant count, ACH command and physical supply mass flow at 60 s intervals. (IAQ-VER-001)
+*   During the approved 24-hour reference run, the maximum room CO2 concentration shall be no greater than 1000 ppm. (IAQ-VER-002)
+*   The conversion between ppm and kg/kg for this benchmark shall use molecular weights 44.01 kg/kmol for CO2 and 28.97 kg/kmol for dry air. (IAQ-DAT-001)
+*   The value C={100} kg/kg in the peopleSource shall not be interpreted as the physical room concentration or a realistic gas mixture composition. (IAQ-DAT-002)
+
+## Behaviors
+
+*   **If** the room CO2 sensor signal is invalid for more than 60 s, **then** the controller shall command 4.0 ACH and raise a sensor-fault indication. (IAQ-SAF-001)
+*   **If** the room CO2 sensor signal is invalid for more than 60 s, **then** the controller shall command 4.0 ACH and raise a sensor-fault indication. (IAQ-SAF-001)
+*   **If** the room CO2 sensor signal is invalid for more than 60 s, **then** the controller shall command 4.0 ACH and raise a sensor-fault indication. (IAQ-SAF-001)
+
+## Constraints
+
+*   The maximum room CO2 concentration shall be no greater than 1000 ppm. (IAQ-VER-002)
+
+## Physical relationships
+
+*   Gain-Air-201: m_flow command = -V*rho/3600 = -100*1.2/3600
+*   Gain-Peco-201: 8.18e-08/100 = 8.18E-6/100
+
+## Scheduled commands
+
+*   None.
+
+## Scheduled commands
+
+*   None.

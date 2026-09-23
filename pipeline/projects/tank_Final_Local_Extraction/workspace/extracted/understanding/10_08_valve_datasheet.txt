@@ -1,0 +1,29 @@
+## Entities
+VD-VXS24
+XV-101
+XV-102
+XV-103
+24 VDC actuator
+spring-return valve
+liquid isolation valve
+
+## Relationships
+None
+
+## Requirements
+None
+
+## Behaviors
+None
+
+## Constraints
+None
+
+## Physical relationships
+None
+
+## Control laws
+None
+
+## Scheduled commands
+None

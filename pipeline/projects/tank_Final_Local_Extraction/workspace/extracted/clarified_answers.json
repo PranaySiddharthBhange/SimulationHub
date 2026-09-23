@@ -1,0 +1,16 @@
+{
+  "questions": [
+    "What is the current applicable Tank 1 high-level setpoint: 0.78 m or 0.80 m?",
+    "What is the current applicable wait after Tank 1 reaches its low-level limit: 10 s or 12 s?",
+    "What is the current applicable inter-cycle wait after Tank 2 reaches its low-level limit: 10 s or 8 s?",
+    "During SHUT, does the controller open V2 and V3 while inhibiting V1, or close all valves immediately?",
+    "Is the observed operator note at 700 s (XV-102 and XV-101 open) a recording error, a lamp/alias mismatch, or evidence of different SHUT logic than TP17/URS?"
+  ],
+  "answers": {
+    "clarify_t1_high_setpoint": "0.80 m for TP17 demonstration configuration",
+    "clarify_wait_after_t1_low": "10 s",
+    "clarify_wait_after_t2_low": "8 s for TP17 demonstration configuration",
+    "clarify_shut_valve_behavior": "Open V2 and V3 while inhibiting V1 until both tanks are at or below low level, then close all valves and return to IDLE",
+    "clarify_operator_shut_observation": "Recording error or lamp/alias mismatch; retain TP17/URS SHUT behavior as governing pending confirmation"
+  }
+}

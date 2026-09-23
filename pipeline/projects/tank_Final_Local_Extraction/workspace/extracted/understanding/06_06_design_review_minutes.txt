@@ -1,0 +1,58 @@
+## Entities
+V1, type: Valve, aliases: Valve 1
+V2, type: Valve, aliases: Valve 2
+V3, type: Valve, aliases: Valve 3
+LT-101, type: Level Sensor, aliases: Tank Level 1
+LT-102, type: Level Sensor, aliases: Tank Level 2
+T1, type: Temperature Sensor, aliases: Tank 1 Temperature
+IDLE, type: System State, aliases: Idle State
+START, type: Command, aliases: Fill Start Command
+STOP, type: Command, aliases: Fill Stop Command
+SHUT, type: Command, aliases: Fill Shut Command
+
+## Relationships
+LT-101 depends_on Tank Level 1
+LT-102 depends_on Tank Level 2
+V1 supplies Tank 1
+V2 supplies Tank 2
+V3 supplies Tank 2
+LT-101 regulates Tank 1 Level
+LT-102 regulates Tank 2 Level
+STOP controls V1
+STOP controls V2
+STOP controls V3
+START controls V2
+START controls V3
+SHUT controls V1
+SHUT controls V2
+SHUT controls V3
+START triggers Fill Cycle
+STOP triggers State Freeze
+SHUT triggers Shutdown Sequence
+
+## Requirements
+- Report tank levels and valve commands for a 900-second experiment (D-06)
+- LT-101 and LT-102 must be at or below their low-level setpoints for SHUT to be complete (D-06)
+- After shutdown completion, all valves must be closed and the sequence context reset to IDLE (D-07)
+- V1 and V2 must never be commanded open together (D-08)
+- V2 and V3 must not be commanded open together in normal auto operation; SHUT is the only permitted exception (D-09)
+
+## Behaviors
+IF LT-101 < 0.78 m AND LT-102 < 0.78 m THEN SHUT is complete (D-06)
+IF STOP THEN STOP closes V1, V2, and V3 and freezes remaining delay (D-02)
+IF START THEN START resumes remaining delay (D-03)
+IF START while automatic sequence is running THEN START is ignored (D-04)
+IF START or STOP received during active SHUT THEN START or STOP is ignored (D-05)
+
+## Constraints
+V1 and V2 must never be commanded open together (D-08)
+V2 and V3 must not be commanded open together in normal auto operation; SHUT is the only permitted exception (D-09)
+
+## Physical relationships
+None
+
+## Control laws
+None
+
+## Scheduled commands
+None

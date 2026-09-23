@@ -1,0 +1,46 @@
+Okay, here’s a breakdown of the system based on the provided data, organized into the seven sections as requested.
+
+## Entities
+*   tank1
+*   tank2
+*   valve1
+*   valve2
+*   valve3
+*   controller_state
+*   wait_remaining_s
+
+## Relationships
+*   tank1_level_m depends_on controller_state
+*   tank2_level_m depends_on controller_state
+*   valve1_open controls valve1
+*   valve2_open controls valve2
+*   valve3_open controls valve3
+*   cmd_start triggers TRANSFER_T1_T2
+*   cmd_stop triggers TRANSFER_T1_T2
+*   cmd_shut triggers TRANSFER_T1_T2
+*   TRANSFER_T1_T2 supplies tank1
+*   TRANSFER_T1_T2 supplies tank2
+*   wait_remaining_s waits after TRANSFER_T1_T2
+
+## Requirements
+*   tank1_level_m must be 0.12125 at time_s = 420
+*   tank2_level_m must be 0.63179 at time_s = 420
+*   valve1_open must be 0 at time_s = 420
+*   valve2_open must be 1 at time_s = 420
+*   valve3_open must be 0 at time_s = 420
+*   controller_state must be TRANSFER_T1_T2 at time_s = 420
+*   wait_remaining_s must be 0 at time_s = 420
+*   Experiment duration: 900 seconds
+
+## Behaviors
+*   IF controller_state is TRANSFER_T1_T2 THEN valve1_open = 0, valve2_open = 1, valve3_open = 0, tank1_level_m = 0.12125, tank2_level_m = 0.63179
+*   IF controller_state is TRANSFER_T1_T2 THEN wait_remaining_s = 11
+*   IF controller_state is TRANSFER_T1_T2 THEN wait_remaining_s = 10
+*   IF controller_state is TRANSFER_T1_T2 THEN wait_remaining_s = 9
+*   IF controller_state is TRANSFER_T1_T2 THEN wait_remaining_s = 8
+*   IF controller_state is TRANSFER_T1_T2 THEN wait_remaining_s = 7
+*   IF controller_state is TRANSFER_T1_T2 THEN wait_remaining_s = 6
+*   IF controller_state is TRANSFER_T1_T2 THEN wait_remaining_s = 5
+*   IF controller_state is TRANSFER_T1_T2 THEN wait_remaining_s = 4
+*   IF controller_state is TRANSFER_T1_T2 THEN wait_remaining_s = 3
+*   IF controller_state is TRANSFER_T1_T2 THEN

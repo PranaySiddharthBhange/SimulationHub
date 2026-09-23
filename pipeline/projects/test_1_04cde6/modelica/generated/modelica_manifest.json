@@ -1,0 +1,42 @@
+{
+  "entry_class": "SingleTankTransferSystem",
+  "files": [
+    {
+      "filename": "Tank1Unit.mo",
+      "role": "component"
+    },
+    {
+      "filename": "Tank2Unit.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ValveFlowCommand.mo",
+      "role": "component"
+    },
+    {
+      "filename": "TransferController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "SingleTankTransferSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Derived from compiler error and Modelica semantics: the previous controller used edge(sample(0, scanPeriod) and startButton), edge(sample(0, scanPeriod) and stopButton), and edge(sample(0, scanPeriod) and shutButton). In Modelica, edge requires a Boolean variable, not an arbitrary Boolean expression. The corrected controller introduces sampledStart, sampledStop, and sampledShut Boolean variables and forms pulses as sampledX and not pre(sampledX), preserving the intended sampled command behavior.",
+    "Assumption from missing source values: tank cross-sectional area, high-level threshold, low-level threshold, initial levels, nominal inlet flow, nominal transfer flow, nominal drain flow, command schedule times, pulse widths, controller scan period, and experiment interval/tolerance are not provided in 01_single_tank_transfer_description.txt. The bundle retains the required sequence and 900 s horizon but uses explicit assumptions for those unresolved numeric values.",
+    "Assumption constrained by clarified but still unresolved routing evidence: the note does not specify explicit physical endpoints for inlet, transfer, and drain valves. This bundle uses a signal-flow representation consistent with the stated sequence only: inlet flow adds to Tank 1, transfer flow removes from Tank 1 and adds the same commanded flow to Tank 2, and drain flow removes from Tank 2. This is a modeling assumption, not an explicit source-stated routing.",
+    "Derived from the confirmed shared low-level switch interpretation: one shared logical low-level switch entity is represented by two Boolean inputs to the controller, one from Tank 1 low detection during transfer completion and one from Tank 2 low detection during draining completion, because the controller must evaluate the shared switch against different sensed tanks in different sequence states. This preserves the clarified semantics while keeping each actually used connector connected.",
+    "Assumption for standalone execution: because no operator command schedule within the 900-second experiment is provided, START, STOP, and SHUT command times are chosen so the model runs autonomously and demonstrates start, pause/resume, and shutdown behaviors within the required 900 s experiment."
+  ],
+  "references": []
+}

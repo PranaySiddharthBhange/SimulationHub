@@ -1,0 +1,72 @@
+## Entities
+*   tank1: Tank, Tank
+*   tank2: Tank, Tank
+*   valve1: Valve, Valve
+*   valve2: Valve, Valve
+*   valve3: Valve, Valve
+*   controller: Controller, Controller
+*   DRAIN_T2: Drain, Drain
+
+## Relationships
+*   tank1 contains tank2
+*   valve1 supplies tank1
+*   valve2 supplies tank2
+*   valve3 supplies tank1
+*   controller controls valve1
+*   DRAIN_T2 controls tank2
+*   DRAIN_T2 triggers shutdown
+
+## Requirements
+*   report tank1_level_m and tank2_level_m for 713 seconds
+*   report valve1_open and valve2_open and valve3_open for 713 seconds
+*   report controller_state for 713 seconds
+
+## Behaviors
+*   IF tank1_level_m < 0.1 THEN valve3_open = 1
+*   IF tank2_level_m < 0.1 THEN DRAIN_T2 = 1
+*   IF valve1_open = 1 AND valve3_open = 1 THEN controller_state = "DRAIN_T2"
+*   IF controller_state = "DRAIN_T2" THEN valve2_open = 1
+*   IF valve2_open = 1 THEN shutdown = 1
+
+## Constraints
+*   tank1_level_m <= 0.1
+*   tank2_level_m <= 0.1
+
+## Physical relationships
+*   None
+
+## Scheduled commands
+*   time_s = 560
+*   cmd_start = 0
+*   cmd_stop = 0
+*   cmd_shut = 0
+*   cmd_start = 0
+*   time_s = 561
+*   cmd_start = 0
+*   cmd_stop = 0
+*   cmd_shut = 0
+*   time_s = 562
+*   cmd_start = 0
+*   cmd_stop = 0
+*   cmd_shut = 0
+*   time_s = 563
+*   cmd_start = 0
+*   cmd_stop = 0
+*   cmd_shut = 0
+*   time_s = 564
+*   cmd_start = 0
+*   cmd_stop = 0
+*   cmd_shut = 0
+*   time_s = 565
+*   cmd_start = 0
+*   cmd_stop = 0
+*   cmd_shut = 0
+*   time_s = 566
+*   cmd_start = 0
+*   cmd_stop = 0
+*   cmd_shut = 0
+*   time_s = 567
+*   cmd_start = 0
+*   cmd_stop = 0
+*   cmd_shut = 0
+*   time_s = 5

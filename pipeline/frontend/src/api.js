@@ -65,6 +65,32 @@ export function getArtifact(id, kind) {
   })
 }
 
+export function listProjectFiles(id, path = '') {
+  const query = path ? `?path=${encodeURIComponent(path)}` : ''
+  return fetch(`${BASE}/projects/${id}/files${query}`).then((r) => asJson(r))
+}
+
+export function previewProjectFile(id, path) {
+  return fetch(`${BASE}/projects/${id}/files/preview?path=${encodeURIComponent(path)}`).then(async (r) => {
+    // 415 (binary) and 413 (too large) are normal outcomes here, not failures:
+    // the browser still offers the file as a download.
+    if (r.status === 415 || r.status === 413) {
+      const body = await r.json().catch(() => ({}))
+      return { unpreviewable: body.detail || 'cannot be previewed' }
+    }
+    return asJson(r)
+  })
+}
+
+export function fileDownloadUrl(id, path) {
+  return `${BASE}/projects/${id}/files/download?path=${encodeURIComponent(path)}`
+}
+
+export function archiveDownloadUrl(id, path = '') {
+  const query = path ? `?path=${encodeURIComponent(path)}` : ''
+  return `${BASE}/projects/${id}/files/archive${query}`
+}
+
 export function streamLogs(id, { onLog, onStatus }) {
   const es = new EventSource(`${BASE}/projects/${id}/logs/stream`)
   es.onmessage = (ev) => {
