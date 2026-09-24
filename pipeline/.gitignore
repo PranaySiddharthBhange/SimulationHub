@@ -20,6 +20,7 @@ dist/
 scratch_pad/
 node_modules/
 venv/
+.claude/
 .pytest_cache/
 coverage/
 htmlcov/

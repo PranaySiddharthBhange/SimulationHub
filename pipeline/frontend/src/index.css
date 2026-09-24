@@ -1,6 +1,10 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
+  color-scheme: light;
+
   --bg: #ffffff;
   --bg-soft: #f6f5f1;
   --panel: #ffffff;
@@ -22,9 +26,52 @@
   --red: #b5493a;
   --violet: #7c72a8;
 
+  --green-soft: #edf3ec;
+  --blue-soft: #eaf1f4;
+  --amber-soft: #faf1de;
+  --red-soft: #f8eae7;
+  --red-soft-border: #e6cec8;
+  --overlay: #e8eaed;
+  --scrollbar-thumb: rgba(38, 38, 36, 0.14);
+  --scrollbar-thumb-hover: rgba(38, 38, 36, 0.24);
+
   --sans: 'Inter', system-ui, sans-serif;
   --serif: 'Source Serif 4', Georgia, serif;
   --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #1c1b19;
+  --bg-soft: #242320;
+  --panel: #242320;
+  --panel-2: #2a2926;
+  --border: #3a3833;
+  --border-strong: #4a473f;
+  --text: #ece8de;
+  --text-muted: #a9a496;
+  --text-dim: #726d60;
+
+  --accent: #d97b45;
+  --accent-strong: #e8935f;
+  --accent-soft: #3c2a1c;
+  --accent-soft-border: #5c4127;
+
+  --blue: #6ea0bd;
+  --green: #74b378;
+  --amber: #cc9d43;
+  --red: #cf7060;
+  --violet: #9c90c9;
+
+  --green-soft: rgba(116, 179, 120, 0.14);
+  --blue-soft: rgba(110, 160, 189, 0.14);
+  --amber-soft: rgba(204, 157, 67, 0.16);
+  --red-soft: rgba(207, 112, 96, 0.16);
+  --red-soft-border: rgba(207, 112, 96, 0.35);
+  --overlay: #17160f;
+  --scrollbar-thumb: rgba(236, 232, 222, 0.14);
+  --scrollbar-thumb-hover: rgba(236, 232, 222, 0.24);
 }
 
 * {
@@ -44,6 +91,7 @@ body {
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 ::-webkit-scrollbar {
@@ -54,11 +102,11 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(38, 38, 36, 0.14);
+  background: var(--scrollbar-thumb);
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(38, 38, 36, 0.24);
+  background: var(--scrollbar-thumb-hover);
 }
 
 .font-mono {
@@ -72,6 +120,9 @@ body {
   background: var(--panel);
   border: 1px solid var(--border);
   box-shadow: 0 1px 2px rgba(38, 38, 36, 0.04);
+}
+:root[data-theme='dark'] .card {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes pulse-ring {

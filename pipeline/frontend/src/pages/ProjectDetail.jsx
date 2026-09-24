@@ -218,7 +218,7 @@ export default function ProjectDetail({ projectId, onNavigateHome }) {
               />
 
               {project.status === 'error' && project.error && (
-                <div className="fade-up flex items-start gap-2.5 rounded-xl border border-[#e6cec8] bg-[#f8eae7] px-4 py-3 text-[12.5px] text-[var(--red)]">
+                <div className="fade-up flex items-start gap-2.5 rounded-xl border border-[var(--red-soft-border)] bg-[var(--red-soft)] px-4 py-3 text-[12.5px] text-[var(--red)]">
                   <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
                   {project.error}
                 </div>

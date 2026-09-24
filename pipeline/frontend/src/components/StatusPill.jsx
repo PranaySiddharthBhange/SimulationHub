@@ -1,11 +1,11 @@
 const CONFIG = {
   created: { label: 'Ready to run', color: 'var(--text-muted)', bg: 'var(--bg-soft)' },
-  stage1_ready: { label: 'Extraction complete', color: 'var(--green)', bg: '#edf3ec' },
-  ready: { label: 'Stage complete', color: 'var(--green)', bg: '#edf3ec' },
-  running: { label: 'Running', color: 'var(--blue)', bg: '#eaf1f4' },
-  awaiting_input: { label: 'Needs your input', color: 'var(--amber)', bg: '#faf1de' },
-  done: { label: 'Complete', color: 'var(--green)', bg: '#edf3ec' },
-  error: { label: 'Failed', color: 'var(--red)', bg: '#f8eae7' },
+  stage1_ready: { label: 'Extraction complete', color: 'var(--green)', bg: 'var(--green-soft)' },
+  ready: { label: 'Stage complete', color: 'var(--green)', bg: 'var(--green-soft)' },
+  running: { label: 'Running', color: 'var(--blue)', bg: 'var(--blue-soft)' },
+  awaiting_input: { label: 'Needs your input', color: 'var(--amber)', bg: 'var(--amber-soft)' },
+  done: { label: 'Complete', color: 'var(--green)', bg: 'var(--green-soft)' },
+  error: { label: 'Failed', color: 'var(--red)', bg: 'var(--red-soft)' },
   interrupted: { label: 'Interrupted', color: 'var(--text-muted)', bg: 'var(--bg-soft)' },
 }
 

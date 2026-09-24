@@ -108,7 +108,7 @@ export default function NewProjectModal({ onClose, onCreate }) {
               <div className="text-[12.5px] text-[var(--text-muted)]">
                 Drop files here, or <span className="text-[var(--accent)]">browse</span>
               </div>
-              <div className="text-[11px] text-[var(--text-dim)]">PDF, DOCX, XLSX, CSV, images, code, text</div>
+              <div className="text-[11px] text-[var(--text-dim)]">PDF, DOCX, XLSX, CSV, images, code, text, or a .zip of these</div>
               <input
                 ref={inputRef}
                 type="file"

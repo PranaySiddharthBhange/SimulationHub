@@ -57,9 +57,9 @@ function cardStatus(state, dependencyReady, prevLabel) {
 }
 
 const TONE_STYLES = {
-  green: { pillFg: 'var(--green)', pillBg: '#edf3ec' },
-  red: { pillFg: 'var(--red)', pillBg: '#f8eae7' },
-  amber: { pillFg: 'var(--amber)', pillBg: '#faf1de' },
+  green: { pillFg: 'var(--green)', pillBg: 'var(--green-soft)' },
+  red: { pillFg: 'var(--red)', pillBg: 'var(--red-soft)' },
+  amber: { pillFg: 'var(--amber)', pillBg: 'var(--amber-soft)' },
   accent: { pillFg: 'var(--accent)', pillBg: 'var(--accent-soft)' },
   muted: { pillFg: 'var(--text-dim)', pillBg: 'var(--bg-soft)' },
 }
