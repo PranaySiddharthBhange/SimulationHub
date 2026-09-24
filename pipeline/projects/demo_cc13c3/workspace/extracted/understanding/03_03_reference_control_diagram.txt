@@ -1,0 +1,45 @@
+Subject: tankController
+Document kind: control diagram
+
+## Entities
+* system -- system
+* defaults -- setting block
+* g -- parameter
+    - value: 9
+* source -- source
+* valve1 -- valve
+* tank1 -- tank
+    - level: 0.05
+* start -- command block
+* stop -- command block
+* shut -- command block
+* tankController -- controller
+* level1 -- signal
+* tank1.level -- signal
+* level2 -- signal
+* tank2.level -- signal
+* valve2 -- valve
+* tank2 -- tank
+    - level: 0.05
+* ambient1 -- ambient source
+* valve3 -- valve
+
+## Relationships
+* source connected_to valve1
+* valve1 connected_to tank1
+* tank1 connected_to valve2
+* valve2 connected_to tank2
+* ambient1 connected_to valve3
+* valve3 connected_to tank2
+* start connected_to tankController
+* stop connected_to tankController
+* shut connected_to tankController
+* tank1.level connected_to tankController (as level1 input)
+* tank2.level connected_to tankController (as level2 input)
+* tankController connected_to valve1
+* tankController connected_to valve2
+* tankController connected_to valve3
+
+## Unreadable
+* Text inside both tanks reads "level =" but no numeric value is shown next to it.
+* Upper-left defaults box contains an additional small red marker/indicator whose meaning is not legible.

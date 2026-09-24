@@ -1,0 +1,43 @@
+Subject: RM-201 CO2 loop
+Document kind: correspondence
+
+## Entities
+* RM-201 CO2 loop -- control loop
+* owner's note -- document
+* outdoor model -- model
+    - CO2 concentration: 300 ppm [current]
+* demo screenshot -- reference artifact
+    - CO2Set: 1 [observed]
+    - gainSensor: 1/1.519E-3 [observed]
+* Modelica freshAir source -- model source
+    - m_flow sign for flow into the zone: negative [current]
+* people source -- model source
+    - C: 100 kg/kg [current]
+    - carrier mass flow ratio to actual CO2 emission: 1/100 [current]
+* DR-IAQ-05 -- decision record  <DR-IAQ-05>
+* OCC-SCH-04 Rev C -- revision  <OCC-SCH-04 Rev C>
+* CR-IAQ-007 -- change request  <CR-IAQ-007>
+    - Kp: 6.0 [approved] (supersedes/superseded: Kp=4)
+    - bias: 3.5 ACH [approved]
+    - min: 0.2 [approved]
+    - max: 6.0 [approved]
+* released reference run -- run
+* old model file -- model file
+    - Kp: 4 [archived]
+    - peak occupancy: 12 [archived]
+
+## Requirements
+* do not exceed 1000 ppm
+* owner intent is 1000 ppm ABSOLUTE room concentration [current]  <DR-IAQ-05>
+* The 1300 ppm interpretation is rejected for this benchmark [current]  <DR-IAQ-05>
+* Please do not turn that into a negative physical ventilation requirement. [current]
+
+## Constraints
+* 1000 ppm above ambient (so around 1300 ppm total) [proposed]
+* hard 1000 ppm absolute target [observed]
+
+## Physical relationships
+* the carrier mass flow is 1/100 of the actual CO2 emission [current]
+
+## Scheduled commands
+* Peak occupancy is now 15 from 13:00-15:00 [current]

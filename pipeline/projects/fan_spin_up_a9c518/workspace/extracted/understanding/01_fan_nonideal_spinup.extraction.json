@@ -1,0 +1,344 @@
+{
+  "document": "# Fan Spin-Up — Real Losses Keep It Below Its Rated Speed\n\n## System\n\nA single fan wheel is mounted on a shaft with its own rotational inertia.\nA motor applies a fixed, constant driving torque to that shaft starting at\na fixed time; before that, the motor is off and the fan is at rest. The\nfan's nameplate rates it for 30 rad/s under idealized, no-loss conditions --\nbut this model includes the two loss mechanisms a real fan actually has,\nso the simulation is expected to show the fan settling BELOW its rated\nspeed, not at it. This is deliberately not an idealized result: it exists\nto show what a non-ideal machine's simulated performance looks like\ncompared to its nameplate rating.\n\n- Fan + shaft rotational inertia: J = 0.02 kg*m^2.\n- Motor torque: a constant 0.5 N*m, applied starting at t = 5 s. Before\n  t = 5 s the motor is off (zero torque) and the fan is at rest (speed\n  0 rad/s).\n- Bearing friction (a real loss an idealized fan model would ignore):\n  linear viscous torque opposing rotation, `T_friction = b * omega`, with\n  b = 0.01 N*m*s/rad.\n- Aerodynamic load (the other real loss): the air the fan is moving pushes\n  back with a torque that grows with the SQUARE of speed, the standard fan\n  affinity-law relationship, `T_aero = k_fan * omega^2`, with\n  k_fan = 0.0004 N*m*s^2/rad^2.\n- Governing equation once the motor is on:\n  `J * domega/dt = T_motor - b*omega - k_fan*omega^2`, starting from\n  omega = 0 rad/s at the instant the motor turns on.\n- Rated/nameplate speed (an idealized reference value the datasheet\n  quotes, representing what the fan would reach with NEITHER loss term\n  present -- not a value this model should ever actually reach): 30 rad/s.\n- No controller, no speed feedback, and no torque change of any kind after\n  t = 5 s: the motor simply holds its one constant torque value for the\n  rest of the run, and the fan's own physics (inertia against a growing\n  aerodynamic load) is what brings it to rest at a lower, real equilibrium\n  speed than the rated value.\n\n## Requirements\n\n- REQ-SIM-001: Simulate for 60 seconds and report the fan's angular speed,\n  the motor's on/off command, and the applied motor torque for the whole\n  run.\n- REQ-FUN-001: While the motor is off (t = 0 to t = 5 s), the fan's speed\n  shall stay exactly at 0 rad/s.\n- REQ-FUN-002: At t = 5 s the motor shall turn on and the fan shall begin\n  spinning up under the stated torque balance, with speed increasing from\n  0 rad/s.\n- REQ-FUN-003: The fan's speed shall rise smoothly toward a real\n  steady-state equilibrium and shall NOT reach, and shall stay strictly\n  below, the 30 rad/s rated/nameplate speed for the entire run -- the\n  friction and aerodynamic loss terms are what make this a non-ideal,\n  realistic result rather than the idealized nameplate figure.\n- REQ-FUN-004: Given the stated torque, friction coefficient, and\n  aerodynamic coefficient, the fan shall settle at a steady-state speed of\n  25 rad/s (where motor torque exactly balances the combined friction and\n  aerodynamic load) and hold there for the remainder of the run.\n\n## Acceptance checks\n\n- AC-01 fan at rest before motor starts: `fan_speed_rad_s == 0` at t = 4 s.\n- AC-02 motor off pre-start, on after: `motor_on_cmd == 0` at t = 4 s, and\n  `motor_on_cmd == 1` at t = 6 s.\n- AC-03 fast initial spin-up: `fan_speed_rad_s >= 15.0` at t = 6 s (1 s\n  after the motor turns on) -- expected value is about 17.47 rad/s.\n- AC-04 close to steady state well before the run ends: `abs(fan_speed_rad_s\n  - 25.0) <= 0.5` at t = 10 s (5 s after start) -- expected value is about\n  24.98 rad/s, already 99.9% of the way to equilibrium.\n- AC-05 settled at the real (non-ideal) equilibrium: `fan_speed_rad_s ==\n  25.0` at t = 60 s (absolute tolerance 0.05 rad/s).\n- AC-06 never reaches the idealized rated speed, for the entire run once\n  the motor is on: `fan_speed_rad_s <= 29.9` holds at all times from\n  t = 5 s to t = 60 s -- the whole point of this case: the result stays\n  meaningfully below the 30 rad/s nameplate value, not at or above it.\n- AC-07 no overshoot past the real equilibrium: `fan_speed_rad_s <= 25.05`\n  holds at all times for the entire run -- unlike an underdamped\n  spring-mass system, this nonlinear, purely-dissipative spin-up rises\n  smoothly and never exceeds its own steady-state value.\n- AC-08 torque balance holds at steady state: `motor_torque_Nm -\n  (0.01*fan_speed_rad_s + 0.0004*fan_speed_rad_s^2) == 0` at t = 60 s\n  (absolute tolerance 0.01 N*m) -- confirms the reported speed is\n  consistent with the stated friction and aerodynamic loss terms, not just\n  a plausible-looking number.\n\n## Notes\n\n- This is the third first-time domain in this folder (after the two-tank\n  gravity case and the spring-mass release case): a rotational\n  mechanical system driven to a NONLINEAR equilibrium, because the\n  aerodynamic load term is quadratic in speed, not linear. The rise to\n  equilibrium is smooth and monotonic (no overshoot, unlike the spring-mass\n  case) but does not have a closed-form exponential solution the way the\n  two-tank case does -- the acceptance-check values above were computed by\n  direct numerical integration (RK4) of the stated ODE, not estimated.\n- The point of this case is specifically to demonstrate a NON-ideal\n  simulated result: a naive or idealized model would just report the\n  30 rad/s nameplate speed once the motor is on. A correct model of this\n  brief must show the fan falling meaningfully short of that number\n  because of the two loss terms this brief explicitly states -- a model\n  that reports fan_speed_rad_s reaching 30 rad/s has dropped the friction\n  and/or aerodynamic terms and should be treated as wrong, not as an\n  idealized best case.\n- There is exactly one event in this run (the motor turning on once, and\n  never off again, never changing torque). No feedback controller, no\n  speed governor, and no second event of any kind belong in this model.\n",
+  "subject": "Fan Spin-Up — Real Losses Keep It Below Its Rated Speed",
+  "kind": "requirement specification",
+  "entities": [
+    {
+      "name": "fan wheel",
+      "kind": "mechanical component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "A single fan wheel is mounted on a shaft with its own rotational inertia."
+    },
+    {
+      "name": "shaft",
+      "kind": "mechanical component",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "rotational inertia",
+          "value": "0.02",
+          "unit": "kg*m^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Fan + shaft rotational inertia: J = 0.02 kg*m^2."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "A single fan wheel is mounted on a shaft with its own rotational inertia."
+    },
+    {
+      "name": "motor",
+      "kind": "actuator",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "torque",
+          "value": "0.5",
+          "unit": "N*m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Motor torque: a constant 0.5 N*m, applied starting at t = 5 s."
+        },
+        {
+          "quantity": "start time",
+          "value": "5",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Motor torque: a constant 0.5 N*m, applied starting at t = 5 s."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "A motor applies a fixed, constant driving torque to that shaft starting at\na fixed time; before that, the motor is off and the fan is at rest."
+    },
+    {
+      "name": "bearing friction",
+      "kind": "loss mechanism",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "coefficient b",
+          "value": "0.01",
+          "unit": "N*m*s/rad",
+          "status": "current",
+          "supersedes": "",
+          "quote": "b = 0.01 N*m*s/rad."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Bearing friction (a real loss an idealized fan model would ignore):\n  linear viscous torque opposing rotation, `T_friction = b * omega`, with\n  b = 0.01 N*m*s/rad."
+    },
+    {
+      "name": "aerodynamic load",
+      "kind": "load",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "coefficient k_fan",
+          "value": "0.0004",
+          "unit": "N*m*s^2/rad^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "k_fan = 0.0004 N*m*s^2/rad^2."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Aerodynamic load (the other real loss): the air the fan is moving pushes\n  back with a torque that grows with the SQUARE of speed, the standard fan\n  affinity-law relationship, `T_aero = k_fan * omega^2`, with\n  k_fan = 0.0004 N*m*s^2/rad^2."
+    },
+    {
+      "name": "fan",
+      "kind": "rotating machine",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "rated/nameplate speed",
+          "value": "30",
+          "unit": "rad/s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "Rated/nameplate speed (an idealized reference value the datasheet\n  quotes, representing what the fan would reach with NEITHER loss term\n  present -- not a value this model should ever actually reach): 30 rad/s."
+        },
+        {
+          "quantity": "initial speed",
+          "value": "0",
+          "unit": "rad/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "t = 5 s the motor is off (zero torque) and the fan is at rest (speed\n  0 rad/s)."
+        },
+        {
+          "quantity": "steady-state speed",
+          "value": "25",
+          "unit": "rad/s",
+          "status": "required",
+          "supersedes": "",
+          "quote": "the fan shall settle at a steady-state speed of\n  25 rad/s"
+        },
+        {
+          "quantity": "simulation duration",
+          "value": "60",
+          "unit": "seconds",
+          "status": "required",
+          "supersedes": "",
+          "quote": "REQ-SIM-001: Simulate for 60 seconds and report the fan's angular speed,"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The\nfan's nameplate rates it for 30 rad/s under idealized, no-loss conditions --"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "fan wheel",
+      "predicate": "mounted on",
+      "object": "shaft",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "A single fan wheel is mounted on a shaft with its own rotational inertia."
+    },
+    {
+      "subject": "motor",
+      "predicate": "applies driving torque to",
+      "object": "shaft",
+      "detail": "fixed, constant driving torque",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "A motor applies a fixed, constant driving torque to that shaft starting at\na fixed time"
+    },
+    {
+      "subject": "bearing friction",
+      "predicate": "opposes rotation of",
+      "object": "fan",
+      "detail": "linear viscous torque",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "linear viscous torque opposing rotation, `T_friction = b * omega`"
+    },
+    {
+      "subject": "aerodynamic load",
+      "predicate": "pushes back on",
+      "object": "fan",
+      "detail": "torque that grows with the SQUARE of speed",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the air the fan is moving pushes\n  back with a torque that grows with the SQUARE of speed"
+    },
+    {
+      "subject": "motor",
+      "predicate": "turns on at",
+      "object": "fan",
+      "detail": "t = 5 s",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "REQ-FUN-002: At t = 5 s the motor shall turn on and the fan shall begin\n  spinning up"
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "T_friction = b * omega",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`T_friction = b * omega`"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "T_aero = k_fan * omega^2",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`T_aero = k_fan * omega^2`"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "J * domega/dt = T_motor - b*omega - k_fan*omega^2",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`J * domega/dt = T_motor - b*omega - k_fan*omega^2`"
+    },
+    {
+      "category": "requirement",
+      "statement": "Simulate for 60 seconds and report the fan's angular speed, the motor's on/off command, and the applied motor torque for the whole run.",
+      "ref": "REQ-SIM-001",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "REQ-SIM-001: Simulate for 60 seconds and report the fan's angular speed,\n  the motor's on/off command, and the applied motor torque for the whole\n  run."
+    },
+    {
+      "category": "requirement",
+      "statement": "While the motor is off (t = 0 to t = 5 s), the fan's speed shall stay exactly at 0 rad/s.",
+      "ref": "REQ-FUN-001",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "REQ-FUN-001: While the motor is off (t = 0 to t = 5 s), the fan's speed\n  shall stay exactly at 0 rad/s."
+    },
+    {
+      "category": "requirement",
+      "statement": "At t = 5 s the motor shall turn on and the fan shall begin spinning up under the stated torque balance, with speed increasing from 0 rad/s.",
+      "ref": "REQ-FUN-002",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "REQ-FUN-002: At t = 5 s the motor shall turn on and the fan shall begin\n  spinning up under the stated torque balance, with speed increasing from\n  0 rad/s."
+    },
+    {
+      "category": "requirement",
+      "statement": "The fan's speed shall rise smoothly toward a real steady-state equilibrium and shall NOT reach, and shall stay strictly below, the 30 rad/s rated/nameplate speed for the entire run.",
+      "ref": "REQ-FUN-003",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "REQ-FUN-003: The fan's speed shall rise smoothly toward a real\n  steady-state equilibrium and shall NOT reach, and shall stay strictly\n  below, the 30 rad/s rated/nameplate speed for the entire run"
+    },
+    {
+      "category": "requirement",
+      "statement": "Given the stated torque, friction coefficient, and aerodynamic coefficient, the fan shall settle at a steady-state speed of 25 rad/s and hold there for the remainder of the run.",
+      "ref": "REQ-FUN-004",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "REQ-FUN-004: Given the stated torque, friction coefficient, and\n  aerodynamic coefficient, the fan shall settle at a steady-state speed of\n  25 rad/s"
+    },
+    {
+      "category": "constraint",
+      "statement": "fan_speed_rad_s == 0 at t = 4 s.",
+      "ref": "AC-01",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-01 fan at rest before motor starts: `fan_speed_rad_s == 0` at t = 4 s."
+    },
+    {
+      "category": "constraint",
+      "statement": "motor_on_cmd == 0 at t = 4 s, and motor_on_cmd == 1 at t = 6 s.",
+      "ref": "AC-02",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-02 motor off pre-start, on after: `motor_on_cmd == 0` at t = 4 s, and\n  `motor_on_cmd == 1` at t = 6 s."
+    },
+    {
+      "category": "constraint",
+      "statement": "fan_speed_rad_s >= 15.0 at t = 6 s (1 s after the motor turns on).",
+      "ref": "AC-03",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-03 fast initial spin-up: `fan_speed_rad_s >= 15.0` at t = 6 s (1 s\n  after the motor turns on)"
+    },
+    {
+      "category": "constraint",
+      "statement": "abs(fan_speed_rad_s - 25.0) <= 0.5 at t = 10 s (5 s after start).",
+      "ref": "AC-04",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-04 close to steady state well before the run ends: `abs(fan_speed_rad_s\n  - 25.0) <= 0.5` at t = 10 s (5 s after start)"
+    },
+    {
+      "category": "constraint",
+      "statement": "fan_speed_rad_s == 25.0 at t = 60 s (absolute tolerance 0.05 rad/s).",
+      "ref": "AC-05",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-05 settled at the real (non-ideal) equilibrium: `fan_speed_rad_s ==\n  25.0` at t = 60 s (absolute tolerance 0.05 rad/s)."
+    },
+    {
+      "category": "constraint",
+      "statement": "fan_speed_rad_s <= 29.9 holds at all times from t = 5 s to t = 60 s.",
+      "ref": "AC-06",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-06 never reaches the idealized rated speed, for the entire run once\n  the motor is on: `fan_speed_rad_s <= 29.9` holds at all times from\n  t = 5 s to t = 60 s"
+    },
+    {
+      "category": "constraint",
+      "statement": "fan_speed_rad_s <= 25.05 holds at all times for the entire run.",
+      "ref": "AC-07",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-07 no overshoot past the real equilibrium: `fan_speed_rad_s <= 25.05`\n  holds at all times for the entire run"
+    },
+    {
+      "category": "constraint",
+      "statement": "motor_torque_Nm - (0.01*fan_speed_rad_s + 0.0004*fan_speed_rad_s^2) == 0 at t = 60 s (absolute tolerance 0.01 N*m).",
+      "ref": "AC-08",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-08 torque balance holds at steady state: `motor_torque_Nm -\n  (0.01*fan_speed_rad_s + 0.0004*fan_speed_rad_s^2) == 0` at t = 60 s\n  (absolute tolerance 0.01 N*m)"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

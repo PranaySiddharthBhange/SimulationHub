@@ -1,0 +1,51 @@
+Subject: reference control diagram
+Document kind: diagram
+
+## Entities
+* CO2Set -- setpoint block
+* PID -- controller block
+* gain1 -- gain block
+    - gain: 100*1.2/3?
+* system -- system block
+* traceDuctIn -- trace block
+* traceDuctOut -- trace block
+* traceVolume -- trace block
+* gainSensor -- gain block
+    - gain: 1/1.519E-3
+* freshAir -- flow source
+* CAtm -- source block
+    - gain: 0.3*1.519E-3
+* ductIn -- duct
+* volume -- volume sensor block; aliases: Volume
+* V=100 -- volume
+    - volume: 100
+* ductOut -- duct
+* boundary4 -- boundary
+* NumberOfPe? -- input block
+* gain -- gain block
+    - gain: 8.18E-6/100
+* peopleSource -- source
+
+## Relationships
+* CO2Set connects_to PID
+* PID connects_to gain1
+* gain1 connects_to freshAir
+* CAtm connects_to freshAir
+* freshAir connects_to ductIn
+* ductIn connects_to V=100
+* peopleSource connects_to V=100
+* V=100 connects_to ductOut
+* ductOut connects_to boundary4
+* ductIn measured_by traceDuctIn
+* ductOut measured_by traceDuctOut
+* V=100 measured_by traceVolume
+* traceVolume connects_to gainSensor
+* gainSensor connects_to PID
+* NumberOfPe? connects_to gain
+* gain connects_to peopleSource
+
+## Unreadable
+* The text near the lower connection of freshAir appears as 'm_flow' with another small red 'm', but the exact labeling is not fully legible.
+* The lower center label may read '1000' beneath the volume connection, but it is not fully legible.
+* The gain expression below gain1 ends with a '?' and is not fully certain.
+* The input block label 'NumberOfPe?' is truncated or unclear.

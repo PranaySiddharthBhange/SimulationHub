@@ -1,0 +1,13 @@
+flowchart TD
+    A["Simulation start<br/>t = 0 s"] --> B["Initialize fan_speed_rad_s = 0 rad/s"]
+    B --> C["Set motor_on_cmd = 0<br/>Set motor_torque_Nm = 0 N*m"]
+    C --> D{"t < 5 s?"}
+    D -->|Yes| E["Fan remains at 0 rad/s<br/>from t = 0 s to t = 5 s"]
+    E --> D
+    D -->|No| F["At t = 5 s set motor_on_cmd = 1<br/>Set motor_torque_Nm = 0.5 N*m"]
+    F --> G["Spin up under torque balance<br/>J*domega/dt = T_motor - b*omega - k_fan*omega^2<br/>J = 0.02 kg*m^2<br/>b = 0.01 N*m*s/rad<br/>k_fan = 0.0004 N*m*s^2/rad^2"]
+    G --> H{"t < 60 s?"}
+    H -->|Yes| I["fan_speed_rad_s rises smoothly toward 25 rad/s<br/>stays below 30 rad/s rated/nameplate speed"]
+    I --> H
+    H -->|No| J["At t = 60 s report outputs<br/>fan_speed_rad_s, motor_on_cmd, motor_torque_Nm"]
+    J --> K["End condition<br/>fan_speed_rad_s = 25 rad/s within 0.05 rad/s<br/>torque balance residual = 0 within 0.01 N*m"]

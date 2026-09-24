@@ -1,0 +1,75 @@
+{
+  "verdict": "partially_valid",
+  "check_results": [
+    {
+      "name": "AC-01 valve closed before opening",
+      "expression": "valve_open_cmd == 0 == 1.0 (relative tolerance 0.000%), at t=4.0",
+      "outcome": "pass",
+      "observed": "At t=4.0 s, valve_open_cmd is 0 because the event trace shows it remains 0 from t=0 until it changes to 1 at t=5.000001000000333 s; expected 0."
+    },
+    {
+      "name": "AC-02 initial levels preserved during closed interval at 4 s",
+      "expression": "(abs(level_A_m - 0.80) <= 0.001) and (abs(level_B_m - 0.00) <= 0.001) == 1.0 (relative tolerance 0.000%), at t=4.0",
+      "outcome": "pass",
+      "observed": "At t=4.0 s, before the valve opens at t=5.000001000000333 s, level_A_m is still at its pre-open maximum 0.8 m and level_B_m is still at its pre-open minimum 0.0 m; expected 0.80 m and 0.00 m within ±0.001 m."
+    },
+    {
+      "name": "AC-03 valve open after opening command",
+      "expression": "valve_open_cmd == 1 == 1.0 (relative tolerance 0.000%), at t=6.0",
+      "outcome": "pass",
+      "observed": "At t=6.0 s, valve_open_cmd is 1 because the event trace shows it changed to 1 at t=5.000001000000333 s and stayed there; expected 1."
+    },
+    {
+      "name": "AC-04 levels show transfer by 15 s",
+      "expression": "(level_A_m <= 0.75) and (level_B_m >= 0.05) == 1.0 (relative tolerance 0.000%), at t=15.0",
+      "outcome": "pass",
+      "observed": "Using the stated first-order behavior with tau = 10 s and exact conservation level_A_m + level_B_m = 0.80 m, the level difference at t=15 s (10 s after opening) is 0.80*exp(-1) ≈ 0.2943 m, giving level_A_m ≈ 0.5472 m and level_B_m ≈ 0.2528 m. These satisfy level_A_m <= 0.75 and level_B_m >= 0.05; expected both conditions true at t=15.0 s."
+    },
+    {
+      "name": "AC-05 near equilibrium by 45 s",
+      "expression": "(abs(level_A_m - 0.40) <= 0.02) and (abs(level_B_m - 0.40) <= 0.02) == 1.0 (relative tolerance 0.000%), at t=45.0",
+      "outcome": "pass",
+      "observed": "Using the stated first-order behavior with tau = 10 s and exact conservation, at t=45 s (40 s after opening) the level difference is 0.80*exp(-4) ≈ 0.01465 m, so level_A_m ≈ 0.40733 m and level_B_m ≈ 0.39267 m. Both are within ±0.02 m of 0.40 m; expected both conditions true at t=45.0 s."
+    },
+    {
+      "name": "AC-06 equilibrium at 150 s",
+      "expression": "(abs(level_A_m - 0.40) <= 0.005) and (abs(level_B_m - 0.40) <= 0.005) == 1.0 (relative tolerance 0.000%), final value",
+      "outcome": "pass",
+      "observed": "Final values are level_A_m = 0.399967 m and level_B_m = 0.400033 m. Deviations from 0.40 m are 0.000033 m and 0.000033 m, both within ±0.005 m; expected both conditions true at final time 150 s."
+    },
+    {
+      "name": "AC-07 total level conserved",
+      "expression": "abs((level_A_m + level_B_m) - 0.80) <= 0.001 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "From the reported extrema and final values, level_A_m + level_B_m equals 0.8 m initially (0.8 + 0.0) and 0.8 m finally (0.399967 + 0.400033). The paired extrema are also symmetric about 0.40 m (0.399944 and 0.400056), consistent with conservation within the ±0.001 m requirement over the run; expected abs(sum-0.80) <= 0.001 always."
+    },
+    {
+      "name": "AC-08 tank levels stay within bounds",
+      "expression": "(level_A_m >= 0) and (level_A_m <= 1.0) and (level_B_m >= 0) and (level_B_m <= 1.0) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "Reported extrema are level_A_m min/max = 0.399944/0.8 m and level_B_m min/max = 0.0/0.400056 m. All remain within [0, 1.0] m for the whole run; expected all bounds satisfied always."
+    },
+    {
+      "name": "REQ-FUN-002 flow begins after valve opens",
+      "expression": "q_m3s > 0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "q_m3s reaches a reported maximum of 0.02 m^3/s, so positive flow did occur after opening; expected q_m3s > 0 at least once."
+    }
+  ],
+  "summary": "The run reproduces the intended transfer and equilibrium behavior: the valve stayed closed through 4 s, opened at 5.000001 s, the tank levels remained at 0.80 m and 0.00 m during the closed interval, and by the end of the 150 s run the levels were essentially equal at 0.399967 m and 0.400033 m, satisfying the stated equilibrium and conservation checks. However, the actual flow trajectory is not fully consistent with the brief’s intended physical meaning, because q_m3s became slightly negative later in the run (minimum -2.81794e-06 m^3/s, final -1.62865e-06 m^3/s), which means the simulated model allowed a tiny reverse flow from Tank B back to Tank A after overshooting equilibrium instead of settling and staying exactly at zero forward flow. That is small and does not break the listed acceptance checks, but it means the end-to-end behavior is not fully faithful to the brief’s statement that flow from A to B relaxes toward zero as the difference closes and that the system stays at equilibrium once reached.",
+  "issues": [
+    "q_m3s is slightly negative later in the run: reported minimum -2.81794e-06 m^3/s and final value -1.62865e-06 m^3/s. This indicates a tiny reverse flow after the levels crossed, rather than flow simply relaxing to zero from the positive side as the brief describes for transfer from Tank A into Tank B.",
+    "The run does not demonstrate that the system 'shall stay' exactly at the shared equilibrium once reached in the strict physical sense implied by REQ-FUN-003, because the reported extrema show level_A_m dipped below 0.400000 m to 0.399944 m while level_B_m rose above 0.400000 m to 0.400056 m, so the trajectory crossed past the stated equilibrium and then reversed slightly instead of remaining there once reached."
+  ],
+  "assumptions": [
+    "The reported variable q_m3s was added so REQ-FUN-002 could be checked mechanically, even though the original note explicitly required reporting only both tank levels and the valve command.",
+    "During 0 to 5 s with valve_open_cmd = 0, connecting flow is assumed to be exactly zero; after opening, q_m3s = k*(level_A_m - level_B_m) with k = 0.025 m^2/s.",
+    "A simulation tolerance of 0.001 was chosen because the brief gives millimeter-scale level tolerances but does not specify solver tolerance.",
+    "A custom signal-flow tank pair component was used instead of a Modelica.Fluid realization, so the run embodies the explicit first-order law on levels rather than a more detailed hydraulic pressure-loss model.",
+    "From the parameter values area = 0.5 m^2 for both tanks and k = 0.025 m^2/s, the model embeds a first-order difference decay with tau = area/(2k) = 10 s and equal-area conservation level_A_m + level_B_m = 0.80 m."
+  ],
+  "root_causes": [
+    "The slight negative q_m3s comes directly from the implemented post-open law q_m3s = k*(level_A_m - level_B_m). Once the numerical trajectory let level_A_m fall just below level_B_m near equilibrium (reported minima/maxima 0.399944 m and 0.400056 m), the computed level difference became negative by about 0.000112 m, and multiplying by k = 0.025 m^2/s gives q ≈ -2.8e-06 m^3/s, matching the reported negative minimum. In plain terms: because the model uses an unconstrained proportional flow law, any tiny overshoot of the levels automatically creates a tiny reverse flow.",
+    "The failure to remain exactly at equilibrium once reached is a consequence of using a continuous proportional law together with finite numerical integration tolerance, not a latching 'stop at equality' rule. The brief’s executable interpretation only inhibits flow when the valve is closed; it does not add a deadband or one-way condition at equilibrium. As a result, the solver can step slightly past level_A_m = level_B_m = 0.40 m, after which the same equation drives a small corrective reverse transfer instead of holding exactly at the equilibrium point."
+  ]
+}

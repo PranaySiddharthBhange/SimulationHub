@@ -1,0 +1,76 @@
+Subject: TankDemo_Rev12
+Document kind: legacy model
+
+## Entities
+* TankDemo_Rev12 -- model
+* A1 -- parameter
+    - area: 1.20 m2 [archived]
+* A2 -- parameter
+    - area: 1.40 m2 [archived]
+* h0 -- parameter
+    - level: 0.05 m [archived]
+* h1High -- parameter
+    - level: 0.78 m [archived]
+* h1Low -- parameter
+    - level: 0.05 m [archived]
+* h2Low -- parameter
+    - level: 0.05 m [archived]
+* qFill -- parameter
+    - flow rate: 0.0060 m3/s [archived]
+* qTransfer -- parameter
+    - flow rate: 0.0045 m3/s [archived]
+* qDrain -- parameter
+    - flow rate: 0.0050 m3/s [archived]
+* wait1 -- parameter
+    - time: 10 s [archived]
+* wait2 -- parameter
+    - time: 10 s [archived]
+* wait3 -- parameter
+    - time: 10 s [archived]
+* tank1Level -- level state
+    - start level: h0 [archived]
+* tank2Level -- level state
+    - start level: h0 [archived]
+* valve1 -- boolean control
+* valve2 -- boolean control
+* valve3 -- boolean control
+* startCmd -- boolean command
+* stopCmd -- boolean command
+* shutCmd -- boolean command
+* StepState -- enumeration type
+* IDLE -- state
+* FILL -- state
+* HOLD1 -- state
+* TRANSFER -- state
+* HOLD2 -- state
+* DRAIN -- state
+* HOLD3 -- state
+* seq -- discrete state
+    - start state: StepState.IDLE [archived]
+* stopped -- discrete boolean state
+    - start value: false [archived]
+* test harness -- actor
+    - button edge times: 20, 220, 280, 650 and 700 seconds [archived]
+
+## Relationships
+* tank1Level depends on derivative equation with valve1 (inflow via qFill and area A1)
+* tank1Level depends on derivative equation with valve2 (outflow via qTransfer and area A1)
+* tank2Level depends on derivative equation with valve2 (inflow via qTransfer and area A2)
+* tank2Level depends on derivative equation with valve3 (outflow via qDrain and area A2)
+
+## Behaviors
+* when edge(startCmd) then stopped := false; [archived]
+* when edge(stopCmd) then stopped := true; [archived]
+
+## Physical relationships
+* der(tank1Level) = (if valve1 then qFill else 0)/A1 - (if valve2 then qTransfer else 0)/A1; [archived]
+* der(tank2Level) = (if valve2 then qTransfer else 0)/A2 - (if valve3 then qDrain else 0)/A2; [archived]
+
+## Control laws
+* valve1 := (seq == StepState.FILL) and not stopped; [archived]
+* valve2 := (seq == StepState.TRANSFER) and not stopped; [archived]
+* valve3 := (seq == StepState.DRAIN) and not stopped; [archived]
+
+## Unreadable
+* State transition details omitted from this archived fragment.
+* SHUT handling was not completed in this revision.

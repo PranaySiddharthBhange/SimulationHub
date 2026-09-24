@@ -1,0 +1,264 @@
+{
+  "document": "09_test_procedure_TP17.pdf",
+  "subject": "PLC-101 sequence behavior",
+  "kind": "test procedure",
+  "entities": [
+    {
+      "name": "PLC-101",
+      "kind": "controller",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Test object             PLC-101 sequence behavior"
+    },
+    {
+      "name": "T1",
+      "kind": "tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "initial level",
+          "value": "0.05",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Initial T1 level                                0.05 m"
+        },
+        {
+          "quantity": "effective high-level setpoint",
+          "value": "0.80",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "effective high-level setpoint of 0.80 m"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Initial T1 level                                0.05 m"
+    },
+    {
+      "name": "T2",
+      "kind": "tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "initial level",
+          "value": "0.05",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Initial T2 level                                0.05 m"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Initial T2 level                                0.05 m"
+    },
+    {
+      "name": "V1",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "inhibit V1, and command V2 and V3 open"
+    },
+    {
+      "name": "V2",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "command V2 and V3 open until both"
+    },
+    {
+      "name": "V3",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "command V2 and V3 open until both"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "PLC-101",
+      "predicate": "controls",
+      "object": "V1",
+      "detail": "automatic operation and shutdown responses command valve state",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V1 shall remain closed and V2/V3 shall be commanded open together"
+    },
+    {
+      "subject": "PLC-101",
+      "predicate": "controls",
+      "object": "V2",
+      "detail": "automatic operation and shutdown responses command valve state",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V1 shall remain closed and V2/V3 shall be commanded open together"
+    },
+    {
+      "subject": "PLC-101",
+      "predicate": "controls",
+      "object": "V3",
+      "detail": "automatic operation and shutdown responses command valve state",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "V1 shall remain closed and V2/V3 shall be commanded open together"
+    }
+  ],
+  "facts": [
+    {
+      "category": "scheduled_command",
+      "statement": "At 20 s, START is scheduled.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "20           START"
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "At 220 s, STOP is scheduled.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "220         STOP"
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "At 280 s, START is scheduled.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "280          START"
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "At 650 s, STOP is scheduled.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "650         STOP"
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "At 700 s, SHUT is scheduled.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "700         SHUT"
+    },
+    {
+      "category": "requirement",
+      "statement": "Verify the two-tank controller normal sequence, STOP/START resume behavior and controlled SHUT behavior in a 900 s simulation.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "Verify the two-tank controller normal sequence, STOP/START resume behavior and controlled SHUT\n behavior in a 900 s simulation."
+    },
+    {
+      "category": "requirement",
+      "statement": "T1 shall reach the effective high-level setpoint of 0.80 m before the first transfer begins.",
+      "ref": "AC-01",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "AC-01 - T1 shall reach the effective high-level setpoint of 0.80 m before the first transfer begins."
+    },
+    {
+      "category": "requirement",
+      "statement": "All valves shall be closed throughout the STOP interval from 220 s until the START command at 280 s.",
+      "ref": "AC-02",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "AC-02 - All valves shall be closed throughout the STOP interval from 220 s until the START command at 280 s."
+    },
+    {
+      "category": "requirement",
+      "statement": "The START at 280 s shall resume the interrupted transfer rather than restart filling.",
+      "ref": "AC-03",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "AC-03 - The START at 280 s shall resume the interrupted transfer rather than restart filling."
+    },
+    {
+      "category": "requirement",
+      "statement": "Following completion of the first T2 drain, the controller shall automatically begin another fill cycle after the effective 8 s inter-cycle delay.",
+      "ref": "AC-04",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "AC-04 - Following completion of the first T2 drain, the controller shall automatically begin another fill cycle after the\n       effective 8 s inter-cycle delay."
+    },
+    {
+      "category": "requirement",
+      "statement": "All valves shall be closed throughout the STOP interval from 650 s until SHUT at 700 s.",
+      "ref": "AC-05",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "AC-05 - All valves shall be closed throughout the STOP interval from 650 s until SHUT at 700 s."
+    },
+    {
+      "category": "requirement",
+      "statement": "At 700 s V1 shall remain closed and V2/V3 shall be commanded open together for controlled draining.",
+      "ref": "AC-06",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "AC-06 - At 700 s V1 shall remain closed and V2/V3 shall be commanded open together for controlled draining."
+    },
+    {
+      "category": "requirement",
+      "statement": "After shutdown drain completion the controller shall return to IDLE with all valves closed and shall remain there through 900 s because no subsequent START is scheduled.",
+      "ref": "AC-07",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "AC-07 - After shutdown drain completion the controller shall return to IDLE with all valves closed and shall remain\n      there through 900 s because no subsequent START is scheduled."
+    },
+    {
+      "category": "requirement",
+      "statement": "Normal automatic operation shall never command V1 and V2 simultaneously, nor V2 and V3 simultaneously. The latter combination is permitted only in SHUTDOWN.",
+      "ref": "AC-08",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "AC-08 - Normal automatic operation shall never command V1 and V2 simultaneously, nor V2 and V3 simultaneously.\n     The latter combination is permitted only in SHUTDOWN."
+    },
+    {
+      "category": "constraint",
+      "statement": "A tolerance of +/-2 s is acceptable for state-boundary comparisons when the effective parameter set is used.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A tolerance of\n +/-2 s is acceptable for state-boundary comparisons when the effective parameter set is used."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

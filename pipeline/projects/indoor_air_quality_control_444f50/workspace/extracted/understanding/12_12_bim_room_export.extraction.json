@@ -1,0 +1,295 @@
+{
+  "document": "{\n  \"export_info\": {\n    \"source\": \"Synthetic IFC/BIM room-property export\",\n    \"revision\": \"BIM-2026-01-20\",\n    \"units\": \"SI\"\n  },\n  \"space\": {\n    \"guid\": \"2f8a7c55-ROOM-201-SYNTH\",\n    \"space_tag\": \"RM-201\",\n    \"name\": \"Seminar / Project Room 201\",\n    \"zone_tag\": \"ZON-201\",\n    \"level\": \"Level 02\",\n    \"gross_floor_area_m2\": 40.0,\n    \"net_floor_area_m2\": 38.6,\n    \"clear_height_m\": 2.59,\n    \"reported_volume_m3\": 100.0,\n    \"occupancy_classification\": \"Assembly - meeting/project room\",\n    \"design_people\": 15\n  },\n  \"air_connections\": [\n    {\n      \"connector_id\": \"SUP-201-A\",\n      \"system\": \"OA-VENT-2\",\n      \"role\": \"supply\",\n      \"x_m\": 2.2,\n      \"y_m\": 1.1,\n      \"z_m\": 2.45,\n      \"nominal_duct_mm\": \"250x150\"\n    },\n    {\n      \"connector_id\": \"EXH-201-A\",\n      \"system\": \"EA-VENT-2\",\n      \"role\": \"exhaust\",\n      \"x_m\": 8.4,\n      \"y_m\": 3.6,\n      \"z_m\": 2.45,\n      \"nominal_duct_mm\": \"250x150\"\n    }\n  ],\n  \"controls_placeholders\": [\n    {\n      \"name\": \"CO2 sensor\",\n      \"location\": \"north wall, 1.5 m AFF\",\n      \"tag_status\": \"not_assigned_in_BIM\"\n    },\n    {\n      \"name\": \"occupancy source\",\n      \"location\": \"logical schedule\",\n      \"tag_status\": \"not_physical\"\n    }\n  ],\n  \"caveat\": \"BIM export is authoritative for spatial identity and room volume only. It is not a controls design source.\"\n}",
+  "subject": "Seminar / Project Room 201",
+  "kind": "engineering register",
+  "entities": [
+    {
+      "name": "Seminar / Project Room 201",
+      "kind": "space",
+      "aliases": [
+        "RM-201",
+        "2f8a7c55-ROOM-201-SYNTH"
+      ],
+      "values": [
+        {
+          "quantity": "gross floor area",
+          "value": "40.0",
+          "unit": "m2",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "\"gross_floor_area_m2\": 40.0"
+        },
+        {
+          "quantity": "net floor area",
+          "value": "38.6",
+          "unit": "m2",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "\"net_floor_area_m2\": 38.6"
+        },
+        {
+          "quantity": "clear height",
+          "value": "2.59",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "\"clear_height_m\": 2.59"
+        },
+        {
+          "quantity": "reported volume",
+          "value": "100.0",
+          "unit": "m3",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "\"reported_volume_m3\": 100.0"
+        },
+        {
+          "quantity": "design people",
+          "value": "15",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "\"design_people\": 15"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"name\": \"Seminar / Project Room 201\""
+    },
+    {
+      "name": "ZON-201",
+      "kind": "zone",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"zone_tag\": \"ZON-201\""
+    },
+    {
+      "name": "Level 02",
+      "kind": "level",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"level\": \"Level 02\""
+    },
+    {
+      "name": "SUP-201-A",
+      "kind": "air connection",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "x position",
+          "value": "2.2",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "\"x_m\": 2.2"
+        },
+        {
+          "quantity": "y position",
+          "value": "1.1",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "\"y_m\": 1.1"
+        },
+        {
+          "quantity": "z position",
+          "value": "2.45",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "\"z_m\": 2.45"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"connector_id\": \"SUP-201-A\""
+    },
+    {
+      "name": "OA-VENT-2",
+      "kind": "air system",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"system\": \"OA-VENT-2\""
+    },
+    {
+      "name": "EXH-201-A",
+      "kind": "air connection",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "x position",
+          "value": "8.4",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "\"x_m\": 8.4"
+        },
+        {
+          "quantity": "y position",
+          "value": "3.6",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "\"y_m\": 3.6"
+        },
+        {
+          "quantity": "z position",
+          "value": "2.45",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "\"z_m\": 2.45"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"connector_id\": \"EXH-201-A\""
+    },
+    {
+      "name": "EA-VENT-2",
+      "kind": "air system",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"system\": \"EA-VENT-2\""
+    },
+    {
+      "name": "CO2 sensor",
+      "kind": "control placeholder",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"name\": \"CO2 sensor\""
+    },
+    {
+      "name": "occupancy source",
+      "kind": "control placeholder",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"name\": \"occupancy source\""
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "Seminar / Project Room 201",
+      "predicate": "in zone",
+      "object": "ZON-201",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"zone_tag\": \"ZON-201\""
+    },
+    {
+      "subject": "Seminar / Project Room 201",
+      "predicate": "on level",
+      "object": "Level 02",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"level\": \"Level 02\""
+    },
+    {
+      "subject": "SUP-201-A",
+      "predicate": "serves as supply connection for",
+      "object": "Seminar / Project Room 201",
+      "detail": "role supply",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"role\": \"supply\""
+    },
+    {
+      "subject": "SUP-201-A",
+      "predicate": "part of system",
+      "object": "OA-VENT-2",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"system\": \"OA-VENT-2\""
+    },
+    {
+      "subject": "EXH-201-A",
+      "predicate": "serves as exhaust connection for",
+      "object": "Seminar / Project Room 201",
+      "detail": "role exhaust",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"role\": \"exhaust\""
+    },
+    {
+      "subject": "EXH-201-A",
+      "predicate": "part of system",
+      "object": "EA-VENT-2",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"system\": \"EA-VENT-2\""
+    },
+    {
+      "subject": "CO2 sensor",
+      "predicate": "located at",
+      "object": "Seminar / Project Room 201",
+      "detail": "north wall, 1.5 m AFF",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"location\": \"north wall, 1.5 m AFF\""
+    },
+    {
+      "subject": "occupancy source",
+      "predicate": "located at",
+      "object": "Seminar / Project Room 201",
+      "detail": "logical schedule",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"location\": \"logical schedule\""
+    }
+  ],
+  "facts": [
+    {
+      "category": "constraint",
+      "statement": "BIM export is authoritative for spatial identity and room volume only.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "\"caveat\": \"BIM export is authoritative for spatial identity and room volume only. It is not a controls design source.\""
+    },
+    {
+      "category": "constraint",
+      "statement": "It is not a controls design source.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "\"caveat\": \"BIM export is authoritative for spatial identity and room volume only. It is not a controls design source.\""
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

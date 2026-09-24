@@ -1,0 +1,31 @@
+{
+  "attempt": 2,
+  "entry_class": "RM201System",
+  "files": [
+    {
+      "filename": "OccupancySchedule.mo",
+      "role": "component"
+    },
+    {
+      "filename": "CO2RoomController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "RM201System.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Continuous.Integrator",
+    "Modelica.Blocks.Sources.BooleanConstant",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Derived from the brief's stated assumption to implement the well-mixed zone mass balance in signal-flow form: room air mass is treated as constant room_volume_m3 * rho_air = 120 kg, and CO2 mass state obeys der(m_CO2) = m_supply_physical*C_out + actual_co2_generation_kg_s - m_supply_physical*C_room.",
+    "The baseline run does not inject sensor invalidity; sensor_valid is therefore driven by a BooleanConstant true source in the system model.",
+    "The brief gives no separate reusable physical component parameters for ducts or boundaries beyond topology; this bundle represents the required well-mixed zone dynamics and control law directly rather than instantiating unparameterized fluid-network duct and boundary surrogates.",
+    "Immediate exit from SENSOR_FAULT on restored sensor validity is implemented per clarified decision."
+  ],
+  "references": []
+}

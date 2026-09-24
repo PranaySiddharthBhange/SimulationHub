@@ -1,0 +1,608 @@
+{
+  "document": "within Hackathon.Legacy;\nmodel RoomCO2Control_Archived_0_9\n  // ARCHIVED MODEL - useful for topology, NOT all effective values.\n  // Known stale values: 350 ppm outdoor CO2 and 12-person peak schedule.\n  parameter Real V = 100 \"Room volume [m3]\";\n  parameter Real rho = 1.2 \"Nominal air density [kg/m3]\";\n  parameter Real C_nominal = 1.519e-3 \"Nominal trace concentration [kg/kg]\";\n  parameter Real C_out = 0.35*C_nominal \"STALE: 350 ppm equivalent\";\n  parameter Real GPeo = 8.18e-6 \"CO2 generation [kg/s/person]\";\n  parameter Real CPeo = 100 \"Trace concentration used by peopleSource [kg/kg]\";\n  parameter Real Kp = 4.0 \"STALE controller tuning [ACH/normalized]\";\n  parameter Real uBias = 3.0 \"STALE ACH bias\";\n  parameter Real uMin = 0.2;\n  parameter Real uMax = 6.0;\n\n  Real nPeo \"occupancy, legacy schedule peaks at 12\";\n  Real mPeoCarrier \"carrier source flow [kg/s]\";\n  Real CRoom \"room CO2 mass fraction [kg/kg]\";\n  Real yCO2 \"normalized feedback\";\n  Real achCmd;\n  Real mFreshCmd \"negative means into room at source port\";\n\n equation\n  mPeoCarrier = nPeo*GPeo/CPeo;\n  yCO2 = CRoom/C_nominal;\n  achCmd = min(uMax,max(uMin,uBias + Kp*(yCO2 - 1)));\n  mFreshCmd = -V*rho/3600*achCmd;\n\n  // Detailed fluid component declarations omitted from this archived extract.\n  // Topology in original graphical model:\n  // CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4\n  // NumberOfPeople -> gain -> peopleSource -> volume\n  // volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow\nend RoomCO2Control_Archived_0_9;\n",
+  "subject": "RoomCO2Control_Archived_0_9",
+  "kind": "legacy model",
+  "entities": [
+    {
+      "name": "RoomCO2Control_Archived_0_9",
+      "kind": "model",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "model RoomCO2Control_Archived_0_9"
+    },
+    {
+      "name": "V",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "Room volume",
+          "value": "100",
+          "unit": "m3",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "parameter Real V = 100 \"Room volume [m3]\""
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real V = 100 \"Room volume [m3]\""
+    },
+    {
+      "name": "rho",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "air density",
+          "value": "1.2",
+          "unit": "kg/m3",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "parameter Real rho = 1.2 \"Nominal air density [kg/m3]\""
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real rho = 1.2 \"Nominal air density [kg/m3]\""
+    },
+    {
+      "name": "C_nominal",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "trace concentration",
+          "value": "1.519e-3",
+          "unit": "kg/kg",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "parameter Real C_nominal = 1.519e-3 \"Nominal trace concentration [kg/kg]\""
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real C_nominal = 1.519e-3 \"Nominal trace concentration [kg/kg]\""
+    },
+    {
+      "name": "C_out",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "outdoor CO2 equivalent",
+          "value": "350",
+          "unit": "ppm",
+          "status": "stale",
+          "supersedes": "",
+          "quote": "Known stale values: 350 ppm outdoor CO2"
+        },
+        {
+          "quantity": "outdoor CO2 concentration",
+          "value": "0.35",
+          "unit": "",
+          "status": "stale",
+          "supersedes": "",
+          "quote": "parameter Real C_out = 0.35*C_nominal \"STALE: 350 ppm equivalent\""
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real C_out = 0.35*C_nominal \"STALE: 350 ppm equivalent\""
+    },
+    {
+      "name": "GPeo",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "CO2 generation",
+          "value": "8.18e-6",
+          "unit": "kg/s/person",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "parameter Real GPeo = 8.18e-6 \"CO2 generation [kg/s/person]\""
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real GPeo = 8.18e-6 \"CO2 generation [kg/s/person]\""
+    },
+    {
+      "name": "CPeo",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "trace concentration used by peopleSource",
+          "value": "100",
+          "unit": "kg/kg",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "parameter Real CPeo = 100 \"Trace concentration used by peopleSource [kg/kg]\""
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real CPeo = 100 \"Trace concentration used by peopleSource [kg/kg]\""
+    },
+    {
+      "name": "Kp",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "controller tuning",
+          "value": "4.0",
+          "unit": "ACH/normalized",
+          "status": "stale",
+          "supersedes": "",
+          "quote": "parameter Real Kp = 4.0 \"STALE controller tuning [ACH/normalized]\""
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real Kp = 4.0 \"STALE controller tuning [ACH/normalized]\""
+    },
+    {
+      "name": "uBias",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "ACH bias",
+          "value": "3.0",
+          "unit": "",
+          "status": "stale",
+          "supersedes": "",
+          "quote": "parameter Real uBias = 3.0 \"STALE ACH bias\""
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real uBias = 3.0 \"STALE ACH bias\""
+    },
+    {
+      "name": "uMin",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "minimum",
+          "value": "0.2",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "parameter Real uMin = 0.2;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real uMin = 0.2;"
+    },
+    {
+      "name": "uMax",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "maximum",
+          "value": "6.0",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "parameter Real uMax = 6.0;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real uMax = 6.0;"
+    },
+    {
+      "name": "nPeo",
+      "kind": "variable",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "occupancy peak schedule",
+          "value": "12",
+          "unit": "person",
+          "status": "stale",
+          "supersedes": "",
+          "quote": "Known stale values: 350 ppm outdoor CO2 and 12-person peak schedule."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Real nPeo \"occupancy, legacy schedule peaks at 12\";"
+    },
+    {
+      "name": "mPeoCarrier",
+      "kind": "variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Real mPeoCarrier \"carrier source flow [kg/s]\";"
+    },
+    {
+      "name": "CRoom",
+      "kind": "variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Real CRoom \"room CO2 mass fraction [kg/kg]\";"
+    },
+    {
+      "name": "yCO2",
+      "kind": "variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Real yCO2 \"normalized feedback\";"
+    },
+    {
+      "name": "achCmd",
+      "kind": "variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Real achCmd;"
+    },
+    {
+      "name": "mFreshCmd",
+      "kind": "variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Real mFreshCmd \"negative means into room at source port\";"
+    },
+    {
+      "name": "CAtm",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4"
+    },
+    {
+      "name": "freshAir",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4"
+    },
+    {
+      "name": "ductIn",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4"
+    },
+    {
+      "name": "volume",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4"
+    },
+    {
+      "name": "ductOut",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4"
+    },
+    {
+      "name": "boundary4",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4"
+    },
+    {
+      "name": "NumberOfPeople",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "NumberOfPeople -> gain -> peopleSource -> volume"
+    },
+    {
+      "name": "gain",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "NumberOfPeople -> gain -> peopleSource -> volume"
+    },
+    {
+      "name": "peopleSource",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "NumberOfPeople -> gain -> peopleSource -> volume"
+    },
+    {
+      "name": "traceVolume",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow"
+    },
+    {
+      "name": "gainSensor",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow"
+    },
+    {
+      "name": "PID",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow"
+    },
+    {
+      "name": "gain1",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow"
+    },
+    {
+      "name": "freshAir.m_flow",
+      "kind": "signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow"
+    },
+    {
+      "name": "volume.C",
+      "kind": "signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "CAtm",
+      "predicate": "connects to",
+      "object": "freshAir",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4"
+    },
+    {
+      "subject": "freshAir",
+      "predicate": "connects to",
+      "object": "ductIn",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4"
+    },
+    {
+      "subject": "ductIn",
+      "predicate": "connects to",
+      "object": "volume",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4"
+    },
+    {
+      "subject": "volume",
+      "predicate": "connects to",
+      "object": "ductOut",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4"
+    },
+    {
+      "subject": "ductOut",
+      "predicate": "connects to",
+      "object": "boundary4",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CAtm -> freshAir -> ductIn -> volume -> ductOut -> boundary4"
+    },
+    {
+      "subject": "NumberOfPeople",
+      "predicate": "connects to",
+      "object": "gain",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "NumberOfPeople -> gain -> peopleSource -> volume"
+    },
+    {
+      "subject": "gain",
+      "predicate": "connects to",
+      "object": "peopleSource",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "NumberOfPeople -> gain -> peopleSource -> volume"
+    },
+    {
+      "subject": "peopleSource",
+      "predicate": "connects to",
+      "object": "volume",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "NumberOfPeople -> gain -> peopleSource -> volume"
+    },
+    {
+      "subject": "volume.C",
+      "predicate": "connects to",
+      "object": "traceVolume",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow"
+    },
+    {
+      "subject": "traceVolume",
+      "predicate": "connects to",
+      "object": "gainSensor",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow"
+    },
+    {
+      "subject": "gainSensor",
+      "predicate": "connects to",
+      "object": "PID",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow"
+    },
+    {
+      "subject": "PID",
+      "predicate": "connects to",
+      "object": "gain1",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow"
+    },
+    {
+      "subject": "gain1",
+      "predicate": "connects to",
+      "object": "freshAir.m_flow",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "volume.C -> traceVolume -> gainSensor -> PID -> gain1 -> freshAir.m_flow"
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "mPeoCarrier = nPeo*GPeo/CPeo;",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "mPeoCarrier = nPeo*GPeo/CPeo;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "yCO2 = CRoom/C_nominal;",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "yCO2 = CRoom/C_nominal;"
+    },
+    {
+      "category": "control_law",
+      "statement": "achCmd = min(uMax,max(uMin,uBias + Kp*(yCO2 - 1)));",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "achCmd = min(uMax,max(uMin,uBias + Kp*(yCO2 - 1)));"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "mFreshCmd = -V*rho/3600*achCmd;",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "mFreshCmd = -V*rho/3600*achCmd;"
+    }
+  ],
+  "unreadable": [
+    "Detailed fluid component declarations omitted from this archived extract."
+  ],
+  "unverified_quotes": []
+}

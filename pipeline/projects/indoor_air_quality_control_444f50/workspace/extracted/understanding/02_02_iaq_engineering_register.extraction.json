@@ -1,0 +1,1018 @@
+{
+  "document": "02_iaq_engineering_register.xlsx",
+  "subject": "Room CO2 Feedback-Control System - Synthetic Requirements Register",
+  "kind": "engineering register",
+  "entities": [
+    {
+      "name": "ZON-201",
+      "kind": "Well-mixed room volume",
+      "aliases": [
+        "volume"
+      ],
+      "values": [
+        {
+          "quantity": "Volume",
+          "value": "100",
+          "unit": "m^3",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A4=ZON-201 | B4=volume | C4=Well-mixed room volume | D4=Controlled air volume | E4=Volume | F4=100 | G4=m^3"
+        },
+        {
+          "quantity": "controlled room air volume",
+          "value": "100",
+          "unit": "m^3",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C9=The controlled room air volume shall be 100 m^3."
+        }
+      ],
+      "ref": "IAQ-PER-001",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A4=ZON-201 | B4=volume | C4=Well-mixed room volume"
+    },
+    {
+      "name": "SRC-OA-201",
+      "kind": "Controlled mass-flow source",
+      "aliases": [
+        "freshAir"
+      ],
+      "values": [
+        {
+          "quantity": "Outdoor CO2",
+          "value": "300",
+          "unit": "ppm",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A5=SRC-OA-201 | B5=freshAir | C5=Controlled mass-flow source | D5=Outdoor air supply | E5=Outdoor CO2 | F5=300 | G5=ppm"
+        },
+        {
+          "quantity": "outdoor-air CO2 concentration",
+          "value": "300",
+          "unit": "ppm",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C7=The outdoor-air CO2 concentration used by the demonstration model shall be 300 ppm."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A5=SRC-OA-201 | B5=freshAir | C5=Controlled mass-flow source"
+    },
+    {
+      "name": "BND-201",
+      "kind": "Pressure boundary",
+      "aliases": [
+        "boundary4"
+      ],
+      "values": [
+        {
+          "quantity": "Pressure",
+          "value": "101325",
+          "unit": "Pa",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A6=BND-201 | B6=boundary4 | C6=Pressure boundary | D6=Room exhaust sink | E6=Pressure | F6=101325 | G6=Pa"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A6=BND-201 | B6=boundary4 | C6=Pressure boundary"
+    },
+    {
+      "name": "SRC-CO2-201",
+      "kind": "Trace-substance mass source",
+      "aliases": [
+        "peopleSource"
+      ],
+      "values": [
+        {
+          "quantity": "C_source",
+          "value": "100",
+          "unit": "kg/kg",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A7=SRC-CO2-201 | B7=peopleSource | C7=Trace-substance mass source | D7=Occupant CO2 generation | E7=C_source | F7=100 | G7=kg/kg"
+        },
+        {
+          "quantity": "trace-substance concentration parameter",
+          "value": "100",
+          "unit": "kg/kg",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C12=The peopleSource implementation shall use a trace-substance concentration parameter of 100 kg/kg"
+        },
+        {
+          "quantity": "C",
+          "value": "100",
+          "unit": "kg/kg",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C35=The value C={100} kg/kg in the peopleSource shall not be interpreted as the physical room concentration or a realistic gas mixture composition."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A7=SRC-CO2-201 | B7=peopleSource | C7=Trace-substance mass source"
+    },
+    {
+      "name": "SCH-OCC-201",
+      "kind": "Occupancy schedule",
+      "aliases": [
+        "NumberOfPeople"
+      ],
+      "values": [
+        {
+          "quantity": "Maximum occupancy",
+          "value": "15",
+          "unit": "person",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A8=SCH-OCC-201 | B8=NumberOfPeople | C8=Occupancy schedule | D8=People count source | E8=Maximum occupancy | F8=15 | G8=person"
+        },
+        {
+          "quantity": "maximum occupants",
+          "value": "15",
+          "unit": "occupants",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C25=The controller demonstration shall use the approved weekday occupancy schedule with a maximum of 15 occupants."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A8=SCH-OCC-201 | B8=NumberOfPeople | C8=Occupancy schedule"
+    },
+    {
+      "name": "SEN-CO2-201",
+      "kind": "CO2 trace sensor",
+      "aliases": [
+        "traceVolume"
+      ],
+      "values": [
+        {
+          "quantity": "Nominal concentration",
+          "value": "0.001519",
+          "unit": "kg/kg",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A9=SEN-CO2-201 | B9=traceVolume | C9=CO2 trace sensor | D9=Measures room concentration | E9=Nominal concentration | F9=0.001519 | G9=kg/kg"
+        },
+        {
+          "quantity": "measurement invalid timeout",
+          "value": "60",
+          "unit": "s",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C31=If the room CO2 sensor signal is invalid for more than 60 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A9=SEN-CO2-201 | B9=traceVolume | C9=CO2 trace sensor"
+    },
+    {
+      "name": "GAIN-NORM-201",
+      "kind": "Gain",
+      "aliases": [
+        "gainSensor"
+      ],
+      "values": [
+        {
+          "quantity": "Gain",
+          "value": "658.327847",
+          "unit": "1/(kg/kg)",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A10=GAIN-NORM-201 | B10=gainSensor | C10=Gain | D10=Normalize CO2 measurement | E10=Gain | F10=658.327847 | G10=1/(kg/kg)"
+        },
+        {
+          "quantity": "normalized value",
+          "value": "1.0",
+          "unit": "",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C15=The controller input shall be normalized such that a measured concentration of 1.519E-3 kg/kg produces a normalized value of 1.0."
+        },
+        {
+          "quantity": "measured concentration",
+          "value": "1.519E-3",
+          "unit": "kg/kg",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C15=The controller input shall be normalized such that a measured concentration of 1.519E-3 kg/kg produces a normalized value of 1.0."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A10=GAIN-NORM-201 | B10=gainSensor | C10=Gain"
+    },
+    {
+      "name": "CTL-CO2-201",
+      "kind": "PID/P controller",
+      "aliases": [
+        "PID"
+      ],
+      "values": [
+        {
+          "quantity": "Kp",
+          "value": "6",
+          "unit": "ACH/normalized",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A11=CTL-CO2-201 | B11=PID | C11=PID/P controller | D11=Ventilation feedback | E11=Kp | F11=6 | G11=ACH/normalized"
+        },
+        {
+          "quantity": "proportional gain",
+          "value": "4.0",
+          "unit": "ACH per normalized concentration error",
+          "status": "superseded",
+          "supersedes": "CR-IAQ-007",
+          "quote": "C22=The controller proportional gain shall be 4.0 ACH per normalized concentration error."
+        },
+        {
+          "quantity": "proportional gain",
+          "value": "6.0",
+          "unit": "ACH per normalized concentration error",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C23=The controller proportional gain shall be 6.0 ACH per normalized concentration error with an output bias of 3.5 ACH."
+        },
+        {
+          "quantity": "output bias",
+          "value": "3.5",
+          "unit": "ACH",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C23=The controller proportional gain shall be 6.0 ACH per normalized concentration error with an output bias of 3.5 ACH."
+        },
+        {
+          "quantity": "fallback command",
+          "value": "4.0",
+          "unit": "ACH",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C31=If the room CO2 sensor signal is invalid for more than 60 s, the controller shall command 4.0 ACH and raise a sensor-fault indication."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A11=CTL-CO2-201 | B11=PID | C11=PID/P controller"
+    },
+    {
+      "name": "SET-CO2-201",
+      "kind": "Constant setpoint",
+      "aliases": [
+        "CO2Set"
+      ],
+      "values": [
+        {
+          "quantity": "Setpoint",
+          "value": "1",
+          "unit": "normalized",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A12=SET-CO2-201 | B12=CO2Set | C12=Constant setpoint | D12=Normalized CO2 limit | E12=Setpoint | F12=1 | G12=normalized"
+        },
+        {
+          "quantity": "CO2 setpoint",
+          "value": "1.0",
+          "unit": "normalized concentration units",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C16=The CO2 setpoint presented to the controller shall be 1.0 in normalized concentration units."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A12=SET-CO2-201 | B12=CO2Set | C12=Constant setpoint"
+    },
+    {
+      "name": "GAIN-AIR-201",
+      "kind": "Gain",
+      "aliases": [
+        "gain1"
+      ],
+      "values": [
+        {
+          "quantity": "Gain",
+          "value": "-0.0333333333",
+          "unit": "kg/s per ACH",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A13=GAIN-AIR-201 | B13=gain1 | C13=Gain | D13=ACH to source mass flow | E13=Gain | F13=-0.0333333333 | G13=kg/s per ACH"
+        },
+        {
+          "quantity": "minimum ACH command",
+          "value": "0.2",
+          "unit": "ACH",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C18=The ventilation command shall be limited to 0.2 through 6.0 ACH during automatic operation."
+        },
+        {
+          "quantity": "maximum ACH command",
+          "value": "6.0",
+          "unit": "ACH",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C18=The ventilation command shall be limited to 0.2 through 6.0 ACH during automatic operation."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A13=GAIN-AIR-201 | B13=gain1 | C13=Gain"
+    },
+    {
+      "name": "GAIN-PEO-201",
+      "kind": "Gain",
+      "aliases": [
+        "gain"
+      ],
+      "values": [
+        {
+          "quantity": "Gain",
+          "value": "8.18e-08",
+          "unit": "kg/(s.person)",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A14=GAIN-PEO-201 | B14=gain | C14=Gain | D14=People count to carrier mass flow | E14=Gain | F14=8.18e-08 | G14=kg/(s.person)"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A14=GAIN-PEO-201 | B14=gain | C14=Gain"
+    },
+    {
+      "name": "SET-OA-201",
+      "kind": "Constant",
+      "aliases": [
+        "CAtm"
+      ],
+      "values": [
+        {
+          "quantity": "C_out",
+          "value": "0.0004557",
+          "unit": "kg/kg",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A15=SET-OA-201 | B15=CAtm | C15=Constant | D15=Outdoor trace concentration | E15=C_out | F15=0.0004557 | G15=kg/kg"
+        },
+        {
+          "quantity": "fresh-air concentration",
+          "value": "300",
+          "unit": "ppm",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C14=The fresh-air concentration of 300 ppm shall be represented as 0.3 times the nominal 1000 ppm mass fraction."
+        },
+        {
+          "quantity": "factor",
+          "value": "0.3",
+          "unit": "",
+          "status": "active",
+          "supersedes": "",
+          "quote": "C14=The fresh-air concentration of 300 ppm shall be represented as 0.3 times the nominal 1000 ppm mass fraction."
+        },
+        {
+          "quantity": "nominal mass fraction",
+          "value": "1.519E-3",
+          "unit": "kg/kg",
+          "status": "active",
+          "supersedes": "",
+          "quote": "J14=C_out = 0.3 * 1.519E-3 kg/kg."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A15=SET-OA-201 | B15=CAtm | C15=Constant"
+    },
+    {
+      "name": "DUCT-IN-201",
+      "kind": "Duct segment",
+      "aliases": [
+        "ductIn"
+      ],
+      "values": [
+        {
+          "quantity": "Ports",
+          "value": "2",
+          "unit": "count",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A16=DUCT-IN-201 | B16=ductIn | C16=Duct segment | D16=Supply connection | E16=Ports | F16=2 | G16=count"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A16=DUCT-IN-201 | B16=ductIn | C16=Duct segment"
+    },
+    {
+      "name": "DUCT-OUT-201",
+      "kind": "Duct segment",
+      "aliases": [
+        "ductOut"
+      ],
+      "values": [
+        {
+          "quantity": "Ports",
+          "value": "2",
+          "unit": "count",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "A17=DUCT-OUT-201 | B17=ductOut | C17=Duct segment | D17=Exhaust connection | E17=Ports | F17=2 | G17=count"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Component_Schedule]",
+      "from_image": false,
+      "quote": "A17=DUCT-OUT-201 | B17=ductOut | C17=Duct segment"
+    },
+    {
+      "name": "room CO2 sensor signal",
+      "kind": "signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "C31=If the room CO2 sensor signal is invalid for more than 60 s"
+    },
+    {
+      "name": "sensor-fault indication",
+      "kind": "indication",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "C31=If the room CO2 sensor signal is invalid for more than 60 s, the controller shall command 4.0 ACH and raise a sensor-fault indication."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "SRC-OA-201",
+      "predicate": "connects_to",
+      "object": "DUCT-IN-201",
+      "detail": "Supply -> duct",
+      "ref": "IF-AIR-01",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A4=IF-AIR-01 | B4=SRC-OA-201 | C4=airPort | D4=DUCT-IN-201 | E4=port_a | F4=Moist air + CO2 | G4=Supply -> duct"
+    },
+    {
+      "subject": "DUCT-IN-201",
+      "predicate": "connects_to",
+      "object": "ZON-201",
+      "detail": "Duct -> room",
+      "ref": "IF-AIR-02",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A5=IF-AIR-02 | B5=DUCT-IN-201 | C5=port_b | D5=ZON-201 | E5=supplyPort | F5=Moist air + CO2 | G5=Duct -> room"
+    },
+    {
+      "subject": "ZON-201",
+      "predicate": "connects_to",
+      "object": "DUCT-OUT-201",
+      "detail": "Room -> duct",
+      "ref": "IF-AIR-03",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A6=IF-AIR-03 | B6=ZON-201 | C6=exhaustPort | D6=DUCT-OUT-201 | E6=port_a | F6=Room air + CO2 | G6=Room -> duct"
+    },
+    {
+      "subject": "DUCT-OUT-201",
+      "predicate": "connects_to",
+      "object": "BND-201",
+      "detail": "Duct -> boundary",
+      "ref": "IF-AIR-04",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A7=IF-AIR-04 | B7=DUCT-OUT-201 | C7=port_b | D7=BND-201 | E7=airPort | F7=Room air + CO2 | G7=Duct -> boundary"
+    },
+    {
+      "subject": "SRC-CO2-201",
+      "predicate": "injects_into",
+      "object": "ZON-201",
+      "detail": "Source -> room",
+      "ref": "IF-TRC-01",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A8=IF-TRC-01 | B8=SRC-CO2-201 | C8=tracePort | D8=ZON-201 | E8=traceInjection | F8=CO2 trace substance | G8=Source -> room"
+    },
+    {
+      "subject": "SCH-OCC-201",
+      "predicate": "signals_to",
+      "object": "GAIN-PEO-201",
+      "detail": "Schedule -> gain",
+      "ref": "IF-SIG-01",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A9=IF-SIG-01 | B9=SCH-OCC-201 | C9=nPeo | D9=GAIN-PEO-201 | E9=u | F9=People count | G9=Schedule -> gain"
+    },
+    {
+      "subject": "GAIN-PEO-201",
+      "predicate": "signals_to",
+      "object": "SRC-CO2-201",
+      "detail": "Gain -> source",
+      "ref": "IF-SIG-02",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A10=IF-SIG-02 | B10=GAIN-PEO-201 | C10=y | D10=SRC-CO2-201 | E10=m_flow | F10=Carrier mass flow | G10=Gain -> source"
+    },
+    {
+      "subject": "SET-OA-201",
+      "predicate": "signals_to",
+      "object": "SRC-OA-201",
+      "detail": "Constant -> source",
+      "ref": "IF-SIG-03",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A11=IF-SIG-03 | B11=SET-OA-201 | C11=C_out | D11=SRC-OA-201 | E11=C | F11=Outdoor CO2 mass fraction | G11=Constant -> source"
+    },
+    {
+      "subject": "ZON-201",
+      "predicate": "signals_to",
+      "object": "SEN-CO2-201",
+      "detail": "Room -> sensor",
+      "ref": "IF-SIG-04",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A12=IF-SIG-04 | B12=ZON-201 | C12=C_room | D12=SEN-CO2-201 | E12=medium | F12=Room trace concentration | G12=Room -> sensor"
+    },
+    {
+      "subject": "SEN-CO2-201",
+      "predicate": "signals_to",
+      "object": "GAIN-NORM-201",
+      "detail": "Sensor -> gain",
+      "ref": "IF-SIG-05",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A13=IF-SIG-05 | B13=SEN-CO2-201 | C13=C | D13=GAIN-NORM-201 | E13=u | F13=Measured CO2 | G13=Sensor -> gain"
+    },
+    {
+      "subject": "GAIN-NORM-201",
+      "predicate": "signals_to",
+      "object": "CTL-CO2-201",
+      "detail": "Gain -> controller",
+      "ref": "IF-SIG-06",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A14=IF-SIG-06 | B14=GAIN-NORM-201 | C14=y | D14=CTL-CO2-201 | E14=measurement | F14=Normalized CO2 | G14=Gain -> controller"
+    },
+    {
+      "subject": "SET-CO2-201",
+      "predicate": "signals_to",
+      "object": "CTL-CO2-201",
+      "detail": "Constant -> controller",
+      "ref": "IF-SIG-07",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A15=IF-SIG-07 | B15=SET-CO2-201 | C15=setpoint | D15=CTL-CO2-201 | E15=setpoint | F15=Normalized setpoint | G15=Constant -> controller"
+    },
+    {
+      "subject": "CTL-CO2-201",
+      "predicate": "signals_to",
+      "object": "GAIN-AIR-201",
+      "detail": "Controller -> gain",
+      "ref": "IF-SIG-08",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A16=IF-SIG-08 | B16=CTL-CO2-201 | C16=ACH_cmd | D16=GAIN-AIR-201 | E16=u | F16=Air-change command | G16=Controller -> gain"
+    },
+    {
+      "subject": "GAIN-AIR-201",
+      "predicate": "signals_to",
+      "object": "SRC-OA-201",
+      "detail": "Gain -> fresh air",
+      "ref": "IF-SIG-09",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A17=IF-SIG-09 | B17=GAIN-AIR-201 | C17=m_flow_cmd | D17=SRC-OA-201 | E17=m_flow | F17=Source mass-flow command | G17=Gain -> fresh air"
+    },
+    {
+      "subject": "Room CO2 Feedback-Control System - Synthetic Requirements Register",
+      "predicate": "provides_outdoor_air_to",
+      "object": "ZON-201",
+      "detail": "through the supply-air path",
+      "ref": "IAQ-FUN-001",
+      "anchor": "[sheet Requirements_Register]",
+      "from_image": false,
+      "quote": "C4=The system shall provide outdoor air to the room through the supply-air path and discharge room air through the exhaust path."
+    },
+    {
+      "subject": "Room CO2 Feedback-Control System - Synthetic Requirements Register",
+      "predicate": "discharges_room_air_through",
+      "object": "BND-201",
+      "detail": "through the exhaust path",
+      "ref": "IAQ-FUN-001",
+      "anchor": "[sheet Requirements_Register]",
+      "from_image": false,
+      "quote": "C4=The system shall provide outdoor air to the room through the supply-air path and discharge room air through the exhaust path."
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "The system shall provide outdoor air to the room through the supply-air path and discharge room air through the exhaust path.",
+      "ref": "IAQ-FUN-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C4=The system shall provide outdoor air to the room through the supply-air path and discharge room air through the exhaust path."
+    },
+    {
+      "category": "requirement",
+      "statement": "The ventilation controller shall modulate fresh-air mass flow using measured room CO2 concentration as feedback.",
+      "ref": "IAQ-FUN-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C5=The ventilation controller shall modulate fresh-air mass flow using measured room CO2 concentration as feedback."
+    },
+    {
+      "category": "requirement",
+      "statement": "The occupied-room CO2 concentration shall not exceed 1000 ppm under the design occupancy schedule.",
+      "ref": "IAQ-FUN-003",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C6=The occupied-room CO2 concentration shall not exceed 1000 ppm under the design occupancy schedule."
+    },
+    {
+      "category": "requirement",
+      "statement": "The outdoor-air CO2 concentration used by the demonstration model shall be 300 ppm.",
+      "ref": "IAQ-FUN-004",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C7=The outdoor-air CO2 concentration used by the demonstration model shall be 300 ppm."
+    },
+    {
+      "category": "requirement",
+      "statement": "CO2 generation shall be proportional to the number of occupants scheduled in the room.",
+      "ref": "IAQ-FUN-005",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C8=CO2 generation shall be proportional to the number of occupants scheduled in the room."
+    },
+    {
+      "category": "requirement",
+      "statement": "The controlled room air volume shall be 100 m^3.",
+      "ref": "IAQ-PER-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C9=The controlled room air volume shall be 100 m^3."
+    },
+    {
+      "category": "requirement",
+      "statement": "The nominal air density for ventilation mass-flow conversion shall be 1.2 kg/m^3.",
+      "ref": "IAQ-PER-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C10=The nominal air density for ventilation mass-flow conversion shall be 1.2 kg/m^3."
+    },
+    {
+      "category": "requirement",
+      "statement": "Each occupant shall contribute 8.18E-6 kg/s of CO2 at the design activity level.",
+      "ref": "IAQ-PER-003",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C11=Each occupant shall contribute 8.18E-6 kg/s of CO2 at the design activity level."
+    },
+    {
+      "category": "requirement",
+      "statement": "The peopleSource implementation shall use a trace-substance concentration parameter of 100 kg/kg and a carrier mass-flow command equal to occupant CO2 generation divided by 100.",
+      "ref": "IAQ-PER-004",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C12=The peopleSource implementation shall use a trace-substance concentration parameter of 100 kg/kg and a carrier mass-flow command equal to occupant CO2 generation divided by 100."
+    },
+    {
+      "category": "requirement",
+      "statement": "The nominal trace-substance concentration used for equation scaling shall be 1.519E-3 kg/kg.",
+      "ref": "IAQ-PER-005",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C13=The nominal trace-substance concentration used for equation scaling shall be 1.519E-3 kg/kg."
+    },
+    {
+      "category": "requirement",
+      "statement": "The fresh-air concentration of 300 ppm shall be represented as 0.3 times the nominal 1000 ppm mass fraction.",
+      "ref": "IAQ-PER-006",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C14=The fresh-air concentration of 300 ppm shall be represented as 0.3 times the nominal 1000 ppm mass fraction."
+    },
+    {
+      "category": "requirement",
+      "statement": "The controller input shall be normalized such that a measured concentration of 1.519E-3 kg/kg produces a normalized value of 1.0.",
+      "ref": "IAQ-CTL-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C15=The controller input shall be normalized such that a measured concentration of 1.519E-3 kg/kg produces a normalized value of 1.0."
+    },
+    {
+      "category": "requirement",
+      "statement": "The CO2 setpoint presented to the controller shall be 1.0 in normalized concentration units.",
+      "ref": "IAQ-CTL-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C16=The CO2 setpoint presented to the controller shall be 1.0 in normalized concentration units."
+    },
+    {
+      "category": "requirement",
+      "statement": "The ventilation controller output shall represent an air-change-rate command in ACH.",
+      "ref": "IAQ-CTL-003",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C17=The ventilation controller output shall represent an air-change-rate command in ACH."
+    },
+    {
+      "category": "constraint",
+      "statement": "The ventilation command shall be limited to 0.2 through 6.0 ACH during automatic operation.",
+      "ref": "IAQ-CTL-004",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C18=The ventilation command shall be limited to 0.2 through 6.0 ACH during automatic operation."
+    },
+    {
+      "category": "requirement",
+      "statement": "The ACH command shall be converted to source mass-flow magnitude using room volume, nominal air density and 3600 s/h.",
+      "ref": "IAQ-CTL-005",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C19=The ACH command shall be converted to source mass-flow magnitude using room volume, nominal air density and 3600 s/h."
+    },
+    {
+      "category": "requirement",
+      "statement": "The simulation source component shall use negative mass-flow sign for air entering the room because of the source-port sign convention.",
+      "ref": "IAQ-CTL-006",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C20=The simulation source component shall use negative mass-flow sign for air entering the room because of the source-port sign convention."
+    },
+    {
+      "category": "requirement",
+      "statement": "The controller shall use the absolute 1000 ppm room concentration as its compliance limit.",
+      "ref": "IAQ-CTL-007",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C21=The controller shall use the absolute 1000 ppm room concentration as its compliance limit."
+    },
+    {
+      "category": "requirement",
+      "statement": "The controller proportional gain shall be 4.0 ACH per normalized concentration error.",
+      "ref": "IAQ-CTL-008",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "superseded",
+      "from_image": false,
+      "quote": "C22=The controller proportional gain shall be 4.0 ACH per normalized concentration error."
+    },
+    {
+      "category": "requirement",
+      "statement": "The controller proportional gain shall be 6.0 ACH per normalized concentration error with an output bias of 3.5 ACH.",
+      "ref": "IAQ-CTL-009",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C23=The controller proportional gain shall be 6.0 ACH per normalized concentration error with an output bias of 3.5 ACH."
+    },
+    {
+      "category": "requirement",
+      "statement": "Integral action shall be disabled in the released hackathon reference run to avoid negative windup during long unoccupied periods.",
+      "ref": "IAQ-CTL-010",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C24=Integral action shall be disabled in the released hackathon reference run to avoid negative windup during long unoccupied periods."
+    },
+    {
+      "category": "requirement",
+      "statement": "The controller demonstration shall use the approved weekday occupancy schedule with a maximum of 15 occupants.",
+      "ref": "IAQ-SCH-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C25=The controller demonstration shall use the approved weekday occupancy schedule with a maximum of 15 occupants."
+    },
+    {
+      "category": "requirement",
+      "statement": "The number-of-people signal shall be piecewise constant between defined schedule change times.",
+      "ref": "IAQ-SCH-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C26=The number-of-people signal shall be piecewise constant between defined schedule change times."
+    },
+    {
+      "category": "requirement",
+      "statement": "The room CO2 measurement shall be represented internally as a Real-valued trace-substance mass fraction in kg/kg.",
+      "ref": "IAQ-INT-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C27=The room CO2 measurement shall be represented internally as a Real-valued trace-substance mass fraction in kg/kg."
+    },
+    {
+      "category": "requirement",
+      "statement": "The controller shall provide a Real-valued ACH command to the airflow conversion gain.",
+      "ref": "IAQ-INT-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C28=The controller shall provide a Real-valued ACH command to the airflow conversion gain."
+    },
+    {
+      "category": "requirement",
+      "statement": "The occupancy schedule shall provide an integer-valued people count to the CO2 source calculation.",
+      "ref": "IAQ-INT-003",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C29=The occupancy schedule shall provide an integer-valued people count to the CO2 source calculation."
+    },
+    {
+      "category": "requirement",
+      "statement": "The fresh-air source shall receive both a mass-flow command and a trace-substance concentration parameter.",
+      "ref": "IAQ-INT-004",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C30=The fresh-air source shall receive both a mass-flow command and a trace-substance concentration parameter."
+    },
+    {
+      "category": "behavior",
+      "statement": "If the room CO2 sensor signal is invalid for more than 60 s, the controller shall command 4.0 ACH and raise a sensor-fault indication.",
+      "ref": "IAQ-SAF-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C31=If the room CO2 sensor signal is invalid for more than 60 s, the controller shall command 4.0 ACH and raise a sensor-fault indication."
+    },
+    {
+      "category": "requirement",
+      "statement": "The 24-hour reference simulation shall log room CO2, outdoor CO2, occupant count, ACH command and physical supply mass flow at 60 s intervals.",
+      "ref": "IAQ-VER-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C32=The 24-hour reference simulation shall log room CO2, outdoor CO2, occupant count, ACH command and physical supply mass flow at 60 s intervals."
+    },
+    {
+      "category": "requirement",
+      "statement": "During the approved 24-hour reference run, the maximum room CO2 concentration shall be no greater than 1000 ppm.",
+      "ref": "IAQ-VER-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C33=During the approved 24-hour reference run, the maximum room CO2 concentration shall be no greater than 1000 ppm."
+    },
+    {
+      "category": "requirement",
+      "statement": "The conversion between ppm and kg/kg for this benchmark shall use molecular weights 44.01 kg/kmol for CO2 and 28.97 kg/kmol for dry air.",
+      "ref": "IAQ-DAT-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C34=The conversion between ppm and kg/kg for this benchmark shall use molecular weights 44.01 kg/kmol for CO2 and 28.97 kg/kmol for dry air."
+    },
+    {
+      "category": "requirement",
+      "statement": "The value C={100} kg/kg in the peopleSource shall not be interpreted as the physical room concentration or a realistic gas mixture composition.",
+      "ref": "IAQ-DAT-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "C35=The value C={100} kg/kg in the peopleSource shall not be interpreted as the physical room concentration or a realistic gas mixture composition."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "C_out = 0.3 * 1.519E-3 kg/kg.",
+      "ref": "",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "J14=C_out = 0.3 * 1.519E-3 kg/kg."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "m_air = ACH*V*rho/3600.",
+      "ref": "",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "J19=m_air = ACH*V*rho/3600."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "=C_ppm/1E6*MW_CO2/MW_air",
+      "ref": "",
+      "anchor": "[sheet Parameter_Calculations]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "E16==C_ppm/1E6*MW_CO2/MW_air"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "=Cout_ppm/1E6*MW_CO2/MW_air",
+      "ref": "",
+      "anchor": "[sheet Parameter_Calculations]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "E17==Cout_ppm/1E6*MW_CO2/MW_air"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "=0.3*C_nom_project",
+      "ref": "",
+      "anchor": "[sheet Parameter_Calculations]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "E19==0.3*C_nom_project"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "=V*rho",
+      "ref": "",
+      "anchor": "[sheet Parameter_Calculations]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "E20==V*rho"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "=V*rho/3600",
+      "ref": "",
+      "anchor": "[sheet Parameter_Calculations]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "E21==V*rho/3600"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "=-V*rho/3600",
+      "ref": "",
+      "anchor": "[sheet Parameter_Calculations]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "E22==-V*rho/3600"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "=G_person/C_source",
+      "ref": "",
+      "anchor": "[sheet Parameter_Calculations]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "E23==G_person/C_source"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "=m_people_carrier*C_source",
+      "ref": "",
+      "anchor": "[sheet Parameter_Calculations]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "E24==m_people_carrier*C_source"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "=1/C_nom_project",
+      "ref": "",
+      "anchor": "[sheet Parameter_Calculations]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "E25==1/C_nom_project"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

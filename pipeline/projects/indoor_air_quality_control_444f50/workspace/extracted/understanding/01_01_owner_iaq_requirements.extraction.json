@@ -1,0 +1,474 @@
+{
+  "document": "01_owner_iaq_requirements.pdf",
+  "subject": "RM-201 Indoor Air Quality Control - Owner Requirements",
+  "kind": "requirement specification",
+  "entities": [
+    {
+      "name": "RM-201 single-zone demand-controlled outdoor-air demonstration",
+      "kind": "system",
+      "aliases": [],
+      "values": [],
+      "ref": "URS-IAQ-001",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "RM-201 single-zone demand-controlled outdoor-air demonstration"
+    },
+    {
+      "name": "room",
+      "kind": "component",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "air volume",
+          "value": "100",
+          "unit": "m3",
+          "status": "required",
+          "supersedes": "",
+          "quote": "single well-mixed air volume of 100 m3"
+        }
+      ],
+      "ref": "URS-IAQ-001",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The room shall be represented as a single well-mixed air volume of 100 m3."
+    },
+    {
+      "name": "outdoor-air source",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "an outdoor-air source"
+    },
+    {
+      "name": "exhaust boundary",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "an exhaust boundary"
+    },
+    {
+      "name": "occupant CO2 generation",
+      "kind": "process",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "occupant\n CO2 generation"
+    },
+    {
+      "name": "room CO2 measurement",
+      "kind": "sensor",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a room CO2 measurement"
+    },
+    {
+      "name": "feedback controller",
+      "kind": "controller",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a feedback controller that adjusts ventilation"
+    },
+    {
+      "name": "ventilation controller",
+      "kind": "controller",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The ventilation controller shall modulate fresh-air flow using measured room CO2 as feedback."
+    },
+    {
+      "name": "room CO2",
+      "kind": "quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "maximum concentration during approved occupied schedule",
+          "value": "1000",
+          "unit": "ppm",
+          "status": "required",
+          "supersedes": "",
+          "quote": "room CO2 shall not exceed 1000 ppm"
+        }
+      ],
+      "ref": "URS-IAQ-004",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "room CO2 shall not exceed 1000 ppm"
+    },
+    {
+      "name": "reference outdoor-air CO2 concentration",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "CO2 concentration",
+          "value": "300",
+          "unit": "ppm",
+          "status": "required",
+          "supersedes": "",
+          "quote": "shall be 300 ppm"
+        }
+      ],
+      "ref": "URS-IAQ-005",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The reference outdoor-air CO2 concentration shall be 300 ppm."
+    },
+    {
+      "name": "design occupant CO2 generation rate",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "CO2 generation rate",
+          "value": "8.18E-6",
+          "unit": "kg/s per person",
+          "status": "required",
+          "supersedes": "",
+          "quote": "shall be 8.18E-6 kg/s per person"
+        }
+      ],
+      "ref": "URS-IAQ-007",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The design occupant CO2 generation rate shall be 8.18E-6 kg/s per person."
+    },
+    {
+      "name": "released demonstration",
+      "kind": "system",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "peak occupancy",
+          "value": "12",
+          "unit": "persons",
+          "status": "required",
+          "supersedes": "",
+          "quote": "peak occupancy of at least 12 persons"
+        }
+      ],
+      "ref": "URS-IAQ-008",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The released demonstration shall support a peak occupancy of at least 12 persons."
+    },
+    {
+      "name": "outdoor air",
+      "kind": "fluid",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Outdoor air shall be supplied through a controlled airflow path"
+    },
+    {
+      "name": "controlled airflow path",
+      "kind": "path",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a controlled airflow path"
+    },
+    {
+      "name": "room air",
+      "kind": "fluid",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "room air shall leave through an\n exhaust path"
+    },
+    {
+      "name": "exhaust path",
+      "kind": "path",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "exhaust path"
+    },
+    {
+      "name": "fresh-air flow",
+      "kind": "flow",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "modulate fresh-air flow"
+    },
+    {
+      "name": "measured room CO2",
+      "kind": "measurement",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "using measured room CO2 as feedback"
+    },
+    {
+      "name": "scheduled number of occupants",
+      "kind": "schedule parameter",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "scheduled number of occupants"
+    },
+    {
+      "name": "approved occupied schedule",
+      "kind": "schedule",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "During the approved occupied schedule"
+    },
+    {
+      "name": "representative daily occupancy schedule",
+      "kind": "schedule",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a representative daily\n occupancy schedule"
+    },
+    {
+      "name": "occupant count",
+      "kind": "quantity",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "record occupant count"
+    },
+    {
+      "name": "outdoor CO2",
+      "kind": "quantity",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "outdoor CO2"
+    },
+    {
+      "name": "commanded ventilation",
+      "kind": "quantity",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "commanded ventilation"
+    },
+    {
+      "name": "physical ventilation flow",
+      "kind": "quantity",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "physical ventilation flow"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "outdoor air",
+      "predicate": "supplied through",
+      "object": "controlled airflow path",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Outdoor air shall be supplied through a controlled airflow path"
+    },
+    {
+      "subject": "room air",
+      "predicate": "leave through",
+      "object": "exhaust path",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "room air shall leave through an\n exhaust path"
+    },
+    {
+      "subject": "ventilation controller",
+      "predicate": "modulates",
+      "object": "fresh-air flow",
+      "detail": "using measured room CO2 as feedback",
+      "ref": "URS-IAQ-003",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The ventilation controller shall modulate fresh-air flow using measured room CO2 as feedback."
+    },
+    {
+      "subject": "CO2 generation",
+      "predicate": "proportional to",
+      "object": "scheduled number of occupants",
+      "detail": "",
+      "ref": "URS-IAQ-006",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "CO2 generation shall be proportional to the scheduled number of occupants."
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "The system shall represent a room, an outdoor-air source, an exhaust boundary, occupant CO2 generation, a room CO2 measurement, and a feedback controller that adjusts ventilation.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "The system shall represent a room, an outdoor-air source, an exhaust boundary, occupant\n CO2 generation, a room CO2 measurement, and a feedback controller that adjusts ventilation."
+    },
+    {
+      "category": "requirement",
+      "statement": "The room shall be represented as a single well-mixed air volume of 100 m3.",
+      "ref": "URS-IAQ-001",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "URS-IAQ-001 - The room shall be represented as a single well-mixed air volume of 100 m3."
+    },
+    {
+      "category": "requirement",
+      "statement": "Outdoor air shall be supplied through a controlled airflow path and room air shall leave through an exhaust path.",
+      "ref": "URS-IAQ-002",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "URS-IAQ-002 - Outdoor air shall be supplied through a controlled airflow path and room air shall leave through an\n exhaust path."
+    },
+    {
+      "category": "requirement",
+      "statement": "The ventilation controller shall modulate fresh-air flow using measured room CO2 as feedback.",
+      "ref": "URS-IAQ-003",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "URS-IAQ-003 - The ventilation controller shall modulate fresh-air flow using measured room CO2 as feedback."
+    },
+    {
+      "category": "requirement",
+      "statement": "During the approved occupied schedule, room CO2 shall not exceed 1000 ppm.",
+      "ref": "URS-IAQ-004",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "URS-IAQ-004 - During the approved occupied schedule, room CO2 shall not exceed 1000 ppm."
+    },
+    {
+      "category": "requirement",
+      "statement": "The reference outdoor-air CO2 concentration shall be 300 ppm.",
+      "ref": "URS-IAQ-005",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "URS-IAQ-005 - The reference outdoor-air CO2 concentration shall be 300 ppm."
+    },
+    {
+      "category": "requirement",
+      "statement": "CO2 generation shall be proportional to the scheduled number of occupants.",
+      "ref": "URS-IAQ-006",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "URS-IAQ-006 - CO2 generation shall be proportional to the scheduled number of occupants."
+    },
+    {
+      "category": "requirement",
+      "statement": "The design occupant CO2 generation rate shall be 8.18E-6 kg/s per person.",
+      "ref": "URS-IAQ-007",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "URS-IAQ-007 - The design occupant CO2 generation rate shall be 8.18E-6 kg/s per person."
+    },
+    {
+      "category": "constraint",
+      "statement": "The released demonstration shall support a peak occupancy of at least 12 persons.",
+      "ref": "URS-IAQ-008",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "URS-IAQ-008 - The released demonstration shall support a peak occupancy of at least 12 persons."
+    },
+    {
+      "category": "requirement",
+      "statement": "A numerical simulation shall demonstrate the CO2 feedback behavior over a representative daily occupancy schedule.",
+      "ref": "URS-IAQ-009",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "URS-IAQ-009 - A numerical simulation shall demonstrate the CO2 feedback behavior over a representative daily\n occupancy schedule."
+    },
+    {
+      "category": "requirement",
+      "statement": "Concentration and airflow quantities shall be represented with explicit engineering units or unambiguous normalization definitions.",
+      "ref": "URS-IAQ-010",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "URS-IAQ-010 - Concentration and airflow quantities shall be represented with explicit engineering units or\n unambiguous normalization definitions."
+    },
+    {
+      "category": "requirement",
+      "statement": "The model shall distinguish physical outdoor-air flow direction from any implementation-specific source sign convention.",
+      "ref": "URS-IAQ-011",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "URS-IAQ-011 - The model shall distinguish physical outdoor-air flow direction from any implementation-specific\n source sign convention."
+    },
+    {
+      "category": "requirement",
+      "statement": "Verification evidence shall record occupant count, room CO2, outdoor CO2, commanded ventilation, and physical ventilation flow.",
+      "ref": "URS-IAQ-012",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "URS-IAQ-012 - Verification evidence shall record occupant count, room CO2, outdoor CO2, commanded ventilation,\n and physical ventilation flow."
+    },
+    {
+      "category": "requirement",
+      "statement": "Detailed controls tuning, the final occupancy schedule, and resolution of ambiguous wording may be established by later approved engineering records.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "Detailed controls tuning, the final occupancy schedule, and resolution of\n ambiguous wording may be established by later approved engineering records."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

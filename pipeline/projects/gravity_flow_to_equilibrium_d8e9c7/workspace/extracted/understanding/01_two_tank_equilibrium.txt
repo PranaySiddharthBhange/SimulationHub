@@ -1,0 +1,65 @@
+Subject: Two Tanks, One Above The Other — Gravity Flow To Equilibrium
+Document kind: requirement specification
+
+## Entities
+* Tank A -- tank; aliases: Tank A (upper)
+    - cross-sectional area: 0.5 m^2 [current]
+    - height: 1.0 m [current]
+    - starting level: 0.80 m [current]
+    - starting time: 0 s [current]
+    - equilibrium level: 0.40 m [current]
+* Tank B -- tank; aliases: Tank B (lower)
+    - cross-sectional area: 0.5 m^2 [current]
+    - height: 1.0 m [current]
+    - starting level: 0 m [current]
+    - starting time: 0 s [current]
+    - equilibrium level: 0.40 m [current]
+* Connecting valve -- valve
+    - closed interval start: 0 s [current]
+    - closed interval end: 5 s [current]
+    - open time: 5 s [current]
+    - command at t=4 s: 0 [current]
+    - command at t=6 s: 1 [current]
+* connecting flow -- flow
+    - conductance k: 0.025 m^2/s [current]
+* system -- system
+    - simulation duration: 150 seconds [required]
+    - total level sum: 0.80 m [current]
+    - initial time: 0 s [current]
+    - time constant tau: 10 s [current]
+    - acceptance time: 150 s [required]
+    - pre-open check time: 4 s [required]
+    - post-open check time: 6 s [required]
+    - flow visible check time: 15 s [required]
+    - equilibrium approach check time: 45 s [required]
+
+## Relationships
+* Tank A physically above Tank B
+* Tank A joined by single pipe with Connecting valve (Two open tanks stand at different heights and are joined by a single pipe with an on/off valve.)
+* connecting flow runs from Tank A (source while level_A > level_B)
+* connecting flow runs to Tank B (destination while level_A > level_B)
+
+## Requirements
+* Simulate for 150 seconds and report both tank levels and the connecting valve's open/closed command for the whole run. [required]  <REQ-SIM-001>
+* The valve shall stay closed and both levels shall stay exactly at their starting values (0.80 m and 0.00 m) for the entire closed interval, t = 0 to t = 5 s. [required]  <REQ-FUN-001>
+* At t = 5 s the valve shall open and flow shall begin from Tank A into Tank B, so Tank A's level falls and Tank B's level rises from that point on. [required]  <REQ-FUN-002>
+* Given equal tank areas and the stated conductance `k`, the system shall relax toward a shared equilibrium level of 0.40 m in each tank (the starting 0.80 m of liquid split evenly across two equal-area tanks) and shall stay there for the remainder of the run once reached. [required]  <REQ-FUN-003>
+* `valve_open_cmd == 0` at t = 4 s. [required]  <AC-01>
+* `level_A_m == 0.80` and `level_B_m == 0.00` at t = 4 s (absolute tolerance 0.001 m) [required]  <AC-02>
+* `valve_open_cmd == 1` at t = 6 s [required]  <AC-03>
+* `level_A_m <= 0.75` and `level_B_m >= 0.05` at t = 15 s [required]  <AC-04>
+* `abs(level_A_m - 0.40) <= 0.02` and `abs(level_B_m - 0.40) <= 0.02` at t = 45 s [required]  <AC-05>
+* `level_A_m == 0.40` and `level_B_m == 0.40` at t = 150 s (absolute tolerance 0.005 m) [required]  <AC-06>
+* `level_A_m + level_B_m == 0.80` holds at all times (absolute tolerance 0.001 m), from t = 0 through t = 150 s [required]  <AC-07>
+
+## Constraints
+* `level_A_m >= 0` and `level_A_m <= 1.0`, and `level_B_m >= 0` and `level_B_m <= 1.0`, hold for the entire run. [required]  <AC-08>
+
+## Behaviors
+* If `level_A > level_B`, flow runs from A to B and relaxes toward zero as the difference closes. [current]
+
+## Physical relationships
+* `q = k * (level_A - level_B)` [current]
+* `level_A + level_B` is constant at 0.80 m from t = 0 onward, before and
+  after the valve opens. [current]
+* `tau = area / (2*k) = 10 s` [current]

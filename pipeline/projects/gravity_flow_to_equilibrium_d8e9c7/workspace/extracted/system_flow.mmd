@@ -1,0 +1,18 @@
+flowchart TD
+    A["Start simulation at t = 0 s"] --> B["Initialize Tank A (upper): level_A_m = 0.80 m<br/>Initialize Tank B (lower): level_B_m = 0.00 m<br/>Set valve_open_cmd = 0"]
+    B --> C{"t < 5 s?"}
+    C -->|Yes| D["Valve closed interval: valve_open_cmd = 0<br/>q_m3s = 0<br/>Hold level_A_m = 0.80 m and level_B_m = 0.00 m"]
+    D --> E{"t reached 5 s?"}
+    E -->|No| D
+    E -->|Yes| F["At t = 5 s open Connecting valve<br/>Set valve_open_cmd = 1"]
+    C -->|No| F
+    F --> G["Compute connecting flow: q_m3s = 0.025 m^2/s * (level_A_m - level_B_m)"]
+    G --> H{"level_A_m > level_B_m?"}
+    H -->|Yes| I["Flow from Tank A to Tank B<br/>level_A_m falls, level_B_m rises<br/>level_A_m + level_B_m stays 0.80 m"]
+    H -->|No| J["Shared equilibrium: level_A_m = 0.40 m<br/>level_B_m = 0.40 m<br/>q_m3s = 0"]
+    I --> K{"Near shared equilibrium reached?"}
+    K -->|No| G
+    K -->|Yes| J
+    J --> L{"t < 150 s?"}
+    L -->|Yes| J
+    L -->|No| M["End at t = 150 s<br/>Report level_A_m, level_B_m, valve_open_cmd, q_m3s for whole run"]

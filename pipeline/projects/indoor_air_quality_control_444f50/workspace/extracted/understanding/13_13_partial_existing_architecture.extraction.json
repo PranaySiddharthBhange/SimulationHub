@@ -1,0 +1,173 @@
+{
+  "document": "@startuml\n' Existing architecture draft - intentionally incomplete\nskinparam componentStyle rectangle\ncomponent \"RoomVolume\\nV=100 m3\" as Room\ncomponent \"FreshAirSource\" as OA\ncomponent \"ExhaustBoundary\" as EXH\ncomponent \"CO2 Sensor\\noutput: ppm ?\" as S\ncomponent \"PID\" as PID\ncomponent \"People CO2\" as P\n\nOA --> Room : supply air\nRoom --> EXH : exhaust air\nRoom --> S : concentration\nS --> PID : CO2\nPID --> OA : airflow request\nP --> Room : CO2\n\nnote right of S\nLegacy draft assumes sensor output is ppm.\nICD-IAQ-03 later freezes the internal\nfeedback interface in kg/kg and adds a\nnormalization gain.\nend note\n\nnote bottom of P\nOccupancy schedule block not shown.\nSource carrier-flow scaling not shown.\nend note\n@enduml\n",
+  "subject": "Existing architecture draft",
+  "kind": "diagram",
+  "entities": [
+    {
+      "name": "Room",
+      "kind": "component",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "volume",
+          "value": "100",
+          "unit": "m3",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "V=100 m3"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"RoomVolume\\nV=100 m3\" as Room"
+    },
+    {
+      "name": "OA",
+      "kind": "component",
+      "aliases": [
+        "FreshAirSource"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"FreshAirSource\" as OA"
+    },
+    {
+      "name": "EXH",
+      "kind": "component",
+      "aliases": [
+        "ExhaustBoundary"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"ExhaustBoundary\" as EXH"
+    },
+    {
+      "name": "S",
+      "kind": "component",
+      "aliases": [
+        "CO2 Sensor"
+      ],
+      "values": [
+        {
+          "quantity": "output",
+          "value": "ppm ?",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "output: ppm ?"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"CO2 Sensor\\noutput: ppm ?\" as S"
+    },
+    {
+      "name": "PID",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"PID\" as PID"
+    },
+    {
+      "name": "P",
+      "kind": "component",
+      "aliases": [
+        "People CO2"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"People CO2\" as P"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "OA",
+      "predicate": "supplies air to",
+      "object": "Room",
+      "detail": "supply air",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "OA --> Room : supply air"
+    },
+    {
+      "subject": "Room",
+      "predicate": "exhausts air to",
+      "object": "EXH",
+      "detail": "exhaust air",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Room --> EXH : exhaust air"
+    },
+    {
+      "subject": "Room",
+      "predicate": "provides concentration to",
+      "object": "S",
+      "detail": "concentration",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Room --> S : concentration"
+    },
+    {
+      "subject": "S",
+      "predicate": "provides CO2 to",
+      "object": "PID",
+      "detail": "CO2",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "S --> PID : CO2"
+    },
+    {
+      "subject": "PID",
+      "predicate": "requests airflow from",
+      "object": "OA",
+      "detail": "airflow request",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "PID --> OA : airflow request"
+    },
+    {
+      "subject": "P",
+      "predicate": "provides CO2 to",
+      "object": "Room",
+      "detail": "CO2",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P --> Room : CO2"
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "Legacy draft assumes sensor output is ppm.",
+      "ref": "",
+      "anchor": "",
+      "status": "archived",
+      "from_image": false,
+      "quote": "Legacy draft assumes sensor output is ppm."
+    }
+  ],
+  "unreadable": [
+    "The sensor output is shown as uncertain: \"output: ppm ?\".",
+    "The note references a later document without fully specifying the normalization gain: \"ICD-IAQ-03 later freezes the internal feedback interface in kg/kg and adds a normalization gain.\"",
+    "The diagram is intentionally incomplete: \"Existing architecture draft - intentionally incomplete\".",
+    "Not shown elements are noted: \"Occupancy schedule block not shown.\" and \"Source carrier-flow scaling not shown.\""
+  ],
+  "unverified_quotes": []
+}

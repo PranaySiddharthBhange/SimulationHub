@@ -1,0 +1,388 @@
+{
+  "document": "[tabular data: 1441 rows, 15 columns]\ncolumns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode\nThese are RECORDED values -- an observation of a run that already happened, not a scenario input and not a command schedule.\nrange of each column across all 1441 rows:\n  time_s: 0 .. 86400\n  occupants_person: 0 .. 15\n  outdoor_co2_ppm: 300 .. 300\n  outdoor_co2_mass_fraction_kgkg: 0.0004557 .. 0.0004557\n  room_co2_ppm: 300 .. 996.524\n  room_co2_mass_fraction_kgkg: 0.0004557 .. 0.00151372\n  normalized_co2_feedback: 0.3 .. 0.996524\n  normalized_setpoint: 1 .. 1\n  ach_command_1_per_h: 0.2 .. 3.47914\n  source_m_flow_command_kg_s: -0.115971 .. -0.00666667\n  physical_supply_m_flow_kg_s: 0.00666667 .. 0.115971\n  people_source_carrier_m_flow_kg_s: 0 .. 1.227e-06\n  actual_co2_generation_kg_s: 0 .. 0.0001227\n  controller_mode: AUTO_CO2, AUTO_MIN\nrows where a discrete column changes value, which is the event structure of this run (12 of 1441 rows shown; the rest repeat the previous row's state):\n  time_s=0 | clock_time=00:00:00 | occupants_person=0 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=300.0 | room_co2_mass_fraction_kgkg=0.00045569999999999996 | normalized_co2_feedback=0.3 | normalized_setpoint=1.0 | ach_command_1_per_h=0.2 | source_m_flow_command_kg_s=-0.006666666666666667 | physical_supply_m_flow_kg_s=0.006666666666666667 | people_source_carrier_m_flow_kg_s=0.0 | actual_co2_generation_kg_s=0.0 | controller_mode=AUTO_MIN\n  time_s=25200 | clock_time=07:00:00 | occupants_person=2 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=300.0897520298442 | room_co2_mass_fraction_kgkg=0.0004558363333333333 | normalized_co2_feedback=0.30008975202984417 | normalized_setpoint=1.0 | ach_command_1_per_h=0.2 | source_m_flow_command_kg_s=-0.006666666666666667 | physical_supply_m_flow_kg_s=0.006666666666666667 | people_source_carrier_m_flow_kg_s=1.6359999999999998e-07 | actual_co2_generation_kg_s=1.636e-05 | controller_mode=AUTO_MIN\n  time_s=27000 | clock_time=07:30:00 | occupants_person=2 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=453.8016246067138 | room_co2_mass_fraction_kgkg=0.0006893246677775982 | normalized_co2_feedback=0.4538016246067138 | normalized_setpoint=1.0 | ach_command_1_per_h=0.22232819645134372 | source_m_flow_command_kg_s=-0.0074109398817114565 | physical_supply_m_flow_kg_s=0.0074109398817114565 | people_source_carrier_m_flow_kg_s=1.6359999999999998e-07 | actual_co2_generation_kg_s=1.636e-05 | controller_mode=AUTO_CO2\n  time_s=28800 | clock_time=08:00:00 | occupants_person=8 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=553.5108849142671 | room_co2_mass_fraction_kgkg=0.0008407830341847716 | normalized_co2_feedback=0.553510884914267 | normalized_setpoint=1.0 | ach_command_1_per_h=0.8192570001950368 | source_m_flow_command_kg_s=-0.027308566673167892 | physical_supply_m_flow_kg_s=0.027308566673167892 | people_source_carrier_m_flow_kg_s=6.543999999999999e-07 | actual_co2_generation_kg_s=6.544e-05 | controller_mode=AUTO_CO2\n  time_s=36000 | clock_time=10:00:00 | occupants_person=12 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=826.2765556492662 | room_co2_mass_fraction_kgkg=0.0012551140880312354 | normalized_co2_feedback=0.8262765556492663 | normalized_setpoint=1.0 | ach_command_1_per_h=2.456582261930368 | source_m_flow_command_kg_s=-0.08188607539767893 | physical_supply_m_flow_kg_s=0.08188607539767893 | people_source_carrier_m_flow_kg_s=9.816e-07 | actual_co2_generation_kg_s=9.816e-05 | controller_mode=AUTO_CO2\n  time_s=43200 | clock_time=12:00:00 | occupants_person=4 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=929.3848108834878 | room_co2_mass_fraction_kgkg=0.001411735527732018 | normalized_co2_feedback=0.9293848108834878 | normalized_setpoint=1.0 | ach_command_1_per_h=3.078462912593638 | source_m_flow_command_kg_s=-0.10261543041978792 | physical_supply_m_flow_kg_s=0.10261543041978792 | people_source_carrier_m_flow_kg_s=3.2719999999999997e-07 | actual_co2_generation_kg_s=3.272e-05 | controller_mode=AUTO_CO2\n  time_s=46800 | clock_time=13:00:00 | occupants_person=15 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=695.3686330959188 | room_co2_mass_fraction_kgkg=0.0010562649536727006 | normalized_co2_feedback=0.6953686330959188 | normalized_setpoint=1.0 | ach_command_1_per_h=1.6692715565711842 | source_m_flow_command_kg_s=-0.05564238521903947 | physical_supply_m_flow_kg_s=0.05564238521903947 | people_source_carrier_m_flow_kg_s=1.227e-06 | actual_co2_generation_kg_s=0.0001227 | controller_mode=AUTO_CO2\n  time_s=54000 | clock_time=15:00:00 | occupants_person=10 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=996.2992083489642 | room_co2_mass_fraction_kgkg=0.0015133784974820765 | normalized_co2_feedback=0.9962992083489641 | normalized_setpoint=1.0 | ach_command_1_per_h=3.4791415294352497 | source_m_flow_command_kg_s=-0.11597138431450833 | physical_supply_m_flow_kg_s=0.11597138431450833 | people_source_carrier_m_flow_kg_s=8.179999999999999e-07 | actual_co2_generation_kg_s=8.18e-05 | controller_mode=AUTO_CO2\n  time_s=61200 | clock_time=17:00:00 | occupants_person=3 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=880.1870438594829 | room_co2_mass_fraction_kgkg=0.0013370041196225544 | normalized_co2_feedback=0.8801870438594829 | normalized_setpoint=1.0 | ach_command_1_per_h=2.7830070596760716 | source_m_flow_command_kg_s=-0.09276690198920239 | physical_supply_m_flow_kg_s=0.09276690198920239 | people_source_carrier_m_flow_kg_s=2.454e-07 | actual_co2_generation_kg_s=2.454e-05 | controller_mode=AUTO_CO2\n  time_s=64800 | clock_time=18:00:00 | occupants_person=0 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=653.4637215248508 | room_co2_mass_fraction_kgkg=0.0009926113929962484 | normalized_co2_feedback=0.6534637215248509 | normalized_setpoint=1.0 | ach_command_1_per_h=1.42162014524328 | source_m_flow_command_kg_s=-0.04738733817477599 | physical_supply_m_flow_kg_s=0.04738733817477599 | people_source_carrier_m_flow_kg_s=0.0 | actual_co2_generation_kg_s=0.0 | controller_mode=AUTO_CO2\n  time_s=70500 | clock_time=19:35:00 | occupants_person=0 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=449.78126851509074 | room_co2_mass_fraction_kgkg=0.0006832177468744228 | normalized_co2_feedback=0.44978126851509076 | normalized_setpoint=1.0 | ach_command_1_per_h=0.2 | source_m_flow_command_kg_s=-0.006666666666666667 | physical_supply_m_flow_kg_s=0.006666666666666667 | people_source_carrier_m_flow_kg_s=0.0 | actual_co2_generation_kg_s=0.0 | controller_mode=AUTO_MIN\n  time_s=86400 | clock_time=24:00:00 | occupants_person=0 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=361.9184470295561 | room_co2_mass_fraction_kgkg=0.0005497541210378957 | normalized_co2_feedback=0.3619184470295561 | normalized_setpoint=1.0 | ach_command_1_per_h=0.2 | source_m_flow_command_kg_s=-0.006666666666666667 | physical_supply_m_flow_kg_s=0.006666666666666667 | people_source_carrier_m_flow_kg_s=0.0 | actual_co2_generation_kg_s=0.0 | controller_mode=AUTO_MIN",
+  "subject": "RECORDED values -- an observation of a run that already happened",
+  "kind": "dataset",
+  "entities": [
+    {
+      "name": "occupants_person",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "occupants_person",
+          "value": "0 .. 15",
+          "unit": "person",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "occupants_person: 0 .. 15"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "outdoor_co2_ppm",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "outdoor_co2_ppm",
+          "value": "300 .. 300",
+          "unit": "ppm",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "outdoor_co2_ppm: 300 .. 300"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "outdoor_co2_mass_fraction_kgkg",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "outdoor_co2_mass_fraction_kgkg",
+          "value": "0.0004557 .. 0.0004557",
+          "unit": "kgkg",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "outdoor_co2_mass_fraction_kgkg: 0.0004557 .. 0.0004557"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "room_co2_ppm",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "room_co2_ppm",
+          "value": "300 .. 996.524",
+          "unit": "ppm",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "room_co2_ppm: 300 .. 996.524"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "room_co2_mass_fraction_kgkg",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "room_co2_mass_fraction_kgkg",
+          "value": "0.0004557 .. 0.00151372",
+          "unit": "kgkg",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "room_co2_mass_fraction_kgkg: 0.0004557 .. 0.00151372"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "normalized_co2_feedback",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "normalized_co2_feedback",
+          "value": "0.3 .. 0.996524",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "normalized_co2_feedback: 0.3 .. 0.996524"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "normalized_setpoint",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "normalized_setpoint",
+          "value": "1 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "normalized_setpoint: 1 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "ach_command_1_per_h",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "ach_command_1_per_h",
+          "value": "0.2 .. 3.47914",
+          "unit": "1_per_h",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "ach_command_1_per_h: 0.2 .. 3.47914"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "source_m_flow_command_kg_s",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "source_m_flow_command_kg_s",
+          "value": "-0.115971 .. -0.00666667",
+          "unit": "kg_s",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "source_m_flow_command_kg_s: -0.115971 .. -0.00666667"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "physical_supply_m_flow_kg_s",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "physical_supply_m_flow_kg_s",
+          "value": "0.00666667 .. 0.115971",
+          "unit": "kg_s",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "physical_supply_m_flow_kg_s: 0.00666667 .. 0.115971"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "people_source_carrier_m_flow_kg_s",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "people_source_carrier_m_flow_kg_s",
+          "value": "0 .. 1.227e-06",
+          "unit": "kg_s",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "people_source_carrier_m_flow_kg_s: 0 .. 1.227e-06"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "actual_co2_generation_kg_s",
+      "kind": "recorded quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "actual_co2_generation_kg_s",
+          "value": "0 .. 0.0001227",
+          "unit": "kg_s",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "actual_co2_generation_kg_s: 0 .. 0.0001227"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "columns: time_s, clock_time, occupants_person, outdoor_co2_ppm, outdoor_co2_mass_fraction_kgkg, room_co2_ppm, room_co2_mass_fraction_kgkg, normalized_co2_feedback, normalized_setpoint, ach_command_1_per_h, source_m_flow_command_kg_s, physical_supply_m_flow_kg_s, people_source_carrier_m_flow_kg_s, actual_co2_generation_kg_s, controller_mode"
+    },
+    {
+      "name": "controller_mode",
+      "kind": "controller mode",
+      "aliases": [
+        "AUTO_CO2",
+        "AUTO_MIN"
+      ],
+      "values": [
+        {
+          "quantity": "controller_mode states",
+          "value": "AUTO_CO2, AUTO_MIN",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "controller_mode: AUTO_CO2, AUTO_MIN"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller_mode: AUTO_CO2, AUTO_MIN"
+    }
+  ],
+  "relationships": [],
+  "facts": [
+    {
+      "category": "behavior",
+      "statement": "This dataset records a run over 1441 rows from time_s 0 to 86400.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "[tabular data: 1441 rows, 15 columns]"
+    },
+    {
+      "category": "behavior",
+      "statement": "The recorded run is explicitly described as an observation of a run that already happened, not a scenario input and not a command schedule.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "These are RECORDED values -- an observation of a run that already happened, not a scenario input and not a command schedule."
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=0 (00:00:00), controller_mode was AUTO_MIN with occupants_person=0 and ach_command_1_per_h=0.2.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=0 | clock_time=00:00:00 | occupants_person=0 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=300.0 | room_co2_mass_fraction_kgkg=0.00045569999999999996 | normalized_co2_feedback=0.3 | normalized_setpoint=1.0 | ach_command_1_per_h=0.2 | source_m_flow_command_kg_s=-0.006666666666666667 | physical_supply_m_flow_kg_s=0.006666666666666667 | people_source_carrier_m_flow_kg_s=0.0 | actual_co2_generation_kg_s=0.0 | controller_mode=AUTO_MIN"
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=25200 (07:00:00), occupants_person changed to 2 while controller_mode remained AUTO_MIN.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=25200 | clock_time=07:00:00 | occupants_person=2 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=300.0897520298442 | room_co2_mass_fraction_kgkg=0.0004558363333333333 | normalized_co2_feedback=0.30008975202984417 | normalized_setpoint=1.0 | ach_command_1_per_h=0.2 | source_m_flow_command_kg_s=-0.006666666666666667 | physical_supply_m_flow_kg_s=0.006666666666666667 | people_source_carrier_m_flow_kg_s=1.6359999999999998e-07 | actual_co2_generation_kg_s=1.636e-05 | controller_mode=AUTO_MIN"
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=27000 (07:30:00), controller_mode changed to AUTO_CO2 and ach_command_1_per_h rose to 0.22232819645134372.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=27000 | clock_time=07:30:00 | occupants_person=2 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=453.8016246067138 | room_co2_mass_fraction_kgkg=0.0006893246677775982 | normalized_co2_feedback=0.4538016246067138 | normalized_setpoint=1.0 | ach_command_1_per_h=0.22232819645134372 | source_m_flow_command_kg_s=-0.0074109398817114565 | physical_supply_m_flow_kg_s=0.0074109398817114565 | people_source_carrier_m_flow_kg_s=1.6359999999999998e-07 | actual_co2_generation_kg_s=1.636e-05 | controller_mode=AUTO_CO2"
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=28800 (08:00:00), occupants_person changed to 8.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=28800 | clock_time=08:00:00 | occupants_person=8 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=553.5108849142671 | room_co2_mass_fraction_kgkg=0.0008407830341847716 | normalized_co2_feedback=0.553510884914267 | normalized_setpoint=1.0 | ach_command_1_per_h=0.8192570001950368 | source_m_flow_command_kg_s=-0.027308566673167892 | physical_supply_m_flow_kg_s=0.027308566673167892 | people_source_carrier_m_flow_kg_s=6.543999999999999e-07 | actual_co2_generation_kg_s=6.544e-05 | controller_mode=AUTO_CO2"
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=36000 (10:00:00), occupants_person changed to 12.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=36000 | clock_time=10:00:00 | occupants_person=12 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=826.2765556492662 | room_co2_mass_fraction_kgkg=0.0012551140880312354 | normalized_co2_feedback=0.8262765556492663 | normalized_setpoint=1.0 | ach_command_1_per_h=2.456582261930368 | source_m_flow_command_kg_s=-0.08188607539767893 | physical_supply_m_flow_kg_s=0.08188607539767893 | people_source_carrier_m_flow_kg_s=9.816e-07 | actual_co2_generation_kg_s=9.816e-05 | controller_mode=AUTO_CO2"
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=43200 (12:00:00), occupants_person changed to 4.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=43200 | clock_time=12:00:00 | occupants_person=4 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=929.3848108834878 | room_co2_mass_fraction_kgkg=0.001411735527732018 | normalized_co2_feedback=0.9293848108834878 | normalized_setpoint=1.0 | ach_command_1_per_h=3.078462912593638 | source_m_flow_command_kg_s=-0.10261543041978792 | physical_supply_m_flow_kg_s=0.10261543041978792 | people_source_carrier_m_flow_kg_s=3.2719999999999997e-07 | actual_co2_generation_kg_s=3.272e-05 | controller_mode=AUTO_CO2"
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=46800 (13:00:00), occupants_person changed to 15.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=46800 | clock_time=13:00:00 | occupants_person=15 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=695.3686330959188 | room_co2_mass_fraction_kgkg=0.0010562649536727006 | normalized_co2_feedback=0.6953686330959188 | normalized_setpoint=1.0 | ach_command_1_per_h=1.6692715565711842 | source_m_flow_command_kg_s=-0.05564238521903947 | physical_supply_m_flow_kg_s=0.05564238521903947 | people_source_carrier_m_flow_kg_s=1.227e-06 | actual_co2_generation_kg_s=0.0001227 | controller_mode=AUTO_CO2"
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=54000 (15:00:00), occupants_person changed to 10 and room_co2_ppm reached 996.2992083489642 with ach_command_1_per_h at 3.4791415294352497.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=54000 | clock_time=15:00:00 | occupants_person=10 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=996.2992083489642 | room_co2_mass_fraction_kgkg=0.0015133784974820765 | normalized_co2_feedback=0.9962992083489641 | normalized_setpoint=1.0 | ach_command_1_per_h=3.4791415294352497 | source_m_flow_command_kg_s=-0.11597138431450833 | physical_supply_m_flow_kg_s=0.11597138431450833 | people_source_carrier_m_flow_kg_s=8.179999999999999e-07 | actual_co2_generation_kg_s=8.18e-05 | controller_mode=AUTO_CO2"
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=61200 (17:00:00), occupants_person changed to 3.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=61200 | clock_time=17:00:00 | occupants_person=3 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=880.1870438594829 | room_co2_mass_fraction_kgkg=0.0013370041196225544 | normalized_co2_feedback=0.8801870438594829 | normalized_setpoint=1.0 | ach_command_1_per_h=2.7830070596760716 | source_m_flow_command_kg_s=-0.09276690198920239 | physical_supply_m_flow_kg_s=0.09276690198920239 | people_source_carrier_m_flow_kg_s=2.454e-07 | actual_co2_generation_kg_s=2.454e-05 | controller_mode=AUTO_CO2"
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=64800 (18:00:00), occupants_person changed to 0 while controller_mode remained AUTO_CO2.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=64800 | clock_time=18:00:00 | occupants_person=0 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=653.4637215248508 | room_co2_mass_fraction_kgkg=0.0009926113929962484 | normalized_co2_feedback=0.6534637215248509 | normalized_setpoint=1.0 | ach_command_1_per_h=1.42162014524328 | source_m_flow_command_kg_s=-0.04738733817477599 | physical_supply_m_flow_kg_s=0.04738733817477599 | people_source_carrier_m_flow_kg_s=0.0 | actual_co2_generation_kg_s=0.0 | controller_mode=AUTO_CO2"
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=70500 (19:35:00), controller_mode changed back to AUTO_MIN and ach_command_1_per_h returned to 0.2.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=70500 | clock_time=19:35:00 | occupants_person=0 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=449.78126851509074 | room_co2_mass_fraction_kgkg=0.0006832177468744228 | normalized_co2_feedback=0.44978126851509076 | normalized_setpoint=1.0 | ach_command_1_per_h=0.2 | source_m_flow_command_kg_s=-0.006666666666666667 | physical_supply_m_flow_kg_s=0.006666666666666667 | people_source_carrier_m_flow_kg_s=0.0 | actual_co2_generation_kg_s=0.0 | controller_mode=AUTO_MIN"
+    },
+    {
+      "category": "behavior",
+      "statement": "At time_s=86400 (24:00:00), the run ended with occupants_person=0 and controller_mode=AUTO_MIN.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=86400 | clock_time=24:00:00 | occupants_person=0 | outdoor_co2_ppm=300.0 | outdoor_co2_mass_fraction_kgkg=0.00045569999999999996 | room_co2_ppm=361.9184470295561 | room_co2_mass_fraction_kgkg=0.0005497541210378957 | normalized_co2_feedback=0.3619184470295561 | normalized_setpoint=1.0 | ach_command_1_per_h=0.2 | source_m_flow_command_kg_s=-0.006666666666666667 | physical_supply_m_flow_kg_s=0.006666666666666667 | people_source_carrier_m_flow_kg_s=0.0 | actual_co2_generation_kg_s=0.0 | controller_mode=AUTO_MIN"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

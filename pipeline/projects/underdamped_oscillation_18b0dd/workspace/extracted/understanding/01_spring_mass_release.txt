@@ -1,0 +1,61 @@
+Subject: Held Mass Released Onto A Spring-Damper — Underdamped Oscillation To Rest
+Document kind: requirement specification
+
+## Entities
+* Mass -- mass
+    - mass: 1 kg [current]
+    - position: 0.10 m [current]
+    - velocity: 0 m/s [current]
+    - position: 0 m [current]
+    - velocity: 0 m/s [current]
+    - position: -0.0729 m [current]
+* Spring -- spring
+    - stiffness: 1 N/m [current]
+    - natural length position: 0 m [current]
+* Damper -- damper
+    - damping coefficient: 0.2 N*s/m [current]
+* Clamp -- clamp
+    - held position: 0.10 m [current]
+    - stretched amount: 0.10 m [current]
+    - velocity: 0 m/s [current]
+    - start time: 0 s [current]
+    - release time: 5 s [current]
+* fixed wall -- wall
+
+## Relationships
+* Spring connects_to Mass (Connects the mass to the fixed wall.)
+* Spring connects_to fixed wall (Connects the mass to the fixed wall.)
+* Damper connects_to Mass (connects the mass to the same fixed wall)
+* Damper connects_to fixed wall (connects the mass to the same fixed wall)
+* Damper in_parallel_with Spring
+* Clamp holds_fixed Mass (holds the mass fixed at position x = 0.10 m)
+
+## Requirements
+* REQ-SIM-001: Simulate for 150 seconds and report the mass's position, its velocity, and the clamp's engaged/released state for the whole run. [current]  <REQ-SIM-001>
+* REQ-FUN-001: While the clamp is engaged (t = 0 to t = 5 s), position shall stay exactly at 0.10 m and velocity shall stay exactly at 0 m/s. [current]  <REQ-FUN-001>
+* REQ-FUN-002: At t = 5 s the clamp shall release once, and the mass shall begin moving back toward the spring's natural length (position decreasing from 0.10 m, velocity going negative). [current]  <REQ-FUN-002>
+* REQ-FUN-003: Given the stated mass, stiffness, and damping, the motion shall be underdamped: the mass shall overshoot past the natural length (position goes negative) before eventually settling there, rather than approaching 0 m monotonically. [current]  <REQ-FUN-003>
+* REQ-FUN-004: The oscillation shall decay over time and the mass shall come to rest at the spring's natural length (position 0 m, velocity 0 m/s) well before the end of the simulated run. [current]  <REQ-FUN-004>
+
+## Constraints
+* AC-02: `position_m == 0.10` and `velocity_m_s == 0.0` at t = 4 s (absolute tolerance 0.001). [current]  <AC-02>
+* AC-04: `velocity_m_s <= -0.04` at t = 6 s. [current]  <AC-04>
+* AC-05: `position_m <= -0.05` becomes true at some point during the run. [current]  <AC-05>
+* AC-06: `abs(velocity_m_s) <= 0.01` at t = 8.16 s. [current]  <AC-06>
+* AC-07: `position_m <= 0.0` becomes true at some point before t = 8 s (checked over 5 s to 8 s). [current]  <AC-07>
+* AC-08: `position_m == 0.0` and `velocity_m_s == 0.0` at t = 150 s (absolute tolerance 0.005). [current]  <AC-08>
+* AC-09: `abs(position_m) <= 0.003` holds for the entire interval t = 50 s to t = 150 s. [current]  <AC-09>
+
+## Behaviors
+* While the clamp is engaged (t = 0 to t = 5 s), position shall stay exactly at 0.10 m and velocity shall stay exactly at 0 m/s. [current]  <REQ-FUN-001>
+* At t = 5 s the clamp shall release once, and the mass shall begin moving back toward the spring's natural length. [current]  <REQ-FUN-002>
+
+## Physical relationships
+* m*x'' + c*x' + k*x = 0 [current]
+* zeta = c / (2*sqrt(k*m)) = 0.2 / (2*sqrt(1*1)) = 0.1 [current]
+* omega_n = sqrt(k/m) = 1 rad/s [current]
+* omega_d = omega_n*sqrt(1-zeta^2) ~= 0.995 rad/s [current]
+* x(t) = x0 * exp(-zeta*omega_n*dt) * (cos(omega_d*dt) + (zeta*omega_n/omega_d)*sin(omega_d*dt)) [current]
+
+## Scheduled commands
+* At t = 5 s the clamp shall release once. [current]  <REQ-FUN-002>

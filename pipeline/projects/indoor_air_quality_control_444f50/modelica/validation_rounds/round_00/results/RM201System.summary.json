@@ -1,0 +1,122 @@
+{
+  "room_co2_mass_state": {
+    "min": 0.054684,
+    "max": 0.1816463763921343,
+    "final": 0.06597334344533057
+  },
+  "der(room_co2_mass_state)": {
+    "min": -6.544002841422052e-05,
+    "max": 8.932332582981038e-05,
+    "final": -6.271857469628093e-07
+  },
+  "ach_command_1_per_h": {
+    "min": 0.1999999998799651,
+    "max": 3.479143396712782,
+    "final": 0.2
+  },
+  "actual_co2_generation_kg_s": {
+    "min": 0.0,
+    "max": 0.0001227,
+    "final": 0.0
+  },
+  "controller.requested_ach_1_per_h": {
+    "min": -0.6999999999999993,
+    "max": 3.479143396712782,
+    "final": -0.3283955416283555
+  },
+  "normalized_co2_feedback": {
+    "min": 0.3,
+    "max": 0.9965238994521304,
+    "final": 0.3619340763952741
+  },
+  "occupants_person": {
+    "min": 0.0,
+    "max": 15.0,
+    "final": 0.0
+  },
+  "people_source_carrier_m_flow_kg_s": {
+    "min": 0.0,
+    "max": 1.227e-06,
+    "final": 0.0
+  },
+  "room_co2_mass_fraction_kgkg": {
+    "min": 0.0004557,
+    "max": 0.001513719803267786,
+    "final": 0.0005497778620444214
+  },
+  "room_co2_ppm": {
+    "min": 299.9688479890934,
+    "max": 996.4204203741822,
+    "final": 361.896493147623
+  },
+  "source_m_flow_command_kg_s": {
+    "min": -0.1159714465570927,
+    "max": -0.006666666662665503,
+    "final": -0.006666666666666667
+  },
+  "time_s": {
+    "min": 0.0,
+    "max": 86400.0,
+    "final": 86400.0
+  },
+  "controller.invalidStartTime": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.mode": {
+    "min": 1.0,
+    "max": 2.0,
+    "final": 1.0
+  },
+  "controller_mode": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.sensor_valid": {
+    "min": 1.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "sensor_fault_indication": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.ach_command_1_per_h": {
+    "min": 0.1999999998799651,
+    "max": 3.479143396712782,
+    "final": 0.2
+  },
+  "controller.normalized_co2_feedback": {
+    "min": 0.3,
+    "max": 0.9965238994521304,
+    "final": 0.3619340763952741
+  },
+  "normalizedFeedbackExpr.y": {
+    "min": 0.3,
+    "max": 0.9965238994521304,
+    "final": 0.3619340763952741
+  },
+  "occupancySchedule.occupants_person": {
+    "min": 0.0,
+    "max": 15.0,
+    "final": 0.0
+  },
+  "physical_supply_m_flow_kg_s": {
+    "min": 0.006666666662665503,
+    "max": 0.1159714465570927,
+    "final": 0.006666666666666667
+  },
+  "controller.controller_mode": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.sensor_fault_indication": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  }
+}

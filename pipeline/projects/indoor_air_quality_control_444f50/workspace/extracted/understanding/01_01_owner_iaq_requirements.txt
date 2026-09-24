@@ -1,0 +1,58 @@
+Subject: RM-201 Indoor Air Quality Control - Owner Requirements
+Document kind: requirement specification
+
+## Entities
+* RM-201 single-zone demand-controlled outdoor-air demonstration -- system  <URS-IAQ-001 [page 1]>
+* room -- component  <URS-IAQ-001 [page 1]>
+    - air volume: 100 m3 [required]
+* outdoor-air source -- component  <[page 1]>
+* exhaust boundary -- component  <[page 1]>
+* occupant CO2 generation -- process  <[page 1]>
+* room CO2 measurement -- sensor  <[page 1]>
+* feedback controller -- controller  <[page 1]>
+* ventilation controller -- controller  <[page 1]>
+* room CO2 -- quantity  <URS-IAQ-004 [page 1]>
+    - maximum concentration during approved occupied schedule: 1000 ppm [required]
+* reference outdoor-air CO2 concentration -- parameter  <URS-IAQ-005 [page 1]>
+    - CO2 concentration: 300 ppm [required]
+* design occupant CO2 generation rate -- parameter  <URS-IAQ-007 [page 1]>
+    - CO2 generation rate: 8.18E-6 kg/s per person [required]
+* released demonstration -- system  <URS-IAQ-008 [page 1]>
+    - peak occupancy: 12 persons [required]
+* outdoor air -- fluid  <[page 1]>
+* controlled airflow path -- path  <[page 1]>
+* room air -- fluid  <[page 1]>
+* exhaust path -- path  <[page 1]>
+* fresh-air flow -- flow  <[page 1]>
+* measured room CO2 -- measurement  <[page 1]>
+* scheduled number of occupants -- schedule parameter  <[page 1]>
+* approved occupied schedule -- schedule  <[page 1]>
+* representative daily occupancy schedule -- schedule  <[page 1]>
+* occupant count -- quantity  <[page 1]>
+* outdoor CO2 -- quantity  <[page 1]>
+* commanded ventilation -- quantity  <[page 1]>
+* physical ventilation flow -- quantity  <[page 1]>
+
+## Relationships
+* outdoor air supplied through controlled airflow path  <[page 1]>
+* room air leave through exhaust path  <[page 1]>
+* ventilation controller modulates fresh-air flow (using measured room CO2 as feedback)  <URS-IAQ-003 [page 1]>
+* CO2 generation proportional to scheduled number of occupants  <URS-IAQ-006 [page 1]>
+
+## Requirements
+* The system shall represent a room, an outdoor-air source, an exhaust boundary, occupant CO2 generation, a room CO2 measurement, and a feedback controller that adjusts ventilation. [current]  <[page 1]>
+* The room shall be represented as a single well-mixed air volume of 100 m3. [current]  <URS-IAQ-001 [page 1]>
+* Outdoor air shall be supplied through a controlled airflow path and room air shall leave through an exhaust path. [current]  <URS-IAQ-002 [page 1]>
+* The ventilation controller shall modulate fresh-air flow using measured room CO2 as feedback. [current]  <URS-IAQ-003 [page 1]>
+* During the approved occupied schedule, room CO2 shall not exceed 1000 ppm. [approved]  <URS-IAQ-004 [page 1]>
+* The reference outdoor-air CO2 concentration shall be 300 ppm. [current]  <URS-IAQ-005 [page 1]>
+* CO2 generation shall be proportional to the scheduled number of occupants. [current]  <URS-IAQ-006 [page 1]>
+* The design occupant CO2 generation rate shall be 8.18E-6 kg/s per person. [current]  <URS-IAQ-007 [page 1]>
+* A numerical simulation shall demonstrate the CO2 feedback behavior over a representative daily occupancy schedule. [current]  <URS-IAQ-009 [page 1]>
+* Concentration and airflow quantities shall be represented with explicit engineering units or unambiguous normalization definitions. [current]  <URS-IAQ-010 [page 1]>
+* The model shall distinguish physical outdoor-air flow direction from any implementation-specific source sign convention. [current]  <URS-IAQ-011 [page 1]>
+* Verification evidence shall record occupant count, room CO2, outdoor CO2, commanded ventilation, and physical ventilation flow. [current]  <URS-IAQ-012 [page 1]>
+* Detailed controls tuning, the final occupancy schedule, and resolution of ambiguous wording may be established by later approved engineering records. [current]  <[page 1]>
+
+## Constraints
+* The released demonstration shall support a peak occupancy of at least 12 persons. [current]  <URS-IAQ-008 [page 1]>

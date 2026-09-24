@@ -1,0 +1,29 @@
+{
+  "entry_class": "SeriesRLCRingingSystem",
+  "files": [
+    {
+      "filename": "ScheduledSwitch.mo",
+      "role": "component"
+    },
+    {
+      "filename": "SeriesRLCRingingSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Electrical.Analog.Basic.Capacitor",
+    "Modelica.Electrical.Analog.Basic.Ground",
+    "Modelica.Electrical.Analog.Basic.Inductor",
+    "Modelica.Electrical.Analog.Basic.Resistor",
+    "Modelica.Electrical.Analog.Ideal.IdealClosingSwitch"
+  ],
+  "corrections": [
+    "Assumption from the brief's merged notes preserved: no solver tolerance is stated, so only the output sampling density choice is implemented. The system experiment uses Interval=0.15 s so a 150 s run produces 1000 intervals, matching the stated modeling choice.",
+    "Derived from the stated topology and ODE: the capacitor negative pin is used as the circuit reference and connected to ground so the electrical network has exactly one reference potential. This adds no alternate behavior; it makes the stated series RLC loop structurally solvable in Modelica.",
+    "Assumption for the ideal switch off/on leakage parameters: IdealClosingSwitch uses Ron=1e-6 Ohm and Goff=1e-6 S because the brief states an open isolated capacitor before 5 s and a closed conducting loop after 5 s, but does not specify non-ideal switch parameters.",
+    "The reported variable switch_closed is implemented as a Real-valued 0/1 signal to match the stated reporting contract and acceptance expressions, while the internal switch command remains Boolean as required by the library switch control connector.",
+    "The stated damping ratio 0.1 and natural frequency 1 rad/s are preserved as parameters for traceability; they are not used as independent governing inputs because the brief's authoritative physical parameters are R=0.2 Ohm, L=1 H, and C=1 F, and the brief itself gives the consistency derivation from those values."
+  ],
+  "references": []
+}

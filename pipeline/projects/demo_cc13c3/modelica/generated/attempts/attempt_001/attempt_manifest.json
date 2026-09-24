@@ -1,0 +1,37 @@
+{
+  "attempt": 1,
+  "entry_class": "TwoTankSequenceSystem",
+  "files": [
+    {
+      "filename": "TwoTankPlant.mo",
+      "role": "component"
+    },
+    {
+      "filename": "PLC101.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "TwoTankSequenceSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Assumption retained from the brief: XV-101, XV-102, and XV-103 nominal demo flow coefficient equivalents are modeled as constant volumetric flow rates when commanded open and zero when commanded closed: qFill=0.0060 m3/s, qTransfer=0.0045 m3/s, qDrain=0.0050 m3/s.",
+    "Assumption retained from the brief: valve stroke dynamics are neglected and the valves act as ideal Boolean flow switches in the executable model despite datasheet stroke times being available.",
+    "Assumption retained from the brief: controller_state_id is reported as numeric encoding IDLE=0, FILL_T1=1, WAIT_AFTER_FILL=2, TRANSFER_T1_T2=3, WAIT_AFTER_TRANSFER=4, DRAIN_T2=5, WAIT_AFTER_DRAIN=6, PAUSED=7, SHUTDOWN=8.",
+    "Assumption retained from the brief: simulation output grid uses 1000 intervals over 0..900 s, giving Interval=0.9 s in the experiment annotation.",
+    "Assumption retained from the brief: numerical integration tolerance is set to 1e-6 because the notes do not state a solver tolerance.",
+    "Derived modeling choice: a physical level floor hFloor=0.0 m is used for tank emptying cutoffs, which is strictly below the low-level threshold 0.05 m so the <=0.05 m transition guards remain reachable.",
+    "Derived modeling choice: no overflow, leakage, compressibility, or pressure-dependent flow relation is added because the brief states the notes do not establish them."
+  ],
+  "references": []
+}

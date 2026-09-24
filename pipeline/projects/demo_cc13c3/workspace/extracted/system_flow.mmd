@@ -1,0 +1,78 @@
+flowchart TD
+    A["Simulation start t=0 s<br/>controller_state_id=0 IDLE<br/>h1=0.05 m, h2=0.05 m<br/>XV-101=0, XV-102=0, XV-103=0"] --> B{"SHUT edge?"}
+    B -->|Yes| S1["Enter SHUTDOWN<br/>discard stored resume context<br/>XV-101=0, XV-102=1, XV-103=1"]
+    B -->|No| C{"STOP edge?"}
+    C -->|Yes| C1["Ignore STOP in IDLE<br/>remain IDLE"]
+    C -->|No| D{"START edge at 20 s or later valid start from IDLE?"}
+    D -->|Yes| E["Enter FILL_T1<br/>controller_state_id=1<br/>XV-101=1, XV-102=0, XV-103=0"]
+    D -->|No| B
+    C1 --> B
+    E --> E1{"SHUT edge?"}
+    E1 -->|Yes| S1
+    E1 -->|No| E2{"STOP edge?"}
+    E2 -->|Yes| P1["Enter PAUSED from FILL_T1<br/>store interrupted state FILL_T1<br/>XV-101=0, XV-102=0, XV-103=0"]
+    E2 -->|No| E3{"LT-101 >= 0.80 m?"}
+    E3 -->|Yes| F["Close XV-101<br/>Enter WAIT_AFTER_FILL<br/>controller_state_id=2<br/>all valve commands=0<br/>start 10 s wait"]
+    E3 -->|No| E
+    F --> F1{"SHUT edge?"}
+    F1 -->|Yes| S1
+    F1 -->|No| F2{"STOP edge?"}
+    F2 -->|Yes| P2["Enter PAUSED from WAIT_AFTER_FILL<br/>store interrupted state WAIT_AFTER_FILL<br/>freeze remaining wait time<br/>XV-101=0, XV-102=0, XV-103=0"]
+    F2 -->|No| F3{"10 s wait expired?"}
+    F3 -->|Yes| G["Enter TRANSFER_T1_T2<br/>controller_state_id=3<br/>XV-101=0, XV-102=1, XV-103=0"]
+    F3 -->|No| F
+    G --> G1{"SHUT edge?"}
+    G1 -->|Yes| S1
+    G1 -->|No| G2{"STOP edge?"}
+    G2 -->|Yes| P3["Enter PAUSED from TRANSFER_T1_T2<br/>store interrupted state TRANSFER_T1_T2<br/>XV-101=0, XV-102=0, XV-103=0"]
+    G2 -->|No| G3{"LT-101 <= 0.05 m?"}
+    G3 -->|Yes| H["Close XV-102<br/>Enter WAIT_AFTER_TRANSFER<br/>controller_state_id=4<br/>all valve commands=0<br/>start 12 s wait"]
+    G3 -->|No| G
+    H --> H1{"SHUT edge?"}
+    H1 -->|Yes| S1
+    H1 -->|No| H2{"STOP edge?"}
+    H2 -->|Yes| P4["Enter PAUSED from WAIT_AFTER_TRANSFER<br/>store interrupted state WAIT_AFTER_TRANSFER<br/>freeze remaining wait time<br/>XV-101=0, XV-102=0, XV-103=0"]
+    H2 -->|No| H3{"12 s wait expired?"}
+    H3 -->|Yes| I["Enter DRAIN_T2<br/>controller_state_id=5<br/>XV-101=0, XV-102=0, XV-103=1"]
+    H3 -->|No| H
+    I --> I1{"SHUT edge?"}
+    I1 -->|Yes| S1
+    I1 -->|No| I2{"STOP edge?"}
+    I2 -->|Yes| P5["Enter PAUSED from DRAIN_T2<br/>store interrupted state DRAIN_T2<br/>XV-101=0, XV-102=0, XV-103=0"]
+    I2 -->|No| I3{"LT-102 <= 0.05 m?"}
+    I3 -->|Yes| J["Close XV-103<br/>Enter WAIT_AFTER_DRAIN<br/>controller_state_id=6<br/>all valve commands=0<br/>start 8 s wait"]
+    I3 -->|No| I
+    J --> J1{"SHUT edge?"}
+    J1 -->|Yes| S1
+    J1 -->|No| J2{"STOP edge?"}
+    J2 -->|Yes| P6["Enter PAUSED from WAIT_AFTER_DRAIN<br/>store interrupted state WAIT_AFTER_DRAIN<br/>freeze remaining wait time<br/>XV-101=0, XV-102=0, XV-103=0"]
+    J2 -->|No| J3{"8 s wait expired?"}
+    J3 -->|Yes| E
+    J3 -->|No| J
+    P1 --> P0{"SHUT edge?"}
+    P2 --> P0
+    P3 --> P0
+    P4 --> P0
+    P5 --> P0
+    P6 --> P0
+    P0 -->|Yes| S1
+    P0 -->|No| P7{"START edge?"}
+    P7 -->|Yes| P8["Resume stored interrupted state<br/>restore remaining wait if paused in wait state"]
+    P7 -->|No| P9{"STOP edge?"}
+    P9 -->|Yes| P0
+    P9 -->|No| P0
+    P8 -->|Resume FILL_T1| E
+    P8 -->|Resume WAIT_AFTER_FILL| F
+    P8 -->|Resume TRANSFER_T1_T2| G
+    P8 -->|Resume WAIT_AFTER_TRANSFER| H
+    P8 -->|Resume DRAIN_T2| I
+    P8 -->|Resume WAIT_AFTER_DRAIN| J
+    S1 --> S2{"LT-101 <= 0.05 m and LT-102 <= 0.05 m?"}
+    S2 -->|Yes| K["Shutdown complete<br/>XV-102=0, XV-103=0, XV-101=0<br/>return to IDLE<br/>controller_state_id=0"]
+    S2 -->|No| S3{"START or STOP edge during SHUTDOWN?"}
+    S3 -->|START| S1
+    S3 -->|STOP| S1
+    S3 -->|No event| S1
+    K --> L{"Simulation time >= 900 s?"}
+    L -->|Yes| M["End at 900 s<br/>remain IDLE with all valves closed unless new START occurs"]
+    L -->|No| B

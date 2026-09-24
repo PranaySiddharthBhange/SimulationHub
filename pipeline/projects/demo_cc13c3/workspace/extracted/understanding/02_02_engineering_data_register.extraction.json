@@ -1,0 +1,846 @@
+{
+  "document": "02_engineering_data_register.xlsx",
+  "subject": "Tank Filling/Emptying System - Synthetic Requirements Register",
+  "kind": "engineering register",
+  "entities": [
+    {
+      "name": "controller",
+      "kind": "controller",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Requirements_Register]",
+      "from_image": false,
+      "quote": "The controller shall start the automatic fill-transfer-drain sequence"
+    },
+    {
+      "name": "V1",
+      "kind": "valve",
+      "aliases": [
+        "XV-101",
+        "valve1"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Requirements_Register]",
+      "from_image": false,
+      "quote": "V1 = XV-101."
+    },
+    {
+      "name": "Tank 1",
+      "kind": "tank",
+      "aliases": [
+        "TK-101",
+        "tank1"
+      ],
+      "values": [
+        {
+          "quantity": "high-level setpoint",
+          "value": "0.78",
+          "unit": "m",
+          "status": "superseded",
+          "supersedes": "",
+          "quote": "Tank 1 high-level setpoint shall be 0.78 m."
+        },
+        {
+          "quantity": "high-level setpoint",
+          "value": "0.80",
+          "unit": "m",
+          "status": "active",
+          "supersedes": "0.78 m",
+          "quote": "Tank 1 high-level setpoint shall be 0.80 m."
+        },
+        {
+          "quantity": "low-level setpoint",
+          "value": "0.05",
+          "unit": "m",
+          "status": "active",
+          "supersedes": "",
+          "quote": "Tank 1 low-level setpoint shall be 0.05 m."
+        },
+        {
+          "quantity": "cross-section area",
+          "value": "1.2",
+          "unit": "m^2",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "E4=1.2"
+        },
+        {
+          "quantity": "height",
+          "value": "1",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "F4=1"
+        },
+        {
+          "quantity": "max working level",
+          "value": "0.9",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "G4=0.9"
+        },
+        {
+          "quantity": "initial level",
+          "value": "0.05",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Vertical tank; initial level 0.05 m."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment_Schedule]",
+      "from_image": false,
+      "quote": "A4=TK-101 | B4=tank1 | C4=Tank"
+    },
+    {
+      "name": "V2",
+      "kind": "valve",
+      "aliases": [
+        "XV-102",
+        "valve2"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Requirements_Register]",
+      "from_image": false,
+      "quote": "V2 = XV-102."
+    },
+    {
+      "name": "Tank 2",
+      "kind": "tank",
+      "aliases": [
+        "TK-102",
+        "tank2"
+      ],
+      "values": [
+        {
+          "quantity": "low-level setpoint",
+          "value": "0.05",
+          "unit": "m",
+          "status": "active",
+          "supersedes": "",
+          "quote": "Tank 2 low-level setpoint shall be 0.05 m."
+        },
+        {
+          "quantity": "cross-section area",
+          "value": "1.4",
+          "unit": "m^2",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "E5=1.4"
+        },
+        {
+          "quantity": "height",
+          "value": "1",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "F5=1"
+        },
+        {
+          "quantity": "max working level",
+          "value": "0.9",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "G5=0.9"
+        },
+        {
+          "quantity": "initial level",
+          "value": "0.05",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Vertical tank; initial level 0.05 m."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment_Schedule]",
+      "from_image": false,
+      "quote": "A5=TK-102 | B5=tank2 | C5=Tank"
+    },
+    {
+      "name": "V3",
+      "kind": "valve",
+      "aliases": [
+        "XV-103",
+        "valve3"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Requirements_Register]",
+      "from_image": false,
+      "quote": "V3 = XV-103."
+    },
+    {
+      "name": "LT-101",
+      "kind": "level transmitter",
+      "aliases": [
+        "level1"
+      ],
+      "values": [
+        {
+          "quantity": "range",
+          "value": "0.0-1.0",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "4-20 mA mapped 0.0-1.0 m."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment_Schedule]",
+      "from_image": false,
+      "quote": "A9=LT-101 | B9=level1 | C9=Level transmitter"
+    },
+    {
+      "name": "LT-102",
+      "kind": "level transmitter",
+      "aliases": [
+        "level2"
+      ],
+      "values": [
+        {
+          "quantity": "range",
+          "value": "0.0-1.0",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "4-20 mA mapped 0.0-1.0 m."
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment_Schedule]",
+      "from_image": false,
+      "quote": "A10=LT-102 | B10=level2 | C10=Level transmitter"
+    },
+    {
+      "name": "PB-START",
+      "kind": "pushbutton",
+      "aliases": [
+        "start"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Equipment_Schedule]",
+      "from_image": false,
+      "quote": "A11=PB-START | B11=start | C11=Momentary pushbutton"
+    },
+    {
+      "name": "PB-STOP",
+      "kind": "pushbutton",
+      "aliases": [
+        "stop"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Equipment_Schedule]",
+      "from_image": false,
+      "quote": "A12=PB-STOP | B12=stop | C12=Momentary pushbutton"
+    },
+    {
+      "name": "PB-SHUT",
+      "kind": "pushbutton",
+      "aliases": [
+        "shut"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Equipment_Schedule]",
+      "from_image": false,
+      "quote": "A13=PB-SHUT | B13=shut | C13=Momentary pushbutton"
+    },
+    {
+      "name": "PLC-101",
+      "kind": "controller",
+      "aliases": [
+        "tankController"
+      ],
+      "values": [
+        {
+          "quantity": "scan time",
+          "value": "100",
+          "unit": "ms",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "100 ms scan."
+        },
+        {
+          "quantity": "scan time",
+          "value": "0.1",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "A18=Controller scan time | B18=PLC-101 | C18=0.1 | D18=s | E18=CDS-02 | F18=Current | G18=Yes"
+        }
+      ],
+      "ref": "",
+      "anchor": "[sheet Equipment_Schedule]",
+      "from_image": false,
+      "quote": "A14=PLC-101 | B14=tankController | C14=Controller"
+    },
+    {
+      "name": "SRC-101",
+      "kind": "boundary source",
+      "aliases": [
+        "source"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Equipment_Schedule]",
+      "from_image": false,
+      "quote": "A15=SRC-101 | B15=source | C15=Boundary source"
+    },
+    {
+      "name": "DRN-101",
+      "kind": "boundary sink",
+      "aliases": [
+        "ambient1"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Equipment_Schedule]",
+      "from_image": false,
+      "quote": "A16=DRN-101 | B16=ambient1 | C16=Boundary sink"
+    },
+    {
+      "name": "START",
+      "kind": "command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Requirements_Register]",
+      "from_image": false,
+      "quote": "START, STOP and SHUT digital commands"
+    },
+    {
+      "name": "STOP",
+      "kind": "command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Requirements_Register]",
+      "from_image": false,
+      "quote": "START, STOP and SHUT digital commands"
+    },
+    {
+      "name": "SHUT",
+      "kind": "command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet Requirements_Register]",
+      "from_image": false,
+      "quote": "START, STOP and SHUT digital commands"
+    },
+    {
+      "name": "DO-101",
+      "kind": "output signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet IO_List]",
+      "from_image": false,
+      "quote": "A9=DO-101 | B9=XV-101 | C9=Output"
+    },
+    {
+      "name": "DO-102",
+      "kind": "output signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet IO_List]",
+      "from_image": false,
+      "quote": "A10=DO-102 | B10=XV-102 | C10=Output"
+    },
+    {
+      "name": "DO-103",
+      "kind": "output signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet IO_List]",
+      "from_image": false,
+      "quote": "A11=DO-103 | B11=XV-103 | C11=Output"
+    },
+    {
+      "name": "DI-101",
+      "kind": "input signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet IO_List]",
+      "from_image": false,
+      "quote": "A4=DI-101 | B4=PB-START | C4=Input"
+    },
+    {
+      "name": "DI-102",
+      "kind": "input signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet IO_List]",
+      "from_image": false,
+      "quote": "A5=DI-102 | B5=PB-STOP | C5=Input"
+    },
+    {
+      "name": "DI-103",
+      "kind": "input signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet IO_List]",
+      "from_image": false,
+      "quote": "A6=DI-103 | B6=PB-SHUT | C6=Input"
+    },
+    {
+      "name": "AI-101",
+      "kind": "input signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet IO_List]",
+      "from_image": false,
+      "quote": "A7=AI-101 | B7=LT-101 | C7=Input"
+    },
+    {
+      "name": "AI-102",
+      "kind": "input signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[sheet IO_List]",
+      "from_image": false,
+      "quote": "A8=AI-102 | B8=LT-102 | C8=Input"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "SRC-101",
+      "predicate": "connects_to",
+      "object": "V1",
+      "detail": "fluidOut to inlet",
+      "ref": "IF-HYD-01",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A4=IF-HYD-01 | B4=SRC-101 | C4=fluidOut | D4=XV-101 | E4=inlet"
+    },
+    {
+      "subject": "V1",
+      "predicate": "connects_to",
+      "object": "Tank 1",
+      "detail": "outlet to inlet",
+      "ref": "IF-HYD-02",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A5=IF-HYD-02 | B5=XV-101 | C5=outlet | D5=TK-101 | E5=inlet"
+    },
+    {
+      "subject": "Tank 1",
+      "predicate": "connects_to",
+      "object": "V2",
+      "detail": "outlet to inlet",
+      "ref": "IF-HYD-03",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A6=IF-HYD-03 | B6=TK-101 | C6=outlet | D6=XV-102 | E6=inlet"
+    },
+    {
+      "subject": "V2",
+      "predicate": "connects_to",
+      "object": "Tank 2",
+      "detail": "outlet to inlet",
+      "ref": "IF-HYD-04",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A7=IF-HYD-04 | B7=XV-102 | C7=outlet | D7=TK-102 | E7=inlet"
+    },
+    {
+      "subject": "Tank 2",
+      "predicate": "connects_to",
+      "object": "V3",
+      "detail": "outlet to inlet",
+      "ref": "IF-HYD-05",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A8=IF-HYD-05 | B8=TK-102 | C8=outlet | D8=XV-103 | E8=inlet"
+    },
+    {
+      "subject": "V3",
+      "predicate": "connects_to",
+      "object": "DRN-101",
+      "detail": "outlet to fluidIn",
+      "ref": "IF-HYD-06",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A9=IF-HYD-06 | B9=XV-103 | C9=outlet | D9=DRN-101 | E9=fluidIn"
+    },
+    {
+      "subject": "LT-101",
+      "predicate": "signals_to",
+      "object": "PLC-101",
+      "detail": "AI-101 level1",
+      "ref": "IF-CTL-01",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A10=IF-CTL-01 | B10=LT-101 | C10=AI-101 | D10=PLC-101 | E10=level1"
+    },
+    {
+      "subject": "LT-102",
+      "predicate": "signals_to",
+      "object": "PLC-101",
+      "detail": "AI-102 level2",
+      "ref": "IF-CTL-02",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A11=IF-CTL-02 | B11=LT-102 | C11=AI-102 | D11=PLC-101 | E11=level2"
+    },
+    {
+      "subject": "PB-START",
+      "predicate": "commands",
+      "object": "PLC-101",
+      "detail": "DI-101 start",
+      "ref": "IF-CTL-03",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A12=IF-CTL-03 | B12=PB-START | C12=DI-101 | D12=PLC-101 | E12=start"
+    },
+    {
+      "subject": "PB-STOP",
+      "predicate": "commands",
+      "object": "PLC-101",
+      "detail": "DI-102 stop",
+      "ref": "IF-CTL-04",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A13=IF-CTL-04 | B13=PB-STOP | C13=DI-102 | D13=PLC-101 | E13=stop"
+    },
+    {
+      "subject": "PB-SHUT",
+      "predicate": "commands",
+      "object": "PLC-101",
+      "detail": "DI-103 shut",
+      "ref": "IF-CTL-05",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A14=IF-CTL-05 | B14=PB-SHUT | C14=DI-103 | D14=PLC-101 | E14=shut"
+    },
+    {
+      "subject": "PLC-101",
+      "predicate": "commands",
+      "object": "V1",
+      "detail": "valve1 via DO-101",
+      "ref": "IF-CTL-06",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A15=IF-CTL-06 | B15=PLC-101 | C15=valve1 | D15=XV-101 | E15=DO-101"
+    },
+    {
+      "subject": "PLC-101",
+      "predicate": "commands",
+      "object": "V2",
+      "detail": "valve2 via DO-102",
+      "ref": "IF-CTL-07",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A16=IF-CTL-07 | B16=PLC-101 | C16=valve2 | D16=XV-102 | E16=DO-102"
+    },
+    {
+      "subject": "PLC-101",
+      "predicate": "commands",
+      "object": "V3",
+      "detail": "valve3 via DO-103",
+      "ref": "IF-CTL-08",
+      "anchor": "[sheet Interface_Matrix]",
+      "from_image": false,
+      "quote": "A17=IF-CTL-08 | B17=PLC-101 | C17=valve3 | D17=XV-103 | E17=DO-103"
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "The controller shall start the automatic fill-transfer-drain sequence upon a valid START command when the process is idle or paused.",
+      "ref": "URS-FUN-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "The controller shall start the automatic fill-transfer-drain sequence upon a valid START command when the process is idle or paused."
+    },
+    {
+      "category": "requirement",
+      "statement": "The automatic sequence shall open inlet valve V1 to fill Tank 1.",
+      "ref": "URS-FUN-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "The automatic sequence shall open inlet valve V1 to fill Tank 1."
+    },
+    {
+      "category": "behavior",
+      "statement": "When Tank 1 reaches its high-level limit, V1 shall close.",
+      "ref": "URS-FUN-003",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "When Tank 1 reaches its high-level limit, V1 shall close."
+    },
+    {
+      "category": "requirement",
+      "statement": "After Tank 1 reaches the high-level limit, the controller shall wait 10 s before opening V2.",
+      "ref": "URS-FUN-004",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "After Tank 1 reaches the high-level limit, the controller shall wait 10 s before opening V2."
+    },
+    {
+      "category": "requirement",
+      "statement": "V2 shall transfer liquid from Tank 1 to Tank 2 until Tank 1 reaches its low-level limit.",
+      "ref": "URS-FUN-005",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "V2 shall transfer liquid from Tank 1 to Tank 2 until Tank 1 reaches its low-level limit."
+    },
+    {
+      "category": "requirement",
+      "statement": "After Tank 1 reaches the low-level limit, the controller shall wait 10 s before opening V3.",
+      "ref": "URS-FUN-006",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "superseded",
+      "from_image": false,
+      "quote": "After Tank 1 reaches the low-level limit, the controller shall wait 10 s before opening V3."
+    },
+    {
+      "category": "requirement",
+      "statement": "V3 shall drain Tank 2 until Tank 2 reaches its low-level limit.",
+      "ref": "URS-FUN-007",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "V3 shall drain Tank 2 until Tank 2 reaches its low-level limit."
+    },
+    {
+      "category": "requirement",
+      "statement": "After Tank 2 reaches its low-level limit, the controller shall return to the Tank 1 filling operation after 10 s.",
+      "ref": "URS-FUN-008",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "superseded",
+      "from_image": false,
+      "quote": "After Tank 2 reaches its low-level limit, the controller shall return to the Tank 1 filling operation after 10 s."
+    },
+    {
+      "category": "behavior",
+      "statement": "STOP shall close V1, V2 and V3 and place the controller in a paused condition.",
+      "ref": "URS-MOD-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "STOP shall close V1, V2 and V3 and place the controller in a paused condition."
+    },
+    {
+      "category": "requirement",
+      "statement": "A START command following STOP shall continue the sequence from the point at which STOP was accepted.",
+      "ref": "URS-MOD-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A START command following STOP shall continue the sequence from the point at which STOP was accepted."
+    },
+    {
+      "category": "behavior",
+      "statement": "SHUT shall command V2 and V3 open to drain both tanks and shall inhibit V1.",
+      "ref": "URS-MOD-003",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "SHUT shall command V2 and V3 open to drain both tanks and shall inhibit V1."
+    },
+    {
+      "category": "requirement",
+      "statement": "After shutdown draining is complete, all three valves shall be closed and the controller shall be in the initial idle configuration.",
+      "ref": "URS-MOD-004",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "After shutdown draining is complete, all three valves shall be closed and the controller shall be in the initial idle configuration."
+    },
+    {
+      "category": "behavior",
+      "statement": "On loss of controller power, all process valves shall move to or remain in the closed position.",
+      "ref": "URS-SAF-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "On loss of controller power, all process valves shall move to or remain in the closed position."
+    },
+    {
+      "category": "requirement",
+      "statement": "SHUT shall have higher command priority than STOP; STOP shall have higher priority than START.",
+      "ref": "URS-SAF-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "SHUT shall have higher command priority than STOP; STOP shall have higher priority than START."
+    },
+    {
+      "category": "requirement",
+      "statement": "V1 shall never be commanded open while V2 is open.",
+      "ref": "URS-SAF-003",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "V1 shall never be commanded open while V2 is open."
+    },
+    {
+      "category": "requirement",
+      "statement": "During normal automatic operation, V2 and V3 shall not be open simultaneously.",
+      "ref": "URS-SAF-004",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "During normal automatic operation, V2 and V3 shall not be open simultaneously."
+    },
+    {
+      "category": "requirement",
+      "statement": "During SHUT mode, V2 and V3 may be open simultaneously.",
+      "ref": "URS-SAF-005",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "During SHUT mode, V2 and V3 may be open simultaneously."
+    },
+    {
+      "category": "requirement",
+      "statement": "The post-transfer waiting time shall be 12 s.",
+      "ref": "URS-PER-005",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "The post-transfer waiting time shall be 12 s."
+    },
+    {
+      "category": "requirement",
+      "statement": "The inter-cycle waiting time after Tank 2 reaches low level shall be 8 s.",
+      "ref": "URS-PER-006",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "The inter-cycle waiting time after Tank 2 reaches low level shall be 8 s."
+    },
+    {
+      "category": "requirement",
+      "statement": "The controller shall receive two analog level measurements designated LT-101 and LT-102.",
+      "ref": "URS-INT-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "The controller shall receive two analog level measurements designated LT-101 and LT-102."
+    },
+    {
+      "category": "requirement",
+      "statement": "The controller shall receive momentary START, STOP and SHUT digital commands.",
+      "ref": "URS-INT-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "The controller shall receive momentary START, STOP and SHUT digital commands."
+    },
+    {
+      "category": "requirement",
+      "statement": "The controller shall provide three discrete valve-open commands to XV-101, XV-102 and XV-103.",
+      "ref": "URS-INT-003",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "The controller shall provide three discrete valve-open commands to XV-101, XV-102 and XV-103."
+    },
+    {
+      "category": "requirement",
+      "statement": "A STOP command received during a wait state shall freeze the wait timer rather than restart it.",
+      "ref": "URS-CTL-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "A STOP command received during a wait state shall freeze the wait timer rather than restart it."
+    },
+    {
+      "category": "requirement",
+      "statement": "START commands received while already running shall be ignored.",
+      "ref": "URS-CTL-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "START commands received while already running shall be ignored."
+    },
+    {
+      "category": "requirement",
+      "statement": "STOP commands received during SHUT mode shall be ignored until shutdown is complete.",
+      "ref": "URS-CTL-003",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "STOP commands received during SHUT mode shall be ignored until shutdown is complete."
+    },
+    {
+      "category": "requirement",
+      "statement": "START commands received during SHUT mode shall be ignored until shutdown is complete.",
+      "ref": "URS-CTL-004",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "START commands received during SHUT mode shall be ignored until shutdown is complete."
+    },
+    {
+      "category": "requirement",
+      "statement": "Shutdown completion shall require Tank 1 and Tank 2 to both be at or below their low-level setpoints.",
+      "ref": "URS-CTL-005",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "Shutdown completion shall require Tank 1 and Tank 2 to both be at or below their low-level setpoints."
+    },
+    {
+      "category": "requirement",
+      "statement": "The demonstration run shall simulate from 0 s through 900 s.",
+      "ref": "URS-TST-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "The demonstration run shall simulate from 0 s through 900 s."
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "The demonstration run shall apply START at 20 s, STOP at 220 s, START at 280 s, STOP at 650 s and SHUT at 700 s.",
+      "ref": "URS-TST-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "The demonstration run shall apply START at 20 s, STOP at 220 s, START at 280 s, STOP at 650 s and SHUT at 700 s."
+    },
+    {
+      "category": "constraint",
+      "statement": "Level values shall be represented internally in metres with a nominal valid range of 0.0 to 1.0 m.",
+      "ref": "URS-DAT-001",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "Level values shall be represented internally in metres with a nominal valid range of 0.0 to 1.0 m."
+    },
+    {
+      "category": "requirement",
+      "statement": "Valve commands shall be represented as Boolean open/closed commands.",
+      "ref": "URS-DAT-002",
+      "anchor": "[sheet Requirements_Register]",
+      "status": "active",
+      "from_image": false,
+      "quote": "Valve commands shall be represented as Boolean open/closed commands."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

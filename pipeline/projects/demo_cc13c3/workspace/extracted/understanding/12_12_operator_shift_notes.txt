@@ -1,0 +1,38 @@
+Subject: TEST ENGINEER SCRATCH NOTES - 04 APR 2026
+Document kind: operator log
+
+## Entities
+* tank1 -- tank  <TK-101>; aliases: TK-101, T1
+* tank2 -- tank  <TK-102>; aliases: TK-102, T2
+* valve1 -- valve  <XV-101>; aliases: XV-101, V1
+* valve2 -- valve  <XV-102>; aliases: XV-102
+* valve3 -- valve  <XV-103>; aliases: XV-103
+* both tank displays -- display
+    - level: ~0.05 m [observed]
+* high target -- target
+    - target: 0.80 [observed]
+    - target: 0.78 [archived] (supersedes/superseded: 0.80)
+* SHUT -- mode
+* E-stop -- command
+
+## Relationships
+* tank1 alias_of TK-101
+* tank2 alias_of TK-102
+* valve1 alias_of XV-101
+* valve2 alias_of XV-102
+* valve3 alias_of XV-103
+
+## Behaviors
+* At the high target, V1 drops out. [observed]
+* Stop at 220 kills all valve lamps. [observed]
+* Start at 280 picks transfer back up; it does NOT go back to fill. [observed]
+* After T1 low there is a dead time of 12 s. [observed]
+* T2 drains, then new fill comes back fairly quickly about 8 s after low. [observed]
+* Shut at 700 turns transfer and drain lamps on together. [observed]
+
+## Scheduled commands
+* Start event at 20 s. [observed]
+* Stop at 220. [observed]
+* Start at 280. [observed]
+* Stop at 650. [observed]
+* Shut at 700. [observed]

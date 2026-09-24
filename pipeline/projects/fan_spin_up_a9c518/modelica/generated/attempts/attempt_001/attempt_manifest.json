@@ -1,0 +1,40 @@
+{
+  "attempt": 1,
+  "entry_class": "FanSystem",
+  "files": [
+    {
+      "filename": "FanRotor.mo",
+      "role": "component"
+    },
+    {
+      "filename": "LossTorque.mo",
+      "role": "component"
+    },
+    {
+      "filename": "MotorDrive.mo",
+      "role": "component"
+    },
+    {
+      "filename": "MotorCommand.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "FanSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Mechanics.Rotational.Components.Inertia",
+    "Modelica.Mechanics.Rotational.Components.Fixed",
+    "Modelica.Mechanics.Rotational.Interfaces.Flange_a",
+    "Modelica.Mechanics.Rotational.Interfaces.Flange_b",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput"
+  ],
+  "corrections": [
+    "Assumption retained from the brief: motor_torque_Nm is modeled as 0 N*m for t < 5 s and 0.5 N*m for t >= 5 s because the note states a fixed constant driving torque when on but does not separately state the off-state torque equation.",
+    "Derived inconsistency from the stated parameters and equations: with J=0.02 kg*m^2, b=0.01 N*m*s/rad, k_fan=0.0004 N*m*s^2/rad^2, motor torque 0.5 N*m, and turn-on at t=5 s, the exact stated torque balance reaches about 14.59 rad/s at t=6 s, so AC-03 (fan_speed_rad_s >= 15 rad/s at t=6 s) is not achievable without changing a stated parameter or the start timing. This was already observed in prior validation rounds; the brief provides no approved correction to those values."
+  ],
+  "references": []
+}

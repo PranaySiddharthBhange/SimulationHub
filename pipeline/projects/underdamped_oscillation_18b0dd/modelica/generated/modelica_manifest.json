@@ -1,0 +1,37 @@
+{
+  "entry_class": "HeldMassSpringDamperSystem",
+  "files": [
+    {
+      "filename": "ReleaseCommand.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "ClampConstraint.mo",
+      "role": "component"
+    },
+    {
+      "filename": "HeldMassSpringDamperSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Mechanics.Translational.Sources.Position",
+    "Modelica.Mechanics.Translational.Components.Mass",
+    "Modelica.Mechanics.Translational.Components.Spring",
+    "Modelica.Mechanics.Translational.Components.Damper",
+    "Modelica.Mechanics.Translational.Components.Fixed",
+    "Modelica.Mechanics.Translational.Interfaces.Flange_b"
+  ],
+  "corrections": [
+    "The brief states the clamp holds the mass at x = 0.10 m until t = 5 s and then releases once. The model represents this with a translational position source inside ClampConstraint that prescribes the flange position while engaged and follows the connected flange position after release to avoid adding any unstated actuator or force law.",
+    "The post-release free motion is produced by the stated mechanical topology and parameters using Modelica.Mechanics.Translational components rather than coding the closed-form response directly. This preserves the stated governing equation m*x'' + c*x' + k*x = 0 after release.",
+    "The explicit applicability assumption from the brief is retained: free motion applies only after release at t = 5 s; before release, clamp holding overrides the free dynamics.",
+    "Reported variable clamp_engaged is implemented as a Real-valued report alias taking 1.0 while engaged and 0.0 after release, matching the confirmed execution assumption for numeric encoding."
+  ],
+  "references": []
+}

@@ -1,0 +1,17 @@
+flowchart TD
+    A["Start simulation at t = 0 s"] --> B["Initialize parameters<br/>m = 1 kg<br/>k = 1 N/m<br/>c = 0.2 N*s/m<br/>spring natural length position = 0 m"]
+    B --> C["Set clamp_engaged = 1<br/>position_m = 0.10 m<br/>velocity_m_s = 0 m/s"]
+    C --> D{"t < 5 s?"}
+    D -->|Yes| E["Clamp holds Mass at x = 0.10 m<br/>position_m = 0.10 m<br/>velocity_m_s = 0 m/s"]
+    E --> F["Advance time and report<br/>position_m, velocity_m_s, clamp_engaged"]
+    F --> D
+    D -->|No| G["At t = 5 s, Clamp releases once<br/>set clamp_engaged = 0"]
+    G --> H["For t >= 5 s, use dt = t - 5 s"]
+    H --> I["Apply free-motion equation<br/>m*x'' + c*x' + k*x = 0"]
+    I --> J["Compute underdamped response<br/>zeta = 0.1<br/>omega_n = 1 rad/s<br/>omega_d ~= 0.995 rad/s"]
+    J --> K["Post-release motion from held state<br/>position decreases from 0.10 m<br/>velocity becomes negative"]
+    K --> L{"t < 150 s?"}
+    L -->|Yes| M["Continue underdamped motion<br/>overshoot past 0 m<br/>position becomes negative before settling"]
+    M --> N["Report position_m, velocity_m_s,<br/>clamp_engaged"]
+    N --> L
+    L -->|No| O["End at t = 150 s<br/>Mass at rest near natural length<br/>position_m ~= 0.0 m<br/>velocity_m_s ~= 0.0 m/s"]

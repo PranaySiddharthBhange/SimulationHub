@@ -3,7 +3,7 @@
   "entry_class": "NaClBatchPlantSystem",
   "files": [
     {
-      "filename": "NaClBatchController.mo",
+      "filename": "BatchSequenceController.mo",
       "role": "controller"
     },
     {
@@ -17,39 +17,173 @@
     "Modelica.Blocks.Interfaces.IntegerOutput",
     "Modelica.Blocks.Interfaces.RealInput",
     "Modelica.Blocks.Math.BooleanToReal",
-    "Modelica.Blocks.Sources.BooleanConstant",
     "Modelica.Blocks.Sources.BooleanTable",
     "Modelica.Blocks.Sources.RealExpression",
-    "Modelica.Fluid.Sensors.MassFlowRate",
     "Modelica.Fluid.Sources.Boundary_pT",
     "Modelica.Fluid.System",
     "Modelica.Fluid.Valves.ValveDiscrete",
-    "Modelica.Fluid.Vessels.ClosedVolume",
     "Modelica.Fluid.Vessels.OpenTank",
     "Modelica.Icons.Example",
-    "Modelica.Media.Water.StandardWater",
-    "Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow"
+    "Modelica.Media.Water.StandardWater"
   ],
   "corrections": [
-    "Derived from the real compiler failure and the prompt's discrete-initialization rule: the previous controller used discrete enumeration variables in a way that contributed Boolean/discrete variables to a nonlinear system seen by the backend C generator. This revision removes the extra discrete Boolean startPulse variable and the extra equation-level edge assignment, and keeps one writer per discrete state machine variable in algorithm when-blocks using pre(...).",
-    "Assumption from the brief's baseline integration-test medium context: this bundle keeps Modelica.Media.Water.StandardWater for topology/control integration only, not the intended WaterNaCl physical medium.",
-    "Assumption retained from the previous bundle because the brief does not provide B1/B2 initial levels: B1 and B2 level_start are 0.30 m so enough inventory exists to perform one cycle in the baseline integration model.",
-    "Assumption retained from the previous bundle because the brief gives valve discrete behavior but not hydraulic sizing: each automated valve uses m_flow_nominal = 0.30 kg/s, with dp_nominal = 1e5 Pa on source/return branches and 1 Pa on gravity-transfer branches, to approximate the stated nominal transfer/pump-scale behavior in the baseline integration model.",
-    "Correction against the earlier rejected attempt with multi-connect vessel ports: each vessel port index in the system file is now connected exactly once, and unused extra sink/source branches from the previous attempt were removed rather than left connected or floating.",
-    "Assumption retained from the previous bundle because no explicit thermal state/temperature initialization for B5/B6/B7 is supplied in the brief: B5_T is still reported as system ambient in the baseline integration model, while B6_T and B7_T are represented by controller-observable completion-temperature expressions tied to cooler command state. This is a baseline integration simplification, not a claim of physical validation.",
-    "Ambiguity preserved: the brief allows a combined evaporator/condenser simulation abstraction provided K1 remains distinct physically. This baseline model keeps K1 as a separate ClosedVolume connected on the B5 vapor side, but does not implement the unresolved physical evaporation/condensation mass-split relation because the notes do not fully establish units and complete executable medium data for that relation.",
-    "Assumption from the human-confirmed clarification and prior bundle: startEnable is represented as an external scenario input by a BooleanTable with pulses at 0.001 s and 2505 s, using positive offset from t=0 so edge(...) can detect the first start event."
+    "Derived from the rejection evidence: the previous bundle over-determined the return-manifold side by placing isolated ValveDiscrete components V1, V3, V5, V6, V18, V20, V22, V23, V24, and V25 with no complete fluid path and no associated junction volumes; OpenModelica then reported a constant flow equation on V25.port_a.m_flow and an imbalanced independent subset. This revision removes those physical valve instances from the fluid network and keeps the approved return valve-group behavior as controller/report outputs only, because the brief resolves branch destinations and observed commanded valve sets but does not resolve a complete manifold topology executable as a unique fluid network.",
+    "Assumption for executable baseline integration model: the baseline medium remains Modelica.Media.Water.StandardWater exactly as resolved for topology/control integration only; NaCl concentration and cooling-temperature signals are represented by RealExpression schedules/signals rather than a composition-dependent physical medium because the intended WaterNaCl medium is stated as unresolved for later stages and no complete executable WaterNaCl implementation is supplied in the evidence.",
+    "Assumption for B1 and B2 source/sink representation: sourceB1 and sourceB2 act as charging supplies to the B3 path through V8 and V9, while B1 and B2 themselves are retained as distinct physical vessels in the diagram and connected to dedicated sink boundaries so every placed fluid component participates in a complete network. This preserves named equipment visibility in OMEdit, but it does not claim a physically validated return-storage behavior for B1 and B2 because the full manifold/topology and inventory initialization needed for that are not fully resolved in the notes.",
+    "Assumption for controller Step4 idle guard implementation: the brief defines B5 idle as LIS-501 < 0.01 m and V15 closed. In the controller this is implemented with LIS501 < B5_idleLevel and branchBMode not equal to Step8_Transfer_B5_to_B7, because V15_open is itself derived from branchBMode and using pre(V15_open) directly in the same dispatcher contributed to the previous discrete compilation issues. This is a derived equivalent within the controller structure, not a changed requirement.",
+    "Assumption for restart stimulus: startEnable is implemented as an external BooleanTable scenario input with pulses at 0.001 s and 2505 s, preserving the clarified role of startEnable as an external scenario input and the BAT-09 restart observation at t=2505 s. The dataset is used only for command timing evidence already merged into the brief, not as a forcing trajectory.",
+    "Assumption for tolerance: experiment annotation uses Tolerance=1e-6 because the brief confirms no explicit solver tolerance."
   ],
   "references": [
     {
+      "path": "02_02_process_data_register.txt REQ-FUN-002",
+      "time_column": "time",
+      "reference_column": "ever(B3_level >= 0.13)",
+      "model_variable": "B3_level",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance check is an ever-condition on B3 reaching 0.13 m."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-003",
+      "time_column": "time",
+      "reference_column": "ever(B3_X_NaCl >= 0.080)",
+      "model_variable": "B3_X_NaCl",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance check is an ever-condition on B3 NaCl mass fraction reaching 0.080."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-004",
+      "time_column": "time",
+      "reference_column": "ever(B3_level < 0.01)",
+      "model_variable": "B3_level",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance check is an ever-condition on B3 dropping below 0.01 m."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-006",
+      "time_column": "time",
+      "reference_column": "ever(B5_level >= 0.18)",
+      "model_variable": "B5_level",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance check is an ever-condition on B5 reaching 0.18 m."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-007",
+      "time_column": "time",
+      "reference_column": "ever(B5_X_NaCl >= 0.180)",
+      "model_variable": "B5_X_NaCl",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance check is an ever-condition on B5 NaCl mass fraction reaching 0.180."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-009",
+      "time_column": "time",
+      "reference_column": "ever(B6_T <= 20)",
+      "model_variable": "B6_T",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance check is an ever-condition on B6 cooling to 20 degC."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-010",
+      "time_column": "time",
+      "reference_column": "ever(B7_T <= 25)",
+      "model_variable": "B7_T",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance check is an ever-condition on B7 cooling to 25 degC."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-SAF-001",
+      "time_column": "time",
+      "reference_column": "always(not (B5_heater_cmd > 0.5 and FIS801_flow < 0.10))",
+      "model_variable": "B5_heater_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Safety check uses B5_heater_cmd jointly with FIS801_flow for all times."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-SAF-005",
+      "time_column": "time",
+      "reference_column": "always(not (B5_heater_cmd > 0.5 and B5_level < 0.05))",
+      "model_variable": "B5_heater_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Safety check uses B5_heater_cmd jointly with B5_level for all times."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-ROU-003",
+      "time_column": "time",
+      "reference_column": "ever(P2_cmd > 0.5)",
+      "model_variable": "P2_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance check is an ever-condition on P2 command occurrence."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-ROU-004",
+      "time_column": "time",
+      "reference_column": "ever(P1_cmd > 0.5)",
+      "model_variable": "P1_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance check is an ever-condition on P1 command occurrence."
+    },
+    {
+      "path": "09_05_process_controls_email_thread.txt CR-017",
+      "time_column": "time",
+      "reference_column": "ever(P2_cmd and V1_open and V3_open and V20_open and V24_open and V25_open)",
+      "model_variable": "P2_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Executable routing check uses observed B6->B1 valve-group pattern when P2 runs."
+    },
+    {
+      "path": "09_05_process_controls_email_thread.txt CR-017",
+      "time_column": "time",
+      "reference_column": "ever(P1_cmd and V18_open and V22_open and V23_open and V5_open and V6_open)",
+      "model_variable": "P1_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Executable routing check uses observed B7->B2 valve-group pattern when P1 runs."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-VV-001",
+      "time_column": "time",
+      "reference_column": "final(time_s > 2500)",
+      "model_variable": "time_s",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance check is on final simulation time exceeding 2500 s."
+    },
+    {
       "path": "14_10_batch_run_3000s.txt",
       "time_column": "time",
-      "reference_column": "V8_open",
+      "reference_column": "V8_open at t=2505.0",
       "model_variable": "V8_open",
       "absolute_tolerance": 0.0,
-      "relative_tolerance": 0,
+      "relative_tolerance": 0.0,
       "interpolation": "previous",
-      "reason": "BAT-09 restart occurs only after 2500 s, checked at t=2505 from the resolved acceptance expression."
+      "reason": "BAT-09 restart evidence checks V8_open occurrence at t=2505 s."
     }
   ]
 }

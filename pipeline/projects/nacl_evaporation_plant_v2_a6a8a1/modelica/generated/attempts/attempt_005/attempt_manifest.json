@@ -3,7 +3,7 @@
   "entry_class": "NaClBatchPlantSystem",
   "files": [
     {
-      "filename": "NaClBatchController.mo",
+      "filename": "BatchSequenceController.mo",
       "role": "controller"
     },
     {
@@ -12,29 +12,27 @@
     }
   ],
   "library_components": [
-    "Modelica.Blocks.Interfaces.BooleanInput",
-    "Modelica.Blocks.Interfaces.BooleanOutput",
-    "Modelica.Blocks.Interfaces.IntegerOutput",
-    "Modelica.Blocks.Interfaces.RealInput",
-    "Modelica.Blocks.Math.BooleanToReal",
-    "Modelica.Blocks.Sources.BooleanConstant",
-    "Modelica.Blocks.Sources.BooleanTable",
-    "Modelica.Blocks.Sources.RealExpression",
-    "Modelica.Fluid.Sensors.MassFlowRate",
-    "Modelica.Fluid.Sources.Boundary_pT",
-    "Modelica.Fluid.System",
-    "Modelica.Fluid.Valves.ValveDiscrete",
-    "Modelica.Fluid.Vessels.ClosedVolume",
-    "Modelica.Fluid.Vessels.OpenTank",
     "Modelica.Icons.Example",
     "Modelica.Media.Water.StandardWater",
-    "Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow"
+    "Modelica.Fluid.System",
+    "Modelica.Fluid.Sources.Boundary_pT",
+    "Modelica.Fluid.Vessels.OpenTank",
+    "Modelica.Fluid.Valves.ValveDiscrete",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Blocks.Math.BooleanToReal"
   ],
   "corrections": [
-    "Derived from the real compiler error pattern and the prior bundle: the root cause is a discrete algebraic/nonlinear system involving Boolean and Integer variables from the controller event logic, not a single syntax line. The repaired controller avoids using edge(startEnable) directly inside the when trigger set more than once and keeps one writer per discrete state variable.",
-    "Baseline integration medium remains Modelica.Media.Water.StandardWater exactly as resolved for topology/control validation only; the intended WaterNaCl physical medium is not implemented because the brief does not supply a complete executable medium package here.",
-    "P1 and P2 are still represented only by commanded return-branch behavior in the controller and not as physical pump components, because the brief supplies nominal flow and differential pressure but no callable Standard Library pump curve data and earlier attempts using a nonexistent constantFlow characteristic were rejected.",
-    "B5/K1 evaporation-condensation physics remain simplified in the prior bundle; no evidence in the brief supplies a complete, unit-verified executable implementation of the stated m_con relation, so this draft preserves baseline topology/control scope only."
+    "Derived from the rejection evidence: the initialization failure at time 0 is consistent with zero-start or empty-start fluid states in the previous topology causing a nonlinear initialization problem in the fluid network rather than a controller event-chatter failure, because the log reports assertion termination at initialization, not later event iteration. This bundle therefore changes K1 and B6 from exactly empty starts to small positive level_start values (0.01 m) while preserving K1 as a distinct component and preserving the resolved sequence structure.",
+    "Assumption retained from the earlier attempt because the brief does not provide initial levels for B1, B2, B6, B7, or K1: B1 and B2 are started at 0.30 m so charging can occur; K1 and B6 are started with small positive liquid inventory to avoid exact-empty initialization issues in the connected StandardWater fluid network. This is an executable modeling assumption, not an evidenced initial condition.",
+    "Assumption retained: baseline integration medium is Modelica.Media.Water.StandardWater, consistent with the brief's resolved medium context for topology/control validation only.",
+    "Assumption retained from the prior executable interpretation: QI-302, QIS-502, TIS-602, TIS-702, and FIS-801 are represented by schedule/derived signal expressions for baseline control-sequence validation because the brief does not supply a complete executable WaterNaCl medium and does not supply a condenser/cooler physical model with all required parameters for those measurements in the StandardWater baseline context.",
+    "Unresolved from the brief: the exact manifold hydraulic path for the B1 and B2 return groups beyond the approved destinations is not fully readable. This executable baseline still represents only the resolved branch destinations and controller-observed valve-group patterns, not a fully evidenced return-header hydraulic detail.",
+    "Known limitation from evidence: the previous and current baseline topology still do not instantiate every named automated return valve as fluid-network valve components; the observed return valve-group patterns are preserved as controller output reports only. The brief supports those as approved executable implementation for control/routing checks, but the exact hydraulic placement of each return-group valve is not fully resolved in the notes."
   ],
   "references": []
 }

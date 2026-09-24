@@ -1,0 +1,29 @@
+Subject: Existing architecture draft
+Document kind: diagram
+
+## Entities
+* Room -- component
+    - volume: 100 m3
+* OA -- component; aliases: FreshAirSource
+* EXH -- component; aliases: ExhaustBoundary
+* S -- component; aliases: CO2 Sensor
+    - output: ppm ?
+* PID -- component
+* P -- component; aliases: People CO2
+
+## Relationships
+* OA supplies air to Room (supply air)
+* Room exhausts air to EXH (exhaust air)
+* Room provides concentration to S (concentration)
+* S provides CO2 to PID (CO2)
+* PID requests airflow from OA (airflow request)
+* P provides CO2 to Room (CO2)
+
+## Physical relationships
+* Legacy draft assumes sensor output is ppm. [archived]
+
+## Unreadable
+* The sensor output is shown as uncertain: "output: ppm ?".
+* The note references a later document without fully specifying the normalization gain: "ICD-IAQ-03 later freezes the internal feedback interface in kg/kg and adds a normalization gain."
+* The diagram is intentionally incomplete: "Existing architecture draft - intentionally incomplete".
+* Not shown elements are noted: "Occupancy schedule block not shown." and "Source carrier-flow scaling not shown."

@@ -1,0 +1,39 @@
+{
+  "attempt": 1,
+  "entry_class": "HeldMassSpringDamperSystem",
+  "files": [
+    {
+      "filename": "ClampConstraint.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ReleaseCommand.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "HeldMassSpringDamperSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Mechanics.Translational.Components.Damper",
+    "Modelica.Mechanics.Translational.Components.Fixed",
+    "Modelica.Mechanics.Translational.Components.Mass",
+    "Modelica.Mechanics.Translational.Components.Spring",
+    "Modelica.Mechanics.Translational.Interfaces.Flange_b",
+    "Modelica.Mechanics.Translational.Sources.Position"
+  ],
+  "corrections": [
+    "Assumption from the brief preserved: clamp_engaged is reported numerically as 1 while engaged and 0 after release.",
+    "Assumption from the brief preserved: the free-motion equation m*x'' + c*x' + k*x = 0 applies only after the clamp release event at t = 5 s; before release the clamp holding overrides free motion.",
+    "Assumption from the brief preserved: the brief's closed-form displacement expression is interpreted with dt = t - 5 s for t >= 5 s.",
+    "The explicit note values 0 m and -0.0729 m for mass position were not used as initial conditions or timed requirements because the clarify-stage decision classified them as non-executable contextual values with unresolved timing/role.",
+    "Modeling assumption: experiment tolerance was set to 1e-6 and output interval to 0.1 s because the brief states StartTime and StopTime but does not state solver tolerance or reporting interval."
+  ],
+  "references": []
+}

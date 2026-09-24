@@ -1,0 +1,18 @@
+Subject: OCC-SCH-04
+Document kind: dataset
+
+## Entities
+* OCC-SCH-04 -- occupancy schedule  <OCC-SCH-04>
+    - revision: C
+
+## Physical relationships
+* interpretation is piecewise_constant
+* occupants = 0 from 00:00 to 07:00 [observed]
+* occupants = 2 from 07:00 to 08:00 [observed]
+* occupants = 8 from 08:00 to 10:00 [observed]
+* occupants = 12 from 10:00 to 12:00 [observed]
+* occupants = 4 from 12:00 to 13:00 [observed]
+* occupants = 15 from 13:00 to 15:00 [observed]
+* occupants = 10 from 15:00 to 17:00 [observed]
+* occupants = 3 from 17:00 to 18:00 [observed]
+* occupants = 0 from 18:00 to 24:00 [observed]

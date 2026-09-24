@@ -1,0 +1,35 @@
+{
+  "entry_class": "TwoTankSystem",
+  "files": [
+    {
+      "filename": "OpenTankLevel.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ConnectingValveFlow.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ValveCommand.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "TwoTankSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Assumption retained from the brief: during 0 s to 5 s with the valve command closed, connecting flow is zero; after opening, the stated relation q = k*(level_A_m - level_B_m) governs the transfer path.",
+    "To prevent the previously observed tiny reverse flow near equilibrium, the executable model floors the post-open flow at zero with q_m3s = max(0, k*(level_A_m - level_B_m)) while the valve is open. This preserves the stated one-direction behavior 'flow runs from A to B' and prevents numerical overshoot from creating reverse transfer.",
+    "No Modelica.Fluid library tank/valve network was used because the brief gives a direct level-difference flow law q = k*(level_A - level_B) and reported variables in terms of levels and volumetric flow, but does not state pressures, medium, pipe geometry, or boundary pressures needed to reproduce that law with catalog fluid components without adding unstated physics."
+  ],
+  "references": []
+}

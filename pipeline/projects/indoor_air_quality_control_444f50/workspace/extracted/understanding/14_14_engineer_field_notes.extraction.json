@@ -1,0 +1,289 @@
+{
+  "document": "RM-201 synthetic trend check - 2026-03-04\n\n- Don't mix up freshAir.m_flow sign with physical air into room. Source command is negative because of port convention.\n- Outside trace = 0.0004557 kg/kg = 300 ppm under project rounding.\n- \"100 kg/kg\" at peopleSource looks crazy but is intentional. carrier m_flow * 100 gives actual CO2 kg/s.\n- New schedule peaks at 15 people after lunch. Old .mo file only peaks at 12.\n- New tuning Kp 6, bias 3.5 ACH. Integral off in reference run.\n- Trend maximum I see: about 996.52 ppm at around 14:59.\n- Controller bottoms at 0.2 ACH for long unoccupied periods.\n- Room is treated perfectly mixed; no local sensor stratification modeled.\n- Sensor-fault fallback is a requirement but not injected in the baseline trend.\n",
+  "subject": "RM-201 synthetic trend check",
+  "kind": "engineering note",
+  "entities": [
+    {
+      "name": "freshAir.m_flow",
+      "kind": "signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "freshAir.m_flow sign"
+    },
+    {
+      "name": "peopleSource",
+      "kind": "source",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "concentration",
+          "value": "100",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "\"100 kg/kg\" at peopleSource"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "peopleSource"
+    },
+    {
+      "name": "carrier m_flow",
+      "kind": "flow",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "carrier m_flow"
+    },
+    {
+      "name": "CO2",
+      "kind": "substance",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CO2 kg/s"
+    },
+    {
+      "name": "schedule",
+      "kind": "schedule",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "peak people",
+          "value": "15",
+          "unit": "people",
+          "status": "current",
+          "supersedes": "",
+          "quote": "peaks at 15 people"
+        },
+        {
+          "quantity": "peak people",
+          "value": "12",
+          "unit": "",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "Old .mo file only peaks at 12"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "New schedule peaks at 15 people after lunch."
+    },
+    {
+      "name": "Kp",
+      "kind": "controller parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "gain",
+          "value": "6",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Kp 6"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "New tuning Kp 6"
+    },
+    {
+      "name": "bias",
+      "kind": "controller parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "bias",
+          "value": "3.5",
+          "unit": "ACH",
+          "status": "current",
+          "supersedes": "",
+          "quote": "bias 3.5 ACH"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "bias 3.5 ACH"
+    },
+    {
+      "name": "Integral",
+      "kind": "controller mode",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Integral off in reference run."
+    },
+    {
+      "name": "Controller",
+      "kind": "controller",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "minimum output",
+          "value": "0.2",
+          "unit": "ACH",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "bottoms at 0.2 ACH"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controller bottoms at 0.2 ACH"
+    },
+    {
+      "name": "Room",
+      "kind": "space",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Room is treated perfectly mixed"
+    },
+    {
+      "name": "sensor-fault fallback",
+      "kind": "fallback mode",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Sensor-fault fallback is a requirement"
+    },
+    {
+      "name": "Outside trace",
+      "kind": "trace value",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "trace concentration",
+          "value": "0.0004557",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Outside trace = 0.0004557 kg/kg"
+        },
+        {
+          "quantity": "trace concentration",
+          "value": "300",
+          "unit": "ppm",
+          "status": "current",
+          "supersedes": "",
+          "quote": "= 300 ppm under project rounding"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Outside trace = 0.0004557 kg/kg = 300 ppm under project rounding."
+    },
+    {
+      "name": "baseline trend",
+      "kind": "trend",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "baseline trend"
+    },
+    {
+      "name": "reference run",
+      "kind": "run",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "reference run"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "freshAir.m_flow",
+      "predicate": "uses sign convention opposite to",
+      "object": "physical air into room",
+      "detail": "Source command is negative because of port convention.",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "freshAir.m_flow sign with physical air into room. Source command is negative because of port convention."
+    },
+    {
+      "subject": "carrier m_flow",
+      "predicate": "scaled by 100 gives actual flow of",
+      "object": "CO2",
+      "detail": "actual CO2 kg/s",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "carrier m_flow * 100 gives actual CO2 kg/s."
+    },
+    {
+      "subject": "sensor-fault fallback",
+      "predicate": "not injected in",
+      "object": "baseline trend",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "not injected in the baseline trend."
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "Outside trace = 0.0004557 kg/kg = 300 ppm under project rounding.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Outside trace = 0.0004557 kg/kg = 300 ppm under project rounding."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "carrier m_flow * 100 gives actual CO2 kg/s.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "carrier m_flow * 100 gives actual CO2 kg/s."
+    },
+    {
+      "category": "requirement",
+      "statement": "Sensor-fault fallback is a requirement.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Sensor-fault fallback is a requirement"
+    },
+    {
+      "category": "behavior",
+      "statement": "Controller bottoms at 0.2 ACH for long unoccupied periods.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "Controller bottoms at 0.2 ACH for long unoccupied periods."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

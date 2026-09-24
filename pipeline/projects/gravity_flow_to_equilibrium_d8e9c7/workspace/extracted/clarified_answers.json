@@ -1,0 +1,17 @@
+{
+  "questions": [
+    "How the stated flow law applies during the valve-closed interval: Merge resolved this to During 0 to 5 s with `valve_open_cmd = 0`, connecting flow is zero; after opening, `q_m3s = k * (level_A_m - level_B_m)` with k = 0.025 m^2/s.. Confirm, or choose a different value."
+  ],
+  "answers": {
+    "resolve_closed_valve_flow_behavior": "During 0 to 5 s with `valve_open_cmd = 0`, connecting flow is zero; after opening, `q_m3s = k * (level_A_m - level_B_m)` with k = 0.025 m^2/s."
+  },
+  "decisions": [
+    {
+      "id": "resolve_closed_valve_flow_behavior",
+      "question": "How the stated flow law applies during the valve-closed interval: Merge resolved this to During 0 to 5 s with `valve_open_cmd = 0`, connecting flow is zero; after opening, `q_m3s = k * (level_A_m - level_B_m)` with k = 0.025 m^2/s.. Confirm, or choose a different value.",
+      "merge_suggested": "During 0 to 5 s with `valve_open_cmd = 0`, connecting flow is zero; after opening, `q_m3s = k * (level_A_m - level_B_m)` with k = 0.025 m^2/s.",
+      "answer": "During 0 to 5 s with `valve_open_cmd = 0`, connecting flow is zero; after opening, `q_m3s = k * (level_A_m - level_B_m)` with k = 0.025 m^2/s.",
+      "outcome": "confirmed"
+    }
+  ]
+}

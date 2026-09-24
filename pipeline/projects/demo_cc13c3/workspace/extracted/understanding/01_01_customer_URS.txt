@@ -1,0 +1,52 @@
+Subject: User Requirement Specification - Two-Tank Sequence Controller
+Document kind: requirement specification
+
+## Entities
+* TK-101 -- tank  <[page 1]>; aliases: tank1, T1
+* TK-102 -- tank  <[page 1]>; aliases: tank2, T2
+* XV-101 -- valve  <[page 1]>; aliases: valve1, V1
+* XV-102 -- valve  <[page 1]>; aliases: valve2, V2
+* XV-103 -- valve  <[page 1]>; aliases: valve3, V3
+* PLC-101 -- controller  <[page 1]>; aliases: tankController
+* LT-101 -- level measurement  <[page 2]>
+* LT-102 -- level measurement  <[page 2]>
+* START -- operator command  <[page 2]>
+* STOP -- operator command  <[page 2]>
+* SHUT -- operator command  <[page 2]>
+* Tank 1 -- tank  <[page 2]>
+    - initial level: 0.05 m [approved]
+    - high limit: 0.78 m [approved]
+    - low limit: 0.05 m [approved]
+* Tank 2 -- tank  <[page 2]>
+    - initial level: 0.05 m [approved]
+    - low limit: 0.05 m [approved]
+* Wait after T1 high -- wait period  <[page 2]>
+    - wait time: 10 s [approved]
+* Wait after T1 low -- wait period  <[page 2]>
+    - wait time: 10 s [approved]
+* Wait after T2 low -- wait period  <[page 2]>
+    - wait time: 10 s [approved]
+
+## Relationships
+* XV-101 inlet valve to TK-101  <[page 1]>
+* XV-102 transfer valve from TK-101 (to TK-102)  <[page 1]>
+* XV-103 drain valve for TK-102  <[page 1]>
+* LT-101 available to PLC-101  <[page 2]>
+* LT-102 available to PLC-101  <[page 2]>
+
+## Requirements
+* START shall initiate automatic operation when the system is in its initial condition. [approved]  <URS-F-001 [page 1]>
+* Normal operation shall fill Tank 1 by opening V1. [approved]  <URS-F-002 [page 1]>
+* V1 shall close when Tank 1 reaches the specified high-level limit. [approved]  <URS-F-003 [page 1]>
+* After a 10 s waiting period, V2 shall open and transfer liquid from Tank 1 to Tank 2. [approved]  <URS-F-004 [page 1]>
+* V2 shall close when Tank 1 reaches its minimum operating level. [approved]  <URS-F-005 [page 1]>
+* After a 10 s waiting period, V3 shall open and drain Tank 2. [approved]  <URS-F-006 [page 1]>
+* V3 shall close when Tank 2 reaches its minimum operating level. [approved]  <URS-F-007 [page 1]>
+* The automatic process shall continue cyclically unless stopped or shut down. [approved]  <URS-F-008 [page 1]>
+* STOP shall close all three valves and suspend automatic operation until another operator command is received. [approved]  <URS-M-001 [page 1]>
+* START after STOP shall continue the process operation rather than force a new empty-cycle initialization. [approved]  <URS-M-002 [page 1]>
+* SHUT shall empty both tanks by opening V2 and V3 and shall inhibit V1. [approved]  <URS-M-003 [page 1]>
+* When shutdown emptying is achieved, V2 and V3 shall close and the controller shall return to the start configuration. [approved]  <URS-M-004 [page 1]>
+* Level measurements LT-101 and LT-102 shall be available to PLC-101. [approved]  <[page 2]>
+* The supplier shall provide actuators that fail closed on loss of power. [approved]  <[page 2]>
+* Sequence operation, stop/resume behavior and controlled shutdown shall be demonstrated in simulation. [approved]  <[page 2]>

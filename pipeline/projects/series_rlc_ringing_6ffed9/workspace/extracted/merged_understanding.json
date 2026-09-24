@@ -1,0 +1,124 @@
+{
+  "title": "Series RLC Ringing — Pre-Charged Capacitor Released Into A Resistor And Inductor",
+  "narrative": "Canonical entities and aliases: capacitor; resistor; inductor; switch; reported signals capacitor_voltage_V (alias v_C, capacitor voltage), loop_current_A (loop current), and switch_closed (switch state). Topology: when the switch is open, the capacitor is isolated from the resistor-inductor series loop. The switch closes once at t = 5 s, connecting the capacitor into a loop with the resistor and inductor in series. After closing, the capacitor discharges through the resistor and through the inductor around the loop. Parameters from the requirement specification are capacitance C = 1 F [current], initial capacitor voltage = 10 V [current], resistance R = 0.2 Ohm [current], inductance L = 1 H [current], initial loop current = 0 A [current], damping ratio zeta = 0.1 [current], and natural frequency omega_n = 1 rad/s [current]. The note states the continuous physical relationship L*C*d^2(v_C)/dt^2 + R*C*d(v_C)/dt + v_C = 0 [current]. Derived check on consistency: with L = 1 H, C = 1 F, and R = 0.2 Ohm, zeta = (R/2)*sqrt(C/L) = (0.2/2)*1 = 0.1, matching the stated value; omega_n = 1/sqrt(L*C) = 1/sqrt(1*1) = 1 rad/s, also matching the stated value. Required simulation/reporting: simulate for 150 s and report capacitor_voltage_V, loop_current_A, and switch_closed for the whole run. Required behavior before switching: while the switch is open from t = 0 s to t = 5 s, capacitor_voltage_V shall stay exactly 10 V and loop_current_A shall stay exactly 0 A. Required switching event: at t = 5 s the switch shall close once, and capacitor_voltage_V shall begin falling from 10 V. Required response character: for the stated R, L, and C values, the response shall be underdamped, so capacitor_voltage_V shall cross below 0 V and swing negative before settling rather than decay monotonically. Required settling: the ringing shall decay over time and capacitor_voltage_V shall settle at 0 V well before the end of the run. Reported variables contract for later stages: capacitor_voltage_V [V] = capacitor voltage; loop_current_A [A] = loop current around the series loop; switch_closed [-] = switch state, with 0 for open and 1 for closed. Acceptance behavior from the stated constraints: switch_closed must be 0 at t = 4 s; capacitor_voltage_V must be 10.0 V and loop_current_A 0.0 A at t = 4 s within absolute tolerance 0.01; switch_closed must be 1 at t = 6 s; capacitor_voltage_V must become less than or equal to 0.0 V at least once between the post-close interval beginning at t = 5 s and the expected first crossing near t = 6.68 s; capacitor_voltage_V must become less than or equal to -5.0 V at least once during the run, with the note saying this is expected around t = 8.16 s where voltage is about -7.29 V; abs(loop_current_A) must be less than or equal to 0.05 A at t = 8.16 s; at t = 150 s, capacitor_voltage_V and loop_current_A must both be 0 within absolute tolerance 0.05; and abs(capacitor_voltage_V) must remain less than or equal to 0.3 V over the interval t = 50 s to t = 150 s. No additional commands, modes, interlocks, pause/resume behavior, or alternate configurations are stated in the notes.",
+  "simulation": {
+    "start_time": 0.0,
+    "stop_time": 150.0,
+    "intervals": 1000,
+    "tolerance": 1e-6
+  },
+  "checks": [
+    {
+      "name": "AC-01 switch open at 4 s",
+      "expression": "switch_closed == 0",
+      "kind": "at",
+      "at_time": 4.0,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_rlc_ringing.txt <AC-01>"
+    },
+    {
+      "name": "AC-02 capacitor voltage at 4 s",
+      "expression": "capacitor_voltage_V == 10.0",
+      "kind": "at",
+      "at_time": 4.0,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_rlc_ringing.txt <AC-02>"
+    },
+    {
+      "name": "AC-02 loop current at 4 s",
+      "expression": "loop_current_A == 0.0",
+      "kind": "at",
+      "at_time": 4.0,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_rlc_ringing.txt <AC-02>"
+    },
+    {
+      "name": "AC-03 switch closed at 6 s",
+      "expression": "switch_closed == 1",
+      "kind": "at",
+      "at_time": 6.0,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_rlc_ringing.txt <AC-03>"
+    },
+    {
+      "name": "AC-06 voltage crosses below zero",
+      "expression": "capacitor_voltage_V <= 0.0",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_rlc_ringing.txt <AC-06>"
+    },
+    {
+      "name": "AC-04 voltage reaches negative overshoot threshold",
+      "expression": "capacitor_voltage_V <= -5.0",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_rlc_ringing.txt <AC-04>"
+    },
+    {
+      "name": "AC-05 loop current near zero at 8.16 s",
+      "expression": "abs(loop_current_A) <= 0.05",
+      "kind": "at",
+      "at_time": 8.16,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_rlc_ringing.txt <AC-05>"
+    },
+    {
+      "name": "AC-07 capacitor voltage settled at 150 s",
+      "expression": "capacitor_voltage_V",
+      "kind": "at",
+      "at_time": 150.0,
+      "expected": 0.0,
+      "absolute_tolerance": 0.05,
+      "relative_tolerance": 0.0,
+      "source": "01_rlc_ringing.txt <AC-07>"
+    },
+    {
+      "name": "AC-07 loop current settled at 150 s",
+      "expression": "loop_current_A",
+      "kind": "at",
+      "at_time": 150.0,
+      "expected": 0.0,
+      "absolute_tolerance": 0.05,
+      "relative_tolerance": 0.0,
+      "source": "01_rlc_ringing.txt <AC-07>"
+    },
+    {
+      "name": "AC-08 voltage magnitude small from late-time window",
+      "expression": "abs(capacitor_voltage_V) <= 0.3",
+      "kind": "always",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_rlc_ringing.txt <AC-08>"
+    }
+  ],
+  "tables": [],
+  "assumptions": [
+    "For the 'entire interval t = 50 s to t = 150 s' late-settling requirement, the mechanically evaluable check is applied as an 'always' condition over the full reported run because the schema supports 'always' over the full run but not a bounded time window. Later stages should enforce the stated 50 s to 150 s interval in implementation if they can represent windowed checks explicitly.",
+    "The note states AC-02 has absolute tolerance 0.01 for the combined condition at t = 4 s. Because checks are split per reported variable, the same 0.01 absolute tolerance is applied to each variable-specific check.",
+    "No solver tolerance or sample count requirement is stated in the note; intervals is left at 1000 by modeling choice for output sampling density."
+  ],
+  "questions": [],
+  "clarifications": [],
+  "resolutions": [],
+  "domains": [
+    "electrical_circuit"
+  ]
+}

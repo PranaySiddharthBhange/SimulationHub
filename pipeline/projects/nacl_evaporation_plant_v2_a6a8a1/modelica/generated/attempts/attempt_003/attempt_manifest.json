@@ -3,7 +3,7 @@
   "entry_class": "NaClBatchPlantSystem",
   "files": [
     {
-      "filename": "NaClBatchController.mo",
+      "filename": "BatchSequenceController.mo",
       "role": "controller"
     },
     {
@@ -17,28 +17,177 @@
     "Modelica.Blocks.Interfaces.IntegerOutput",
     "Modelica.Blocks.Interfaces.RealInput",
     "Modelica.Blocks.Math.BooleanToReal",
-    "Modelica.Blocks.Sources.BooleanConstant",
     "Modelica.Blocks.Sources.BooleanTable",
     "Modelica.Blocks.Sources.RealExpression",
-    "Modelica.Fluid.Sensors.MassFlowRate",
+    "Modelica.Fluid.Fittings.TeeJunctionVolume",
     "Modelica.Fluid.Sources.Boundary_pT",
-    "Modelica.Fluid.Sources.MassFlowSource_T",
     "Modelica.Fluid.System",
     "Modelica.Fluid.Valves.ValveDiscrete",
-    "Modelica.Fluid.Vessels.ClosedVolume",
     "Modelica.Fluid.Vessels.OpenTank",
     "Modelica.Icons.Example",
-    "Modelica.Media.Water.StandardWater",
-    "Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow"
+    "Modelica.Media.Water.StandardWater"
   ],
   "corrections": [
-    "Derived root cause of the translation error: the previous system model connected more than one physical branch to the same vessel port indices while also using surrogate source/sink branches for condensate and return pumping. In this plant, B3, B4, B5, B6, and B7 each participate in more distinct hydraulic connections than the previous nPorts declarations allowed. The bundle increases nPorts and assigns one unique ports[i] per actual connection so each vessel connection path is represented separately.",
-    "Assumption: because the brief confirms branch destinations and observed commanded return valve sets but does not provide a full readable manifold path or a pump head-flow curve, the return pumping remains represented with commanded MassFlowSource_T devices and the approved/observed valve groups remain as separate actuated hydraulic path elements. This preserves the commanded routing behavior without reusing one vessel port for multiple connections.",
-    "Assumption: the StandardWater medium is used as the baseline integration-test medium exactly as resolved in the brief; composition reports QI-302 and QIS-502 remain surrogate report expressions in this baseline model because StandardWater cannot carry NaCl mass fraction.",
-    "Assumption: no explicit solver tolerance is stated in the brief. The system file keeps experiment Tolerance=1e-6 as a modeling choice, not as a brief-stated fact.",
-    "Assumption: initial levels for B1 and B2 remain 0.30 m because the brief supplies geometry, max levels, and B3 prefill evidence but does not state initial B1/B2 fill levels. This preserves the earlier executable choice; the brief is otherwise silent.",
-    "Assumption: K1 volume V=0.01 m3 remains an executable placeholder because the brief requires K1 to remain a distinct physical component but provides no condenser hold-up volume.",
-    "Derived concern retained from evidence: the exact physical semantics of condensate generation from B5 into K1 are not fully established for this StandardWater baseline. The brief provides an evidence-grounded condensation relation involving Q_up, heatPort.Q_flow, hv, hl, Xi[1], cp, dT_dX, and dhl_dX, but also states units are not fully established and must be verified before implementation. This baseline therefore does not claim physical validation of evaporation/condensation energetics."
+    "Derived from the brief and the prior compiler error: PrescribedPump was removed because the brief gives only pump nominal mass flow 0.30 kg/s and nominal differential pressure 1.8 bar, but no pump head-flow curve; the previous use of Modelica.Fluid.Machines.PrescribedPump with a non-existent constantFlow characteristic did not match the evidenced pump data.",
+    "Assumption for this baseline integration bundle: the physical return pump hydraulics are not represented with a Modelica.Fluid pump component because the provided verified catalog does not include a commanded fixed-mass-flow two-port pump component and the brief does not provide the pump curve data required by PrescribedPump. The controller outputs P1_cmd and P2_cmd are still reported exactly, but the return branch material path is not completed physically in this baseline bundle.",
+    "Assumption retained from the brief: baseline integration medium is Modelica.Media.Water.StandardWater only for topology/control-sequence validation; intended WaterNaCl physical medium is not implemented here because no verified WaterNaCl library class is present in the provided catalog.",
+    "Assumption for initial conditions: B1 and B2 level_start were kept at 0.30 m as in the prior attempt because the brief provides vessel geometry and B3 water prefill but does not state initial levels for B1 and B2.",
+    "Assumption for start schedule: startEnable is implemented as BooleanTable pulses at 0.001 s and 2505 s, with 0.2 s width, following the brief's authoritative restart check at t=2505 s and the rule to avoid a first toggle exactly at t=0.",
+    "Correction against the previous attempt: unused placed components ambientDrain, jB3, B6LevelSig, B7LevelSig, B4LevelSig, p1SpeedOff, and p2SpeedOff were removed so every placed component is used in a connect() or equation.",
+    "Derived from the clarified Step7 role and the SysML sequence: branch B Step7 is modeled as an explicit no-actuator wait state with completion condition LIS701 < 0.01 before Step8 opens V15.",
+    "Derived from the SysML and narrative sequence: branch A and branch B are triggered when the main sequence enters JoinWait after Step6 completion, because the split occurs after evaporation target reach.",
+    "Assumption for B5 temperature reporting in this baseline bundle: B5_T is reported as a constant 100 degC placeholder inherited from the prior attempt because the brief declares B5_T as a required output contract but the present StandardWater topology/control bundle does not include a thermal state for B5. This preserves the report name but is not a validated plant temperature model."
   ],
-  "references": []
+  "references": [
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-002",
+      "time_column": "time",
+      "reference_column": "B3_level >= 0.13",
+      "model_variable": "B3_level",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Ever-condition check from the brief: B3 reaches fill level."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-003",
+      "time_column": "time",
+      "reference_column": "B3_X_NaCl >= 0.080",
+      "model_variable": "B3_X_NaCl",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Ever-condition check from the brief: B3 reaches target concentration."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-004",
+      "time_column": "time",
+      "reference_column": "B3_level < 0.01",
+      "model_variable": "B3_level",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Ever-condition check from the brief: B3 empties below threshold."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-006",
+      "time_column": "time",
+      "reference_column": "B5_level >= 0.18",
+      "model_variable": "B5_level",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Ever-condition check from the brief: B5 reaches batch fill level."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-007",
+      "time_column": "time",
+      "reference_column": "B5_X_NaCl >= 0.180",
+      "model_variable": "B5_X_NaCl",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Ever-condition check from the brief: B5 reaches evaporation concentration target."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-009",
+      "time_column": "time",
+      "reference_column": "B6_T <= 20",
+      "model_variable": "B6_T",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Ever-condition check from the brief: B6 reaches cooling target."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-FUN-010",
+      "time_column": "time",
+      "reference_column": "B7_T <= 25",
+      "model_variable": "B7_T",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Ever-condition check from the brief: B7 reaches cooling target."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-SAF-001",
+      "time_column": "time",
+      "reference_column": "not (B5_heater_cmd > 0.5 and FIS801_flow < 0.10)",
+      "model_variable": "B5_heater_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Always-condition check uses B5_heater_cmd together with FIS801_flow reported by the model."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-SAF-005",
+      "time_column": "time",
+      "reference_column": "not (B5_heater_cmd > 0.5 and B5_level < 0.05)",
+      "model_variable": "B5_heater_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Always-condition check uses B5_heater_cmd together with B5_level reported by the model."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-ROU-003",
+      "time_column": "time",
+      "reference_column": "P2_cmd > 0.5",
+      "model_variable": "P2_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Ever-condition check from the brief: P2 return branch occurs."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-ROU-004",
+      "time_column": "time",
+      "reference_column": "P1_cmd > 0.5",
+      "model_variable": "P1_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Ever-condition check from the brief: P1 return branch occurs."
+    },
+    {
+      "path": "09_05_process_controls_email_thread.txt CR-017",
+      "time_column": "time",
+      "reference_column": "P2_cmd > 0.5 and V1_open > 0.5 and V3_open > 0.5 and V20_open > 0.5 and V24_open > 0.5 and V25_open > 0.5",
+      "model_variable": "P2_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Ever-condition check uses the reported P2 and valve-group command signals for the approved B6-to-B1 implementation pattern."
+    },
+    {
+      "path": "09_05_process_controls_email_thread.txt CR-017",
+      "time_column": "time",
+      "reference_column": "P1_cmd > 0.5 and V18_open > 0.5 and V22_open > 0.5 and V23_open > 0.5 and V5_open > 0.5 and V6_open > 0.5",
+      "model_variable": "P1_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Ever-condition check uses the reported P1 and valve-group command signals for the approved B7-to-B2 implementation pattern."
+    },
+    {
+      "path": "02_02_process_data_register.txt REQ-VV-001",
+      "time_column": "time",
+      "reference_column": "time_s > 2500",
+      "model_variable": "time_s",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Final-value check from the brief: run continues beyond 2500 s."
+    },
+    {
+      "path": "14_10_batch_run_3000s.txt",
+      "time_column": "time",
+      "reference_column": "V8_open > 0.5 at t=2505.0",
+      "model_variable": "V8_open",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "At-time check from BAT-09: restart occurs only after 2500 s."
+    }
+  ]
 }

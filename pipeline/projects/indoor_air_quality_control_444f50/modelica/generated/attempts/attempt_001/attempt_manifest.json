@@ -1,0 +1,26 @@
+{
+  "attempt": 1,
+  "entry_class": "RM201System",
+  "files": [
+    {
+      "filename": "OccupancySchedule.mo",
+      "role": "component"
+    },
+    {
+      "filename": "CO2Controller.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "RM201System.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [],
+  "corrections": [
+    "Implemented the required well-mixed room trace-substance balance as a derived modeling assumption from the brief's stated inflow, outflow, source, room volume, and density: V*rho*der(C_room) = m_supply*(C_out - C_room) + G_CO2. This uses constant air density 1.2 kg/m3 and fixed room volume 100 m3 as explicitly stated.",
+    "The baseline run does not inject sensor invalidity. Therefore signal_valid is fixed true in the system model for the approved scenario; SENSOR_FAULT behavior remains represented in the controller logic but is not exercised in the baseline experiment.",
+    "The brief requires reported variables outdoor_co2_ppm and outdoor_co2_mass_fraction_kgkg, so both are exposed as top-level variables and assigned from the approved fixed baseline values 300 ppm and 0.0004557 kg/kg.",
+    "The acceptance checks named one-person carrier-flow and one-person CO2-generation attainment, but the approved occupancy schedule evidence contains only 0, 2, 8, 12, 4, 15, 10, 3, 0 persons. That schedule cannot attain exactly one person; this unresolved inconsistency is preserved rather than altered by inventing an extra schedule point."
+  ],
+  "references": []
+}

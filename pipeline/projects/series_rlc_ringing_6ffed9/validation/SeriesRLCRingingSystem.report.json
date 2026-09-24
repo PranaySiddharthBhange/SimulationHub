@@ -1,0 +1,86 @@
+{
+  "verdict": "partially_valid",
+  "check_results": [
+    {
+      "name": "AC-01 switch open at 4 s",
+      "expression": "switch_closed == 0 == 1.0 (relative tolerance 0.000%), at t=4.0",
+      "outcome": "pass",
+      "observed": "Event trace shows switch_closed = 0 from t=0 until it changes to 1 at t=5.000000001000071; therefore at t=4.0, switch_closed = 0. Expected 0."
+    },
+    {
+      "name": "AC-02 capacitor voltage at 4 s",
+      "expression": "capacitor_voltage_V == 10.0 == 1.0 (relative tolerance 0.000%), at t=4.0",
+      "outcome": "not_evaluable",
+      "observed": "Result summary gives capacitor_voltage_V min=-7.28036, max=10, final=2.58751e-06, but no time-stamped value at t=4.0 is provided in the supplied data. Expected 10.0 V at t=4.0."
+    },
+    {
+      "name": "AC-02 loop current at 4 s",
+      "expression": "loop_current_A == 0.0 == 1.0 (relative tolerance 0.000%), at t=4.0",
+      "outcome": "not_evaluable",
+      "observed": "Result summary gives loop_current_A min=-8.62255, max=6.28647, final=-2.15825e-06, but no time-stamped value at t=4.0 is provided in the supplied data. Expected 0.0 A at t=4.0."
+    },
+    {
+      "name": "AC-03 switch closed at 6 s",
+      "expression": "switch_closed == 1 == 1.0 (relative tolerance 0.000%), at t=6.0",
+      "outcome": "pass",
+      "observed": "Event trace shows switch_closed changes to 1 at t=5.000000001000071 and never changes again; therefore at t=6.0, switch_closed = 1. Expected 1."
+    },
+    {
+      "name": "AC-06 voltage crosses below zero",
+      "expression": "capacitor_voltage_V <= 0.0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "capacitor_voltage_V has minimum -7.28036 V during the run, so it became <= 0.0 V at least once. Expected at least one value <= 0.0 V."
+    },
+    {
+      "name": "AC-04 voltage reaches negative overshoot threshold",
+      "expression": "capacitor_voltage_V <= -5.0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "capacitor_voltage_V minimum is -7.28036 V, which is <= -5.0 V. Expected at least one value <= -5.0 V."
+    },
+    {
+      "name": "AC-05 loop current near zero at 8.16 s",
+      "expression": "abs(loop_current_A) <= 0.05 == 1.0 (relative tolerance 0.000%), at t=8.16",
+      "outcome": "not_evaluable",
+      "observed": "Result summary gives loop_current_A min=-8.62255, max=6.28647, final=-2.15825e-06, but no time-stamped value at t=8.16 is provided in the supplied data. Expected |loop_current_A| <= 0.05 A at t=8.16."
+    },
+    {
+      "name": "AC-07 capacitor voltage settled at 150 s",
+      "expression": "capacitor_voltage_V == 0.0 (absolute tolerance 0.05), at t=150.0",
+      "outcome": "pass",
+      "observed": "capacitor_voltage_V final = 2.58751e-06 V at the end of the 150 s run. This is within ±0.05 V of 0.0 V. Expected 0.0 ± 0.05 V at t=150.0."
+    },
+    {
+      "name": "AC-07 loop current settled at 150 s",
+      "expression": "loop_current_A == 0.0 (absolute tolerance 0.05), at t=150.0",
+      "outcome": "pass",
+      "observed": "loop_current_A final = -2.15825e-06 A at the end of the 150 s run. This is within ±0.05 A of 0.0 A. Expected 0.0 ± 0.05 A at t=150.0."
+    },
+    {
+      "name": "AC-08 voltage magnitude small from late-time window",
+      "expression": "abs(capacitor_voltage_V) <= 0.3 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "fail",
+      "observed": "capacitor_voltage_V maximum is 10 V and minimum is -7.28036 V over the full reported run, so |capacitor_voltage_V| exceeds 0.3 V. The merged evaluable form applied this as an always-over-full-run check, not a bounded 50 s to 150 s window. Expected |capacitor_voltage_V| <= 0.3 always under that merged check form."
+    }
+  ],
+  "summary": "The simulated run clearly shows the intended underdamped RLC discharge after the switch closes: switch_closed stays 0 until t=5.000000001000071 s, then changes to 1 once and remains closed; capacitor_voltage_V swings negative to a minimum of -7.28036 V and settles to 2.58751e-06 V by 150 s, while loop_current_A settles to -2.15825e-06 A by 150 s. However, this run is not fully valid against the stated acceptance set as supplied here because three checks cannot be evaluated from the provided result data alone: capacitor_voltage_V at t=4 s, loop_current_A at t=4 s, and |loop_current_A| at t=8.16 s are not given as time-stamped values. In addition, the merged AC-08 formulation fails when applied as an always-over-full-run condition, because the voltage reaches 10 V initially and -7.28036 V later, both larger than 0.3 V in magnitude.",
+  "issues": [
+    "AC-02 capacitor voltage at 4 s is not evaluable from the supplied data: capacitor_voltage_V is reported only by min/max/final, with no value at t=4.0 s.",
+    "AC-02 loop current at 4 s is not evaluable from the supplied data: loop_current_A is reported only by min/max/final, with no value at t=4.0 s.",
+    "AC-05 loop current near zero at 8.16 s is not evaluable from the supplied data: loop_current_A is reported only by min/max/final, with no value at t=8.16 s.",
+    "AC-08 fails under the merged evaluable form because it was applied as an always-over-full-run condition: |capacitor_voltage_V| reaches 10 V initially and 7.28036 V at negative overshoot, both greater than the 0.3 V limit."
+  ],
+  "assumptions": [
+    "For AC-08, the original requirement was |capacitor_voltage_V| <= 0.3 V over t = 50 s to 150 s, but the merged check applied it as an always condition over the full run because the schema could not represent a bounded time window.",
+    "For AC-02, the original combined absolute tolerance 0.01 at t = 4 s was split and applied separately to capacitor_voltage_V and loop_current_A.",
+    "No solver tolerance was specified in the brief; the model used Interval = 0.15 s to produce 1000 intervals over 150 s.",
+    "The capacitor negative pin was connected to ground as the single electrical reference so the network is structurally solvable.",
+    "The ideal switch was modeled with Ron = 1e-6 Ohm and Goff = 1e-6 S because the brief did not specify non-ideal switch parameters.",
+    "switch_closed was implemented as a Real-valued 0/1 reported signal while the internal switch command remained Boolean.",
+    "The stated damping ratio 0.1 and natural frequency 1 rad/s were retained for traceability but not used as independent governing inputs; the run is determined by R = 0.2 Ohm, L = 1 H, and C = 1 F.",
+    "A further model-implied assumption is that the pre-charge is represented as an initial capacitor voltage of 10 V with no active source in the circuit after t = 0, so all subsequent energy in the run comes from the initially stored capacitor energy and then decays through the resistor."
+  ],
+  "root_causes": [
+    "The three not-evaluable checks are a reporting/data-availability problem, not a demonstrated trajectory failure: the supplied evidence contains only min/max/final summaries for continuous variables plus discrete-event changes, so exact values of capacitor_voltage_V and loop_current_A at t = 4.0 s and of loop_current_A at t = 8.16 s cannot be read from the provided data.",
+    "AC-08 fails because of the merged check formulation, not because the physical run failed to settle late in time. The actual model starts with the capacitor pre-charged to 10 V and then, after the switch closes at about 5 s, produces underdamped ringing down to -7.28036 V before decaying toward zero. Those intended early-time behaviors necessarily violate an always-over-full-run limit of |capacitor_voltage_V| <= 0.3 V. The conflict comes from replacing the original bounded late-time window t = 50 s to 150 s with a full-run always condition."
+  ]
+}

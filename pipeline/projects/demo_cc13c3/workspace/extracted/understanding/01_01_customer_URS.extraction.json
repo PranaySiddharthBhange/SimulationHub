@@ -1,0 +1,444 @@
+{
+  "document": "01_customer_URS.pdf",
+  "subject": "User Requirement Specification - Two-Tank Sequence Controller",
+  "kind": "requirement specification",
+  "entities": [
+    {
+      "name": "TK-101",
+      "kind": "tank",
+      "aliases": [
+        "tank1",
+        "T1"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "TK-101            Tank 1                                          tank1 / T1"
+    },
+    {
+      "name": "TK-102",
+      "kind": "tank",
+      "aliases": [
+        "tank2",
+        "T2"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "TK-102            Tank 2                                          tank2 / T2"
+    },
+    {
+      "name": "XV-101",
+      "kind": "valve",
+      "aliases": [
+        "valve1",
+        "V1"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "XV-101                  Inlet valve to Tank 1                              valve1 / V1"
+    },
+    {
+      "name": "XV-102",
+      "kind": "valve",
+      "aliases": [
+        "valve2",
+        "V2"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "XV-102              Transfer valve Tank 1 to Tank 2                    valve2 / V2"
+    },
+    {
+      "name": "XV-103",
+      "kind": "valve",
+      "aliases": [
+        "valve3",
+        "V3"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "XV-103            Tank 2 drain valve                                valve3 / V3"
+    },
+    {
+      "name": "PLC-101",
+      "kind": "controller",
+      "aliases": [
+        "tankController"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "PLC-101           Sequence controller                                 tankController"
+    },
+    {
+      "name": "LT-101",
+      "kind": "level measurement",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Level measurements LT-101 and LT-102 shall be available to PLC-101."
+    },
+    {
+      "name": "LT-102",
+      "kind": "level measurement",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Level measurements LT-101 and LT-102 shall be available to PLC-101."
+    },
+    {
+      "name": "START",
+      "kind": "operator command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "START, STOP and SHUT are\n momentary commands."
+    },
+    {
+      "name": "STOP",
+      "kind": "operator command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "START, STOP and SHUT are\n momentary commands."
+    },
+    {
+      "name": "SHUT",
+      "kind": "operator command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "START, STOP and SHUT are\n momentary commands."
+    },
+    {
+      "name": "Tank 1",
+      "kind": "tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "initial level",
+          "value": "0.05",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Tank 1 initial level                   0.05        m"
+        },
+        {
+          "quantity": "high limit",
+          "value": "0.78",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Tank 1 high limit                     0.78        m"
+        },
+        {
+          "quantity": "low limit",
+          "value": "0.05",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Tank 1 low limit                     0.05        m"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Tank 1 initial level                   0.05        m       Demo initialization"
+    },
+    {
+      "name": "Tank 2",
+      "kind": "tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "initial level",
+          "value": "0.05",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Tank 2 initial level                   0.05        m"
+        },
+        {
+          "quantity": "low limit",
+          "value": "0.05",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Tank 2 low limit                     0.05        m"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Tank 2 initial level                   0.05        m       Demo initialization"
+    },
+    {
+      "name": "Wait after T1 high",
+      "kind": "wait period",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "wait time",
+          "value": "10",
+          "unit": "s",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Wait after T1 high                 10               s"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Wait after T1 high                 10               s        No valve open during wait"
+    },
+    {
+      "name": "Wait after T1 low",
+      "kind": "wait period",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "wait time",
+          "value": "10",
+          "unit": "s",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Wait after T1 low                  10               s"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Wait after T1 low                  10               s        No valve open during wait"
+    },
+    {
+      "name": "Wait after T2 low",
+      "kind": "wait period",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "wait time",
+          "value": "10",
+          "unit": "s",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Wait after T2 low                  10               s"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Wait after T2 low                  10               s           Before next automatic fill cycle"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "XV-101",
+      "predicate": "inlet valve to",
+      "object": "TK-101",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "XV-101                  Inlet valve to Tank 1                              valve1 / V1"
+    },
+    {
+      "subject": "XV-102",
+      "predicate": "transfer valve from",
+      "object": "TK-101",
+      "detail": "to TK-102",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "XV-102              Transfer valve Tank 1 to Tank 2                    valve2 / V2"
+    },
+    {
+      "subject": "XV-103",
+      "predicate": "drain valve for",
+      "object": "TK-102",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "XV-103            Tank 2 drain valve                                valve3 / V3"
+    },
+    {
+      "subject": "LT-101",
+      "predicate": "available to",
+      "object": "PLC-101",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Level measurements LT-101 and LT-102 shall be available to PLC-101."
+    },
+    {
+      "subject": "LT-102",
+      "predicate": "available to",
+      "object": "PLC-101",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Level measurements LT-101 and LT-102 shall be available to PLC-101."
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "START shall initiate automatic operation when the system is in its initial condition.",
+      "ref": "URS-F-001",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-F-001 - START shall initiate automatic operation when the system is in its initial condition."
+    },
+    {
+      "category": "requirement",
+      "statement": "Normal operation shall fill Tank 1 by opening V1.",
+      "ref": "URS-F-002",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-F-002 - Normal operation shall fill Tank 1 by opening V1."
+    },
+    {
+      "category": "requirement",
+      "statement": "V1 shall close when Tank 1 reaches the specified high-level limit.",
+      "ref": "URS-F-003",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-F-003 - V1 shall close when Tank 1 reaches the specified high-level limit."
+    },
+    {
+      "category": "requirement",
+      "statement": "After a 10 s waiting period, V2 shall open and transfer liquid from Tank 1 to Tank 2.",
+      "ref": "URS-F-004",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-F-004 - After a 10 s waiting period, V2 shall open and transfer liquid from Tank 1 to Tank 2."
+    },
+    {
+      "category": "requirement",
+      "statement": "V2 shall close when Tank 1 reaches its minimum operating level.",
+      "ref": "URS-F-005",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-F-005 - V2 shall close when Tank 1 reaches its minimum operating level."
+    },
+    {
+      "category": "requirement",
+      "statement": "After a 10 s waiting period, V3 shall open and drain Tank 2.",
+      "ref": "URS-F-006",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-F-006 - After a 10 s waiting period, V3 shall open and drain Tank 2."
+    },
+    {
+      "category": "requirement",
+      "statement": "V3 shall close when Tank 2 reaches its minimum operating level.",
+      "ref": "URS-F-007",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-F-007 - V3 shall close when Tank 2 reaches its minimum operating level."
+    },
+    {
+      "category": "requirement",
+      "statement": "The automatic process shall continue cyclically unless stopped or shut down.",
+      "ref": "URS-F-008",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-F-008 - The automatic process shall continue cyclically unless stopped or shut down."
+    },
+    {
+      "category": "requirement",
+      "statement": "STOP shall close all three valves and suspend automatic operation until another operator command is received.",
+      "ref": "URS-M-001",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-M-001 - STOP shall close all three valves and suspend automatic operation until another operator command is\n      received."
+    },
+    {
+      "category": "requirement",
+      "statement": "START after STOP shall continue the process operation rather than force a new empty-cycle initialization.",
+      "ref": "URS-M-002",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-M-002 - START after STOP shall continue the process operation rather than force a new empty-cycle\n        initialization."
+    },
+    {
+      "category": "requirement",
+      "statement": "SHUT shall empty both tanks by opening V2 and V3 and shall inhibit V1.",
+      "ref": "URS-M-003",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-M-003 - SHUT shall empty both tanks by opening V2 and V3 and shall inhibit V1."
+    },
+    {
+      "category": "requirement",
+      "statement": "When shutdown emptying is achieved, V2 and V3 shall close and the controller shall return to the start configuration.",
+      "ref": "URS-M-004",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "URS-M-004 - When shutdown emptying is achieved, V2 and V3 shall close and the controller shall return to the start\n       configuration."
+    },
+    {
+      "category": "requirement",
+      "statement": "Level measurements LT-101 and LT-102 shall be available to PLC-101.",
+      "ref": "",
+      "anchor": "[page 2]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Level measurements LT-101 and LT-102 shall be available to PLC-101."
+    },
+    {
+      "category": "requirement",
+      "statement": "The supplier shall provide actuators that fail closed on loss of power.",
+      "ref": "",
+      "anchor": "[page 2]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "The supplier shall provide\n actuators that fail closed on loss of power."
+    },
+    {
+      "category": "requirement",
+      "statement": "Sequence operation, stop/resume behavior and controlled shutdown shall be demonstrated in simulation.",
+      "ref": "",
+      "anchor": "[page 2]",
+      "status": "released",
+      "from_image": false,
+      "quote": "Sequence operation, stop/resume behavior and controlled shutdown shall be demonstrated in simulation."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

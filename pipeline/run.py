@@ -3,7 +3,11 @@
     .venv/Scripts/python.exe run.py        (Windows)
     .venv/bin/python run.py                (macOS/Linux)
 
-Loads the shared environment, starts Ollama, ensures the configured local
+Loads the shared environment. If Ollama isn't already reachable, asks
+whether you have it running locally with the configured model (gemma3:4b by
+default) -- answer no and the launcher skips Ollama entirely and starts the
+backend/frontend without it (Stage 1 extraction then needs the Cloud/OpenAI
+backend instead). Otherwise it starts Ollama, ensures the configured local
 model is installed, starts the backend API and frontend dev server, waits
 for every service to become ready, then opens the UI. An occupied port is
 skipped so every launcher invocation owns its backend and frontend. Ctrl+C
@@ -62,6 +66,19 @@ def _read_json(url: str) -> dict:
         return {}
 
 
+def prompt_yes_no(question: str, default: bool) -> bool:
+    suffix = " [Y/n] " if default else " [y/N] "
+    try:
+        answer = input(question + suffix).strip().lower()
+    except EOFError:
+        # No interactive stdin (e.g. launched from a non-terminal) -- fall
+        # back to the default rather than hanging on input().
+        return default
+    if not answer:
+        return default
+    return answer.startswith("y")
+
+
 def _port_in_use(host: str, port: int) -> bool:
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
         sock.settimeout(0.5)
@@ -96,7 +113,14 @@ def load_environment() -> None:
                 os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
 
 
-def check_prerequisites() -> None:
+def check_prerequisites() -> bool:
+    """Verify install-time deps and decide whether to set up Ollama.
+
+    Returns whether the launcher should start/verify Ollama and the local
+    extraction model. When Ollama isn't already reachable, this asks the
+    user rather than hard-failing -- answering no lets the app start with
+    Stage 1 extraction limited to the Cloud (OpenAI) backend.
+    """
     try:
         import fastapi  # noqa: F401
         import uvicorn  # noqa: F401
@@ -105,10 +129,23 @@ def check_prerequisites() -> None:
         log(f"Run this from the project's venv, or first: {sys.executable} -m pip install -e .")
         sys.exit(1)
 
-    if shutil.which("ollama") is None and not _reachable(f"{OLLAMA_URL}/api/tags"):
-        log("ERROR: Ollama is not installed or available on PATH.")
-        log("Install it from https://ollama.com/download and run this launcher again.")
-        sys.exit(1)
+    model = os.environ.get("STAGE_1_EXTRACTION_MODEL", "gemma3:4b").strip()
+    if _reachable(f"{OLLAMA_URL}/api/tags"):
+        log("Ollama is already running -- will use it for local extraction.")
+        use_ollama = True
+    else:
+        use_ollama = prompt_yes_no(
+            f"Do you have Ollama installed and want to use it locally with the {model} model "
+            "for Stage 1 extraction?",
+            default=shutil.which("ollama") is not None,
+        )
+        if use_ollama and shutil.which("ollama") is None:
+            log("ERROR: Ollama isn't reachable and its executable isn't on PATH.")
+            log("Install it from https://ollama.com/download and run this launcher again.")
+            sys.exit(1)
+        if not use_ollama:
+            log("continuing without Ollama -- Stage 1 extraction will need the Cloud (OpenAI) backend.")
+
     if os.environ.get("OPENAI_API_KEY"):
         log("OpenAI API key: found -- Merge, Stage 2 and Stage 3 are ready.")
     else:
@@ -116,10 +153,14 @@ def check_prerequisites() -> None:
             "WARNING: OPENAI_API_KEY is not set in .env -- Merge/Stage 2/Stage 3 need it. "
             "Add it directly to local-simulation-agent/.env (never paste it in chat)."
         )
+        if not use_ollama:
+            log("WARNING: without Ollama and without an OpenAI key, Stage 1 extraction has no backend available.")
 
     if shutil.which("npm") is None:
         log("ERROR: npm not found on PATH -- install Node.js from https://nodejs.org first.")
         sys.exit(1)
+
+    return use_ollama
 
 
 def start_ollama() -> subprocess.Popen | None:
@@ -291,17 +332,20 @@ def start_frontend(backend_port: int) -> tuple[subprocess.Popen | None, int]:
 def main() -> None:
     log(f"project root: {ROOT}")
     load_environment()
-    check_prerequisites()
+    use_ollama = check_prerequisites()
 
     started: list[subprocess.Popen] = []
     managed_services: list[tuple[str, subprocess.Popen, str, int, str | None]] = []
 
     try:
-        ollama_process = start_ollama()
-        if ollama_process is not None:
-            started.append(ollama_process)
-            managed_services.append(("Ollama", ollama_process, "127.0.0.1", 11434, None))
-        ensure_local_model()
+        if use_ollama:
+            ollama_process = start_ollama()
+            if ollama_process is not None:
+                started.append(ollama_process)
+                managed_services.append(("Ollama", ollama_process, "127.0.0.1", 11434, None))
+            ensure_local_model()
+        else:
+            log("skipping Ollama startup and local model check.")
 
         backend, backend_port = start_backend()
         if backend is not None:

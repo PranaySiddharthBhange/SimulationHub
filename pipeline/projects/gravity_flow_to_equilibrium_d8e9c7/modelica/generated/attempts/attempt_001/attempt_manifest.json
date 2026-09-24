@@ -1,0 +1,24 @@
+{
+  "attempt": 1,
+  "entry_class": "TwoTankSystem",
+  "files": [
+    {
+      "filename": "ConnectingValve.mo",
+      "role": "component"
+    },
+    {
+      "filename": "TwoTankSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Derived executable assumption from the brief and merged decisions: during 0 s to 5 s while the connecting valve is closed, q_m3s = 0; after opening, q_m3s follows the stated relation with one-way clipping q_m3s = max(0, k*(level_A_m - level_B_m)) to prevent reverse flow after equilibrium overshoot and keep flow consistent with the stated A-to-B transfer meaning.",
+    "Valve opening is implemented by the continuous relation time >= 5.0 s so the command change occurs at the exact threshold in the model equations rather than from a scheduled table offset.",
+    "The brief names open tanks and a connecting valve but does not provide fluid-medium, pressure-boundary, pipe geometry, or hydraulic-loss data required for a faithful Modelica.Fluid acausal network, so this bundle uses a signal-state realization of the explicitly stated level and flow equations instead of inventing unstated fluid-network parameters."
+  ],
+  "references": []
+}

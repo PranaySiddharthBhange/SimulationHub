@@ -1,0 +1,80 @@
+{
+  "verdict": "partially_valid",
+  "check_results": [
+    {
+      "name": "AC-01 speed_zero_before_start",
+      "expression": "fan_speed_rad_s == 0 == 1.0 (relative tolerance 0.000%), at t=4.0",
+      "outcome": "pass",
+      "observed": "At t=4.0 s, fan_speed_rad_s = 0 rad/s (from min=0 and no spin-up event before motor turn-on at t=5.000000001 s); expected 0 exactly."
+    },
+    {
+      "name": "AC-02 motor_off_before_start",
+      "expression": "motor_on_cmd == 0 == 1.0 (relative tolerance 0.000%), at t=4.0",
+      "outcome": "pass",
+      "observed": "motor_on_cmd = 0 from t=0 until the event at t=5.000000001 s; therefore at t=4.0 s motor_on_cmd = 0; expected 0 exactly."
+    },
+    {
+      "name": "AC-02 motor_on_after_start",
+      "expression": "motor_on_cmd == 1 == 1.0 (relative tolerance 0.000%), at t=6.0",
+      "outcome": "pass",
+      "observed": "motor_on_cmd changed to 1 at t=5.000000001 s and remained 1 afterward; therefore at t=6.0 s motor_on_cmd = 1; expected 1 exactly."
+    },
+    {
+      "name": "REQ-FUN-002 spinup_occurs",
+      "expression": "fan_speed_rad_s > 0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "fan_speed_rad_s has max=25 rad/s, so it became greater than 0 during the run; expected fan_speed_rad_s > 0 at least once."
+    },
+    {
+      "name": "AC-03 speed_reaches_15_by_6s",
+      "expression": "fan_speed_rad_s >= 15.0 == 1.0 (relative tolerance 0.000%), at t=6.0",
+      "outcome": "fail",
+      "observed": "Using the stated model-generation assumption preserved in the brief, the actual run reaches about 14.59 rad/s at t=6.0 s; expected fan_speed_rad_s >= 15.0 rad/s."
+    },
+    {
+      "name": "AC-04 near_steady_by_10s",
+      "expression": "abs(fan_speed_rad_s - 25.0) <= 0.5 == 1.0 (relative tolerance 0.000%), at t=10.0",
+      "outcome": "pass",
+      "observed": "By t=10.0 s, the trajectory is within 0.5 rad/s of the final steady value 25 rad/s; final fan_speed_rad_s = 25 rad/s and the brief's preserved prior validation indicates only the 6 s check was inconsistent with the current parameters."
+    },
+    {
+      "name": "AC-05 final_speed_25",
+      "expression": "fan_speed_rad_s == 25.0 (absolute tolerance 0.05), final value",
+      "outcome": "pass",
+      "observed": "Final fan_speed_rad_s = 25 rad/s; expected 25.0 ± 0.05 rad/s."
+    },
+    {
+      "name": "AC-06 below_29_9_after_start",
+      "expression": "fan_speed_rad_s <= 29.9 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "fan_speed_rad_s max = 25 rad/s over the run, so it stayed <= 29.9 rad/s at all times; expected always <= 29.9 rad/s."
+    },
+    {
+      "name": "AC-07 below_25_05_entire_run",
+      "expression": "fan_speed_rad_s <= 25.05 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "fan_speed_rad_s max = 25 rad/s over the run, so it stayed <= 25.05 rad/s for the entire run; expected always <= 25.05 rad/s."
+    },
+    {
+      "name": "AC-08_final_torque_balance",
+      "expression": "motor_torque_Nm - (0.01*fan_speed_rad_s + 0.0004*fan_speed_rad_s*fan_speed_rad_s) == 0.0 (absolute tolerance 0.01), final value",
+      "outcome": "pass",
+      "observed": "At final time, motor_torque_Nm = 0.5 N*m and fan_speed_rad_s = 25 rad/s, so residual = 0.5 - (0.01*25 + 0.0004*25*25) = 0.5 - (0.25 + 0.25) = 0.0 N*m; expected 0.0 ± 0.01 N*m."
+    }
+  ],
+  "summary": "The run captured the intended fan behavior overall: the motor stayed off through 4 s, switched on at 5.000000001 s, the fan spun up from 0 to a final 25 rad/s, never exceeded either the 29.9 rad/s or 25.05 rad/s limits, and satisfied the final torque-balance check exactly. However, it did not meet the 6 s spin-up requirement: at 6.0 s the fan speed was about 14.59 rad/s, below the required 15 rad/s. Because one stated acceptance check failed, the run is only partially valid rather than fully valid.",
+  "issues": [
+    "AC-03 failed: at t=6.0 s, fan_speed_rad_s is about 14.59 rad/s, which is 0.41 rad/s below the required minimum of 15.0 rad/s.",
+    "The motor turn-on event occurred at t=5.000000001000047 s rather than exactly t=5.0 s, although this did not prevent the explicit t=6.0 motor_on_cmd check from passing."
+  ],
+  "assumptions": [
+    "Retained modeling assumption from Merge and model generation: motor_torque_Nm is 0 N*m for t < 5 s and 0.5 N*m for t >= 5 s because the brief states a fixed constant driving torque when on and does not separately state an off-state torque value in the governing equation.",
+    "Model-generation-stage explicit assumption: with J = 0.02 kg*m^2, motor torque = 0.5 N*m, b = 0.01 N*m*s/rad, k_fan = 0.0004 N*m*s^2/rad^2, and turn-on at t = 5 s, the model reaches about 14.59 rad/s at t = 6 s, so AC-03 is not achievable without changing at least one stated current parameter or the start time.",
+    "Model-generation-stage explicit assumption: motor_on_cmd is implemented as the relation time >= startTime, and the resulting event is recorded numerically at about 5.000000001 s rather than exactly 5 s.",
+    "Further inferred assumption from the trajectory and parameters: the model uses the single rigid rotational degree of freedom stated in the brief, with no additional compliance, delay, or hidden state, because all reported rotational speed variables share the same 0 to 25 rad/s range and final value."
+  ],
+  "root_causes": [
+    "AC-03 failed because the acceleration after turn-on is limited by the stated inertia and loss law. At turn-on the net torque is initially about 0.5 N*m, so the initial angular acceleration is about 0.5/0.02 = 25 rad/s^2, but as speed rises the viscous term b*omega and quadratic aerodynamic term k_fan*omega^2 subtract from motor torque. With the current values J=0.02, b=0.01, k_fan=0.0004, and motor torque 0.5 N*m, the actual trajectory only reaches about 14.59 rad/s by 6 s, so the 15 rad/s threshold is unattainable under these parameters without changing torque, inertia, losses, or start timing.",
+    "The slight delay of the command change to t=5.000000001 s comes from the explicit event condition motorOnCmd = time >= startTime being realized numerically by the simulator. That shifts the step by about 1e-9 s, which is negligible for the later checks but explains why the event trace does not show an exact 5.0 s transition."
+  ]
+}

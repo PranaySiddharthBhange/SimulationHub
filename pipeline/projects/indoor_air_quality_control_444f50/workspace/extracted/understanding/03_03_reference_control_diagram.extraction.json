@@ -1,0 +1,404 @@
+{
+  "document": "Visual evidence: 03_reference_control_diagram.png, image 1",
+  "subject": "reference control diagram",
+  "kind": "diagram",
+  "entities": [
+    {
+      "name": "CO2Set",
+      "kind": "setpoint block",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'CO2Set' at upper left block"
+    },
+    {
+      "name": "PID",
+      "kind": "controller block",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'PID' on controller block near top center"
+    },
+    {
+      "name": "gain1",
+      "kind": "gain block",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "gain",
+          "value": "100*1.2/3?",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "text 'k=100*1.2/3?' below gain1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'gain1' on gain block near top center-right"
+    },
+    {
+      "name": "system",
+      "kind": "system block",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'system' above small block at upper right"
+    },
+    {
+      "name": "traceDuctIn",
+      "kind": "trace block",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'traceDuctIn' above circular gauge left of center"
+    },
+    {
+      "name": "traceDuctOut",
+      "kind": "trace block",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'traceDuctOut' above circular gauge center"
+    },
+    {
+      "name": "traceVolume",
+      "kind": "trace block",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'traceVolume' above circular gauge right of center"
+    },
+    {
+      "name": "gainSensor",
+      "kind": "gain block",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "gain",
+          "value": "1/1.519E-3",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "text 'k=1/1.519E-3' below gainSensor"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'gainSensor' on gain block at upper right of main loop"
+    },
+    {
+      "name": "freshAir",
+      "kind": "flow source",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'freshAir' above blue fan/source at left-middle"
+    },
+    {
+      "name": "CAtm",
+      "kind": "source block",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "gain",
+          "value": "0.3*1.519E-3",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "text 'k=0.3*1.519E-3' below CAtm"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'CAtm' above left input block"
+    },
+    {
+      "name": "ductIn",
+      "kind": "duct",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'ductIn' below left duct segment"
+    },
+    {
+      "name": "volume",
+      "kind": "volume sensor block",
+      "aliases": [
+        "Volume"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'Volume' near center connection"
+    },
+    {
+      "name": "V=100",
+      "kind": "volume",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "volume",
+          "value": "100",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "text 'V=100' inside central sphere"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "text 'V=100' inside central sphere"
+    },
+    {
+      "name": "ductOut",
+      "kind": "duct",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'ductOut' below right duct segment"
+    },
+    {
+      "name": "boundary4",
+      "kind": "boundary",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'boundary4' above blue sphere at far right"
+    },
+    {
+      "name": "NumberOfPe?",
+      "kind": "input block",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'NumberOfPe?' on lower left block"
+    },
+    {
+      "name": "gain",
+      "kind": "gain block",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "gain",
+          "value": "8.18E-6/100",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "text 'k=8.18E-6/100' below gain"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'gain' above lower-left gain block"
+    },
+    {
+      "name": "peopleSource",
+      "kind": "source",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'peopleSource' above lower blue source"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "CO2Set",
+      "predicate": "connects_to",
+      "object": "PID",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "wire from 'CO2Set' to 'PID' across top row"
+    },
+    {
+      "subject": "PID",
+      "predicate": "connects_to",
+      "object": "gain1",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "wire from 'PID' to 'gain1' with arrow toward gain1"
+    },
+    {
+      "subject": "gain1",
+      "predicate": "connects_to",
+      "object": "freshAir",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "feedback/control wire from 'gain1' returning down left side to 'freshAir'"
+    },
+    {
+      "subject": "CAtm",
+      "predicate": "connects_to",
+      "object": "freshAir",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "wire from 'CAtm' into 'freshAir' at left-middle"
+    },
+    {
+      "subject": "freshAir",
+      "predicate": "connects_to",
+      "object": "ductIn",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "pipe from 'freshAir' to 'ductIn'"
+    },
+    {
+      "subject": "ductIn",
+      "predicate": "connects_to",
+      "object": "V=100",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "pipe from 'ductIn' into central volume marked 'V=100'"
+    },
+    {
+      "subject": "peopleSource",
+      "predicate": "connects_to",
+      "object": "V=100",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "vertical pipe from 'peopleSource' up into central volume marked 'V=100'"
+    },
+    {
+      "subject": "V=100",
+      "predicate": "connects_to",
+      "object": "ductOut",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "pipe from central volume marked 'V=100' to 'ductOut'"
+    },
+    {
+      "subject": "ductOut",
+      "predicate": "connects_to",
+      "object": "boundary4",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "pipe from 'ductOut' to 'boundary4' at far right"
+    },
+    {
+      "subject": "ductIn",
+      "predicate": "measured_by",
+      "object": "traceDuctIn",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "circular gauge 'traceDuctIn' connected above ductIn"
+    },
+    {
+      "subject": "ductOut",
+      "predicate": "measured_by",
+      "object": "traceDuctOut",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "circular gauge 'traceDuctOut' connected above ductOut-side node"
+    },
+    {
+      "subject": "V=100",
+      "predicate": "measured_by",
+      "object": "traceVolume",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "circular gauge 'traceVolume' connected above central volume line"
+    },
+    {
+      "subject": "traceVolume",
+      "predicate": "connects_to",
+      "object": "gainSensor",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "wire from 'traceVolume' to 'gainSensor'"
+    },
+    {
+      "subject": "gainSensor",
+      "predicate": "connects_to",
+      "object": "PID",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "feedback wire from 'gainSensor' back to lower input of 'PID'"
+    },
+    {
+      "subject": "NumberOfPe?",
+      "predicate": "connects_to",
+      "object": "gain",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "wire from 'NumberOfPe?' to 'gain'"
+    },
+    {
+      "subject": "gain",
+      "predicate": "connects_to",
+      "object": "peopleSource",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "wire from 'gain' to 'peopleSource'"
+    }
+  ],
+  "facts": [],
+  "unreadable": [
+    "The text near the lower connection of freshAir appears as 'm_flow' with another small red 'm', but the exact labeling is not fully legible.",
+    "The lower center label may read '1000' beneath the volume connection, but it is not fully legible.",
+    "The gain expression below gain1 ends with a '?' and is not fully certain.",
+    "The input block label 'NumberOfPe?' is truncated or unclear."
+  ],
+  "unverified_quotes": []
+}

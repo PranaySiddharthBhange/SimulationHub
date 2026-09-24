@@ -1,0 +1,1155 @@
+{
+  "document": "RM-201 CO2 Ventilation Control\nControl Sequence and Modeling Notes\nDocument CDS-IAQ-02 / MOD-NT-03 - Rev B\nIssued 2026-03-01\n1. Purpose and model boundary\nThis note defines the functional control interpretation for the single-zone room CO2 demonstration. The room is represented as one perfectly mixed 100 m3 air volume. Outdoor air enters through a controlled mass-flow source and supply duct. Room air leaves through an exhaust duct to an ideal pressure boundary. Occupants are represented as a separate trace-substance mass source.\n\nFigure 1 - Legacy graphical simulation model used as topology evidence.\n2. Concentration conventions\nThe owner compliance limit is 1000 ppm absolute room CO2. Under the project molecular-weight convention this is represented by the rounded trace-substance mass fraction C_nominal = 1.519E-3 kg/kg.\nOutdoor air is 300 ppm and is implemented as C_out = 0.3*C_nominal = 4.557E-4 kg/kg.\nThe room sensor output is a trace-substance mass fraction in kg/kg. gainSensor multiplies it by 1/C_nominal so that 1000 ppm becomes the normalized value 1.0.\nCO2Set therefore has value 1.0. This is a normalized controller signal, not 1 ppm and not 1 kg/kg.\n3. Occupant source implementation\nAt the design activity level, one person emits approximately 8.18E-6 kg/s of CO2. Directly adding this as a carrier-fluid source would also add carrier mass to the room energy and mass balances. The simulation therefore uses an intentionally high trace concentration at the people source and a proportionally reduced carrier flow:\nm_peopleSource = (8.18E-6 / 100) * nPeo   kg/s\nwith peopleSource.C = 100 kg/kg. The trace-substance injection is m_peopleSource * C = nPeo * 8.18E-6 kg/s. The 100 kg/kg value is a numerical device only and must not be interpreted as a physical room concentration.\n4. Ventilation control path\nMeasure room CO2 mass fraction at traceVolume.\nNormalize the measurement using gainSensor = 1/1.519E-3.\nCompare normalized feedback with CO2Set = 1.0.\nGenerate an ACH command. Effective reference-run tuning after CR-IAQ-007 is Kp=6.0, bias=3.5 ACH, integral disabled, output limited to 0.2..6.0 ACH.\nConvert ACH to mass-flow magnitude using V*rho/3600 = 100*1.2/3600 = 0.033333 kg/s per ACH.\nApply a negative sign to the Modelica source command because negative source m_flow denotes flow from the source into the connected duct. Report physical outdoor-air flow as a positive quantity.\n5. State / mode interpretation\nMode | Entry condition | Control output | Exit condition | Notes\nAUTO_MIN | CO2 sufficiently below setpoint | 0.2 ACH lower limit | P-law requests >0.2 ACH | Common while unoccupied.\nAUTO_CO2 | 0.2 < requested ACH < 6.0 | Bias + Kp*(C/Cnom-1) | Saturation or operating condition changes | Baseline occupied regulation.\nAUTO_MAX | Requested ACH >= 6.0 | 6.0 ACH | Requested value falls below maximum | Not expected in baseline run.\nSENSOR_FAULT | Sensor invalid >60 s | 4.0 ACH | Valid signal restored and reset logic satisfied | Raise fault indication. Not exercised in baseline run.\n6. Known evidence conflicts and precedence\nCO2 limit wording: 10-Feb email suggests 1000 ppm above outdoor; DR-IAQ-05 rejects this. Use 1000 ppm absolute.\nOutdoor CO2: Archived model uses 350 ppm; URS and approved review use 300 ppm.\nPeak occupancy: Archived model peaks at 12 people; OCC-SCH-04 Rev C peaks at 15.\nController tuning: CDS Rev A / archived model use Kp=4; CR-IAQ-007 uses Kp=6 and 3.5 ACH bias with integral disabled.\nSensor units: Legacy architecture drawing labels sensor output as ppm; ICD-IAQ-03 defines the internal feedback signal in kg/kg before normalization.\n7. Modeling constraints suitable for system-model capture\nC_room <= 1.519E-3 kg/kg during the approved design occupancy schedule.\nC_out = 0.3*C_nominal.\nG_CO2 = nPeo*8.18E-6 kg/s.\nm_peopleCarrier = G_CO2/100.\nm_supply_physical = ACH*V*rho/3600.\nm_supply_sourceCommand = -m_supply_physical.\n0.2 <= ACH <= 6.0.\nnormalized_CO2 = C_room/C_nominal.\n8. Revision note\nThis Rev B note incorporates DR-IAQ-05, OCC-SCH-04 Rev C, and CR-IAQ-007. The archived Modelica file is retained as evidence of the existing implementation structure and of realistic revision inconsistency.",
+  "subject": "RM-201 CO2 Ventilation Control",
+  "kind": "engineering note",
+  "entities": [
+    {
+      "name": "room",
+      "kind": "air volume",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "volume",
+          "value": "100",
+          "unit": "m3",
+          "status": "current",
+          "supersedes": "",
+          "quote": "The room is represented as one perfectly mixed 100 m3 air volume."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The room is represented as one perfectly mixed 100 m3 air volume."
+    },
+    {
+      "name": "controlled mass-flow source",
+      "kind": "source",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Outdoor air enters through a controlled mass-flow source and supply duct."
+    },
+    {
+      "name": "supply duct",
+      "kind": "duct",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Outdoor air enters through a controlled mass-flow source and supply duct."
+    },
+    {
+      "name": "exhaust duct",
+      "kind": "duct",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Room air leaves through an exhaust duct to an ideal pressure boundary."
+    },
+    {
+      "name": "ideal pressure boundary",
+      "kind": "boundary",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Room air leaves through an exhaust duct to an ideal pressure boundary."
+    },
+    {
+      "name": "Occupants",
+      "kind": "trace-substance mass source",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Occupants are represented as a separate trace-substance mass source."
+    },
+    {
+      "name": "C_nominal",
+      "kind": "trace-substance mass fraction",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "mass fraction",
+          "value": "1.519E-3",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C_nominal = 1.519E-3 kg/kg"
+        },
+        {
+          "quantity": "CO2 concentration",
+          "value": "1000",
+          "unit": "ppm",
+          "status": "current",
+          "supersedes": "",
+          "quote": "The owner compliance limit is 1000 ppm absolute room CO2."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Under the project molecular-weight convention this is represented by the rounded trace-substance mass fraction C_nominal = 1.519E-3 kg/kg."
+    },
+    {
+      "name": "C_out",
+      "kind": "trace-substance mass fraction",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "CO2 concentration",
+          "value": "300",
+          "unit": "ppm",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Outdoor air is 300 ppm"
+        },
+        {
+          "quantity": "mass fraction",
+          "value": "4.557E-4",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C_out = 0.3*C_nominal = 4.557E-4 kg/kg"
+        },
+        {
+          "quantity": "CO2 concentration",
+          "value": "350",
+          "unit": "ppm",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "Outdoor CO2: Archived model uses 350 ppm; URS and approved review use 300 ppm."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Outdoor air is 300 ppm and is implemented as C_out = 0.3*C_nominal = 4.557E-4 kg/kg."
+    },
+    {
+      "name": "room sensor output",
+      "kind": "sensor signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "mass fraction",
+          "value": "1.0",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "1000 ppm becomes the normalized value 1.0"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The room sensor output is a trace-substance mass fraction in kg/kg."
+    },
+    {
+      "name": "gainSensor",
+      "kind": "gain",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "gain",
+          "value": "1/1.519E-3",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Normalize the measurement using gainSensor = 1/1.519E-3."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "gainSensor multiplies it by 1/C_nominal so that 1000 ppm becomes the normalized value 1.0."
+    },
+    {
+      "name": "CO2Set",
+      "kind": "controller setpoint",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "value",
+          "value": "1.0",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "CO2Set therefore has value 1.0."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CO2Set therefore has value 1.0. This is a normalized controller signal, not 1 ppm and not 1 kg/kg."
+    },
+    {
+      "name": "people source",
+      "kind": "trace-substance source",
+      "aliases": [
+        "peopleSource"
+      ],
+      "values": [
+        {
+          "quantity": "carrier flow",
+          "value": "(8.18E-6 / 100)",
+          "unit": "kg/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "m_peopleSource = (8.18E-6 / 100) * nPeo   kg/s"
+        },
+        {
+          "quantity": "trace concentration",
+          "value": "100",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "with peopleSource.C = 100 kg/kg."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "with peopleSource.C = 100 kg/kg."
+    },
+    {
+      "name": "nPeo",
+      "kind": "occupancy count",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "m_peopleSource = (8.18E-6 / 100) * nPeo   kg/s"
+    },
+    {
+      "name": "one person",
+      "kind": "occupant",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "CO2 emission rate",
+          "value": "8.18E-6",
+          "unit": "kg/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "one person emits approximately 8.18E-6 kg/s of CO2"
+        },
+        {
+          "quantity": "peak occupancy",
+          "value": "12",
+          "unit": "people",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "Peak occupancy: Archived model peaks at 12 people; OCC-SCH-04 Rev C peaks at 15."
+        },
+        {
+          "quantity": "peak occupancy",
+          "value": "15",
+          "unit": "people",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Peak occupancy: Archived model peaks at 12 people; OCC-SCH-04 Rev C peaks at 15."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "At the design activity level, one person emits approximately 8.18E-6 kg/s of CO2."
+    },
+    {
+      "name": "traceVolume",
+      "kind": "measurement point",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Measure room CO2 mass fraction at traceVolume."
+    },
+    {
+      "name": "ACH command",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "bias",
+          "value": "3.5",
+          "unit": "ACH",
+          "status": "current",
+          "supersedes": "",
+          "quote": "bias=3.5 ACH"
+        },
+        {
+          "quantity": "lower limit",
+          "value": "0.2",
+          "unit": "ACH",
+          "status": "current",
+          "supersedes": "",
+          "quote": "output limited to 0.2..6.0 ACH"
+        },
+        {
+          "quantity": "upper limit",
+          "value": "6.0",
+          "unit": "ACH",
+          "status": "current",
+          "supersedes": "",
+          "quote": "output limited to 0.2..6.0 ACH"
+        },
+        {
+          "quantity": "fallback output",
+          "value": "4.0",
+          "unit": "ACH",
+          "status": "current",
+          "supersedes": "",
+          "quote": "SENSOR_FAULT | Sensor invalid >60 s | 4.0 ACH | Valid signal restored and reset logic satisfied | Raise fault indication."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Generate an ACH command."
+    },
+    {
+      "name": "CR-IAQ-007",
+      "kind": "change request",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Effective reference-run tuning after CR-IAQ-007 is Kp=6.0, bias=3.5 ACH, integral disabled, output limited to 0.2..6.0 ACH."
+    },
+    {
+      "name": "Kp",
+      "kind": "controller gain",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "proportional gain",
+          "value": "6.0",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Effective reference-run tuning after CR-IAQ-007 is Kp=6.0, bias=3.5 ACH, integral disabled, output limited to 0.2..6.0 ACH."
+        },
+        {
+          "quantity": "proportional gain",
+          "value": "4",
+          "unit": "",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "Controller tuning: CDS Rev A / archived model use Kp=4; CR-IAQ-007 uses Kp=6 and 3.5 ACH bias with integral disabled."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Effective reference-run tuning after CR-IAQ-007 is Kp=6.0, bias=3.5 ACH, integral disabled, output limited to 0.2..6.0 ACH."
+    },
+    {
+      "name": "V",
+      "kind": "volume term",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "volume",
+          "value": "100",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "V*rho/3600 = 100*1.2/3600 = 0.033333 kg/s per ACH"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Convert ACH to mass-flow magnitude using V*rho/3600 = 100*1.2/3600 = 0.033333 kg/s per ACH."
+    },
+    {
+      "name": "rho",
+      "kind": "density term",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "density",
+          "value": "1.2",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "V*rho/3600 = 100*1.2/3600 = 0.033333 kg/s per ACH"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Convert ACH to mass-flow magnitude using V*rho/3600 = 100*1.2/3600 = 0.033333 kg/s per ACH."
+    },
+    {
+      "name": "Modelica source command",
+      "kind": "source command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Apply a negative sign to the Modelica source command because negative source m_flow denotes flow from the source into the connected duct."
+    },
+    {
+      "name": "AUTO_MIN",
+      "kind": "mode",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "control output",
+          "value": "0.2",
+          "unit": "ACH",
+          "status": "current",
+          "supersedes": "",
+          "quote": "AUTO_MIN | CO2 sufficiently below setpoint | 0.2 ACH lower limit | P-law requests >0.2 ACH | Common while unoccupied."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "AUTO_MIN | CO2 sufficiently below setpoint | 0.2 ACH lower limit | P-law requests >0.2 ACH | Common while unoccupied."
+    },
+    {
+      "name": "AUTO_CO2",
+      "kind": "mode",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "AUTO_CO2 | 0.2 < requested ACH < 6.0 | Bias + Kp*(C/Cnom-1) | Saturation or operating condition changes | Baseline occupied regulation."
+    },
+    {
+      "name": "AUTO_MAX",
+      "kind": "mode",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "control output",
+          "value": "6.0",
+          "unit": "ACH",
+          "status": "current",
+          "supersedes": "",
+          "quote": "AUTO_MAX | Requested ACH >= 6.0 | 6.0 ACH | Requested value falls below maximum | Not expected in baseline run."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "AUTO_MAX | Requested ACH >= 6.0 | 6.0 ACH | Requested value falls below maximum | Not expected in baseline run."
+    },
+    {
+      "name": "SENSOR_FAULT",
+      "kind": "mode",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "sensor invalid duration",
+          "value": ">60",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "SENSOR_FAULT | Sensor invalid >60 s | 4.0 ACH | Valid signal restored and reset logic satisfied | Raise fault indication."
+        },
+        {
+          "quantity": "control output",
+          "value": "4.0",
+          "unit": "ACH",
+          "status": "current",
+          "supersedes": "",
+          "quote": "SENSOR_FAULT | Sensor invalid >60 s | 4.0 ACH | Valid signal restored and reset logic satisfied | Raise fault indication."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "SENSOR_FAULT | Sensor invalid >60 s | 4.0 ACH | Valid signal restored and reset logic satisfied | Raise fault indication."
+    },
+    {
+      "name": "C_room",
+      "kind": "room CO2 mass fraction",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "upper limit",
+          "value": "1.519E-3",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C_room <= 1.519E-3 kg/kg during the approved design occupancy schedule."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "C_room <= 1.519E-3 kg/kg during the approved design occupancy schedule."
+    },
+    {
+      "name": "G_CO2",
+      "kind": "CO2 generation rate",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "generation rate",
+          "value": "8.18E-6",
+          "unit": "kg/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "G_CO2 = nPeo*8.18E-6 kg/s."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "G_CO2 = nPeo*8.18E-6 kg/s."
+    },
+    {
+      "name": "m_peopleCarrier",
+      "kind": "carrier mass flow",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "formula constant",
+          "value": "100",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "m_peopleCarrier = G_CO2/100."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "m_peopleCarrier = G_CO2/100."
+    },
+    {
+      "name": "m_supply_physical",
+      "kind": "physical supply mass flow",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "m_supply_physical = ACH*V*rho/3600."
+    },
+    {
+      "name": "m_supply_sourceCommand",
+      "kind": "source-command mass flow",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "m_supply_sourceCommand = -m_supply_physical."
+    },
+    {
+      "name": "normalized_CO2",
+      "kind": "normalized CO2 signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "normalized_CO2 = C_room/C_nominal."
+    },
+    {
+      "name": "traceDuctIn",
+      "kind": "sensor",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'traceDuctIn' above left duct in image 1"
+    },
+    {
+      "name": "traceDuctOut",
+      "kind": "sensor",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'traceDuctOut' above right side of room in image 1"
+    },
+    {
+      "name": "freshAir",
+      "kind": "source",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'freshAir' on left blue source in image 1"
+    },
+    {
+      "name": "ductIn",
+      "kind": "duct",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'ductIn' below left duct in image 1"
+    },
+    {
+      "name": "ductOut",
+      "kind": "duct",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'ductOut' below right duct in image 1"
+    },
+    {
+      "name": "volume",
+      "kind": "volume",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "volume",
+          "value": "100",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "label 'V=100' inside central volume in image 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'volume' and 'V=100' inside central vessel in image 1"
+    },
+    {
+      "name": "boundary4",
+      "kind": "boundary",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'boundary4' on right blue boundary in image 1"
+    },
+    {
+      "name": "CAtm",
+      "kind": "constant block",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "gain",
+          "value": "0.3*1.519E-3",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "label 'CAtm' with 'k=0.3*1.519E-3' at lower left in image 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'CAtm' with 'k=0.3*1.519E-3' at lower left in image 1"
+    },
+    {
+      "name": "gain",
+      "kind": "gain block",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "gain",
+          "value": "8.18E-6/100",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "label 'gain' with 'k=8.18E-6/100' near people source in image 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'gain' with 'k=8.18E-6/100' near people source in image 1"
+    },
+    {
+      "name": "gain1",
+      "kind": "gain block",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "gain",
+          "value": "-100*1.2/3?",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "label 'gain1' with 'k=-100*1.2/3?' near top right in image 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'gain1' with 'k=-100*1.2/3?' near top right in image 1"
+    },
+    {
+      "name": "PID",
+      "kind": "controller block",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'PID' in top center of image 1"
+    },
+    {
+      "name": "system",
+      "kind": "system block",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'system' in top right of image 1"
+    },
+    {
+      "name": "NumberOfPe?",
+      "kind": "occupancy input block",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'NumberOfPe?' at lower left of image 1"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "controlled mass-flow source",
+      "predicate": "supplies",
+      "object": "room",
+      "detail": "through supply duct",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Outdoor air enters through a controlled mass-flow source and supply duct."
+    },
+    {
+      "subject": "room",
+      "predicate": "discharges to",
+      "object": "ideal pressure boundary",
+      "detail": "through exhaust duct",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Room air leaves through an exhaust duct to an ideal pressure boundary."
+    },
+    {
+      "subject": "Occupants",
+      "predicate": "are represented as",
+      "object": "people source",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Occupants are represented as a separate trace-substance mass source."
+    },
+    {
+      "subject": "gainSensor",
+      "predicate": "multiplies",
+      "object": "room sensor output",
+      "detail": "by 1/C_nominal",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "gainSensor multiplies it by 1/C_nominal so that 1000 ppm becomes the normalized value 1.0."
+    },
+    {
+      "subject": "traceVolume",
+      "predicate": "measures",
+      "object": "room",
+      "detail": "room CO2 mass fraction",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Measure room CO2 mass fraction at traceVolume."
+    },
+    {
+      "subject": "CO2Set",
+      "predicate": "is compared with",
+      "object": "gainSensor",
+      "detail": "normalized feedback",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Compare normalized feedback with CO2Set = 1.0."
+    },
+    {
+      "subject": "ACH command",
+      "predicate": "is converted to",
+      "object": "m_supply_physical",
+      "detail": "mass-flow magnitude using V*rho/3600",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Convert ACH to mass-flow magnitude using V*rho/3600 = 100*1.2/3600 = 0.033333 kg/s per ACH."
+    },
+    {
+      "subject": "Modelica source command",
+      "predicate": "applies negative sign to",
+      "object": "m_supply_physical",
+      "detail": "negative source m_flow denotes flow from the source into the connected duct",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Apply a negative sign to the Modelica source command because negative source m_flow denotes flow from the source into the connected duct."
+    },
+    {
+      "subject": "m_supply_sourceCommand",
+      "predicate": "equals negative of",
+      "object": "m_supply_physical",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "m_supply_sourceCommand = -m_supply_physical."
+    },
+    {
+      "subject": "traceDuctIn",
+      "predicate": "is connected to",
+      "object": "ductIn",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "traceDuctIn shown above ductIn in image 1"
+    },
+    {
+      "subject": "freshAir",
+      "predicate": "is connected to",
+      "object": "ductIn",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "freshAir shown feeding ductIn from the left in image 1"
+    },
+    {
+      "subject": "ductIn",
+      "predicate": "is connected to",
+      "object": "volume",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "ductIn shown connected to volume in image 1"
+    },
+    {
+      "subject": "people source",
+      "predicate": "injects into",
+      "object": "volume",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "peopleSource shown connected below volume in image 1"
+    },
+    {
+      "subject": "volume",
+      "predicate": "is connected to",
+      "object": "ductOut",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "volume shown connected to ductOut on the right in image 1"
+    },
+    {
+      "subject": "traceDuctOut",
+      "predicate": "is connected to",
+      "object": "ductOut",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "traceDuctOut shown above ductOut in image 1"
+    },
+    {
+      "subject": "ductOut",
+      "predicate": "is connected to",
+      "object": "boundary4",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "ductOut shown connected to boundary4 in image 1"
+    },
+    {
+      "subject": "traceVolume",
+      "predicate": "is connected to",
+      "object": "gainSensor",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "traceVolume output shown connected to gainSensor in image 1"
+    },
+    {
+      "subject": "gainSensor",
+      "predicate": "feeds",
+      "object": "PID",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "gainSensor output shown returning to PID in image 1"
+    },
+    {
+      "subject": "CO2Set",
+      "predicate": "feeds",
+      "object": "PID",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "CO2Set shown connected to PID in image 1"
+    },
+    {
+      "subject": "PID",
+      "predicate": "feeds",
+      "object": "gain1",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "PID output shown connected to gain1 in image 1"
+    },
+    {
+      "subject": "gain1",
+      "predicate": "feeds",
+      "object": "freshAir",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "gain1 output shown connected down to freshAir in image 1"
+    },
+    {
+      "subject": "CAtm",
+      "predicate": "feeds",
+      "object": "freshAir",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "CAtm shown connected to freshAir in image 1"
+    },
+    {
+      "subject": "NumberOfPe?",
+      "predicate": "feeds",
+      "object": "gain",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "NumberOfPe? shown connected to gain in image 1"
+    },
+    {
+      "subject": "gain",
+      "predicate": "feeds",
+      "object": "people source",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "gain shown connected to peopleSource in image 1"
+    }
+  ],
+  "facts": [
+    {
+      "category": "constraint",
+      "statement": "The owner compliance limit is 1000 ppm absolute room CO2.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "The owner compliance limit is 1000 ppm absolute room CO2."
+    },
+    {
+      "category": "constraint",
+      "statement": "C_room <= 1.519E-3 kg/kg during the approved design occupancy schedule.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "C_room <= 1.519E-3 kg/kg during the approved design occupancy schedule."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "C_out = 0.3*C_nominal = 4.557E-4 kg/kg.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "C_out = 0.3*C_nominal = 4.557E-4 kg/kg."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "m_peopleSource = (8.18E-6 / 100) * nPeo   kg/s",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "m_peopleSource = (8.18E-6 / 100) * nPeo   kg/s"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "The trace-substance injection is m_peopleSource * C = nPeo * 8.18E-6 kg/s.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "The trace-substance injection is m_peopleSource * C = nPeo * 8.18E-6 kg/s."
+    },
+    {
+      "category": "requirement",
+      "statement": "The 100 kg/kg value is a numerical device only and must not be interpreted as a physical room concentration.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "The 100 kg/kg value is a numerical device only and must not be interpreted as a physical room concentration."
+    },
+    {
+      "category": "control_law",
+      "statement": "Effective reference-run tuning after CR-IAQ-007 is Kp=6.0, bias=3.5 ACH, integral disabled, output limited to 0.2..6.0 ACH.",
+      "ref": "CR-IAQ-007",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Effective reference-run tuning after CR-IAQ-007 is Kp=6.0, bias=3.5 ACH, integral disabled, output limited to 0.2..6.0 ACH."
+    },
+    {
+      "category": "behavior",
+      "statement": "AUTO_MIN | CO2 sufficiently below setpoint | 0.2 ACH lower limit | P-law requests >0.2 ACH | Common while unoccupied.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AUTO_MIN | CO2 sufficiently below setpoint | 0.2 ACH lower limit | P-law requests >0.2 ACH | Common while unoccupied."
+    },
+    {
+      "category": "behavior",
+      "statement": "AUTO_CO2 | 0.2 < requested ACH < 6.0 | Bias + Kp*(C/Cnom-1) | Saturation or operating condition changes | Baseline occupied regulation.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AUTO_CO2 | 0.2 < requested ACH < 6.0 | Bias + Kp*(C/Cnom-1) | Saturation or operating condition changes | Baseline occupied regulation."
+    },
+    {
+      "category": "behavior",
+      "statement": "AUTO_MAX | Requested ACH >= 6.0 | 6.0 ACH | Requested value falls below maximum | Not expected in baseline run.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AUTO_MAX | Requested ACH >= 6.0 | 6.0 ACH | Requested value falls below maximum | Not expected in baseline run."
+    },
+    {
+      "category": "behavior",
+      "statement": "SENSOR_FAULT | Sensor invalid >60 s | 4.0 ACH | Valid signal restored and reset logic satisfied | Raise fault indication.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "SENSOR_FAULT | Sensor invalid >60 s | 4.0 ACH | Valid signal restored and reset logic satisfied | Raise fault indication."
+    },
+    {
+      "category": "requirement",
+      "statement": "Use 1000 ppm absolute.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Use 1000 ppm absolute."
+    },
+    {
+      "category": "constraint",
+      "statement": "0.2 <= ACH <= 6.0.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "0.2 <= ACH <= 6.0."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "C_out = 0.3*C_nominal.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "C_out = 0.3*C_nominal."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "G_CO2 = nPeo*8.18E-6 kg/s.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "G_CO2 = nPeo*8.18E-6 kg/s."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "m_peopleCarrier = G_CO2/100.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "m_peopleCarrier = G_CO2/100."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "m_supply_physical = ACH*V*rho/3600.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "m_supply_physical = ACH*V*rho/3600."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "m_supply_sourceCommand = -m_supply_physical.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "m_supply_sourceCommand = -m_supply_physical."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "normalized_CO2 = C_room/C_nominal.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "normalized_CO2 = C_room/C_nominal."
+    }
+  ],
+  "unreadable": [
+    "Image 1 gain1 parameter text appears as 'k=-100*1.2/3?' and the final character is not legible.",
+    "Image 1 lower-left block label appears as 'NumberOfPe?' and the final character(s) are not legible."
+  ],
+  "unverified_quotes": []
+}

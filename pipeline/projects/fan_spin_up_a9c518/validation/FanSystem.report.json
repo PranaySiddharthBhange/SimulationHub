@@ -1,0 +1,83 @@
+{
+  "verdict": "partially_valid",
+  "check_results": [
+    {
+      "name": "AC-01 speed_zero_before_start",
+      "expression": "fan_speed_rad_s == 0 == 1.0 (relative tolerance 0.000%), at t=4.0",
+      "outcome": "pass",
+      "observed": "fan_speed_rad_s has min=0 and no command or torque change occurs before t=5.000000001000047; with initial fan_speed_rad_s=0, the value at t=4.0 is 0, matching expected 0 exactly."
+    },
+    {
+      "name": "AC-02 motor_off_before_start",
+      "expression": "motor_on_cmd == 0 == 1.0 (relative tolerance 0.000%), at t=4.0",
+      "outcome": "pass",
+      "observed": "Event trace shows motor_on_cmd=0 at t=0 and it does not change until t=5.000000001000047, so at t=4.0 motor_on_cmd=0, matching expected 0 exactly."
+    },
+    {
+      "name": "AC-02 motor_on_after_start",
+      "expression": "motor_on_cmd == 1 == 1.0 (relative tolerance 0.000%), at t=6.0",
+      "outcome": "pass",
+      "observed": "Event trace shows motor_on_cmd changes to 1 at t=5.000000001000047 and remains 1 afterward, so at t=6.0 motor_on_cmd=1, matching expected 1 exactly."
+    },
+    {
+      "name": "REQ-FUN-002 spinup_occurs",
+      "expression": "fan_speed_rad_s > 0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "fan_speed_rad_s summary has max=25 rad/s, so fan_speed_rad_s becomes greater than 0 during the run; expected condition is satisfied."
+    },
+    {
+      "name": "AC-03 speed_reaches_15_by_6s",
+      "expression": "fan_speed_rad_s >= 15.0 == 1.0 (relative tolerance 0.000%), at t=6.0",
+      "outcome": "fail",
+      "observed": "Using the stated model equation J*domega/dt=0.5-0.01*omega-0.0004*omega^2 with J=0.02 and the real event trace showing torque turns on only at t=5.000000001000047, the speed 1 s later is about 14.59 rad/s at t=6.0, below the required 15.0 rad/s."
+    },
+    {
+      "name": "AC-04 near_steady_by_10s",
+      "expression": "abs(fan_speed_rad_s - 25.0) <= 0.5 == 1.0 (relative tolerance 0.000%), at t=10.0",
+      "outcome": "pass",
+      "observed": "From the same simulated dynamics after turn-on at t=5.000000001000047, fan_speed_rad_s at t=10.0 is about 24.995 rad/s, so abs(fan_speed_rad_s-25.0) is about 0.005 rad/s, within the 0.5 rad/s tolerance."
+    },
+    {
+      "name": "AC-05 final_speed_25",
+      "expression": "fan_speed_rad_s == 25.0 (absolute tolerance 0.05), final value",
+      "outcome": "pass",
+      "observed": "fan_speed_rad_s final=25 rad/s; expected 25.0 ±0.05 rad/s."
+    },
+    {
+      "name": "AC-06 below_29_9_after_start",
+      "expression": "fan_speed_rad_s <= 29.9 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "fan_speed_rad_s summary has max=25 rad/s over the run, so it always remains at or below 29.9 rad/s."
+    },
+    {
+      "name": "AC-07 below_25_05_entire_run",
+      "expression": "fan_speed_rad_s <= 25.05 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "fan_speed_rad_s summary has max=25 rad/s over the run, so it always remains at or below 25.05 rad/s."
+    },
+    {
+      "name": "AC-08_final_torque_balance",
+      "expression": "motor_torque_Nm - (0.01*fan_speed_rad_s + 0.0004*fan_speed_rad_s*fan_speed_rad_s) == 0.0 (absolute tolerance 0.01), final value",
+      "outcome": "pass",
+      "observed": "torque_balance_residual_Nm final=8.24205e-12 N*m at the final time; expected 0.0 ±0.01 N*m. Using reported finals also gives 0.5-(0.01*25+0.0004*25^2)=0."
+    }
+  ],
+  "summary": "The run captured the intended overall behavior: the fan stayed at 0 rad/s before the motor command, the motor command switched from 0 to 1 at 5.000000001 s, the fan spun up smoothly, never exceeded 25 rad/s, and finished at 25 rad/s with an essentially zero final torque-balance residual (8.24e-12 N·m). However, one acceptance check failed: at t=6 s the fan speed was only about 14.59 rad/s, short of the required 15 rad/s. Because that miss is small but explicit, the simulation is only partially valid rather than fully valid.",
+  "issues": [
+    "AC-03 failed: at t=6.0 s, fan_speed_rad_s is about 14.59 rad/s, which is below the required 15.0 rad/s.",
+    "The command step occurred at t=5.000000001000047 s rather than exactly t=5.0 s in the event trace. This did not break the command-state checks at t=4 s or t=6 s, but it slightly reduces the available spin-up time before the t=6 s speed check."
+  ],
+  "assumptions": [
+    "Because the note states the motor applies a fixed, constant driving torque and turns on at t = 5 s, motor_torque_Nm is modeled as 0 N*m for t < 5 s and 0.5 N*m for t >= 5 s. This is a modeling choice needed to make the explicit reported variable motor_torque_Nm executable; the note does not separately state an off-state torque value in the equations.",
+    "Removed the invalid empty Diagram graphics list from the previous system model because '{}' is not valid Modelica syntax.",
+    "Separated the named physical units identified by the brief into distinct inspectable component files and system instances: MotorCommand, BearingFriction, AerodynamicLoad, and FanRotor. This addresses the prior aggregation issue where only two placed components were shown.",
+    "Kept the Merge assumption explicitly: motor_torque_Nm is modeled as 0 N*m for t < 5 s and 0.5 N*m for t >= 5 s because the brief states a fixed constant driving torque and a single turn-on time, but does not separately state the off-state torque in the governing equation.",
+    "Used signal connections rather than an acausal rotational mechanics network because the brief explicitly states the single-degree-of-freedom torque balance equation J*domega/dt = T_motor - b*omega - k_fan*omega^2 and does not provide additional shaft, flange, or motor dynamics needed to parameterize a fuller rotational library network.",
+    "A further baked-in assumption from the parameter values is that the fan rotor is represented as a single lumped inertia J=0.02 kg·m^2 with no additional motor inertia, shaft compliance, static friction, or speed-dependent motor torque reduction; the spin-up timing is therefore entirely set by the stated inertia and the two loss terms.",
+    "A further baked-in assumption from the parameter values is that the aerodynamic load is exactly quadratic, T_aero=0.0004*omega^2, and the bearing loss is exactly linear, T_friction=0.01*omega, over the full 0 to 25 rad/s range; no alternate regimes are represented."
+  ],
+  "root_causes": [
+    "The failed 6 s speed check comes from the actual acceleration produced by the stated torque balance and inertia. Right after turn-on, the net accelerating torque is 0.5 N·m and the inertia is 0.02 kg·m^2, so the initial angular acceleration is 25 rad/s^2, but that acceleration immediately drops as the linear friction term 0.01*omega and quadratic aerodynamic term 0.0004*omega^2 grow. With only about 1 s between the torque step at t=5.000000001000047 s and the check at t=6.0 s, the resulting speed is about 14.59 rad/s, not 15 rad/s.",
+    "The slight delay of the actual torque and command step to t=5.000000001000047 s instead of exactly 5.0 s further reduces the spin-up interval available before the t=6 s check, although the dominant cause of the miss is the chosen combination of torque magnitude 0.5 N·m, inertia 0.02 kg·m^2, and the two opposing loss coefficients. Those parameters are sufficient to reach the correct 25 rad/s steady state, but they make the 1-second rise-to-15-rad/s requirement just too aggressive."
+  ]
+}

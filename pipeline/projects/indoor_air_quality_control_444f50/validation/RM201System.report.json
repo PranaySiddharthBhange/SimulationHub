@@ -1,0 +1,133 @@
+{
+  "verdict": "partially_valid",
+  "check_results": [
+    {
+      "name": "AC-01 final room CO2 limit",
+      "expression": "room_co2_ppm <= 1000 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "room_co2_ppm ranges from 299.969 ppm to 996.42 ppm over the full 0..86400 s run; maximum observed is 996.42 ppm, which stays below the 1000 ppm limit at all times. Final value at t=86400 s is 361.896 ppm."
+    },
+    {
+      "name": "AC-02 outdoor CO2 fixed baseline ppm",
+      "expression": "outdoor_co2_ppm == 300 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "not_evaluable",
+      "observed": "The reported result summary does not contain variable outdoor_co2_ppm, so the required always-300 ppm check cannot be evaluated from the result file. The brief expected 300 ppm at all times."
+    },
+    {
+      "name": "AC-03 ACH lower bound",
+      "expression": "ach_command_1_per_h >= 0.2 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "ach_command_1_per_h has min=0.2 1/h, max=3.47914 1/h, final=0.2 1/h over 0..86400 s, so it never drops below the 0.2 1/h lower bound."
+    },
+    {
+      "name": "AC-03 ACH upper bound",
+      "expression": "ach_command_1_per_h <= 6.0 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "ach_command_1_per_h has min=0.2 1/h, max=3.47914 1/h, final=0.2 1/h over 0..86400 s, so it never exceeds the 6.0 1/h upper bound."
+    },
+    {
+      "name": "AC-04 source and physical flow opposite sign equality",
+      "expression": "physical_supply_m_flow_kg_s + source_m_flow_command_kg_s == 0 == 1.0 (absolute tolerance 1e-06), always value",
+      "outcome": "pass",
+      "observed": "physical_supply_m_flow_kg_s ranges 0.00666667..0.115971 kg/s and source_m_flow_command_kg_s ranges -0.115971..-0.00666667 kg/s. The extrema and final values are equal magnitude with opposite sign; at t=86400 s they are +0.00666667 and -0.00666667 kg/s, summing to 0 within the 1e-06 tolerance."
+    },
+    {
+      "name": "AC-05 people source actual CO2 generation law",
+      "expression": "actual_co2_generation_kg_s == occupants_person*8.18e-6 == 1.0 (absolute tolerance 1e-10), always value",
+      "outcome": "fail",
+      "observed": "The event trace shows rounded actual_co2_generation_kg_s values that do not satisfy the required law within 1e-10 when compared to the simultaneous occupants_person values: at t=28800.00000576008 s occupants_person=8, so expected generation is 6.544e-05 kg/s, but reported actual_co2_generation_kg_s=6.5e-05 kg/s; difference 4.4e-07 kg/s. At t=46800.00000936083 s occupants_person=15, expected 0.0001227 kg/s, but the event trace reports 0.000123 kg/s. Summary extrema/final are min=0, max=0.0001227, final=0."
+    },
+    {
+      "name": "people source carrier flow law",
+      "expression": "people_source_carrier_m_flow_kg_s == actual_co2_generation_kg_s/100 == 1.0 (absolute tolerance 1e-12), always value",
+      "outcome": "fail",
+      "observed": "The event trace reports rounded people_source_carrier_m_flow_kg_s values that do not match actual_co2_generation_kg_s/100 within 1e-12 at occupied steps: at t=28800.00000576008 s actual_co2_generation_kg_s=6.5e-05 kg/s, so expected carrier flow is 6.5e-07 kg/s from the reported generation, but people_source_carrier_m_flow_kg_s is reported as 1e-06 kg/s; difference 3.5e-07 kg/s. At t=46800.00000936083 s actual_co2_generation_kg_s=0.000123 kg/s, expected 1.23e-06 kg/s, but reported carrier flow is 1e-06 kg/s. Summary shows max carrier flow 1.227e-06 kg/s and max generation 0.0001227 kg/s, which are consistent at extrema but the event trace values do not satisfy the stated always check."
+    },
+    {
+      "name": "one-person carrier flow attained",
+      "expression": "people_source_carrier_m_flow_kg_s == 8.18e-8 == 1.0 (absolute tolerance 1e-12), ever value",
+      "outcome": "fail",
+      "observed": "No event trace entry or summary value shows people_source_carrier_m_flow_kg_s reaching 8.18e-08 kg/s. Reported event levels are 0, 1e-06, and 0 again at occupancy transitions; summary max is 1.227e-06 kg/s."
+    },
+    {
+      "name": "one-person actual CO2 generation attained",
+      "expression": "actual_co2_generation_kg_s == 8.18e-6 == 1.0 (absolute tolerance 1e-10), ever value",
+      "outcome": "fail",
+      "observed": "No event trace entry or summary value shows actual_co2_generation_kg_s reaching 8.18e-06 kg/s. The occupancy schedule steps from 0 directly to 2 persons at t=25200.00000504033 s, where actual_co2_generation_kg_s becomes 1.6e-05 kg/s in the event trace; summary max is 0.0001227 kg/s."
+    },
+    {
+      "name": "initial room equals outdoor concentration",
+      "expression": "room_co2_mass_fraction_kgkg == outdoor_co2_mass_fraction_kgkg and occupants_person == 0 == 1.0 (relative tolerance 0.000%), at t=0.0",
+      "outcome": "not_evaluable",
+      "observed": "At t=0, occupants_person=0 and room_co2_mass_fraction_kgkg has min 0.0004557 kg/kg, consistent with initialization, but the result summary does not contain outdoor_co2_mass_fraction_kgkg, so equality between room and outdoor mass fraction at t=0 cannot be directly evaluated from the reported variables."
+    },
+    {
+      "name": "occupancy peak 15 attained",
+      "expression": "occupants_person == 15 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "The event trace shows occupants_person = 15 at t=46800.00000936083 s, and the summary gives max=15 persons."
+    },
+    {
+      "name": "AUTO_CO2 mode reached",
+      "expression": "controller_mode == 1 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "The event trace shows controller_mode changes from 0 to 1 at t=26953.93590402733 s, so AUTO_CO2 is reached. Summary max=1 and final=0."
+    },
+    {
+      "name": "AUTO_MIN at end of day",
+      "expression": "controller_mode == 0 and occupants_person == 0 == 1.0 (relative tolerance 0.000%), final value",
+      "outcome": "pass",
+      "observed": "At final time t=86400 s, controller_mode final=0 and occupants_person final=0, satisfying the required end-of-day AUTO_MIN with zero occupants."
+    },
+    {
+      "name": "normalized feedback definition",
+      "expression": "normalized_co2_feedback == room_co2_mass_fraction_kgkg/0.001519 == 1.0 (absolute tolerance 1e-06), always value",
+      "outcome": "pass",
+      "observed": "Using the reported extrema/final values, the relationship matches numerically: at final time t=86400 s, room_co2_mass_fraction_kgkg=0.000549778 gives 0.000549778/0.001519 = 0.361934, matching normalized_co2_feedback final=0.361934 within 1e-06. At the maximum, 0.00151372/0.001519 ≈ 0.996524, matching normalized_co2_feedback max=0.996524."
+    },
+    {
+      "name": "outdoor mass fraction fixed baseline",
+      "expression": "outdoor_co2_mass_fraction_kgkg == 0.0004557 == 1.0 (absolute tolerance 1e-07), always value",
+      "outcome": "not_evaluable",
+      "observed": "The reported result summary does not contain variable outdoor_co2_mass_fraction_kgkg, so the required always-0.0004557 kg/kg check cannot be evaluated from the result file."
+    },
+    {
+      "name": "24h endpoint reached",
+      "expression": "time_s == 86400 == 1.0 (relative tolerance 0.000%), final value",
+      "outcome": "pass",
+      "observed": "time_s has final=86400 s and max=86400 s, so the run reaches the required 24 h endpoint."
+    },
+    {
+      "name": "ACH rises above minimum during occupied regulation",
+      "expression": "ach_command_1_per_h > 0.2 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "ach_command_1_per_h reaches a maximum of 3.47914 1/h, which is above the 0.2 1/h minimum, so the command does rise above minimum during the run."
+    }
+  ],
+  "summary": "The 24-hour simulation did run through to 86400 s and its main room-control behavior is broadly consistent with the intended baseline: room CO2 stayed below the 1000 ppm limit, peaking at 996.42 ppm, the ACH command stayed within 0.2 to 3.47914 1/h, AUTO_CO2 was reached during the day, and the system returned to AUTO_MIN with zero occupants by the end. However, this run is not fully valid against the brief because several required checks could not be evaluated from the reported results at all: the file does not report outdoor_co2_ppm or outdoor_co2_mass_fraction_kgkg, so the baseline outdoor-CO2 checks and the initial room-equals-outdoor check cannot be confirmed. In addition, the event trace values for occupant CO2 generation and people-source carrier flow are rounded in a way that fails the very tight always-check tolerances, and the one-person attainment checks fail because the approved occupancy schedule never includes exactly one person.",
+  "issues": [
+    "Required reported variable outdoor_co2_ppm is absent from the result data, so AC-02 ('outdoor_co2_ppm == 300 always') is not evaluable even though the brief requires that variable to be reported.",
+    "Required reported variable outdoor_co2_mass_fraction_kgkg is absent from the result data, so the 'outdoor mass fraction fixed baseline' check is not evaluable, and the initial equality check between room and outdoor concentration at t=0 is also not fully evaluable.",
+    "The always-check for actual CO2 generation fails against the provided event trace values and tolerance: for example, at t=28800.00000576008 s occupants_person=8 requires 6.544e-05 kg/s, but the event trace reports actual_co2_generation_kg_s=6.5e-05 kg/s, a difference of 4.4e-07 kg/s, which exceeds the 1e-10 tolerance.",
+    "The always-check for people-source carrier flow fails against the provided event trace values and tolerance: for example, at t=28800.00000576008 s the event trace reports actual_co2_generation_kg_s=6.5e-05 kg/s, so the implied carrier flow should be 6.5e-07 kg/s, but people_source_carrier_m_flow_kg_s is reported as 1e-06 kg/s, a difference of 3.5e-07 kg/s, which exceeds the 1e-12 tolerance.",
+    "The 'one-person carrier flow attained' check fails because the schedule never reaches exactly one occupant; no reported value shows people_source_carrier_m_flow_kg_s = 8.18e-08 kg/s.",
+    "The 'one-person actual CO2 generation attained' check fails because the schedule never reaches exactly one occupant; no reported value shows actual_co2_generation_kg_s = 8.18e-06 kg/s."
+  ],
+  "assumptions": [
+    "Model-generation assumption: the occupancy schedule output was connected by alias equation occupants_person = occupancySchedule.occupants_person after removing a prior self-connection loop.",
+    "Model-generation assumption: the room CO2 state uses der(room_co2_mass_state) = m_supply*C_out + G_CO2 - m_supply*C_room as the standard well-mixed trace-substance balance, because the brief did not provide the full differential equation explicitly.",
+    "Model-generation assumption: controller_mode numeric encoding is AUTO_MIN=0, AUTO_CO2=1, AUTO_MAX=2, SENSOR_FAULT=3.",
+    "Model-generation assumption: baseline sensor validity is fixed true for the entire run, so SENSOR_FAULT is not exercised in this baseline simulation.",
+    "Model-generation assumption: room air mass is constant at V*rho = 100 m3 * 1.2 kg/m3 = 120 kg.",
+    "Model-generation assumption: the implementation is signal-flow rather than Modelica.Fluid, because the brief did not supply the fluid-network parameters needed for a full fluid-component model.",
+    "Inherited assumption from merge/clarify: Boolean check expressions evaluate to 1 when true and 0 when false.",
+    "Inherited assumption from merge/clarify: immediate exit from SENSOR_FAULT when sensor validity is restored.",
+    "Further inferred from the parameterization and trajectory: the model treats room mass, density, pressure, and humidity as constant, because only a single constant roomAirMass and a single trace-substance state are reported and the concentration dynamics scale accordingly."
+  ],
+  "root_causes": [
+    "The missing-variable issues arise because the generated model did not expose outdoor_co2_ppm or outdoor_co2_mass_fraction_kgkg as top-level reported outputs, even though the brief's reporting contract explicitly required both. As a result, baseline outdoor concentration checks cannot be demonstrated from the result file.",
+    "The failure of the generation-law and carrier-law checks is caused by the real event trace being rounded to a small number of significant digits for those variables. The summary extrema show the expected maxima (0.0001227 kg/s and 1.227e-06 kg/s), but the event entries use rounded values such as 6.5e-05 and 1e-06, which do not satisfy the stated absolute tolerances of 1e-10 and 1e-12 when used as evidence.",
+    "The one-person attainment checks fail because the approved occupancy schedule OCC-SCH-04 Rev C never commands exactly 1 person. It steps 0 -> 2 -> 8 -> 12 -> 4 -> 15 -> 10 -> 3 -> 0, so the model has no physical scenario in which it could generate exactly 8.18e-6 kg/s CO2 or 8.18e-8 kg/s carrier flow.",
+    "The run is only partially valid rather than invalid because the core control physics did occur as intended: CO2 rose under occupancy, the proportional controller increased ACH above minimum up to 3.47914 1/h, room CO2 remained below the 1000 ppm limit, and ventilation returned to minimum after occupancy ended. The blocking problems are evidence/reporting gaps and checks tied to unattained or rounded values, not a failure of the main control sequence itself."
+  ]
+}

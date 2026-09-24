@@ -1,0 +1,345 @@
+{
+  "document": "[page 1]\n  Commissioning / Model Verification Procedure CP-23\n\n Revision C - 2026-03-03\n\n 1. Objective\n Verify the released room CO2 feedback-control configuration over the approved 24-hour weekday occupancy\n  profile using effective parameters current after CR-IAQ-007.\n 2. Preconditions\n Room volume = 100 m3.\n Nominal air density = 1.2 kg/m3.\n Outdoor CO2 = 300 ppm = 0.3*1.519E-3 kg/kg.\n Occupant CO2 generation = 8.18E-6 kg/s/person.\n  Controller: Kp=6.0 ACH/normalized, bias=3.5 ACH, integral disabled, limits 0.2..6.0 ACH.\n Use OCC-SCH-04 Rev C.\n 3. Test steps\n  1. Initialize room concentration to the outdoor concentration and start at 00:00 with zero occupants.\n  2. Execute the occupancy schedule continuously through 24:00. Treat each schedule interval as piecewise constant.\n  3. Compute room trace concentration using the well-mixed zone balance. Evaluate controller at an internal integration\n step no larger than 1 s.\n  4. Log at 60 s intervals: time, occupant count, room ppm, room kg/kg, normalized feedback, ACH command, source\n mass-flow command, physical supply mass flow, people carrier flow, and actual CO2 generation.\n  5. Report the maximum room CO2 and its time. Confirm the result is not greater than 1000 ppm.\n  6. Confirm source command sign and physical flow sign are opposite for the outdoor-air source.\n  7. Confirm one-person people-source carrier flow is 8.18E-8 kg/s and corresponding trace injection is 8.18E-6 kg/s.\n 4. Acceptance criteria\n\n    ID                Criterion\n    AC-01        Maximum room CO2 <= 1000 ppm.\n    AC-02          Outdoor concentration remains 300 ppm in baseline run.\n    AC-03       ACH command remains within 0.2..6.0 ACH.\n    AC-04          physical_supply_m_flow_kg_s = -source_m_flow_command_kg_s.\n    AC-05       CO2 source injection equals occupants*8.18E-6 kg/s.\n    AC-06          Trend contains 1441 rows including 00:00 and 24:00 endpoints.\n\n\n Reference synthetic run summary: maximum room CO2 = 996.524 ppm at t=53999 s. This value is informational evidence\n associated with the supplied trend file.\n\n\n\n\nSynthetic hackathon engineering evidence                                                                    Page 1\n[page 1 also supplied as visual image 1]",
+  "subject": "Commissioning / Model Verification Procedure CP-23",
+  "kind": "test procedure",
+  "entities": [
+    {
+      "name": "room",
+      "kind": "zone",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "volume",
+          "value": "100",
+          "unit": "m3",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Room volume = 100 m3."
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Room volume = 100 m3."
+    },
+    {
+      "name": "Nominal air",
+      "kind": "material",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "density",
+          "value": "1.2",
+          "unit": "kg/m3",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "Nominal air density = 1.2 kg/m3."
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Nominal air density = 1.2 kg/m3."
+    },
+    {
+      "name": "Outdoor CO2",
+      "kind": "concentration",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "concentration",
+          "value": "300",
+          "unit": "ppm",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Outdoor CO2 = 300 ppm = 0.3*1.519E-3 kg/kg."
+        },
+        {
+          "quantity": "concentration",
+          "value": "0.3*1.519E-3",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Outdoor CO2 = 300 ppm = 0.3*1.519E-3 kg/kg."
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Outdoor CO2 = 300 ppm = 0.3*1.519E-3 kg/kg."
+    },
+    {
+      "name": "Occupant CO2 generation",
+      "kind": "source term",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "generation rate",
+          "value": "8.18E-6",
+          "unit": "kg/s/person",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Occupant CO2 generation = 8.18E-6 kg/s/person."
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Occupant CO2 generation = 8.18E-6 kg/s/person."
+    },
+    {
+      "name": "Controller",
+      "kind": "controller",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "Kp",
+          "value": "6.0",
+          "unit": "ACH/normalized",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Controller: Kp=6.0 ACH/normalized, bias=3.5 ACH, integral disabled, limits 0.2..6.0 ACH."
+        },
+        {
+          "quantity": "bias",
+          "value": "3.5",
+          "unit": "ACH",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Controller: Kp=6.0 ACH/normalized, bias=3.5 ACH, integral disabled, limits 0.2..6.0 ACH."
+        },
+        {
+          "quantity": "lower limit",
+          "value": "0.2",
+          "unit": "ACH",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Controller: Kp=6.0 ACH/normalized, bias=3.5 ACH, integral disabled, limits 0.2..6.0 ACH."
+        },
+        {
+          "quantity": "upper limit",
+          "value": "6.0",
+          "unit": "ACH",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Controller: Kp=6.0 ACH/normalized, bias=3.5 ACH, integral disabled, limits 0.2..6.0 ACH."
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Controller: Kp=6.0 ACH/normalized, bias=3.5 ACH, integral disabled, limits 0.2..6.0 ACH."
+    },
+    {
+      "name": "OCC-SCH-04",
+      "kind": "occupancy schedule",
+      "aliases": [
+        "OCC-SCH-04 Rev C"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Use OCC-SCH-04 Rev C."
+    },
+    {
+      "name": "outdoor-air source",
+      "kind": "source",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Confirm source command sign and physical flow sign are opposite for the outdoor-air source."
+    },
+    {
+      "name": "people-source",
+      "kind": "source",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "one-person carrier flow",
+          "value": "8.18E-8",
+          "unit": "kg/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Confirm one-person people-source carrier flow is 8.18E-8 kg/s and corresponding trace injection is 8.18E-6 kg/s."
+        },
+        {
+          "quantity": "corresponding trace injection",
+          "value": "8.18E-6",
+          "unit": "kg/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Confirm one-person people-source carrier flow is 8.18E-8 kg/s and corresponding trace injection is 8.18E-6 kg/s."
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Confirm one-person people-source carrier flow is 8.18E-8 kg/s and corresponding trace injection is 8.18E-6 kg/s."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "room",
+      "predicate": "initialized to concentration of",
+      "object": "Outdoor CO2",
+      "detail": "at 00:00 with zero occupants",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Initialize room concentration to the outdoor concentration and start at 00:00 with zero occupants."
+    },
+    {
+      "subject": "room",
+      "predicate": "uses occupancy schedule",
+      "object": "OCC-SCH-04",
+      "detail": "continuously through 24:00",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Use OCC-SCH-04 Rev C."
+    },
+    {
+      "subject": "outdoor-air source",
+      "predicate": "has opposite sign to",
+      "object": "physical supply mass flow",
+      "detail": "source command sign and physical flow sign are opposite",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Confirm source command sign and physical flow sign are opposite for the outdoor-air source."
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "Verify the released room CO2 feedback-control configuration over the approved 24-hour weekday occupancy profile using effective parameters current after CR-IAQ-007.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "Verify the released room CO2 feedback-control configuration over the approved 24-hour weekday occupancy\n  profile using effective parameters current after CR-IAQ-007."
+    },
+    {
+      "category": "requirement",
+      "statement": "Initialize room concentration to the outdoor concentration and start at 00:00 with zero occupants.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "Initialize room concentration to the outdoor concentration and start at 00:00 with zero occupants."
+    },
+    {
+      "category": "requirement",
+      "statement": "Execute the occupancy schedule continuously through 24:00. Treat each schedule interval as piecewise constant.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "Execute the occupancy schedule continuously through 24:00. Treat each schedule interval as piecewise constant."
+    },
+    {
+      "category": "requirement",
+      "statement": "Compute room trace concentration using the well-mixed zone balance. Evaluate controller at an internal integration step no larger than 1 s.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "Compute room trace concentration using the well-mixed zone balance. Evaluate controller at an internal integration\n step no larger than 1 s."
+    },
+    {
+      "category": "requirement",
+      "statement": "Log at 60 s intervals: time, occupant count, room ppm, room kg/kg, normalized feedback, ACH command, source mass-flow command, physical supply mass flow, people carrier flow, and actual CO2 generation.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "Log at 60 s intervals: time, occupant count, room ppm, room kg/kg, normalized feedback, ACH command, source\n mass-flow command, physical supply mass flow, people carrier flow, and actual CO2 generation."
+    },
+    {
+      "category": "requirement",
+      "statement": "Report the maximum room CO2 and its time. Confirm the result is not greater than 1000 ppm.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "Report the maximum room CO2 and its time. Confirm the result is not greater than 1000 ppm."
+    },
+    {
+      "category": "requirement",
+      "statement": "Confirm source command sign and physical flow sign are opposite for the outdoor-air source.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "Confirm source command sign and physical flow sign are opposite for the outdoor-air source."
+    },
+    {
+      "category": "requirement",
+      "statement": "Confirm one-person people-source carrier flow is 8.18E-8 kg/s and corresponding trace injection is 8.18E-6 kg/s.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "Confirm one-person people-source carrier flow is 8.18E-8 kg/s and corresponding trace injection is 8.18E-6 kg/s."
+    },
+    {
+      "category": "constraint",
+      "statement": "Maximum room CO2 <= 1000 ppm.",
+      "ref": "AC-01",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-01        Maximum room CO2 <= 1000 ppm."
+    },
+    {
+      "category": "constraint",
+      "statement": "Outdoor concentration remains 300 ppm in baseline run.",
+      "ref": "AC-02",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-02          Outdoor concentration remains 300 ppm in baseline run."
+    },
+    {
+      "category": "constraint",
+      "statement": "ACH command remains within 0.2..6.0 ACH.",
+      "ref": "AC-03",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-03       ACH command remains within 0.2..6.0 ACH."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "physical_supply_m_flow_kg_s = -source_m_flow_command_kg_s.",
+      "ref": "AC-04",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-04          physical_supply_m_flow_kg_s = -source_m_flow_command_kg_s."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "CO2 source injection equals occupants*8.18E-6 kg/s.",
+      "ref": "AC-05",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-05       CO2 source injection equals occupants*8.18E-6 kg/s."
+    },
+    {
+      "category": "requirement",
+      "statement": "Trend contains 1441 rows including 00:00 and 24:00 endpoints.",
+      "ref": "AC-06",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-06          Trend contains 1441 rows including 00:00 and 24:00 endpoints."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

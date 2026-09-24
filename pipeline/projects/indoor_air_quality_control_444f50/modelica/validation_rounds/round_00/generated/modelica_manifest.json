@@ -1,0 +1,47 @@
+{
+  "entry_class": "RM201System",
+  "files": [
+    {
+      "filename": "OccupancySchedule.mo",
+      "role": "component"
+    },
+    {
+      "filename": "CO2RoomController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "RM201System.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Sources.BooleanConstant",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Replaced the previous self-connection of occupancySchedule.occupants_person with a one-directional alias equation occupants_person = occupancySchedule.occupants_person; the prior self-connect created a zero-state algebraic signal loop unrelated to the actual occupancy schedule behavior.",
+    "Used a direct continuous state room_co2_mass_state with der(room_co2_mass_state)=m_supply*C_out + G_CO2 - m_supply*C_room to implement the required well-mixed room trace-substance balance. This follows the brief's stated assumption that later stages must implement the standard well-mixed balance consistent with inflow, outflow, and source terms.",
+    "Mode numeric encoding follows the already-approved assumption AUTO_MIN=0, AUTO_CO2=1, AUTO_MAX=2, SENSOR_FAULT=3 via controller_mode = Integer(mode) - 1.",
+    "Baseline sensor validity is held true with Modelica.Blocks.Sources.BooleanConstant because the brief states no sensor-invalid schedule for the baseline run; SENSOR_FAULT logic is still modeled in the controller for non-baseline use.",
+    "The model uses the room air mass as a constant roomAirMass = V*rho = 120 kg, derived from the brief's room volume 100 m3 and nominal air density 1.2 kg/m3. This supports the well-mixed mass-fraction state formulation because no varying room mass, pressure, or humidity model is stated in the evidence.",
+    "The top-level model is signal-flow rather than Modelica.Fluid because the brief establishes the required well-mixed single-zone concentration balance, ACH-to-mass-flow conversion, and sign-convention reporting, but does not provide the fluid-component parameters needed to instantiate a faithful Modelica.Fluid network for ducts and trace-species transport in air."
+  ],
+  "references": [
+    {
+      "path": "11_11_reference_run_24h.txt",
+      "time_column": "time_s",
+      "reference_column": "room_co2_ppm",
+      "model_variable": "room_co2_ppm",
+      "absolute_tolerance": 10.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Reference dataset is evidence of one past approved 24 h run and may be compared as an output trajectory without using it as a forcing input."
+    }
+  ]
+}

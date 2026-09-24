@@ -1,0 +1,456 @@
+{
+  "document": "# Two Tanks, One Above The Other — Gravity Flow To Equilibrium\n\n## System\n\nTwo open tanks stand at different heights and are joined by a single pipe\nwith an on/off valve. Tank A is mounted physically above Tank B, so once the\nvalve opens, gravity drives liquid from A (higher level) down into B (lower\nlevel) until their levels settle at a shared equilibrium — nothing keeps\npumping afterward, and nothing drains the pair from outside. There is no\noperator command sequence and no controller: the valve is closed for a\nfixed interval, then opens once, and stays open for the rest of the run.\n\n- Tank A (upper): cross-sectional area 0.5 m^2, height 1.0 m, starts full to\n  0.80 m at t = 0.\n- Tank B (lower): cross-sectional area 0.5 m^2, height 1.0 m, starts empty\n  (level = 0 m) at t = 0.\n- Connecting valve: closed from t = 0 to t = 5 s (no flow, both levels held\n  at their starting values). At t = 5 s the valve opens once and never\n  closes again for the rest of the run.\n- Once open, the connecting flow is driven by the two tanks' own level\n  difference: `q = k * (level_A - level_B)`, with `k = 0.025 m^2/s`. Flow\n  runs from A to B while `level_A > level_B` and relaxes toward zero as the\n  difference closes -- there is no pump and no fixed nominal rate once the\n  valve is open, unlike a supply-fed fill.\n- The two tanks have equal area and no other inflow or outflow anywhere in\n  the system, so total liquid volume is conserved for the whole run:\n  `level_A + level_B` is constant at 0.80 m from t = 0 onward, before and\n  after the valve opens.\n\n## Requirements\n\n- REQ-SIM-001: Simulate for 150 seconds and report both tank levels and the\n  connecting valve's open/closed command for the whole run.\n- REQ-FUN-001: The valve shall stay closed and both levels shall stay\n  exactly at their starting values (0.80 m and 0.00 m) for the entire\n  closed interval, t = 0 to t = 5 s.\n- REQ-FUN-002: At t = 5 s the valve shall open and flow shall begin from\n  Tank A into Tank B, so Tank A's level falls and Tank B's level rises from\n  that point on.\n- REQ-FUN-003: Given equal tank areas and the stated conductance `k`, the\n  system shall relax toward a shared equilibrium level of 0.40 m in each\n  tank (the starting 0.80 m of liquid split evenly across two equal-area\n  tanks) and shall stay there for the remainder of the run once reached.\n\n## Acceptance checks\n\n- AC-01 valve closed pre-open: `valve_open_cmd == 0` at t = 4 s.\n- AC-02 levels frozen while closed: `level_A_m == 0.80` and\n  `level_B_m == 0.00` at t = 4 s (absolute tolerance 0.001 m) -- unchanged\n  from the initial condition right up to the moment before the valve opens.\n- AC-03 valve opens on schedule: `valve_open_cmd == 1` at t = 6 s (one\n  second after the scheduled open time, clear of the switching instant\n  itself).\n- AC-04 flow has visibly started: `level_A_m <= 0.75` and\n  `level_B_m >= 0.05` at t = 15 s (10 s after the valve opened) -- Tank A\n  is draining and Tank B is filling.\n- AC-05 approaching equilibrium: `abs(level_A_m - 0.40) <= 0.02` and\n  `abs(level_B_m - 0.40) <= 0.02` at t = 45 s (40 s after the valve opened,\n  four time constants given `tau = area / (2*k) = 10 s`).\n- AC-06 settled at equilibrium: `level_A_m == 0.40` and `level_B_m == 0.40`\n  at t = 150 s (absolute tolerance 0.005 m) -- both tanks have visibly\n  stopped moving by the end of the run.\n- AC-07 volume conservation, the whole run: `level_A_m + level_B_m == 0.80`\n  holds at all times (absolute tolerance 0.001 m), from t = 0 through\n  t = 150 s -- no liquid appears or disappears anywhere in this system,\n  valve open or closed.\n- AC-08 no overflow/underflow: `level_A_m >= 0` and `level_A_m <= 1.0`, and\n  `level_B_m >= 0` and `level_B_m <= 1.0`, hold for the entire run.\n\n## Notes\n\n- This case has exactly one discrete event (the valve opening once, never\n  closing again) and one continuous relaxation afterward, so it\n  deliberately has no controller, no setpoint, no pause/resume behavior,\n  and no second command. It exists to exercise gravity-driven flow between\n  two vessels and a genuine asymptotic equilibrium, neither of which the\n  single-tank-fill or sequenced-valve cases in this folder cover.\n- Equal tank areas were chosen deliberately so the equilibrium level\n  (0.40 m each) and the conservation identity (`level_A + level_B = 0.80`)\n  are both exact, closed-form numbers to check against -- not because equal\n  areas are required by the physics. A future variant with unequal areas\n  would still conserve total VOLUME (`A_A*level_A + A_B*level_B` constant),\n  just not total level.\n- \"Tank A mounted above Tank B\" is the physical framing for why gravity\n  drives flow from A to B once the valve opens; the model itself only needs\n  each tank's own level and the stated level-difference-driven flow law, not\n  a separate elevation state -- there is no requirement to model absolute\n  pipe geometry or hydrostatic pressure explicitly.\n",
+  "subject": "Two Tanks, One Above The Other — Gravity Flow To Equilibrium",
+  "kind": "requirement specification",
+  "entities": [
+    {
+      "name": "Tank A",
+      "kind": "tank",
+      "aliases": [
+        "Tank A (upper)"
+      ],
+      "values": [
+        {
+          "quantity": "cross-sectional area",
+          "value": "0.5",
+          "unit": "m^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "cross-sectional area 0.5 m^2"
+        },
+        {
+          "quantity": "height",
+          "value": "1.0",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "height 1.0 m"
+        },
+        {
+          "quantity": "starting level",
+          "value": "0.80",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "starts full to\n  0.80 m at t = 0"
+        },
+        {
+          "quantity": "starting time",
+          "value": "0",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "0.80 m at t = 0"
+        },
+        {
+          "quantity": "equilibrium level",
+          "value": "0.40",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "level of 0.40 m in each\n  tank"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Tank A (upper): cross-sectional area 0.5 m^2, height 1.0 m, starts full to\n  0.80 m at t = 0."
+    },
+    {
+      "name": "Tank B",
+      "kind": "tank",
+      "aliases": [
+        "Tank B (lower)"
+      ],
+      "values": [
+        {
+          "quantity": "cross-sectional area",
+          "value": "0.5",
+          "unit": "m^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "cross-sectional area 0.5 m^2"
+        },
+        {
+          "quantity": "height",
+          "value": "1.0",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "height 1.0 m"
+        },
+        {
+          "quantity": "starting level",
+          "value": "0",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "(level = 0 m) at t = 0"
+        },
+        {
+          "quantity": "starting time",
+          "value": "0",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "(level = 0 m) at t = 0"
+        },
+        {
+          "quantity": "equilibrium level",
+          "value": "0.40",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "level of 0.40 m in each\n  tank"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Tank B (lower): cross-sectional area 0.5 m^2, height 1.0 m, starts empty\n  (level = 0 m) at t = 0."
+    },
+    {
+      "name": "Connecting valve",
+      "kind": "valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "closed interval start",
+          "value": "0",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "closed from t = 0 to t = 5 s"
+        },
+        {
+          "quantity": "closed interval end",
+          "value": "5",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "closed from t = 0 to t = 5 s"
+        },
+        {
+          "quantity": "open time",
+          "value": "5",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "At t = 5 s the valve opens once"
+        },
+        {
+          "quantity": "command at t=4 s",
+          "value": "0",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`valve_open_cmd == 0` at t = 4 s"
+        },
+        {
+          "quantity": "command at t=6 s",
+          "value": "1",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`valve_open_cmd == 1` at t = 6 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Connecting valve: closed from t = 0 to t = 5 s (no flow, both levels held\n  at their starting values). At t = 5 s the valve opens once and never\n  closes again for the rest of the run."
+    },
+    {
+      "name": "connecting flow",
+      "kind": "flow",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "conductance k",
+          "value": "0.025",
+          "unit": "m^2/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`k = 0.025 m^2/s`"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Once open, the connecting flow is driven by the two tanks' own level\n  difference: `q = k * (level_A - level_B)`, with `k = 0.025 m^2/s`."
+    },
+    {
+      "name": "system",
+      "kind": "system",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "simulation duration",
+          "value": "150",
+          "unit": "seconds",
+          "status": "required",
+          "supersedes": "",
+          "quote": "Simulate for 150 seconds"
+        },
+        {
+          "quantity": "total level sum",
+          "value": "0.80",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "is constant at 0.80 m from t = 0 onward"
+        },
+        {
+          "quantity": "initial time",
+          "value": "0",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "from t = 0 onward"
+        },
+        {
+          "quantity": "time constant tau",
+          "value": "10",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`tau = area / (2*k) = 10 s`"
+        },
+        {
+          "quantity": "acceptance time",
+          "value": "150",
+          "unit": "s",
+          "status": "required",
+          "supersedes": "",
+          "quote": "at t = 150 s"
+        },
+        {
+          "quantity": "pre-open check time",
+          "value": "4",
+          "unit": "s",
+          "status": "required",
+          "supersedes": "",
+          "quote": "at t = 4 s"
+        },
+        {
+          "quantity": "post-open check time",
+          "value": "6",
+          "unit": "s",
+          "status": "required",
+          "supersedes": "",
+          "quote": "at t = 6 s"
+        },
+        {
+          "quantity": "flow visible check time",
+          "value": "15",
+          "unit": "s",
+          "status": "required",
+          "supersedes": "",
+          "quote": "at t = 15 s"
+        },
+        {
+          "quantity": "equilibrium approach check time",
+          "value": "45",
+          "unit": "s",
+          "status": "required",
+          "supersedes": "",
+          "quote": "at t = 45 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Two open tanks stand at different heights and are joined by a single pipe\nwith an on/off valve."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "Tank A",
+      "predicate": "physically above",
+      "object": "Tank B",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Tank A is mounted physically above Tank B"
+    },
+    {
+      "subject": "Tank A",
+      "predicate": "joined by single pipe with",
+      "object": "Connecting valve",
+      "detail": "Two open tanks stand at different heights and are joined by a single pipe with an on/off valve.",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "joined by a single pipe\nwith an on/off valve"
+    },
+    {
+      "subject": "connecting flow",
+      "predicate": "runs from",
+      "object": "Tank A",
+      "detail": "source while level_A > level_B",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Flow\n  runs from A to B while `level_A > level_B`"
+    },
+    {
+      "subject": "connecting flow",
+      "predicate": "runs to",
+      "object": "Tank B",
+      "detail": "destination while level_A > level_B",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Flow\n  runs from A to B while `level_A > level_B`"
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "`q = k * (level_A - level_B)`",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`q = k * (level_A - level_B)`"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "`level_A + level_B` is constant at 0.80 m from t = 0 onward, before and\n  after the valve opens.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`level_A + level_B` is constant at 0.80 m from t = 0 onward, before and\n  after the valve opens"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "`tau = area / (2*k) = 10 s`",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`tau = area / (2*k) = 10 s`"
+    },
+    {
+      "category": "requirement",
+      "statement": "Simulate for 150 seconds and report both tank levels and the connecting valve's open/closed command for the whole run.",
+      "ref": "REQ-SIM-001",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "REQ-SIM-001: Simulate for 150 seconds and report both tank levels and the\n  connecting valve's open/closed command for the whole run."
+    },
+    {
+      "category": "requirement",
+      "statement": "The valve shall stay closed and both levels shall stay exactly at their starting values (0.80 m and 0.00 m) for the entire closed interval, t = 0 to t = 5 s.",
+      "ref": "REQ-FUN-001",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "REQ-FUN-001: The valve shall stay closed and both levels shall stay\n  exactly at their starting values (0.80 m and 0.00 m) for the entire\n  closed interval, t = 0 to t = 5 s."
+    },
+    {
+      "category": "requirement",
+      "statement": "At t = 5 s the valve shall open and flow shall begin from Tank A into Tank B, so Tank A's level falls and Tank B's level rises from that point on.",
+      "ref": "REQ-FUN-002",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "REQ-FUN-002: At t = 5 s the valve shall open and flow shall begin from\n  Tank A into Tank B, so Tank A's level falls and Tank B's level rises from\n  that point on."
+    },
+    {
+      "category": "requirement",
+      "statement": "Given equal tank areas and the stated conductance `k`, the system shall relax toward a shared equilibrium level of 0.40 m in each tank (the starting 0.80 m of liquid split evenly across two equal-area tanks) and shall stay there for the remainder of the run once reached.",
+      "ref": "REQ-FUN-003",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "REQ-FUN-003: Given equal tank areas and the stated conductance `k`, the\n  system shall relax toward a shared equilibrium level of 0.40 m in each\n  tank (the starting 0.80 m of liquid split evenly across two equal-area\n  tanks) and shall stay there for the remainder of the run once reached."
+    },
+    {
+      "category": "requirement",
+      "statement": "`valve_open_cmd == 0` at t = 4 s.",
+      "ref": "AC-01",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-01 valve closed pre-open: `valve_open_cmd == 0` at t = 4 s."
+    },
+    {
+      "category": "requirement",
+      "statement": "`level_A_m == 0.80` and `level_B_m == 0.00` at t = 4 s (absolute tolerance 0.001 m)",
+      "ref": "AC-02",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-02 levels frozen while closed: `level_A_m == 0.80` and\n  `level_B_m == 0.00` at t = 4 s (absolute tolerance 0.001 m)"
+    },
+    {
+      "category": "requirement",
+      "statement": "`valve_open_cmd == 1` at t = 6 s",
+      "ref": "AC-03",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-03 valve opens on schedule: `valve_open_cmd == 1` at t = 6 s"
+    },
+    {
+      "category": "requirement",
+      "statement": "`level_A_m <= 0.75` and `level_B_m >= 0.05` at t = 15 s",
+      "ref": "AC-04",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-04 flow has visibly started: `level_A_m <= 0.75` and\n  `level_B_m >= 0.05` at t = 15 s"
+    },
+    {
+      "category": "requirement",
+      "statement": "`abs(level_A_m - 0.40) <= 0.02` and `abs(level_B_m - 0.40) <= 0.02` at t = 45 s",
+      "ref": "AC-05",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-05 approaching equilibrium: `abs(level_A_m - 0.40) <= 0.02` and\n  `abs(level_B_m - 0.40) <= 0.02` at t = 45 s"
+    },
+    {
+      "category": "requirement",
+      "statement": "`level_A_m == 0.40` and `level_B_m == 0.40` at t = 150 s (absolute tolerance 0.005 m)",
+      "ref": "AC-06",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-06 settled at equilibrium: `level_A_m == 0.40` and `level_B_m == 0.40`\n  at t = 150 s (absolute tolerance 0.005 m)"
+    },
+    {
+      "category": "requirement",
+      "statement": "`level_A_m + level_B_m == 0.80` holds at all times (absolute tolerance 0.001 m), from t = 0 through t = 150 s",
+      "ref": "AC-07",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-07 volume conservation, the whole run: `level_A_m + level_B_m == 0.80`\n  holds at all times (absolute tolerance 0.001 m), from t = 0 through\n  t = 150 s"
+    },
+    {
+      "category": "constraint",
+      "statement": "`level_A_m >= 0` and `level_A_m <= 1.0`, and `level_B_m >= 0` and `level_B_m <= 1.0`, hold for the entire run.",
+      "ref": "AC-08",
+      "anchor": "",
+      "status": "required",
+      "from_image": false,
+      "quote": "AC-08 no overflow/underflow: `level_A_m >= 0` and `level_A_m <= 1.0`, and\n  `level_B_m >= 0` and `level_B_m <= 1.0`, hold for the entire run."
+    },
+    {
+      "category": "behavior",
+      "statement": "If `level_A > level_B`, flow runs from A to B and relaxes toward zero as the difference closes.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Flow\n  runs from A to B while `level_A > level_B` and relaxes toward zero as the\n  difference closes"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

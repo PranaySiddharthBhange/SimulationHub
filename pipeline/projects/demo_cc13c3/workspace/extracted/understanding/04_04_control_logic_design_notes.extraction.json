@@ -1,0 +1,684 @@
+{
+  "document": "CONTROL LOGIC DESIGN NOTE\nTwo-Tank Fill/Transfer/Drain Controller\nDocument | CDS-02\nRevision | B\nDate | 20 Feb 2026\nStatus | Released after design review DR-02\nNote | CR-004 updates numeric parameters but not state semantics\n1. Objective\nThis note defines the controller state semantics and resolves command-priority questions raised against URS-001 Rev A. It does not replace the mechanical model or supplier data. Numeric setpoints and delays shall follow the latest approved parameter/change records.\n2. State Definitions\nState | Valve Command Pattern (V1,V2,V3) | Definition / Exit Condition\nIDLE | 0,0,0 | All valves closed. A START edge begins FILL_T1. A SHUT command while already empty has no useful hydraulic effect and may be treated as completed shutdown.\nFILL_T1 | 1,0,0 | Command XV-101 open. XV-102 and XV-103 closed. Transition when LT-101 >= T1_High.\nWAIT_AFTER_FILL | 0,0,0 | All valves closed. Hold for the configured post-fill wait. STOP freezes remaining time.\nTRANSFER_T1_T2 | 0,1,0 | Command XV-102 open. V1 and V3 closed. Transition when LT-101 <= T1_Low.\nWAIT_AFTER_TRANSFER | 0,0,0 | All valves closed. Hold for configured post-transfer wait. STOP freezes remaining time.\nDRAIN_T2 | 0,0,1 | Command XV-103 open. V1 and V2 closed. Transition when LT-102 <= T2_Low.\nWAIT_AFTER_DRAIN | 0,0,0 | All valves closed. Hold for inter-cycle wait, then return to FILL_T1 automatically.\nPAUSED | 0,0,0 | All valves closed. Preserve the interrupted sequence state and, if applicable, its remaining timer. START resumes the stored state.\nSHUTDOWN | 0,1,1 | V1 closed; V2 and V3 commanded open together. Remain in SHUTDOWN until both tanks are at or below their low-level limits, then close all valves and go to IDLE.\n3. Command Priority and Edge Semantics\nSHUT has the highest command priority. A valid SHUT edge immediately abandons any stored resume context and enters SHUTDOWN.\nSTOP has the next priority. STOP is accepted from any normal running or wait state and places the controller in PAUSED with all valve outputs false.\nSTART has the lowest priority. START from IDLE begins FILL_T1; START from PAUSED restores the interrupted state. START while already running is ignored.\nCommands received while SHUTDOWN is active do not interrupt the shutdown sequence. A new START is required after shutdown has completed and the controller has returned to IDLE.\n4. Timer Resume Rule\nWhen STOP occurs in WAIT_AFTER_FILL, WAIT_AFTER_TRANSFER or WAIT_AFTER_DRAIN, the remaining delay shall be retained. START shall resume with that remaining delay. Reinitializing the whole delay on resume was rejected in DR-02 because it makes operator stop duration affect process timing.\n5. Interlocks and Constraints\nV1 and V2 shall never be open simultaneously.\nV2 and V3 shall not be open simultaneously during normal automatic operation.\nThe V2/V3 simultaneous-open restriction is explicitly waived in SHUTDOWN.\nAll valves are de-energize-to-close. On controller power loss, output commands shall be false.\nLevel threshold comparisons shall include equality (>= high, <= low).\n6. State Transition Table\nFrom | Trigger / Guard | To | Actions | Comment\nIDLE | START edge | FILL_T1 | V1=1 | new cycle\nFILL_T1 | LT-101 >= T1_High | WAIT_AFTER_FILL | V1=0; start timer | \nWAIT_AFTER_FILL | timer expired | TRANSFER_T1_T2 | V2=1 | \nTRANSFER_T1_T2 | LT-101 <= T1_Low | WAIT_AFTER_TRANSFER | V2=0; start timer | \nWAIT_AFTER_TRANSFER | timer expired | DRAIN_T2 | V3=1 | \nDRAIN_T2 | LT-102 <= T2_Low | WAIT_AFTER_DRAIN | V3=0; start timer | \nWAIT_AFTER_DRAIN | timer expired | FILL_T1 | V1=1 | automatic repeat\nnormal/wait | STOP edge | PAUSED | all valves 0 | store state + remaining wait\nPAUSED | START edge | stored state | restore state outputs | resume\nany non-shutdown | SHUT edge | SHUTDOWN | V1=0,V2=1,V3=1 | clear resume context\nSHUTDOWN | LT-101 <= T1_Low AND LT-102 <= T2_Low | IDLE | V2=0,V3=0 | shutdown complete\n7. Naming Cross-Reference\nLegacy simulation code uses states FILL, HOLD1, TRANSFER, HOLD2, DRAIN and HOLD3. These map to FILL_T1, WAIT_AFTER_FILL, TRANSFER_T1_T2, WAIT_AFTER_TRANSFER, DRAIN_T2 and WAIT_AFTER_DRAIN respectively. The old code has no explicit PAUSED state object and handles STOP with a Boolean latch.\n8. Open Items at Release\nControls tuning requested a small increase in T1 high limit above the 0.78 m URS baseline. Formal approval was pending when Rev B of this note was issued.\nPost-transfer and inter-cycle delays were still under customer review at document release. Use a later approved change request if available.\n",
+  "subject": "Two-Tank Fill/Transfer/Drain Controller",
+  "kind": "design note",
+  "entities": [
+    {
+      "name": "Two-Tank Fill/Transfer/Drain Controller",
+      "kind": "controller",
+      "aliases": [],
+      "values": [],
+      "ref": "CDS-02",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Two-Tank Fill/Transfer/Drain Controller"
+    },
+    {
+      "name": "V1",
+      "kind": "valve output",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V1 and V2 shall never be open simultaneously."
+    },
+    {
+      "name": "V2",
+      "kind": "valve output",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V1 and V2 shall never be open simultaneously."
+    },
+    {
+      "name": "V3",
+      "kind": "valve output",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V2 and V3 shall not be open simultaneously during normal automatic operation."
+    },
+    {
+      "name": "XV-101",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Command XV-101 open."
+    },
+    {
+      "name": "XV-102",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Command XV-102 open."
+    },
+    {
+      "name": "XV-103",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Command XV-103 open."
+    },
+    {
+      "name": "LT-101",
+      "kind": "level transmitter",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Transition when LT-101 >= T1_High."
+    },
+    {
+      "name": "LT-102",
+      "kind": "level transmitter",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Transition when LT-102 <= T2_Low."
+    },
+    {
+      "name": "T1_High",
+      "kind": "level threshold",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "0.78",
+          "unit": "m",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "0.78 m URS baseline"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controls tuning requested a small increase in T1 high limit above the 0.78 m URS baseline."
+    },
+    {
+      "name": "T1_Low",
+      "kind": "level threshold",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Transition when LT-101 <= T1_Low."
+    },
+    {
+      "name": "T2_Low",
+      "kind": "level threshold",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Transition when LT-102 <= T2_Low."
+    },
+    {
+      "name": "START",
+      "kind": "command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "START has the lowest priority."
+    },
+    {
+      "name": "STOP",
+      "kind": "command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "STOP has the next priority."
+    },
+    {
+      "name": "SHUT",
+      "kind": "command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "SHUT has the highest command priority."
+    },
+    {
+      "name": "IDLE",
+      "kind": "controller state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "IDLE | 0,0,0 | All valves closed."
+    },
+    {
+      "name": "FILL_T1",
+      "kind": "controller state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "FILL_T1 | 1,0,0 | Command XV-101 open."
+    },
+    {
+      "name": "WAIT_AFTER_FILL",
+      "kind": "controller state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "WAIT_AFTER_FILL | 0,0,0 | All valves closed."
+    },
+    {
+      "name": "TRANSFER_T1_T2",
+      "kind": "controller state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "TRANSFER_T1_T2 | 0,1,0 | Command XV-102 open."
+    },
+    {
+      "name": "WAIT_AFTER_TRANSFER",
+      "kind": "controller state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "WAIT_AFTER_TRANSFER | 0,0,0 | All valves closed."
+    },
+    {
+      "name": "DRAIN_T2",
+      "kind": "controller state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "DRAIN_T2 | 0,0,1 | Command XV-103 open."
+    },
+    {
+      "name": "WAIT_AFTER_DRAIN",
+      "kind": "controller state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "WAIT_AFTER_DRAIN | 0,0,0 | All valves closed."
+    },
+    {
+      "name": "PAUSED",
+      "kind": "controller state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "PAUSED | 0,0,0 | All valves closed."
+    },
+    {
+      "name": "SHUTDOWN",
+      "kind": "controller state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "SHUTDOWN | 0,1,1 | V1 closed; V2 and V3 commanded open together."
+    },
+    {
+      "name": "FILL",
+      "kind": "legacy simulation state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Legacy simulation code uses states FILL, HOLD1, TRANSFER, HOLD2, DRAIN and HOLD3."
+    },
+    {
+      "name": "HOLD1",
+      "kind": "legacy simulation state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Legacy simulation code uses states FILL, HOLD1, TRANSFER, HOLD2, DRAIN and HOLD3."
+    },
+    {
+      "name": "TRANSFER",
+      "kind": "legacy simulation state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Legacy simulation code uses states FILL, HOLD1, TRANSFER, HOLD2, DRAIN and HOLD3."
+    },
+    {
+      "name": "HOLD2",
+      "kind": "legacy simulation state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Legacy simulation code uses states FILL, HOLD1, TRANSFER, HOLD2, DRAIN and HOLD3."
+    },
+    {
+      "name": "DRAIN",
+      "kind": "legacy simulation state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Legacy simulation code uses states FILL, HOLD1, TRANSFER, HOLD2, DRAIN and HOLD3."
+    },
+    {
+      "name": "HOLD3",
+      "kind": "legacy simulation state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Legacy simulation code uses states FILL, HOLD1, TRANSFER, HOLD2, DRAIN and HOLD3."
+    },
+    {
+      "name": "URS-001 Rev A",
+      "kind": "referenced document",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "raised against URS-001 Rev A."
+    },
+    {
+      "name": "DR-02",
+      "kind": "design review",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Released after design review DR-02"
+    },
+    {
+      "name": "CR-004",
+      "kind": "change request",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CR-004 updates numeric parameters but not state semantics"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "FILL",
+      "predicate": "maps to",
+      "object": "FILL_T1",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "These map to FILL_T1"
+    },
+    {
+      "subject": "HOLD1",
+      "predicate": "maps to",
+      "object": "WAIT_AFTER_FILL",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "HOLD1, TRANSFER, HOLD2, DRAIN and HOLD3. These map to FILL_T1, WAIT_AFTER_FILL"
+    },
+    {
+      "subject": "TRANSFER",
+      "predicate": "maps to",
+      "object": "TRANSFER_T1_T2",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "TRANSFER, HOLD2, DRAIN and HOLD3. These map to FILL_T1, WAIT_AFTER_FILL, TRANSFER_T1_T2"
+    },
+    {
+      "subject": "HOLD2",
+      "predicate": "maps to",
+      "object": "WAIT_AFTER_TRANSFER",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "HOLD2, DRAIN and HOLD3. These map to FILL_T1, WAIT_AFTER_FILL, TRANSFER_T1_T2, WAIT_AFTER_TRANSFER"
+    },
+    {
+      "subject": "DRAIN",
+      "predicate": "maps to",
+      "object": "DRAIN_T2",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "DRAIN and HOLD3. These map to FILL_T1, WAIT_AFTER_FILL, TRANSFER_T1_T2, WAIT_AFTER_TRANSFER, DRAIN_T2"
+    },
+    {
+      "subject": "HOLD3",
+      "predicate": "maps to",
+      "object": "WAIT_AFTER_DRAIN",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "HOLD3. These map to FILL_T1, WAIT_AFTER_FILL, TRANSFER_T1_T2, WAIT_AFTER_TRANSFER, DRAIN_T2 and WAIT_AFTER_DRAIN respectively."
+    },
+    {
+      "subject": "IDLE",
+      "predicate": "transitions to",
+      "object": "FILL_T1",
+      "detail": "START edge",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "IDLE | START edge | FILL_T1"
+    },
+    {
+      "subject": "FILL_T1",
+      "predicate": "transitions to",
+      "object": "WAIT_AFTER_FILL",
+      "detail": "LT-101 >= T1_High",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "FILL_T1 | LT-101 >= T1_High | WAIT_AFTER_FILL"
+    },
+    {
+      "subject": "WAIT_AFTER_FILL",
+      "predicate": "transitions to",
+      "object": "TRANSFER_T1_T2",
+      "detail": "timer expired",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "WAIT_AFTER_FILL | timer expired | TRANSFER_T1_T2"
+    },
+    {
+      "subject": "TRANSFER_T1_T2",
+      "predicate": "transitions to",
+      "object": "WAIT_AFTER_TRANSFER",
+      "detail": "LT-101 <= T1_Low",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "TRANSFER_T1_T2 | LT-101 <= T1_Low | WAIT_AFTER_TRANSFER"
+    },
+    {
+      "subject": "WAIT_AFTER_TRANSFER",
+      "predicate": "transitions to",
+      "object": "DRAIN_T2",
+      "detail": "timer expired",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "WAIT_AFTER_TRANSFER | timer expired | DRAIN_T2"
+    },
+    {
+      "subject": "DRAIN_T2",
+      "predicate": "transitions to",
+      "object": "WAIT_AFTER_DRAIN",
+      "detail": "LT-102 <= T2_Low",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "DRAIN_T2 | LT-102 <= T2_Low | WAIT_AFTER_DRAIN"
+    },
+    {
+      "subject": "WAIT_AFTER_DRAIN",
+      "predicate": "transitions to",
+      "object": "FILL_T1",
+      "detail": "timer expired",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "WAIT_AFTER_DRAIN | timer expired | FILL_T1"
+    },
+    {
+      "subject": "normal/wait",
+      "predicate": "transitions to",
+      "object": "PAUSED",
+      "detail": "STOP edge",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "normal/wait | STOP edge | PAUSED"
+    },
+    {
+      "subject": "PAUSED",
+      "predicate": "transitions to",
+      "object": "stored state",
+      "detail": "START edge",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "PAUSED | START edge | stored state"
+    },
+    {
+      "subject": "any non-shutdown",
+      "predicate": "transitions to",
+      "object": "SHUTDOWN",
+      "detail": "SHUT edge",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "any non-shutdown | SHUT edge | SHUTDOWN"
+    },
+    {
+      "subject": "SHUTDOWN",
+      "predicate": "transitions to",
+      "object": "IDLE",
+      "detail": "LT-101 <= T1_Low AND LT-102 <= T2_Low",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "SHUTDOWN | LT-101 <= T1_Low AND LT-102 <= T2_Low | IDLE"
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "Numeric setpoints and delays shall follow the latest approved parameter/change records.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "Numeric setpoints and delays shall follow the latest approved parameter/change records."
+    },
+    {
+      "category": "requirement",
+      "statement": "When STOP occurs in WAIT_AFTER_FILL, WAIT_AFTER_TRANSFER or WAIT_AFTER_DRAIN, the remaining delay shall be retained.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "the remaining delay shall be retained."
+    },
+    {
+      "category": "requirement",
+      "statement": "START shall resume with that remaining delay.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "START shall resume with that remaining delay."
+    },
+    {
+      "category": "requirement",
+      "statement": "V1 and V2 shall never be open simultaneously.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "V1 and V2 shall never be open simultaneously."
+    },
+    {
+      "category": "requirement",
+      "statement": "V2 and V3 shall not be open simultaneously during normal automatic operation.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "V2 and V3 shall not be open simultaneously during normal automatic operation."
+    },
+    {
+      "category": "requirement",
+      "statement": "On controller power loss, output commands shall be false.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "On controller power loss, output commands shall be false."
+    },
+    {
+      "category": "requirement",
+      "statement": "Level threshold comparisons shall include equality (>= high, <= low).",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "Level threshold comparisons shall include equality (>= high, <= low)."
+    },
+    {
+      "category": "behavior",
+      "statement": "A valid SHUT edge immediately abandons any stored resume context and enters SHUTDOWN.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "A valid SHUT edge immediately abandons any stored resume context and enters SHUTDOWN."
+    },
+    {
+      "category": "behavior",
+      "statement": "STOP is accepted from any normal running or wait state and places the controller in PAUSED with all valve outputs false.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "STOP is accepted from any normal running or wait state and places the controller in PAUSED with all valve outputs false."
+    },
+    {
+      "category": "behavior",
+      "statement": "START from IDLE begins FILL_T1; START from PAUSED restores the interrupted state.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "START from IDLE begins FILL_T1; START from PAUSED restores the interrupted state."
+    },
+    {
+      "category": "behavior",
+      "statement": "START while already running is ignored.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "START while already running is ignored."
+    },
+    {
+      "category": "behavior",
+      "statement": "Commands received while SHUTDOWN is active do not interrupt the shutdown sequence.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "Commands received while SHUTDOWN is active do not interrupt the shutdown sequence."
+    },
+    {
+      "category": "behavior",
+      "statement": "A new START is required after shutdown has completed and the controller has returned to IDLE.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "A new START is required after shutdown has completed and the controller has returned to IDLE."
+    },
+    {
+      "category": "behavior",
+      "statement": "A START edge begins FILL_T1.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "A START edge begins FILL_T1."
+    },
+    {
+      "category": "behavior",
+      "statement": "STOP freezes remaining time.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "STOP freezes remaining time."
+    },
+    {
+      "category": "behavior",
+      "statement": "START resumes the stored state.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "START resumes the stored state."
+    },
+    {
+      "category": "behavior",
+      "statement": "Remain in SHUTDOWN until both tanks are at or below their low-level limits, then close all valves and go to IDLE.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "Remain in SHUTDOWN until both tanks are at or below their low-level limits, then close all valves and go to IDLE."
+    },
+    {
+      "category": "constraint",
+      "statement": "The V2/V3 simultaneous-open restriction is explicitly waived in SHUTDOWN.",
+      "ref": "",
+      "anchor": "",
+      "status": "released",
+      "from_image": false,
+      "quote": "The V2/V3 simultaneous-open restriction is explicitly waived in SHUTDOWN."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

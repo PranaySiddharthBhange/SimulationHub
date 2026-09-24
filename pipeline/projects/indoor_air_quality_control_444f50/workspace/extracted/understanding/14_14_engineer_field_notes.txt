@@ -1,0 +1,41 @@
+Subject: RM-201 synthetic trend check
+Document kind: engineering note
+
+## Entities
+* freshAir.m_flow -- signal
+* peopleSource -- source
+    - concentration: 100 kg/kg [current]
+* carrier m_flow -- flow
+* CO2 -- substance
+* schedule -- schedule
+    - peak people: 15 people [current]
+    - peak people: 12 [archived]
+* Kp -- controller parameter
+    - gain: 6 [current]
+* bias -- controller parameter
+    - bias: 3.5 ACH [current]
+* Integral -- controller mode
+* Controller -- controller
+    - minimum output: 0.2 ACH [observed]
+* Room -- space
+* sensor-fault fallback -- fallback mode
+* Outside trace -- trace value
+    - trace concentration: 0.0004557 kg/kg [current]
+    - trace concentration: 300 ppm [current]
+* baseline trend -- trend
+* reference run -- run
+
+## Relationships
+* freshAir.m_flow uses sign convention opposite to physical air into room (Source command is negative because of port convention.)
+* carrier m_flow scaled by 100 gives actual flow of CO2 (actual CO2 kg/s)
+* sensor-fault fallback not injected in baseline trend
+
+## Requirements
+* Sensor-fault fallback is a requirement. [current]
+
+## Behaviors
+* Controller bottoms at 0.2 ACH for long unoccupied periods. [observed]
+
+## Physical relationships
+* Outside trace = 0.0004557 kg/kg = 300 ppm under project rounding. [current]
+* carrier m_flow * 100 gives actual CO2 kg/s. [current]

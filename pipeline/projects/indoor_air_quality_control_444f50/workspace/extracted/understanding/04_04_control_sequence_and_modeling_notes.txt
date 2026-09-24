@@ -1,0 +1,140 @@
+Subject: RM-201 CO2 Ventilation Control
+Document kind: engineering note
+
+## Entities
+* room -- air volume
+    - volume: 100 m3 [current]
+* controlled mass-flow source -- source
+* supply duct -- duct
+* exhaust duct -- duct
+* ideal pressure boundary -- boundary
+* Occupants -- trace-substance mass source
+* C_nominal -- trace-substance mass fraction
+    - mass fraction: 1.519E-3 kg/kg [current]
+    - CO2 concentration: 1000 ppm [current]
+* C_out -- trace-substance mass fraction
+    - CO2 concentration: 300 ppm [current]
+    - mass fraction: 4.557E-4 kg/kg [current]
+    - CO2 concentration: 350 ppm [archived]
+* room sensor output -- sensor signal
+    - mass fraction: 1.0 [current]
+* gainSensor -- gain
+    - gain: 1/1.519E-3 [current]
+* CO2Set -- controller setpoint
+    - value: 1.0 [current]
+* people source -- trace-substance source; aliases: peopleSource
+    - carrier flow: (8.18E-6 / 100) kg/s [current]
+    - trace concentration: 100 kg/kg [current]
+* nPeo -- occupancy count
+* one person -- occupant
+    - CO2 emission rate: 8.18E-6 kg/s [current]
+    - peak occupancy: 12 people [archived]
+    - peak occupancy: 15 people [current]
+* traceVolume -- measurement point
+* ACH command -- command signal
+    - bias: 3.5 ACH [current]
+    - lower limit: 0.2 ACH [current]
+    - upper limit: 6.0 ACH [current]
+    - fallback output: 4.0 ACH [current]
+* CR-IAQ-007 -- change request
+* Kp -- controller gain
+    - proportional gain: 6.0 [current]
+    - proportional gain: 4 [archived]
+* V -- volume term
+    - volume: 100 [current]
+* rho -- density term
+    - density: 1.2 [current]
+* Modelica source command -- source command
+* AUTO_MIN -- mode
+    - control output: 0.2 ACH [current]
+* AUTO_CO2 -- mode
+* AUTO_MAX -- mode
+    - control output: 6.0 ACH [current]
+* SENSOR_FAULT -- mode
+    - sensor invalid duration: >60 s [current]
+    - control output: 4.0 ACH [current]
+* C_room -- room CO2 mass fraction
+    - upper limit: 1.519E-3 kg/kg [current]
+* G_CO2 -- CO2 generation rate
+    - generation rate: 8.18E-6 kg/s [current]
+* m_peopleCarrier -- carrier mass flow
+    - formula constant: 100 [current]
+* m_supply_physical -- physical supply mass flow
+* m_supply_sourceCommand -- source-command mass flow
+* normalized_CO2 -- normalized CO2 signal
+* traceDuctIn -- sensor
+* traceDuctOut -- sensor
+* freshAir -- source
+* ductIn -- duct
+* ductOut -- duct
+* volume -- volume
+    - volume: 100
+* boundary4 -- boundary
+* CAtm -- constant block
+    - gain: 0.3*1.519E-3
+* gain -- gain block
+    - gain: 8.18E-6/100
+* gain1 -- gain block
+    - gain: -100*1.2/3?
+* PID -- controller block
+* system -- system block
+* NumberOfPe? -- occupancy input block
+
+## Relationships
+* controlled mass-flow source supplies room (through supply duct)
+* room discharges to ideal pressure boundary (through exhaust duct)
+* Occupants are represented as people source
+* gainSensor multiplies room sensor output (by 1/C_nominal)
+* traceVolume measures room (room CO2 mass fraction)
+* CO2Set is compared with gainSensor (normalized feedback)
+* ACH command is converted to m_supply_physical (mass-flow magnitude using V*rho/3600)
+* Modelica source command applies negative sign to m_supply_physical (negative source m_flow denotes flow from the source into the connected duct)
+* m_supply_sourceCommand equals negative of m_supply_physical
+* traceDuctIn is connected to ductIn
+* freshAir is connected to ductIn
+* ductIn is connected to volume
+* people source injects into volume
+* volume is connected to ductOut
+* traceDuctOut is connected to ductOut
+* ductOut is connected to boundary4
+* traceVolume is connected to gainSensor
+* gainSensor feeds PID
+* CO2Set feeds PID
+* PID feeds gain1
+* gain1 feeds freshAir
+* CAtm feeds freshAir
+* NumberOfPe? feeds gain
+* gain feeds people source
+
+## Requirements
+* The 100 kg/kg value is a numerical device only and must not be interpreted as a physical room concentration. [current]
+* Use 1000 ppm absolute. [current]
+
+## Constraints
+* The owner compliance limit is 1000 ppm absolute room CO2. [current]
+* C_room <= 1.519E-3 kg/kg during the approved design occupancy schedule. [approved]
+* 0.2 <= ACH <= 6.0. [current]
+
+## Behaviors
+* AUTO_MIN | CO2 sufficiently below setpoint | 0.2 ACH lower limit | P-law requests >0.2 ACH | Common while unoccupied. [current]
+* AUTO_CO2 | 0.2 < requested ACH < 6.0 | Bias + Kp*(C/Cnom-1) | Saturation or operating condition changes | Baseline occupied regulation. [current]
+* AUTO_MAX | Requested ACH >= 6.0 | 6.0 ACH | Requested value falls below maximum | Not expected in baseline run. [current]
+* SENSOR_FAULT | Sensor invalid >60 s | 4.0 ACH | Valid signal restored and reset logic satisfied | Raise fault indication. [current]
+
+## Physical relationships
+* C_out = 0.3*C_nominal = 4.557E-4 kg/kg. [current]
+* m_peopleSource = (8.18E-6 / 100) * nPeo   kg/s [current]
+* The trace-substance injection is m_peopleSource * C = nPeo * 8.18E-6 kg/s. [current]
+* C_out = 0.3*C_nominal. [current]
+* G_CO2 = nPeo*8.18E-6 kg/s. [current]
+* m_peopleCarrier = G_CO2/100. [current]
+* m_supply_physical = ACH*V*rho/3600. [current]
+* m_supply_sourceCommand = -m_supply_physical. [current]
+* normalized_CO2 = C_room/C_nominal. [current]
+
+## Control laws
+* Effective reference-run tuning after CR-IAQ-007 is Kp=6.0, bias=3.5 ACH, integral disabled, output limited to 0.2..6.0 ACH. [current]  <CR-IAQ-007>
+
+## Unreadable
+* Image 1 gain1 parameter text appears as 'k=-100*1.2/3?' and the final character is not legible.
+* Image 1 lower-left block label appears as 'NumberOfPe?' and the final character(s) are not legible.

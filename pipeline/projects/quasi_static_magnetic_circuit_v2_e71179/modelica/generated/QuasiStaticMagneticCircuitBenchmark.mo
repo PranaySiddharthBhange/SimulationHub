@@ -38,7 +38,7 @@ model QuasiStaticMagneticCircuitBenchmark
     annotation (Placement(transformation(extent={{70,10},{110,50}})));
 
   Modelica.Blocks.Sources.RealExpression excitingVoltage(y=2*Modelica.Constants.pi*f_Hz*N_exc*magneticCorePath.Phi_core_Wb)
-    annotation (Placement(transformation(extent={{70,70},{90,90}})));
+    annotation (Placement(transformation(origin = {2, -4}, extent = {{70, 70}, {90, 90}})));
 
   Modelica.Electrical.Analog.Basic.Ground electricGround
     annotation (Placement(transformation(extent={{-90,-90},{-70,-70}})));
@@ -96,8 +96,7 @@ equation
 
   annotation (
     experiment(StartTime=0.0, StopTime=1.0, Tolerance=1e-6, Interval=0.001),
-    Diagram(graphics={
-      Text(extent={{-138,104},{138,92}}, textString="Released nominal quasi-static magnetic benchmark")}),
+    Diagram(graphics={Text(origin = {-4, 20}, extent = {{-138, 104}, {138, 92}}, textString = "Released nominal quasi-static magnetic benchmark")}),
     Icon(graphics={Text(extent={{-100,100},{100,140}}, textString="%name")})
   );
 end QuasiStaticMagneticCircuitBenchmark;

@@ -1,0 +1,48 @@
+Subject: Fan Spin-Up — Real Losses Keep It Below Its Rated Speed
+Document kind: requirement specification
+
+## Entities
+* fan wheel -- mechanical component
+* shaft -- mechanical component
+    - rotational inertia: 0.02 kg*m^2 [current]
+* motor -- actuator
+    - torque: 0.5 N*m [current]
+    - start time: 5 s [current]
+* bearing friction -- loss mechanism
+    - coefficient b: 0.01 N*m*s/rad [current]
+* aerodynamic load -- load
+    - coefficient k_fan: 0.0004 N*m*s^2/rad^2 [current]
+* fan -- rotating machine
+    - rated/nameplate speed: 30 rad/s [nominal]
+    - initial speed: 0 rad/s [current]
+    - steady-state speed: 25 rad/s [required]
+    - simulation duration: 60 seconds [required]
+
+## Relationships
+* fan wheel mounted on shaft
+* motor applies driving torque to shaft (fixed, constant driving torque)
+* bearing friction opposes rotation of fan (linear viscous torque)
+* aerodynamic load pushes back on fan (torque that grows with the SQUARE of speed)
+* motor turns on at fan (t = 5 s)
+
+## Requirements
+* Simulate for 60 seconds and report the fan's angular speed, the motor's on/off command, and the applied motor torque for the whole run. [required]  <REQ-SIM-001>
+* While the motor is off (t = 0 to t = 5 s), the fan's speed shall stay exactly at 0 rad/s. [required]  <REQ-FUN-001>
+* At t = 5 s the motor shall turn on and the fan shall begin spinning up under the stated torque balance, with speed increasing from 0 rad/s. [required]  <REQ-FUN-002>
+* The fan's speed shall rise smoothly toward a real steady-state equilibrium and shall NOT reach, and shall stay strictly below, the 30 rad/s rated/nameplate speed for the entire run. [required]  <REQ-FUN-003>
+* Given the stated torque, friction coefficient, and aerodynamic coefficient, the fan shall settle at a steady-state speed of 25 rad/s and hold there for the remainder of the run. [required]  <REQ-FUN-004>
+
+## Constraints
+* fan_speed_rad_s == 0 at t = 4 s. [required]  <AC-01>
+* motor_on_cmd == 0 at t = 4 s, and motor_on_cmd == 1 at t = 6 s. [required]  <AC-02>
+* fan_speed_rad_s >= 15.0 at t = 6 s (1 s after the motor turns on). [required]  <AC-03>
+* abs(fan_speed_rad_s - 25.0) <= 0.5 at t = 10 s (5 s after start). [required]  <AC-04>
+* fan_speed_rad_s == 25.0 at t = 60 s (absolute tolerance 0.05 rad/s). [required]  <AC-05>
+* fan_speed_rad_s <= 29.9 holds at all times from t = 5 s to t = 60 s. [required]  <AC-06>
+* fan_speed_rad_s <= 25.05 holds at all times for the entire run. [required]  <AC-07>
+* motor_torque_Nm - (0.01*fan_speed_rad_s + 0.0004*fan_speed_rad_s^2) == 0 at t = 60 s (absolute tolerance 0.01 N*m). [required]  <AC-08>
+
+## Physical relationships
+* T_friction = b * omega [current]
+* T_aero = k_fan * omega^2 [current]
+* J * domega/dt = T_motor - b*omega - k_fan*omega^2 [current]

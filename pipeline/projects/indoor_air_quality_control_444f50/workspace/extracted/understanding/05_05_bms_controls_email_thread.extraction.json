@@ -1,0 +1,296 @@
+{
+  "document": "From: Elena Ruiz <elena.ruiz@example.invalid>\nDate: Tue, 10 Feb 2026 09:14:00 +0000\nSubject: RM-201 CO2 loop - setpoint wording\n\nTeam,\n\nI am translating the owner's note into the BMS sequence. The note says \"do not exceed 1000 ppm.\" Can someone confirm whether that is 1000 ppm total or 1000 ppm above outdoor? I have seen both conventions. For quick sizing I assumed outside is 300 ppm.\n\n- Elena\n\n-----Original Message-----\nFrom: Ravi Menon <ravi.menon@example.invalid>\nDate: Tue, 10 Feb 2026 11:02:00 +0000\nSubject: RE: RM-201 CO2 loop - setpoint wording\n\nMy first read was 1000 ppm above ambient (so around 1300 ppm total), but the demo screenshot has CO2Set=1 and gainSensor=1/1.519E-3, which looks like a hard 1000 ppm absolute target. We should not freeze this until design review.\n\nAlso note the Modelica freshAir source wants negative m_flow for flow into the zone. Please do not turn that into a negative physical ventilation requirement.\n\n- Ravi\n\n-----Original Message-----\nFrom: Mei Ortega <mei.ortega@example.invalid>\nDate: Sat, 14 Feb 2026 16:35:00 +0000\nSubject: RE: RM-201 CO2 loop - DR-IAQ-05 decision\n\nDR-IAQ-05 closed this today: owner intent is 1000 ppm ABSOLUTE room concentration. The 1300 ppm interpretation is rejected for this benchmark. Outdoor model remains 300 ppm.\n\nPlease also keep the people source trick explicit in the model notes. C=100 kg/kg is not a physical room concentration; it is only there so the carrier mass flow is 1/100 of the actual CO2 emission.\n\n- Mei\n\n-----Original Message-----\nFrom: Elena Ruiz <elena.ruiz@example.invalid>\nDate: Sun, 1 Mar 2026 10:08:00 +0000\nSubject: RM-201 reference tuning after OCC-SCH-04 Rev C\n\nPeak occupancy is now 15 from 13:00-15:00. CR-IAQ-007 approved Kp=6.0, bias=3.5 ACH, min=0.2, max=6.0, integral disabled for the released reference run. The old model file still has Kp=4 and peak 12.\n\nI generated a clean run using the new values.\n\n- Elena\n",
+  "subject": "RM-201 CO2 loop",
+  "kind": "correspondence",
+  "entities": [
+    {
+      "name": "RM-201 CO2 loop",
+      "kind": "control loop",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Subject: RM-201 CO2 loop - setpoint wording"
+    },
+    {
+      "name": "owner's note",
+      "kind": "document",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The note says \"do not exceed 1000 ppm.\""
+    },
+    {
+      "name": "outdoor model",
+      "kind": "model",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "CO2 concentration",
+          "value": "300",
+          "unit": "ppm",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Outdoor model remains 300 ppm."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Outdoor model remains 300 ppm."
+    },
+    {
+      "name": "demo screenshot",
+      "kind": "reference artifact",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "CO2Set",
+          "value": "1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "the demo screenshot has CO2Set=1"
+        },
+        {
+          "quantity": "gainSensor",
+          "value": "1/1.519E-3",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "gainSensor=1/1.519E-3"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the demo screenshot has CO2Set=1 and gainSensor=1/1.519E-3"
+    },
+    {
+      "name": "Modelica freshAir source",
+      "kind": "model source",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "m_flow sign for flow into the zone",
+          "value": "negative",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Modelica freshAir source wants negative m_flow for flow into the zone"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Modelica freshAir source wants negative m_flow for flow into the zone"
+    },
+    {
+      "name": "people source",
+      "kind": "model source",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "C",
+          "value": "100",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "C=100 kg/kg is not a physical room concentration"
+        },
+        {
+          "quantity": "carrier mass flow ratio to actual CO2 emission",
+          "value": "1/100",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "the carrier mass flow is 1/100 of the actual CO2 emission"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Please also keep the people source trick explicit in the model notes."
+    },
+    {
+      "name": "DR-IAQ-05",
+      "kind": "decision record",
+      "aliases": [],
+      "values": [],
+      "ref": "DR-IAQ-05",
+      "anchor": "",
+      "from_image": false,
+      "quote": "DR-IAQ-05 closed this today"
+    },
+    {
+      "name": "OCC-SCH-04 Rev C",
+      "kind": "revision",
+      "aliases": [],
+      "values": [],
+      "ref": "OCC-SCH-04 Rev C",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Subject: RM-201 reference tuning after OCC-SCH-04 Rev C"
+    },
+    {
+      "name": "CR-IAQ-007",
+      "kind": "change request",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "Kp",
+          "value": "6.0",
+          "unit": "",
+          "status": "approved",
+          "supersedes": "Kp=4",
+          "quote": "CR-IAQ-007 approved Kp=6.0"
+        },
+        {
+          "quantity": "bias",
+          "value": "3.5",
+          "unit": "ACH",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "bias=3.5 ACH"
+        },
+        {
+          "quantity": "min",
+          "value": "0.2",
+          "unit": "",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "min=0.2"
+        },
+        {
+          "quantity": "max",
+          "value": "6.0",
+          "unit": "",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "max=6.0"
+        }
+      ],
+      "ref": "CR-IAQ-007",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CR-IAQ-007 approved Kp=6.0, bias=3.5 ACH, min=0.2, max=6.0, integral disabled for the released reference run."
+    },
+    {
+      "name": "released reference run",
+      "kind": "run",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "integral disabled for the released reference run"
+    },
+    {
+      "name": "old model file",
+      "kind": "model file",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "Kp",
+          "value": "4",
+          "unit": "",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "The old model file still has Kp=4"
+        },
+        {
+          "quantity": "peak occupancy",
+          "value": "12",
+          "unit": "",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "peak 12"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The old model file still has Kp=4 and peak 12."
+    }
+  ],
+  "relationships": [],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "do not exceed 1000 ppm",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "The note says \"do not exceed 1000 ppm.\""
+    },
+    {
+      "category": "constraint",
+      "statement": "1000 ppm above ambient (so around 1300 ppm total)",
+      "ref": "",
+      "anchor": "",
+      "status": "proposed",
+      "from_image": false,
+      "quote": "My first read was 1000 ppm above ambient (so around 1300 ppm total)"
+    },
+    {
+      "category": "constraint",
+      "statement": "hard 1000 ppm absolute target",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "which looks like a hard 1000 ppm absolute target"
+    },
+    {
+      "category": "requirement",
+      "statement": "owner intent is 1000 ppm ABSOLUTE room concentration",
+      "ref": "DR-IAQ-05",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "owner intent is 1000 ppm ABSOLUTE room concentration."
+    },
+    {
+      "category": "requirement",
+      "statement": "The 1300 ppm interpretation is rejected for this benchmark",
+      "ref": "DR-IAQ-05",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "The 1300 ppm interpretation is rejected for this benchmark."
+    },
+    {
+      "category": "requirement",
+      "statement": "Please do not turn that into a negative physical ventilation requirement.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Please do not turn that into a negative physical ventilation requirement."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "the carrier mass flow is 1/100 of the actual CO2 emission",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "the carrier mass flow is 1/100 of the actual CO2 emission."
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "Peak occupancy is now 15 from 13:00-15:00",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Peak occupancy is now 15 from 13:00-15:00."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

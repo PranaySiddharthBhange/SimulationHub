@@ -1,0 +1,275 @@
+{
+  "document": "08_valve_datasheet.pdf",
+  "subject": "Synthetic Supplier Datasheet - VXS-24 On/Off Valve",
+  "kind": "datasheet",
+  "entities": [
+    {
+      "name": "VXS-24",
+      "kind": "valve family",
+      "aliases": [
+        "VXS-24 On/Off Valve"
+      ],
+      "values": [
+        {
+          "quantity": "actuator voltage",
+          "value": "24 VDC",
+          "unit": "VDC",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "24 VDC actuator"
+        },
+        {
+          "quantity": "full open stroke time",
+          "value": "0.8 s",
+          "unit": "s",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Full open stroke time                     0.8 s                     0.8 s                     0.8 s"
+        },
+        {
+          "quantity": "full close stroke time",
+          "value": "0.6 s",
+          "unit": "s",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Full close stroke time                     0.6 s                     0.6 s                     0.6 s"
+        }
+      ],
+      "ref": "VD-VXS24",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Synthetic Supplier Datasheet - VXS-24 On/Off Valve"
+    },
+    {
+      "name": "XV-101",
+      "kind": "valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "nominal demo flow coefficient equivalent",
+          "value": "0.0060 m^3/s",
+          "unit": "m^3/s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "0.0060 m^3/s"
+        },
+        {
+          "quantity": "full open stroke time",
+          "value": "0.8 s",
+          "unit": "s",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "0.8 s"
+        },
+        {
+          "quantity": "full close stroke time",
+          "value": "0.6 s",
+          "unit": "s",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "0.6 s"
+        },
+        {
+          "quantity": "command voltage",
+          "value": "24 VDC",
+          "unit": "VDC",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "24 VDC energized=open"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "XV-101"
+    },
+    {
+      "name": "XV-102",
+      "kind": "valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "nominal demo flow coefficient equivalent",
+          "value": "0.0045 m^3/s",
+          "unit": "m^3/s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "0.0045 m^3/s"
+        },
+        {
+          "quantity": "full open stroke time",
+          "value": "0.8 s",
+          "unit": "s",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "0.8 s"
+        },
+        {
+          "quantity": "full close stroke time",
+          "value": "0.6 s",
+          "unit": "s",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "0.6 s"
+        },
+        {
+          "quantity": "command voltage",
+          "value": "24 VDC",
+          "unit": "VDC",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "24 VDC energized=open"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "XV-102"
+    },
+    {
+      "name": "XV-103",
+      "kind": "valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "nominal demo flow coefficient equivalent",
+          "value": "0.0050 m^3/s",
+          "unit": "m^3/s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "0.0050 m^3/s"
+        },
+        {
+          "quantity": "full open stroke time",
+          "value": "0.8 s",
+          "unit": "s",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "0.8 s"
+        },
+        {
+          "quantity": "full close stroke time",
+          "value": "0.6 s",
+          "unit": "s",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "0.6 s"
+        },
+        {
+          "quantity": "command voltage",
+          "value": "24 VDC",
+          "unit": "VDC",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "24 VDC energized=open"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "XV-103"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "XV-101",
+      "predicate": "project service",
+      "object": "Feed to Tank 1",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Feed to Tank 1"
+    },
+    {
+      "subject": "XV-102",
+      "predicate": "project service",
+      "object": "Tank 1 transfer",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Tank 1 transfer"
+    },
+    {
+      "subject": "XV-103",
+      "predicate": "project service",
+      "object": "Tank 2 drain",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Tank 2 drain"
+    },
+    {
+      "subject": "XV-101",
+      "predicate": "uses family",
+      "object": "VXS-24",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project tags XV-101,\n XV-102 and XV-103 use this family."
+    },
+    {
+      "subject": "XV-102",
+      "predicate": "uses family",
+      "object": "VXS-24",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project tags XV-101,\n XV-102 and XV-103 use this family."
+    },
+    {
+      "subject": "XV-103",
+      "predicate": "uses family",
+      "object": "VXS-24",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project tags XV-101,\n XV-102 and XV-103 use this family."
+    }
+  ],
+  "facts": [
+    {
+      "category": "behavior",
+      "statement": "Loss of electrical power removes actuator energy and the spring returns the valve to the closed position.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Loss of electrical power removes actuator energy and the spring returns the valve to the closed position."
+    },
+    {
+      "category": "constraint",
+      "statement": "This datasheet does not define process sequencing or whether two valves may be open concurrently; that is a system-controls decision.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "This\n datasheet does not define process sequencing or whether two valves may be open concurrently; that is a\n system-controls decision."
+    },
+    {
+      "category": "constraint",
+      "statement": "For the hackathon simulation the dynamic valve stroke is neglected and each valve is treated as an ideal Boolean flow switch.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "For the hackathon simulation the dynamic valve stroke is neglected and each valve is treated as an ideal\n Boolean flow switch."
+    },
+    {
+      "category": "behavior",
+      "statement": "24 VDC energized=open",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "24 VDC energized=open"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

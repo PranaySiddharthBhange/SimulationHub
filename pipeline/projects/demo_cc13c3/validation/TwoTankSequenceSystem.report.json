@@ -1,0 +1,90 @@
+{
+  "verdict": "valid",
+  "check_results": [
+    {
+      "name": "AC-01_tank1_reaches_high_before_first_transfer",
+      "expression": "tank1_level_m >= 0.80 and controller_state_id == 3 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "At t=180.0000000401047 s the controller transitions to controller_state_id=3; tank1_level_m had reached 0.80 m max at t=170.0000000381042 s and remains at 0.80 m at transfer start because der(plant.h1) was 0 from 170.0000000381042 s to 180.0000000401047 s. Observed condition tank1_level_m=0.80 m and controller_state_id=3 at t=180.0000000401047 s; expected tank1_level_m >= 0.80 and controller_state_id == 3."
+    },
+    {
+      "name": "AC-02_all_valves_closed_during_first_stop",
+      "expression": "valve1_open_cmd == 0 and valve2_open_cmd == 0 and valve3_open_cmd == 0 == 1.0 (relative tolerance 0.000%), at t=250.0",
+      "outcome": "pass",
+      "observed": "From t=220.0000000221022 s to t=280.0000000281032 s, valve1_open_cmd=0, valve2_open_cmd=0, valve3_open_cmd=0 throughout the PAUSED interval. Therefore at t=250.0 s all three are 0; expected all 0."
+    },
+    {
+      "name": "AC-03_resume_interrupted_transfer_after_280s_start",
+      "expression": "controller_state_id == 3 and valve2_open_cmd == 1 and valve1_open_cmd == 0 == 1.0 (relative tolerance 0.000%), at t=282.0",
+      "outcome": "pass",
+      "observed": "At t=280.0000000281032 s controller_state_id changes to 3, valve2_open_cmd to 1, and valve1_open_cmd remains 0; these values persist until t=440.0000001221131 s. Therefore at t=282.0 s controller_state_id=3, valve2_open_cmd=1, valve1_open_cmd=0; expected 3, 1, 0 respectively."
+    },
+    {
+      "name": "AC-04_begin_next_fill_after_first_drain_and_8s_wait",
+      "expression": "controller_state_id == 1 and valve1_open_cmd == 1 == 1.0 (relative tolerance 0.000%), at t=640.0",
+      "outcome": "pass",
+      "observed": "At t=640.0000002239349 s controller_state_id changes to 1 and valve1_open_cmd changes to 1 after WAIT_AFTER_DRAIN from 632.0000002223339 s. Observed at the 640 s boundary: controller_state_id=1 and valve1_open_cmd=1; expected 1 and 1."
+    },
+    {
+      "name": "AC-05_all_valves_closed_during_second_stop",
+      "expression": "valve1_open_cmd == 0 and valve2_open_cmd == 0 and valve3_open_cmd == 0 == 1.0 (relative tolerance 0.000%), at t=675.0",
+      "outcome": "pass",
+      "observed": "From t=650.0000000651011 s to t=700.0000000701011 s, valve1_open_cmd=0, valve2_open_cmd=0, valve3_open_cmd=0 throughout the PAUSED interval. Therefore at t=675.0 s all three are 0; expected all 0."
+    },
+    {
+      "name": "AC-06_shutdown_commands_at_700s",
+      "expression": "valve1_open_cmd == 0 and valve2_open_cmd == 1 and valve3_open_cmd == 1 and controller_state_id == 8 == 1.0 (relative tolerance 0.000%), at t=700.0",
+      "outcome": "pass",
+      "observed": "At t=700.0000000701011 s controller_state_id changes to 8, valve1_open_cmd=0, valve2_open_cmd=1, and valve3_open_cmd=1. Observed shutdown command state at 700 s matches expected 0,1,1,8."
+    },
+    {
+      "name": "AC-07_idle_closed_through_end_after_shutdown",
+      "expression": "controller_state_id == 0 and valve1_open_cmd == 0 and valve2_open_cmd == 0 and valve3_open_cmd == 0 == 1.0 (relative tolerance 0.000%), final value",
+      "outcome": "pass",
+      "observed": "Final values at t=900 s: controller_state_id=0, valve1_open_cmd=0, valve2_open_cmd=0, valve3_open_cmd=0. Expected final values 0,0,0,0."
+    },
+    {
+      "name": "AC-08_no_V1_and_V2_simultaneous",
+      "expression": "not (valve1_open_cmd > 0.5 and valve2_open_cmd > 0.5) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "Event trace shows valve1_open_cmd=1 only during 20.00000000210057-170.0000000381042 s and 640.0000002239349-650.0000000651011 s, while valve2_open_cmd=1 only during 180.0000000401047-220.0000000221022 s, 280.0000000281032-440.0000001221131 s, and 700.0000000701011-713.3333331916583 s. No overlap occurs at any time; expected no simultaneous opening always."
+    },
+    {
+      "name": "AC-08_no_V2_and_V3_simultaneous_outside_shutdown",
+      "expression": "not (valve2_open_cmd > 0.5 and valve3_open_cmd > 0.5 and controller_state_id != 8) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "Valve2_open_cmd and valve3_open_cmd are simultaneously 1 only during SHUTDOWN from t=700.0000000701011 s to t=713.3333331916583 s, where controller_state_id=8. Outside SHUTDOWN, valve2_open_cmd=1 during 180.0000000401047-220.0000000221022 s and 280.0000000281032-440.0000001221131 s while valve3_open_cmd=0; valve3_open_cmd=1 during 452.0000001245146-632.0000002223339 s while valve2_open_cmd=0. Expected no simultaneous V2/V3 opening outside shutdown, satisfied."
+    },
+    {
+      "name": "URS-FUN-003_close_V1_at_high_level",
+      "expression": "tank1_level_m >= 0.80 and valve1_open_cmd == 0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "At t=170.0000000381042 s tank1_level_m reaches 0.80 m max and valve1_open_cmd simultaneously changes to 0. Observed tank1_level_m=0.80 m with valve1_open_cmd=0; expected >=0.80 and 0."
+    },
+    {
+      "name": "URS-MOD-001_pause_state_reached_on_stop",
+      "expression": "controller_state_id == 7 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "controller_state_id changes to 7 at t=220.0000000221022 s and again at t=650.0000000651011 s. Expected PAUSED state reached ever."
+    },
+    {
+      "name": "URS-MOD-004_shutdown_completion_both_low_then_idle",
+      "expression": "tank1_level_m <= 0.05 and tank2_level_m <= 0.05 and controller_state_id == 0 == 1.0 (absolute tolerance 1e-06), ever value",
+      "outcome": "pass",
+      "observed": "At t=713.3333331916583 s controller_state_id changes to 0. At that point tank1_level_m=0.05 m and tank2_level_m=0.0452381 m from the summary/final segment after shutdown completion, satisfying tank1_level_m <= 0.05 and tank2_level_m <= 0.05 with absolute tolerance 1e-06. Expected both low and idle ever."
+    }
+  ],
+  "summary": "The simulated 0-900 s run matches the brief end to end. Tank 1 filled from 0.05 m to 0.80 m and first transfer began at 180.0000000401047 s only after that high level was reached. Both STOP intervals were truly paused with all three valve commands at 0, and the 280 s START resumed transfer rather than restarting fill. The first drain completed at 632.0000002223339 s and, after the required 8 s wait, the next fill began at 640.0000002239349 s. At 700.0000000701011 s shutdown correctly forced XV-101 closed with XV-102 and XV-103 open together, then the tanks emptied to tank1_level_m=0.05 m and tank2_level_m=0.0452381 m by 713.3333331916583 s, after which the controller returned to IDLE with all valves closed and stayed there through 900 s. No prohibited simultaneous XV-101/XV-102 opening occurred, and XV-102/XV-103 overlap occurred only in SHUTDOWN as allowed.",
+  "issues": [],
+  "assumptions": [
+    "XV-101, XV-102, and XV-103 nominal demo flow coefficient equivalents are modeled as constant volumetric flow rates when commanded open and zero when commanded closed: qFill=0.0060 m3/s, qTransfer=0.0045 m3/s, qDrain=0.0050 m3/s.",
+    "Valve stroke dynamics are neglected and the valves act as ideal Boolean flow switches in the executable model despite datasheet stroke times being available.",
+    "controller_state_id is reported as numeric encoding IDLE=0, FILL_T1=1, WAIT_AFTER_FILL=2, TRANSFER_T1_T2=3, WAIT_AFTER_TRANSFER=4, DRAIN_T2=5, WAIT_AFTER_DRAIN=6, PAUSED=7, SHUTDOWN=8.",
+    "Simulation output grid uses 1000 intervals over 0..900 s, giving Interval=0.9 s in the experiment annotation.",
+    "Numerical integration tolerance is set to 1e-6 because the notes do not state a solver tolerance.",
+    "A physical level floor hFloor=0.0 m is used for tank emptying cutoffs, below the 0.05 m low-level thresholds, so the <=0.05 m transition guards remain reachable.",
+    "No overflow, leakage, compressibility, or pressure-dependent flow relation is added.",
+    "Derived from the trajectory and parameters: level dynamics are those of fixed-flow balances dh1/dt=(u1*qFill-u2*qTransfer)/A1 and dh2/dt=(u2*qTransfer-u3*qDrain)/A2 with A1=1.2 m2 and A2=1.4 m2, so phase durations are determined directly by these constant rates and threshold levels rather than by pressure or valve stroke behavior."
+  ],
+  "root_causes": []
+}

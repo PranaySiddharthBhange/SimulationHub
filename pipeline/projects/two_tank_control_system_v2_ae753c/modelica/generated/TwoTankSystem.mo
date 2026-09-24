@@ -17,7 +17,7 @@ model TwoTankSystem
   Modelica.Blocks.Sources.BooleanTable startSchedule(table={20,20.2,280,280.2}, startValue=false) annotation(Placement(transformation(extent={{-180,100},{-160,120}})));
   Modelica.Blocks.Sources.BooleanTable stopSchedule(table={220,220.2,650,650.2}, startValue=false) annotation(Placement(transformation(extent={{-180,60},{-160,80}})));
   Modelica.Blocks.Sources.BooleanTable shutSchedule(table={700,700.2}, startValue=false) annotation(Placement(transformation(extent={{-180,20},{-160,40}})));
-  TwoTankController PLC_101(scanPeriod=scanPeriod, t1High=T1_high, t1Low=T1_low, t2Low=T2_low, waitAfterFill=10, waitAfterTransfer=12, waitAfterDrain=8) annotation(Placement(transformation(origin = {4, 26}, extent = {{-40, 10}, {20, 90}})));
+  TwoTankController PLC_101(scanPeriod=scanPeriod, t1High=T1_high, t1Low=T1_low, t2Low=T2_low, waitAfterFill=10, waitAfterTransfer=12, waitAfterDrain=8) annotation(Placement(transformation(origin = {10, 32}, extent = {{-40, 10}, {20, 90}})));
 
   Real tank1_level_m(start=tank1_level_start, fixed=true, nominal=0.5);
   Real tank2_level_m(start=tank2_level_start, fixed=true, nominal=0.5);
@@ -35,9 +35,9 @@ equation
   cmd_stop = stopSchedule.y;
   cmd_shut = shutSchedule.y;
 
-  connect(startSchedule.y, PLC_101.startButton) annotation(Line(points={{-159,110},{-100,110},{-100,104},{-39,104}}, color={255,0,255}));
-  connect(stopSchedule.y, PLC_101.stopButton) annotation(Line(points={{-159,70},{-97,70},{-97,88},{-39,88}}, color={255,0,255}));
-  connect(shutSchedule.y, PLC_101.shutButton) annotation(Line(points={{-159,30},{-80,30},{-80,72},{-39,72}}, color={255,0,255}));
+  connect(startSchedule.y, PLC_101.startButton) annotation(Line(points={{-159,110},{-33, 110}}, color={255,0,255}));
+  connect(stopSchedule.y, PLC_101.stopButton) annotation(Line(points={{-159,70},{-97,70},{-97,94},{-33,94}}, color={255,0,255}));
+  connect(shutSchedule.y, PLC_101.shutButton) annotation(Line(points={{-159,30},{-80,30},{-80,78},{-33,78}}, color={255,0,255}));
 
   PLC_101.level1 = tank1_level_m;
   PLC_101.level2 = tank2_level_m;

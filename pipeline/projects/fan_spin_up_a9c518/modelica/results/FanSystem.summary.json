@@ -1,0 +1,82 @@
+{
+  "fanRotor.fan_speed_rad_s": {
+    "min": 0.0,
+    "max": 24.99999999972527,
+    "final": 24.99999999972527
+  },
+  "der(fanRotor.fan_speed_rad_s)": {
+    "min": 0.0,
+    "max": 25.0,
+    "final": 4.121022967318311e-10
+  },
+  "aerodynamicLoad.T_aero_Nm": {
+    "min": 0.0,
+    "max": 0.2499999999945053,
+    "final": 0.2499999999945053
+  },
+  "bearingFriction.T_friction_Nm": {
+    "min": 0.0,
+    "max": 0.2499999999972527,
+    "final": 0.2499999999972527
+  },
+  "fanRotor.domega_dt": {
+    "min": 0.0,
+    "max": 25.0,
+    "final": 4.121022967318311e-10
+  },
+  "motor_on_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "motor_torque_Nm": {
+    "min": 0.0,
+    "max": 0.5,
+    "final": 0.5
+  },
+  "torque_balance_residual_Nm": {
+    "min": 0.0,
+    "max": 0.5,
+    "final": 8.242045934636621e-12
+  },
+  "motorCommand.motor_on_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "aerodynamicLoad.omega_rad_s": {
+    "min": 0.0,
+    "max": 24.99999999972527,
+    "final": 24.99999999972527
+  },
+  "bearingFriction.omega_rad_s": {
+    "min": 0.0,
+    "max": 24.99999999972527,
+    "final": 24.99999999972527
+  },
+  "fanRotor.T_aero_Nm": {
+    "min": 0.0,
+    "max": 0.2499999999945053,
+    "final": 0.2499999999945053
+  },
+  "fanRotor.T_friction_Nm": {
+    "min": 0.0,
+    "max": 0.2499999999972527,
+    "final": 0.2499999999972527
+  },
+  "fanRotor.motor_torque_Nm": {
+    "min": 0.0,
+    "max": 0.5,
+    "final": 0.5
+  },
+  "fan_speed_rad_s": {
+    "min": 0.0,
+    "max": 24.99999999972527,
+    "final": 24.99999999972527
+  },
+  "motorCommand.motor_torque_Nm": {
+    "min": 0.0,
+    "max": 0.5,
+    "final": 0.5
+  }
+}

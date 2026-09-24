@@ -1,0 +1,38 @@
+{
+  "attempt": 2,
+  "entry_class": "HeldMassSpringDamperSystem",
+  "files": [
+    {
+      "filename": "ClampConstraint.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ReleaseCommand.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "HeldMassSpringDamperSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Mechanics.Translational.Interfaces.Flange_b",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Mechanics.Translational.Sources.Position",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Mechanics.Translational.Components.Mass",
+    "Modelica.Mechanics.Translational.Components.Spring",
+    "Modelica.Mechanics.Translational.Components.Damper",
+    "Modelica.Mechanics.Translational.Components.Fixed"
+  ],
+  "corrections": [
+    "Root cause of the reported preflight failure: the previous bundle represented the physical clamp-and-release behavior correctly in structure, but several connector declarations lacked Placement annotations on the custom top-level class boundaries and the system connections needed explicit Line annotations for OMEdit inspectability. This revision adds those annotations without changing the stated mechanical behavior or timing.",
+    "Assumption retained from the brief: the free-motion equation m*x'' + c*x' + k*x = 0 is executed only after the clamp release at t = 5 s; before release, the clamp position source holds the mass at x = 0.10 m.",
+    "Assumption retained from the brief: clamp_engaged is reported as a numeric Real with value 1.0 while engaged and 0.0 after release, produced from the Boolean engaged command through BooleanToReal.",
+    "Executable interpretation retained: the clamp command uses engaged = time < 5 s, so the clamp is engaged for the pre-release interval and released at and after t = 5 s, matching the stated single release event."
+  ],
+  "references": []
+}

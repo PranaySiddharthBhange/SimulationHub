@@ -1,0 +1,36 @@
+{
+  "entry_class": "TwoTankEquilibriumSystem",
+  "files": [
+    {
+      "filename": "UpperLowerTankPair.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ConnectingValveFlow.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ValveOpenSchedule.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "TwoTankEquilibriumSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Assumption retained from the brief: q_m3s is reported although the original note explicitly required reporting only both tank levels and the valve command; this was already merged so REQ-FUN-002 can be checked mechanically.",
+    "Executable interpretation retained from the brief and human-confirmed clarify answer: during 0 to 5 s with valve_open_cmd = 0, the connecting flow is zero; after opening, q_m3s = k*(level_A_m - level_B_m) with k = 0.025 m^2/s.",
+    "Assumption retained from the brief: simulation tolerance is set to 0.001 because the note states millimeter-scale level acceptance tolerances but does not state a solver tolerance.",
+    "Modeling choice: a custom signal-flow tank pair component is used because the brief specifies the explicit relationship q = k*(level_A - level_B) on levels and requires reported levels and flow, but does not provide the additional hydraulic parameters a Modelica.Fluid realization would need to reproduce that exact first-order level-difference law without introducing unstated pressure-loss details."
+  ],
+  "references": []
+}

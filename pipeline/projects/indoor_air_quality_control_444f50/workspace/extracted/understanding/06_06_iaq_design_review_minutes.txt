@@ -1,0 +1,42 @@
+Subject: RM-201 room CO2 controlled ventilation
+Document kind: design review minutes
+
+## Entities
+* RM-201 room CO2 controlled ventilation -- system
+* owner limit -- limit
+    - room CO2 limit: 1000 ppm [approved]
+* Outdoor CO2 -- reference quantity
+    - CO2 concentration: 300 ppm [current]
+    - trace-substance mass fraction: 0.3 * 1.519E-3 kg/kg [current]
+* Internal controller feedback -- control signal
+    - normalization input: 1.519E-3 kg/kg [current]
+    - normalized value: 1.0 [current]
+* Controller output -- control signal
+* Modelica source component -- software component
+* occupant source implementation -- source implementation
+    - C_source: 100 kg/kg [current]
+    - carrier flow scale factor: 1/100 [current]
+    - CO2 injection: 8.18E-6 kg/s/person [current]
+* CO2 sensor -- sensor
+    - invalid duration threshold: 60 s [approved]
+    - fallback ventilation: 4 ACH [approved]
+* fault indication -- alarm
+* Controls -- actor  <CR-IAQ-007>
+* Facilities -- actor  <OCC-SCH-04 Rev C>
+* Commissioning -- actor  <CP-23 Rev C>
+
+## Relationships
+* Controller output uses conversion RM-201 room CO2 controlled ventilation (m = ACH * V * rho / 3600)
+* Modelica source component represents inflow with negative mass-flow command
+* occupant source implementation scales carrier flow by 1/100
+
+## Requirements
+* C_source=100 kg/kg is a numerical implementation parameter and shall not be shown as a realistic room or outdoor gas composition. [approved]
+* The resulting CO2 injection must remain 8.18E-6 kg/s/person. [approved]
+* verify absolute 1000 ppm criterion in 24-h synthetic trend. [approved]  <CP-23 Rev C>
+
+## Behaviors
+* If the CO2 sensor is invalid continuously for more than 60 s, fallback ventilation is 4 ACH and a fault indication is raised. [approved]
+
+## Physical relationships
+* m = ACH * V * rho / 3600 [approved]

@@ -1,0 +1,592 @@
+{
+  "document": "within SyntheticTankDemo;\nmodel TankDemo_Rev12\n  // Archived 02-Feb-2026. This model predates later approved controls changes.\n  parameter Real A1(unit=\"m2\") = 1.20;\n  parameter Real A2(unit=\"m2\") = 1.40;\n  parameter Real h0(unit=\"m\") = 0.05;\n  parameter Real h1High(unit=\"m\") = 0.78;\n  parameter Real h1Low(unit=\"m\") = 0.05;\n  parameter Real h2Low(unit=\"m\") = 0.05;\n  parameter Real qFill(unit=\"m3/s\") = 0.0060;\n  parameter Real qTransfer(unit=\"m3/s\") = 0.0045;\n  parameter Real qDrain(unit=\"m3/s\") = 0.0050;\n  parameter Real wait1(unit=\"s\") = 10;\n  parameter Real wait2(unit=\"s\") = 10;\n  parameter Real wait3(unit=\"s\") = 10;\n\n  Real tank1Level(start=h0, unit=\"m\");\n  Real tank2Level(start=h0, unit=\"m\");\n  Boolean valve1;\n  Boolean valve2;\n  Boolean valve3;\n  Boolean startCmd;\n  Boolean stopCmd;\n  Boolean shutCmd;\n\n  type StepState = enumeration(IDLE,FILL,HOLD1,TRANSFER,HOLD2,DRAIN,HOLD3);\n  discrete StepState seq(start=StepState.IDLE);\n  discrete Boolean stopped(start=false);\n\nalgorithm\n  // Simplified demonstration logic. SHUT handling was not completed in this revision.\n  when edge(startCmd) then stopped := false; end when;\n  when edge(stopCmd) then stopped := true; end when;\n\n  valve1 := (seq == StepState.FILL) and not stopped;\n  valve2 := (seq == StepState.TRANSFER) and not stopped;\n  valve3 := (seq == StepState.DRAIN) and not stopped;\n\n  // State transition details omitted from this archived fragment.\n  // A test harness supplies button edges at 20, 220, 280, 650 and 700 seconds.\n\nequation\n  der(tank1Level) = (if valve1 then qFill else 0)/A1 - (if valve2 then qTransfer else 0)/A1;\n  der(tank2Level) = (if valve2 then qTransfer else 0)/A2 - (if valve3 then qDrain else 0)/A2;\nend TankDemo_Rev12;\n",
+  "subject": "TankDemo_Rev12",
+  "kind": "legacy model",
+  "entities": [
+    {
+      "name": "TankDemo_Rev12",
+      "kind": "model",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "model TankDemo_Rev12"
+    },
+    {
+      "name": "A1",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "1.20",
+          "unit": "m2",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real A1(unit=\"m2\") = 1.20;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real A1(unit=\"m2\") = 1.20;"
+    },
+    {
+      "name": "A2",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "1.40",
+          "unit": "m2",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real A2(unit=\"m2\") = 1.40;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real A2(unit=\"m2\") = 1.40;"
+    },
+    {
+      "name": "h0",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "0.05",
+          "unit": "m",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real h0(unit=\"m\") = 0.05;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real h0(unit=\"m\") = 0.05;"
+    },
+    {
+      "name": "h1High",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "0.78",
+          "unit": "m",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real h1High(unit=\"m\") = 0.78;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real h1High(unit=\"m\") = 0.78;"
+    },
+    {
+      "name": "h1Low",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "0.05",
+          "unit": "m",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real h1Low(unit=\"m\") = 0.05;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real h1Low(unit=\"m\") = 0.05;"
+    },
+    {
+      "name": "h2Low",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "0.05",
+          "unit": "m",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real h2Low(unit=\"m\") = 0.05;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real h2Low(unit=\"m\") = 0.05;"
+    },
+    {
+      "name": "qFill",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "flow rate",
+          "value": "0.0060",
+          "unit": "m3/s",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real qFill(unit=\"m3/s\") = 0.0060;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real qFill(unit=\"m3/s\") = 0.0060;"
+    },
+    {
+      "name": "qTransfer",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "flow rate",
+          "value": "0.0045",
+          "unit": "m3/s",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real qTransfer(unit=\"m3/s\") = 0.0045;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real qTransfer(unit=\"m3/s\") = 0.0045;"
+    },
+    {
+      "name": "qDrain",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "flow rate",
+          "value": "0.0050",
+          "unit": "m3/s",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real qDrain(unit=\"m3/s\") = 0.0050;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real qDrain(unit=\"m3/s\") = 0.0050;"
+    },
+    {
+      "name": "wait1",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "time",
+          "value": "10",
+          "unit": "s",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real wait1(unit=\"s\") = 10;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real wait1(unit=\"s\") = 10;"
+    },
+    {
+      "name": "wait2",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "time",
+          "value": "10",
+          "unit": "s",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real wait2(unit=\"s\") = 10;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real wait2(unit=\"s\") = 10;"
+    },
+    {
+      "name": "wait3",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "time",
+          "value": "10",
+          "unit": "s",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "parameter Real wait3(unit=\"s\") = 10;"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "parameter Real wait3(unit=\"s\") = 10;"
+    },
+    {
+      "name": "tank1Level",
+      "kind": "level state",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "start level",
+          "value": "h0",
+          "unit": "",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "Real tank1Level(start=h0, unit=\"m\");"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Real tank1Level(start=h0, unit=\"m\");"
+    },
+    {
+      "name": "tank2Level",
+      "kind": "level state",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "start level",
+          "value": "h0",
+          "unit": "",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "Real tank2Level(start=h0, unit=\"m\");"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Real tank2Level(start=h0, unit=\"m\");"
+    },
+    {
+      "name": "valve1",
+      "kind": "boolean control",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Boolean valve1;"
+    },
+    {
+      "name": "valve2",
+      "kind": "boolean control",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Boolean valve2;"
+    },
+    {
+      "name": "valve3",
+      "kind": "boolean control",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Boolean valve3;"
+    },
+    {
+      "name": "startCmd",
+      "kind": "boolean command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Boolean startCmd;"
+    },
+    {
+      "name": "stopCmd",
+      "kind": "boolean command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Boolean stopCmd;"
+    },
+    {
+      "name": "shutCmd",
+      "kind": "boolean command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Boolean shutCmd;"
+    },
+    {
+      "name": "StepState",
+      "kind": "enumeration type",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "type StepState = enumeration(IDLE,FILL,HOLD1,TRANSFER,HOLD2,DRAIN,HOLD3);"
+    },
+    {
+      "name": "IDLE",
+      "kind": "state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "type StepState = enumeration(IDLE,FILL,HOLD1,TRANSFER,HOLD2,DRAIN,HOLD3);"
+    },
+    {
+      "name": "FILL",
+      "kind": "state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "type StepState = enumeration(IDLE,FILL,HOLD1,TRANSFER,HOLD2,DRAIN,HOLD3);"
+    },
+    {
+      "name": "HOLD1",
+      "kind": "state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "type StepState = enumeration(IDLE,FILL,HOLD1,TRANSFER,HOLD2,DRAIN,HOLD3);"
+    },
+    {
+      "name": "TRANSFER",
+      "kind": "state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "type StepState = enumeration(IDLE,FILL,HOLD1,TRANSFER,HOLD2,DRAIN,HOLD3);"
+    },
+    {
+      "name": "HOLD2",
+      "kind": "state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "type StepState = enumeration(IDLE,FILL,HOLD1,TRANSFER,HOLD2,DRAIN,HOLD3);"
+    },
+    {
+      "name": "DRAIN",
+      "kind": "state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "type StepState = enumeration(IDLE,FILL,HOLD1,TRANSFER,HOLD2,DRAIN,HOLD3);"
+    },
+    {
+      "name": "HOLD3",
+      "kind": "state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "type StepState = enumeration(IDLE,FILL,HOLD1,TRANSFER,HOLD2,DRAIN,HOLD3);"
+    },
+    {
+      "name": "seq",
+      "kind": "discrete state",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "start state",
+          "value": "StepState.IDLE",
+          "unit": "",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "discrete StepState seq(start=StepState.IDLE);"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "discrete StepState seq(start=StepState.IDLE);"
+    },
+    {
+      "name": "stopped",
+      "kind": "discrete boolean state",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "start value",
+          "value": "false",
+          "unit": "",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "discrete Boolean stopped(start=false);"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "discrete Boolean stopped(start=false);"
+    },
+    {
+      "name": "test harness",
+      "kind": "actor",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "button edge times",
+          "value": "20, 220, 280, 650 and 700",
+          "unit": "seconds",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "A test harness supplies button edges at 20, 220, 280, 650 and 700 seconds."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "A test harness supplies button edges at 20, 220, 280, 650 and 700 seconds."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "tank1Level",
+      "predicate": "depends on derivative equation with",
+      "object": "valve1",
+      "detail": "inflow via qFill and area A1",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "der(tank1Level) = (if valve1 then qFill else 0)/A1 - (if valve2 then qTransfer else 0)/A1;"
+    },
+    {
+      "subject": "tank1Level",
+      "predicate": "depends on derivative equation with",
+      "object": "valve2",
+      "detail": "outflow via qTransfer and area A1",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "der(tank1Level) = (if valve1 then qFill else 0)/A1 - (if valve2 then qTransfer else 0)/A1;"
+    },
+    {
+      "subject": "tank2Level",
+      "predicate": "depends on derivative equation with",
+      "object": "valve2",
+      "detail": "inflow via qTransfer and area A2",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "der(tank2Level) = (if valve2 then qTransfer else 0)/A2 - (if valve3 then qDrain else 0)/A2;"
+    },
+    {
+      "subject": "tank2Level",
+      "predicate": "depends on derivative equation with",
+      "object": "valve3",
+      "detail": "outflow via qDrain and area A2",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "der(tank2Level) = (if valve2 then qTransfer else 0)/A2 - (if valve3 then qDrain else 0)/A2;"
+    }
+  ],
+  "facts": [
+    {
+      "category": "behavior",
+      "statement": "when edge(startCmd) then stopped := false;",
+      "ref": "",
+      "anchor": "",
+      "status": "archived",
+      "from_image": false,
+      "quote": "when edge(startCmd) then stopped := false; end when;"
+    },
+    {
+      "category": "behavior",
+      "statement": "when edge(stopCmd) then stopped := true;",
+      "ref": "",
+      "anchor": "",
+      "status": "archived",
+      "from_image": false,
+      "quote": "when edge(stopCmd) then stopped := true; end when;"
+    },
+    {
+      "category": "control_law",
+      "statement": "valve1 := (seq == StepState.FILL) and not stopped;",
+      "ref": "",
+      "anchor": "",
+      "status": "archived",
+      "from_image": false,
+      "quote": "valve1 := (seq == StepState.FILL) and not stopped;"
+    },
+    {
+      "category": "control_law",
+      "statement": "valve2 := (seq == StepState.TRANSFER) and not stopped;",
+      "ref": "",
+      "anchor": "",
+      "status": "archived",
+      "from_image": false,
+      "quote": "valve2 := (seq == StepState.TRANSFER) and not stopped;"
+    },
+    {
+      "category": "control_law",
+      "statement": "valve3 := (seq == StepState.DRAIN) and not stopped;",
+      "ref": "",
+      "anchor": "",
+      "status": "archived",
+      "from_image": false,
+      "quote": "valve3 := (seq == StepState.DRAIN) and not stopped;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "der(tank1Level) = (if valve1 then qFill else 0)/A1 - (if valve2 then qTransfer else 0)/A1;",
+      "ref": "",
+      "anchor": "",
+      "status": "archived",
+      "from_image": false,
+      "quote": "der(tank1Level) = (if valve1 then qFill else 0)/A1 - (if valve2 then qTransfer else 0)/A1;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "der(tank2Level) = (if valve2 then qTransfer else 0)/A2 - (if valve3 then qDrain else 0)/A2;",
+      "ref": "",
+      "anchor": "",
+      "status": "archived",
+      "from_image": false,
+      "quote": "der(tank2Level) = (if valve2 then qTransfer else 0)/A2 - (if valve3 then qDrain else 0)/A2;"
+    }
+  ],
+  "unreadable": [
+    "State transition details omitted from this archived fragment.",
+    "SHUT handling was not completed in this revision."
+  ],
+  "unverified_quotes": []
+}

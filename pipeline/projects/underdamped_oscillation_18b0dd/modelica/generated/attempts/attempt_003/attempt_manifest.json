@@ -1,0 +1,36 @@
+{
+  "attempt": 3,
+  "entry_class": "HeldMassSpringDamperSystem",
+  "files": [
+    {
+      "filename": "ReleaseCommand.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "ClampConstraint.mo",
+      "role": "component"
+    },
+    {
+      "filename": "HeldMassSpringDamperSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Mechanics.Translational.Sources.Position",
+    "Modelica.Mechanics.Translational.Components.Mass",
+    "Modelica.Mechanics.Translational.Components.Spring",
+    "Modelica.Mechanics.Translational.Components.Damper",
+    "Modelica.Mechanics.Translational.Components.Fixed"
+  ],
+  "corrections": [
+    "Assumption retained from the brief: clamp_engaged is reported as 1.0 while engaged and 0.0 after release.",
+    "Assumption retained from the brief: the free-motion governing equation applies only after the clamp release event at t = 5 s; before release, clamp holding overrides free motion.",
+    "Assumption retained from the brief: the explicit closed-form expression uses dt = t - 5 s for t >= 5 s."
+  ],
+  "references": []
+}

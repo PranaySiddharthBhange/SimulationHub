@@ -1,0 +1,37 @@
+{
+  "entry_class": "FanSystem",
+  "files": [
+    {
+      "filename": "FanRotor.mo",
+      "role": "component"
+    },
+    {
+      "filename": "MotorTorqueSource.mo",
+      "role": "component"
+    },
+    {
+      "filename": "BearingFrictionLoss.mo",
+      "role": "component"
+    },
+    {
+      "filename": "AerodynamicLoadLoss.mo",
+      "role": "component"
+    },
+    {
+      "filename": "FanSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Math.BooleanToReal"
+  ],
+  "corrections": [
+    "Assumption retained from Merge: motor_torque_Nm is modeled as 0 N.m for t < 5 s and 0.5 N.m for t >= 5 s because the brief states a fixed constant driving torque when on and does not separately state an off-state torque value in the governing equation.",
+    "Derived inconsistency from the stated equations and current parameter values: with J = 0.02 kg.m^2, motor torque magnitude = 0.5 N.m, b = 0.01 N.m.s/rad, k_fan = 0.0004 N.m.s^2/rad^2, and turn-on at t = 5 s, the model reaches about 14.59 rad/s at t = 6 s, so AC-03 (fan_speed_rad_s >= 15 rad/s at t = 6 s) is not achievable without changing at least one stated current parameter or the start time. This was explicitly reported by the prior validation summary and is preserved rather than hidden by retuning.",
+    "The motor command is implemented as the explicit relation motorOnCmd = time >= startTime. The brief requires the turn-on at t = 5 s, but the prior validation observed the event recorded numerically at about 5.000000001 s. No alternative event mechanism is established by the evidence."
+  ],
+  "references": []
+}

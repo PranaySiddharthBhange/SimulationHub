@@ -1,0 +1,419 @@
+{
+  "document": "# Held Mass Released Onto A Spring-Damper — Underdamped Oscillation To Rest\n\n## System\n\nA single mass slides horizontally on a frictionless surface, anchored to a\nfixed wall through a spring and a damper acting in parallel. A clamp holds\nthe mass at a fixed, stretched position away from the spring's natural\nlength for the first part of the run. The clamp releases once, at a fixed\ntime, and never re-engages: from that instant on, the mass moves freely\nunder the spring's restoring force and the damper's resistance alone, with\nno other force acting on it.\n\nThis is a genuinely different kind of behavior from every other case in\nthis folder: it is second-order (position AND velocity both matter, not\njust an accumulating level), the chosen damping is light enough that the\nmass overshoots the spring's natural length and swings to the opposite\nside before settling, and it never truly reaches its final rest position --\nonly decays toward it asymptotically.\n\n- Mass: 1 kg, sliding with no friction against the surface itself (the\n  damper is the only source of resistance).\n- Spring: stiffness 1 N/m, unstretched (zero force) at position x = 0 m.\n  Connects the mass to the fixed wall.\n- Damper: damping coefficient 0.2 N*s/m, connects the mass to the same\n  fixed wall, in parallel with the spring.\n- Clamp: holds the mass fixed at position x = 0.10 m (stretched 0.10 m from\n  the spring's natural length) with zero velocity, from t = 0 to t = 5 s.\n  At t = 5 s the clamp releases once and never re-engages for the rest of\n  the run; from that instant, position and velocity evolve solely from the\n  spring and damper forces (`m*x'' + c*x' + k*x = 0`, starting from\n  x = 0.10 m and velocity 0 m/s at the instant of release).\n- No external force, motor, or controller acts on the mass at any point in\n  this run -- once released, the system evolves on its own.\n\n## Requirements\n\n- REQ-SIM-001: Simulate for 150 seconds and report the mass's position,\n  its velocity, and the clamp's engaged/released state for the whole run.\n- REQ-FUN-001: While the clamp is engaged (t = 0 to t = 5 s), position\n  shall stay exactly at 0.10 m and velocity shall stay exactly at 0 m/s.\n- REQ-FUN-002: At t = 5 s the clamp shall release once, and the mass shall\n  begin moving back toward the spring's natural length (position\n  decreasing from 0.10 m, velocity going negative).\n- REQ-FUN-003: Given the stated mass, stiffness, and damping, the motion\n  shall be underdamped: the mass shall overshoot past the natural length\n  (position goes negative) before eventually settling there, rather than\n  approaching 0 m monotonically.\n- REQ-FUN-004: The oscillation shall decay over time and the mass shall\n  come to rest at the spring's natural length (position 0 m, velocity\n  0 m/s) well before the end of the simulated run.\n\n## Acceptance checks\n\n- AC-01 clamp engaged pre-release: `clamp_engaged == 1` at t = 4 s.\n- AC-02 position and velocity frozen while clamped: `position_m == 0.10`\n  and `velocity_m_s == 0.0` at t = 4 s (absolute tolerance 0.001).\n- AC-03 clamp releases on schedule: `clamp_engaged == 0` at t = 6 s (one\n  second after the scheduled release, clear of the switching instant\n  itself).\n- AC-04 mass moving back toward natural length right after release:\n  `velocity_m_s <= -0.04` at t = 6 s (the mass is moving in the negative\n  direction at meaningful speed shortly after release).\n- AC-05 overshoot past the natural length (confirms genuine underdamped\n  behavior, not just decay to zero): `position_m <= -0.05` becomes true at\n  some point during the run (ever value == 1.0). Expected around\n  t = 8.16 s, where position reaches about -0.0729 m.\n- AC-06 velocity returns to zero at the overshoot peak: `abs(velocity_m_s)\n  <= 0.01` at t = 8.16 s -- the mass momentarily stops there before\n  swinging back.\n- AC-07 oscillation crosses the natural length before the overshoot peak:\n  `position_m <= 0.0` becomes true at some point before t = 8 s (ever\n  value == 1.0, checked over 5 s to 8 s). Expected around t = 6.68 s.\n- AC-08 settled at rest by the end of the run: `position_m == 0.0` and\n  `velocity_m_s == 0.0` at t = 150 s (absolute tolerance 0.005) -- the\n  oscillation has fully decayed.\n- AC-09 stays settled, not still oscillating: `abs(position_m) <= 0.003`\n  holds for the entire interval t = 50 s to t = 150 s -- by t = 50 s\n  (45 s after release, well past the point the envelope decays under the\n  0.2% band) the motion must already be negligible and must not grow again.\n\n## Notes\n\n- This case is deliberately the mechanical counterpart to the gravity-flow\n  two-tank case in this same folder: both hold a state fixed, release it\n  once at t = 5 s, and let the system relax on its own with no further\n  input. The two-tank case is strictly first-order and monotonic (no\n  overshoot is possible, by construction); this case is second-order and\n  underdamped specifically so it overshoots and oscillates before settling\n  -- a dynamic shape nothing else in this folder exercises.\n- The damping ratio here is `zeta = c / (2*sqrt(k*m)) = 0.2 / (2*sqrt(1*1))\n  = 0.1`, and the undamped natural frequency is `omega_n = sqrt(k/m) =\n  1 rad/s`, giving a damped frequency `omega_d = omega_n*sqrt(1-zeta^2) ~=\n  0.995 rad/s` -- all the acceptance-check timings above were computed\n  directly from the closed-form solution `x(t) = x0 * exp(-zeta*omega_n*dt)\n  * (cos(omega_d*dt) + (zeta*omega_n/omega_d)*sin(omega_d*dt))`, dt = t -\n  5 s, not estimated.\n- There is exactly one event in this whole run (the clamp releasing once).\n  Nothing re-engages the clamp, and no external force is ever applied\n  again -- any generated model that keeps forcing position or velocity to\n  a fixed value after t = 5 s, or that adds an external force/controller\n  not stated here, has added something this brief does not call for.\n",
+  "subject": "Held Mass Released Onto A Spring-Damper — Underdamped Oscillation To Rest",
+  "kind": "requirement specification",
+  "entities": [
+    {
+      "name": "Mass",
+      "kind": "mass",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "mass",
+          "value": "1",
+          "unit": "kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Mass: 1 kg"
+        },
+        {
+          "quantity": "position",
+          "value": "0.10",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "position x = 0.10 m"
+        },
+        {
+          "quantity": "velocity",
+          "value": "0",
+          "unit": "m/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "velocity 0 m/s"
+        },
+        {
+          "quantity": "position",
+          "value": "0",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "position 0 m"
+        },
+        {
+          "quantity": "velocity",
+          "value": "0",
+          "unit": "m/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "velocity 0 m/s"
+        },
+        {
+          "quantity": "position",
+          "value": "-0.0729",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "position reaches about -0.0729 m"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Mass: 1 kg, sliding with no friction against the surface itself"
+    },
+    {
+      "name": "Spring",
+      "kind": "spring",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "stiffness",
+          "value": "1",
+          "unit": "N/m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "stiffness 1 N/m"
+        },
+        {
+          "quantity": "natural length position",
+          "value": "0",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "position x = 0 m"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Spring: stiffness 1 N/m, unstretched (zero force) at position x = 0 m."
+    },
+    {
+      "name": "Damper",
+      "kind": "damper",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "damping coefficient",
+          "value": "0.2",
+          "unit": "N*s/m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "damping coefficient 0.2 N*s/m"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Damper: damping coefficient 0.2 N*s/m, connects the mass to the same\n  fixed wall, in parallel with the spring."
+    },
+    {
+      "name": "Clamp",
+      "kind": "clamp",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "held position",
+          "value": "0.10",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "position x = 0.10 m"
+        },
+        {
+          "quantity": "stretched amount",
+          "value": "0.10",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "stretched 0.10 m from"
+        },
+        {
+          "quantity": "velocity",
+          "value": "0",
+          "unit": "m/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "velocity 0 m/s"
+        },
+        {
+          "quantity": "start time",
+          "value": "0",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "t = 0"
+        },
+        {
+          "quantity": "release time",
+          "value": "5",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "t = 5 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Clamp: holds the mass fixed at position x = 0.10 m"
+    },
+    {
+      "name": "fixed wall",
+      "kind": "wall",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "fixed wall"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "Spring",
+      "predicate": "connects_to",
+      "object": "Mass",
+      "detail": "Connects the mass to the fixed wall.",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Connects the mass to the fixed wall."
+    },
+    {
+      "subject": "Spring",
+      "predicate": "connects_to",
+      "object": "fixed wall",
+      "detail": "Connects the mass to the fixed wall.",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Connects the mass to the fixed wall."
+    },
+    {
+      "subject": "Damper",
+      "predicate": "connects_to",
+      "object": "Mass",
+      "detail": "connects the mass to the same fixed wall",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "connects the mass to the same\n  fixed wall"
+    },
+    {
+      "subject": "Damper",
+      "predicate": "connects_to",
+      "object": "fixed wall",
+      "detail": "connects the mass to the same fixed wall",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "connects the mass to the same\n  fixed wall"
+    },
+    {
+      "subject": "Damper",
+      "predicate": "in_parallel_with",
+      "object": "Spring",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "in parallel with the spring"
+    },
+    {
+      "subject": "Clamp",
+      "predicate": "holds_fixed",
+      "object": "Mass",
+      "detail": "holds the mass fixed at position x = 0.10 m",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "holds the mass fixed at position x = 0.10 m"
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "m*x'' + c*x' + k*x = 0",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`m*x'' + c*x' + k*x = 0`"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "zeta = c / (2*sqrt(k*m)) = 0.2 / (2*sqrt(1*1)) = 0.1",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`zeta = c / (2*sqrt(k*m)) = 0.2 / (2*sqrt(1*1))\n  = 0.1`"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "omega_n = sqrt(k/m) = 1 rad/s",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`omega_n = sqrt(k/m) =\n  1 rad/s`"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "omega_d = omega_n*sqrt(1-zeta^2) ~= 0.995 rad/s",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`omega_d = omega_n*sqrt(1-zeta^2) ~=\n  0.995 rad/s`"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "x(t) = x0 * exp(-zeta*omega_n*dt) * (cos(omega_d*dt) + (zeta*omega_n/omega_d)*sin(omega_d*dt))",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`x(t) = x0 * exp(-zeta*omega_n*dt)\n  * (cos(omega_d*dt) + (zeta*omega_n/omega_d)*sin(omega_d*dt))`"
+    },
+    {
+      "category": "requirement",
+      "statement": "REQ-SIM-001: Simulate for 150 seconds and report the mass's position, its velocity, and the clamp's engaged/released state for the whole run.",
+      "ref": "REQ-SIM-001",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-SIM-001: Simulate for 150 seconds and report the mass's position,\n  its velocity, and the clamp's engaged/released state for the whole run."
+    },
+    {
+      "category": "requirement",
+      "statement": "REQ-FUN-001: While the clamp is engaged (t = 0 to t = 5 s), position shall stay exactly at 0.10 m and velocity shall stay exactly at 0 m/s.",
+      "ref": "REQ-FUN-001",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-FUN-001: While the clamp is engaged (t = 0 to t = 5 s), position\n  shall stay exactly at 0.10 m and velocity shall stay exactly at 0 m/s."
+    },
+    {
+      "category": "requirement",
+      "statement": "REQ-FUN-002: At t = 5 s the clamp shall release once, and the mass shall begin moving back toward the spring's natural length (position decreasing from 0.10 m, velocity going negative).",
+      "ref": "REQ-FUN-002",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-FUN-002: At t = 5 s the clamp shall release once, and the mass shall\n  begin moving back toward the spring's natural length (position\n  decreasing from 0.10 m, velocity going negative)."
+    },
+    {
+      "category": "requirement",
+      "statement": "REQ-FUN-003: Given the stated mass, stiffness, and damping, the motion shall be underdamped: the mass shall overshoot past the natural length (position goes negative) before eventually settling there, rather than approaching 0 m monotonically.",
+      "ref": "REQ-FUN-003",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-FUN-003: Given the stated mass, stiffness, and damping, the motion\n  shall be underdamped: the mass shall overshoot past the natural length\n  (position goes negative) before eventually settling there, rather than\n  approaching 0 m monotonically."
+    },
+    {
+      "category": "requirement",
+      "statement": "REQ-FUN-004: The oscillation shall decay over time and the mass shall come to rest at the spring's natural length (position 0 m, velocity 0 m/s) well before the end of the simulated run.",
+      "ref": "REQ-FUN-004",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-FUN-004: The oscillation shall decay over time and the mass shall\n  come to rest at the spring's natural length (position 0 m, velocity\n  0 m/s) well before the end of the simulated run."
+    },
+    {
+      "category": "constraint",
+      "statement": "AC-02: `position_m == 0.10` and `velocity_m_s == 0.0` at t = 4 s (absolute tolerance 0.001).",
+      "ref": "AC-02",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-02 position and velocity frozen while clamped: `position_m == 0.10`\n  and `velocity_m_s == 0.0` at t = 4 s (absolute tolerance 0.001)."
+    },
+    {
+      "category": "constraint",
+      "statement": "AC-04: `velocity_m_s <= -0.04` at t = 6 s.",
+      "ref": "AC-04",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-04 mass moving back toward natural length right after release:\n  `velocity_m_s <= -0.04` at t = 6 s"
+    },
+    {
+      "category": "constraint",
+      "statement": "AC-05: `position_m <= -0.05` becomes true at some point during the run.",
+      "ref": "AC-05",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-05 overshoot past the natural length (confirms genuine underdamped\n  behavior, not just decay to zero): `position_m <= -0.05` becomes true at\n  some point during the run"
+    },
+    {
+      "category": "constraint",
+      "statement": "AC-06: `abs(velocity_m_s) <= 0.01` at t = 8.16 s.",
+      "ref": "AC-06",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-06 velocity returns to zero at the overshoot peak: `abs(velocity_m_s)\n  <= 0.01` at t = 8.16 s"
+    },
+    {
+      "category": "constraint",
+      "statement": "AC-07: `position_m <= 0.0` becomes true at some point before t = 8 s (checked over 5 s to 8 s).",
+      "ref": "AC-07",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-07 oscillation crosses the natural length before the overshoot peak:\n  `position_m <= 0.0` becomes true at some point before t = 8 s (ever\n  value == 1.0, checked over 5 s to 8 s)."
+    },
+    {
+      "category": "constraint",
+      "statement": "AC-08: `position_m == 0.0` and `velocity_m_s == 0.0` at t = 150 s (absolute tolerance 0.005).",
+      "ref": "AC-08",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-08 settled at rest by the end of the run: `position_m == 0.0` and\n  `velocity_m_s == 0.0` at t = 150 s (absolute tolerance 0.005)"
+    },
+    {
+      "category": "constraint",
+      "statement": "AC-09: `abs(position_m) <= 0.003` holds for the entire interval t = 50 s to t = 150 s.",
+      "ref": "AC-09",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-09 stays settled, not still oscillating: `abs(position_m) <= 0.003`\n  holds for the entire interval t = 50 s to t = 150 s"
+    },
+    {
+      "category": "behavior",
+      "statement": "While the clamp is engaged (t = 0 to t = 5 s), position shall stay exactly at 0.10 m and velocity shall stay exactly at 0 m/s.",
+      "ref": "REQ-FUN-001",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "While the clamp is engaged (t = 0 to t = 5 s), position\n  shall stay exactly at 0.10 m and velocity shall stay exactly at 0 m/s."
+    },
+    {
+      "category": "behavior",
+      "statement": "At t = 5 s the clamp shall release once, and the mass shall begin moving back toward the spring's natural length.",
+      "ref": "REQ-FUN-002",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "At t = 5 s the clamp shall release once, and the mass shall\n  begin moving back toward the spring's natural length"
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "At t = 5 s the clamp shall release once.",
+      "ref": "REQ-FUN-002",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "At t = 5 s the clamp shall release once"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

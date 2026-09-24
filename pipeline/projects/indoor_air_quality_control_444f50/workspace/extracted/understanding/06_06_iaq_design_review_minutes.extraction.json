@@ -1,0 +1,293 @@
+{
+  "document": "# DR-IAQ-05 - Indoor Air Quality Control Design Review\n\n**Date:** 2026-02-14  \n**System:** RM-201 room CO2 controlled ventilation  \n**Status:** Final / approved\n\n## Attendees\nM. Ortega (owner engineering), N. Shah (controls), L. Chen (simulation), E. Ruiz (BMS), T. Willis (commissioning)\n\n## Decisions\n1. The owner limit is **1000 ppm absolute room CO2**. The phrase \"1000 ppm above outdoor\" from the 10-Feb email is not applicable to this benchmark.\n2. Outdoor CO2 for the reference model remains **300 ppm**, represented as `0.3 * 1.519E-3 kg/kg`.\n3. Internal controller feedback remains trace-substance mass fraction in **kg/kg**. A normalization gain converts `1.519E-3 kg/kg` to `1.0`.\n4. Controller output is an **ACH command**. The airflow conversion uses `m = ACH * V * rho / 3600`.\n5. In the Modelica source component, inflow is represented with a **negative mass-flow command**. SysML requirements should distinguish this software sign convention from physical airflow direction.\n6. The occupant source implementation may keep `C_source=100 kg/kg` and scale its carrier flow by 1/100. The resulting CO2 injection must remain `8.18E-6 kg/s/person`.\n7. `C_source=100 kg/kg` is a numerical implementation parameter and shall not be shown as a realistic room or outdoor gas composition.\n8. If the CO2 sensor is invalid continuously for more than 60 s, fallback ventilation is 4 ACH and a fault indication is raised. This fault mode is outside the baseline trend run.\n\n## Actions\n- Controls: issue revised tuning after updated occupancy schedule. **Closed by CR-IAQ-007.**\n- Facilities: issue final people schedule. **Closed by OCC-SCH-04 Rev C.**\n- Commissioning: verify absolute 1000 ppm criterion in 24-h synthetic trend. **Closed by CP-23 Rev C.**\n",
+  "subject": "RM-201 room CO2 controlled ventilation",
+  "kind": "design review minutes",
+  "entities": [
+    {
+      "name": "RM-201 room CO2 controlled ventilation",
+      "kind": "system",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "**System:** RM-201 room CO2 controlled ventilation"
+    },
+    {
+      "name": "owner limit",
+      "kind": "limit",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "room CO2 limit",
+          "value": "1000",
+          "unit": "ppm",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "The owner limit is **1000 ppm absolute room CO2**."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The owner limit is **1000 ppm absolute room CO2**."
+    },
+    {
+      "name": "Outdoor CO2",
+      "kind": "reference quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "CO2 concentration",
+          "value": "300",
+          "unit": "ppm",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Outdoor CO2 for the reference model remains **300 ppm**"
+        },
+        {
+          "quantity": "trace-substance mass fraction",
+          "value": "0.3 * 1.519E-3",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "represented as `0.3 * 1.519E-3 kg/kg`."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Outdoor CO2 for the reference model remains **300 ppm**, represented as `0.3 * 1.519E-3 kg/kg`."
+    },
+    {
+      "name": "Internal controller feedback",
+      "kind": "control signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "normalization input",
+          "value": "1.519E-3",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "A normalization gain converts `1.519E-3 kg/kg` to `1.0`."
+        },
+        {
+          "quantity": "normalized value",
+          "value": "1.0",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "A normalization gain converts `1.519E-3 kg/kg` to `1.0`."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Internal controller feedback remains trace-substance mass fraction in **kg/kg**. A normalization gain converts `1.519E-3 kg/kg` to `1.0`."
+    },
+    {
+      "name": "Controller output",
+      "kind": "control signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controller output is an **ACH command**."
+    },
+    {
+      "name": "Modelica source component",
+      "kind": "software component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "In the Modelica source component, inflow is represented with a **negative mass-flow command**."
+    },
+    {
+      "name": "occupant source implementation",
+      "kind": "source implementation",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "C_source",
+          "value": "100",
+          "unit": "kg/kg",
+          "status": "current",
+          "supersedes": "",
+          "quote": "The occupant source implementation may keep `C_source=100 kg/kg`"
+        },
+        {
+          "quantity": "carrier flow scale factor",
+          "value": "1/100",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "and scale its carrier flow by 1/100."
+        },
+        {
+          "quantity": "CO2 injection",
+          "value": "8.18E-6",
+          "unit": "kg/s/person",
+          "status": "current",
+          "supersedes": "",
+          "quote": "The resulting CO2 injection must remain `8.18E-6 kg/s/person`."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The occupant source implementation may keep `C_source=100 kg/kg` and scale its carrier flow by 1/100. The resulting CO2 injection must remain `8.18E-6 kg/s/person`."
+    },
+    {
+      "name": "CO2 sensor",
+      "kind": "sensor",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "invalid duration threshold",
+          "value": "60",
+          "unit": "s",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "If the CO2 sensor is invalid continuously for more than 60 s"
+        },
+        {
+          "quantity": "fallback ventilation",
+          "value": "4",
+          "unit": "ACH",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "fallback ventilation is 4 ACH"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "If the CO2 sensor is invalid continuously for more than 60 s, fallback ventilation is 4 ACH and a fault indication is raised."
+    },
+    {
+      "name": "fault indication",
+      "kind": "alarm",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "fallback ventilation is 4 ACH and a fault indication is raised."
+    },
+    {
+      "name": "Controls",
+      "kind": "actor",
+      "aliases": [],
+      "values": [],
+      "ref": "CR-IAQ-007",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controls: issue revised tuning after updated occupancy schedule. **Closed by CR-IAQ-007.**"
+    },
+    {
+      "name": "Facilities",
+      "kind": "actor",
+      "aliases": [],
+      "values": [],
+      "ref": "OCC-SCH-04 Rev C",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Facilities: issue final people schedule. **Closed by OCC-SCH-04 Rev C.**"
+    },
+    {
+      "name": "Commissioning",
+      "kind": "actor",
+      "aliases": [],
+      "values": [],
+      "ref": "CP-23 Rev C",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Commissioning: verify absolute 1000 ppm criterion in 24-h synthetic trend. **Closed by CP-23 Rev C.**"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "Controller output",
+      "predicate": "uses conversion",
+      "object": "RM-201 room CO2 controlled ventilation",
+      "detail": "m = ACH * V * rho / 3600",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The airflow conversion uses `m = ACH * V * rho / 3600`."
+    },
+    {
+      "subject": "Modelica source component",
+      "predicate": "represents inflow with",
+      "object": "negative mass-flow command",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "In the Modelica source component, inflow is represented with a **negative mass-flow command**."
+    },
+    {
+      "subject": "occupant source implementation",
+      "predicate": "scales carrier flow by",
+      "object": "1/100",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "and scale its carrier flow by 1/100."
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "m = ACH * V * rho / 3600",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "The airflow conversion uses `m = ACH * V * rho / 3600`."
+    },
+    {
+      "category": "requirement",
+      "statement": "C_source=100 kg/kg is a numerical implementation parameter and shall not be shown as a realistic room or outdoor gas composition.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "`C_source=100 kg/kg` is a numerical implementation parameter and shall not be shown as a realistic room or outdoor gas composition."
+    },
+    {
+      "category": "behavior",
+      "statement": "If the CO2 sensor is invalid continuously for more than 60 s, fallback ventilation is 4 ACH and a fault indication is raised.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "If the CO2 sensor is invalid continuously for more than 60 s, fallback ventilation is 4 ACH and a fault indication is raised."
+    },
+    {
+      "category": "requirement",
+      "statement": "The resulting CO2 injection must remain 8.18E-6 kg/s/person.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "The resulting CO2 injection must remain `8.18E-6 kg/s/person`."
+    },
+    {
+      "category": "requirement",
+      "statement": "verify absolute 1000 ppm criterion in 24-h synthetic trend.",
+      "ref": "CP-23 Rev C",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Commissioning: verify absolute 1000 ppm criterion in 24-h synthetic trend. **Closed by CP-23 Rev C.**"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

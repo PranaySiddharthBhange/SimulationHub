@@ -1,0 +1,30 @@
+Subject: Synthetic CO2 Room Transmitter
+Document kind: datasheet
+
+## Entities
+* Synthetic CO2 Room Transmitter -- CO2 transmitter  <CO2-TX-2K [page 1]>; aliases: CO2-TX-2K
+    - CO2 range: 0 to 2000 ppm [current]
+    - accuracy at 25 C: ±(40 ppm + 3% of reading) [current]
+    - resolution: 1 ppm [current]
+    - typical response time (T63): 90 s [current]
+    - analog output range: 0-10 V [current]
+    - analog output mapped concentration range: 0-2000 ppm [current]
+    - supply: 24 VAC/VDC [current]
+    - operating temperature: 0 to 50 C [current]
+    - recommended mounting height: 1.1 to 1.7 m [current]
+* ICD-IAQ-03 -- interface control document  <[page 1]>
+* physical device -- device  <[page 1]>
+* internal simulation/controller concentration signal -- signal  <[page 1]>
+    - quantity basis: kg/kg [current]
+* sensor display quantity -- quantity  <[page 1]>
+    - display unit: ppm [current]
+* internal feedback quantity -- quantity  <[page 1]>
+    - feedback unit: kg/kg [current]
+
+## Relationships
+* physical device reports sensor display quantity (ppm)  <[page 1]>
+* ICD-IAQ-03 defines internal simulation/controller concentration signal (as trace-substance mass fraction in kg/kg, followed by a normalization gain)  <[page 1]>
+* Synthetic CO2 Room Transmitter has digital output internal simulation/controller concentration signal (BACnet MS/TP, CO2 object in ppm)  <[page 1]>
+
+## Physical relationships
+* 0-10 V = 0-2000 ppm [current]  <[page 1]>

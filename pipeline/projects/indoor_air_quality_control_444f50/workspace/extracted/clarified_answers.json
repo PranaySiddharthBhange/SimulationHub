@@ -1,0 +1,80 @@
+{
+  "questions": [
+    "What reset logic should be modeled for exit from SENSOR_FAULT after the sensor signal becomes valid again?",
+    "Baseline outdoor CO2 concentration: Merge resolved this to 300 ppm absolute, represented internally as 0.0004557 kg/kg (approximately 0.3*1.519E-3 kg/kg).. Confirm, or choose a different value.",
+    "Compliance interpretation of the 1000 ppm limit: Merge resolved this to Absolute room CO2 concentration limit of 1000 ppm, not 1000 ppm above ambient.. Confirm, or choose a different value.",
+    "Controller proportional gain Kp: Merge resolved this to Kp = 6.0 ACH per normalized concentration error.. Confirm, or choose a different value.",
+    "Controller output bias: Merge resolved this to 3.5 ACH.. Confirm, or choose a different value.",
+    "Peak occupancy in approved reference run: Merge resolved this to 15 persons, with 15 from 13:00 to 15:00 in OCC-SCH-04 Rev C.. Confirm, or choose a different value.",
+    "Internal controller feedback quantity units: Merge resolved this to Internal simulation/controller concentration signal is kg/kg mass fraction, then normalized by gain 1/1.519E-3; physical device display may still be ppm.. Confirm, or choose a different value.",
+    "Outdoor-air source command sign convention: Merge resolved this to Physical supply mass flow into room is positive by physical meaning, while Modelica source command is equal magnitude and negative: source_m_flow_command = -physical_supply_m_flow.. Confirm, or choose a different value."
+  ],
+  "answers": {
+    "clarify_sensor_fault_reset_logic": "Immediate exit from SENSOR_FAULT when sensor validity is restored.",
+    "resolve_outdoor_co2_baseline": "300 ppm absolute, represented internally as 0.0004557 kg/kg (approximately 0.3*1.519E-3 kg/kg).",
+    "resolve_co2_limit_interpretation": "Absolute room CO2 concentration limit of 1000 ppm, not 1000 ppm above ambient.",
+    "resolve_controller_gain": "Kp = 6.0 ACH per normalized concentration error.",
+    "resolve_controller_bias": "3.5 ACH.",
+    "resolve_peak_occupancy": "15 persons, with 15 from 13:00 to 15:00 in OCC-SCH-04 Rev C.",
+    "resolve_sensor_interface_units": "Internal simulation/controller concentration signal is kg/kg mass fraction, then normalized by gain 1/1.519E-3; physical device display may still be ppm.",
+    "resolve_supply_flow_sign": "Physical supply mass flow into room is positive by physical meaning, while Modelica source command is equal magnitude and negative: source_m_flow_command = -physical_supply_m_flow."
+  },
+  "decisions": [
+    {
+      "id": "clarify_sensor_fault_reset_logic",
+      "question": "What reset logic should be modeled for exit from SENSOR_FAULT after the sensor signal becomes valid again?",
+      "merge_suggested": "",
+      "answer": "Immediate exit from SENSOR_FAULT when sensor validity is restored.",
+      "outcome": "answered"
+    },
+    {
+      "id": "resolve_outdoor_co2_baseline",
+      "question": "Baseline outdoor CO2 concentration: Merge resolved this to 300 ppm absolute, represented internally as 0.0004557 kg/kg (approximately 0.3*1.519E-3 kg/kg).. Confirm, or choose a different value.",
+      "merge_suggested": "300 ppm absolute, represented internally as 0.0004557 kg/kg (approximately 0.3*1.519E-3 kg/kg).",
+      "answer": "300 ppm absolute, represented internally as 0.0004557 kg/kg (approximately 0.3*1.519E-3 kg/kg).",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_co2_limit_interpretation",
+      "question": "Compliance interpretation of the 1000 ppm limit: Merge resolved this to Absolute room CO2 concentration limit of 1000 ppm, not 1000 ppm above ambient.. Confirm, or choose a different value.",
+      "merge_suggested": "Absolute room CO2 concentration limit of 1000 ppm, not 1000 ppm above ambient.",
+      "answer": "Absolute room CO2 concentration limit of 1000 ppm, not 1000 ppm above ambient.",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_controller_gain",
+      "question": "Controller proportional gain Kp: Merge resolved this to Kp = 6.0 ACH per normalized concentration error.. Confirm, or choose a different value.",
+      "merge_suggested": "Kp = 6.0 ACH per normalized concentration error.",
+      "answer": "Kp = 6.0 ACH per normalized concentration error.",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_controller_bias",
+      "question": "Controller output bias: Merge resolved this to 3.5 ACH.. Confirm, or choose a different value.",
+      "merge_suggested": "3.5 ACH.",
+      "answer": "3.5 ACH.",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_peak_occupancy",
+      "question": "Peak occupancy in approved reference run: Merge resolved this to 15 persons, with 15 from 13:00 to 15:00 in OCC-SCH-04 Rev C.. Confirm, or choose a different value.",
+      "merge_suggested": "15 persons, with 15 from 13:00 to 15:00 in OCC-SCH-04 Rev C.",
+      "answer": "15 persons, with 15 from 13:00 to 15:00 in OCC-SCH-04 Rev C.",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_sensor_interface_units",
+      "question": "Internal controller feedback quantity units: Merge resolved this to Internal simulation/controller concentration signal is kg/kg mass fraction, then normalized by gain 1/1.519E-3; physical device display may still be ppm.. Confirm, or choose a different value.",
+      "merge_suggested": "Internal simulation/controller concentration signal is kg/kg mass fraction, then normalized by gain 1/1.519E-3; physical device display may still be ppm.",
+      "answer": "Internal simulation/controller concentration signal is kg/kg mass fraction, then normalized by gain 1/1.519E-3; physical device display may still be ppm.",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_supply_flow_sign",
+      "question": "Outdoor-air source command sign convention: Merge resolved this to Physical supply mass flow into room is positive by physical meaning, while Modelica source command is equal magnitude and negative: source_m_flow_command = -physical_supply_m_flow.. Confirm, or choose a different value.",
+      "merge_suggested": "Physical supply mass flow into room is positive by physical meaning, while Modelica source command is equal magnitude and negative: source_m_flow_command = -physical_supply_m_flow.",
+      "answer": "Physical supply mass flow into room is positive by physical meaning, while Modelica source command is equal magnitude and negative: source_m_flow_command = -physical_supply_m_flow.",
+      "outcome": "confirmed"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "questions": [
+    "Tank 1 high-level setpoint: Merge resolved this to 0.80 m effective/current/active high-level setpoint for Tank 1. Confirm, or choose a different value.",
+    "Delay after Tank 1 reaches low level before opening V3: Merge resolved this to 12 s post-transfer waiting time. Confirm, or choose a different value.",
+    "Inter-cycle delay after Tank 2 reaches low level before next fill: Merge resolved this to 8 s inter-cycle waiting time. Confirm, or choose a different value.",
+    "Direction of Tank 2 drain path around V3 and DRN-101: Merge resolved this to TK-102/Tank 2 flows to XV-103/V3, which flows to DRN-101/ambient1. Confirm, or choose a different value."
+  ],
+  "answers": {
+    "resolve_t1_high_setpoint": "0.80 m effective/current/active high-level setpoint for Tank 1",
+    "resolve_wait_after_transfer": "12 s post-transfer waiting time",
+    "resolve_wait_after_drain": "8 s inter-cycle waiting time",
+    "resolve_drain_topology_direction": "TK-102/Tank 2 flows to XV-103/V3, which flows to DRN-101/ambient1"
+  },
+  "decisions": [
+    {
+      "id": "resolve_t1_high_setpoint",
+      "question": "Tank 1 high-level setpoint: Merge resolved this to 0.80 m effective/current/active high-level setpoint for Tank 1. Confirm, or choose a different value.",
+      "merge_suggested": "0.80 m effective/current/active high-level setpoint for Tank 1",
+      "answer": "0.80 m effective/current/active high-level setpoint for Tank 1",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_wait_after_transfer",
+      "question": "Delay after Tank 1 reaches low level before opening V3: Merge resolved this to 12 s post-transfer waiting time. Confirm, or choose a different value.",
+      "merge_suggested": "12 s post-transfer waiting time",
+      "answer": "12 s post-transfer waiting time",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_wait_after_drain",
+      "question": "Inter-cycle delay after Tank 2 reaches low level before next fill: Merge resolved this to 8 s inter-cycle waiting time. Confirm, or choose a different value.",
+      "merge_suggested": "8 s inter-cycle waiting time",
+      "answer": "8 s inter-cycle waiting time",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_drain_topology_direction",
+      "question": "Direction of Tank 2 drain path around V3 and DRN-101: Merge resolved this to TK-102/Tank 2 flows to XV-103/V3, which flows to DRN-101/ambient1. Confirm, or choose a different value.",
+      "merge_suggested": "TK-102/Tank 2 flows to XV-103/V3, which flows to DRN-101/ambient1",
+      "answer": "TK-102/Tank 2 flows to XV-103/V3, which flows to DRN-101/ambient1",
+      "outcome": "confirmed"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+Subject: RoomCO2Control_Archived_0_9
+Document kind: legacy model
+
+## Entities
+* RoomCO2Control_Archived_0_9 -- model
+* V -- parameter
+    - Room volume: 100 m3
+* rho -- parameter
+    - air density: 1.2 kg/m3 [nominal]
+* C_nominal -- parameter
+    - trace concentration: 1.519e-3 kg/kg [nominal]
+* C_out -- parameter
+    - outdoor CO2 equivalent: 350 ppm [superseded/stale]
+    - outdoor CO2 concentration: 0.35 [superseded/stale]
+* GPeo -- parameter
+    - CO2 generation: 8.18e-6 kg/s/person
+* CPeo -- parameter
+    - trace concentration used by peopleSource: 100 kg/kg
+* Kp -- parameter
+    - controller tuning: 4.0 ACH/normalized [superseded/stale]
+* uBias -- parameter
+    - ACH bias: 3.0 [superseded/stale]
+* uMin -- parameter
+    - minimum: 0.2
+* uMax -- parameter
+    - maximum: 6.0
+* nPeo -- variable
+    - occupancy peak schedule: 12 person [superseded/stale]
+* mPeoCarrier -- variable
+* CRoom -- variable
+* yCO2 -- variable
+* achCmd -- variable
+* mFreshCmd -- variable
+* CAtm -- component
+* freshAir -- component
+* ductIn -- component
+* volume -- component
+* ductOut -- component
+* boundary4 -- component
+* NumberOfPeople -- component
+* gain -- component
+* peopleSource -- component
+* traceVolume -- component
+* gainSensor -- component
+* PID -- component
+* gain1 -- component
+* freshAir.m_flow -- signal
+* volume.C -- signal
+
+## Relationships
+* CAtm connects to freshAir
+* freshAir connects to ductIn
+* ductIn connects to volume
+* volume connects to ductOut
+* ductOut connects to boundary4
+* NumberOfPeople connects to gain
+* gain connects to peopleSource
+* peopleSource connects to volume
+* volume.C connects to traceVolume
+* traceVolume connects to gainSensor
+* gainSensor connects to PID
+* PID connects to gain1
+* gain1 connects to freshAir.m_flow
+
+## Physical relationships
+* mPeoCarrier = nPeo*GPeo/CPeo;
+* yCO2 = CRoom/C_nominal;
+* mFreshCmd = -V*rho/3600*achCmd;
+
+## Control laws
+* achCmd = min(uMax,max(uMin,uBias + Kp*(yCO2 - 1)));
+
+## Unreadable
+* Detailed fluid component declarations omitted from this archived extract.

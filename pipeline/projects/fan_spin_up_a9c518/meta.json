@@ -1,0 +1,6 @@
+{
+  "name": "Fan Spin-Up",
+  "stage1_backend": "openai",
+  "extraction_status": "completed",
+  "status": "stage1_ready"
+}

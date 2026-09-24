@@ -1,0 +1,20 @@
+flowchart TD
+    A["Start simulation at t = 0 s"] --> B["Switch open<br/>switch_closed = 0"]
+    B --> C["Capacitor isolated from resistor-inductor series loop"]
+    C --> D["Hold capacitor_voltage_V = 10 V<br/>Hold loop_current_A = 0 A"]
+    D --> E{"t = 5 s?"}
+    E -->|No| D
+    E -->|Yes| F["Close switch once at t = 5 s<br/>switch_closed = 1"]
+    F --> G["Capacitor connected into loop with resistor and inductor in series"]
+    G --> H["Evolve under L*C*d^2(v_C)/dt^2 + R*C*d(v_C)/dt + v_C = 0<br/>with L = 1 H, C = 1 F, R = 0.2 Ohm"]
+    H --> I["Underdamped response<br/>capacitor_voltage_V falls from 10 V"]
+    I --> J{"capacitor_voltage_V <= 0.0 V?"}
+    J -->|No| I
+    J -->|Yes| K["capacitor_voltage_V crosses below 0 V and swings negative"]
+    K --> L{"capacitor_voltage_V <= -5.0 V?"}
+    L -->|No| M["Ringing continues and decays over time"]
+    L -->|Yes| M
+    M --> N["Responses decay toward 0<br/>capacitor_voltage_V and loop_current_A settle"]
+    N --> O{"t = 150 s?"}
+    O -->|No| N
+    O -->|Yes| P["Report capacitor_voltage_V, loop_current_A, and switch_closed for the whole run"]

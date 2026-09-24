@@ -1,0 +1,48 @@
+Subject: Commissioning / Model Verification Procedure CP-23
+Document kind: test procedure
+
+## Entities
+* room -- zone  <[page 1]>
+    - volume: 100 m3 [current]
+* Nominal air -- material  <[page 1]>
+    - density: 1.2 kg/m3 [nominal]
+* Outdoor CO2 -- concentration  <[page 1]>
+    - concentration: 300 ppm [current]
+    - concentration: 0.3*1.519E-3 kg/kg [current]
+* Occupant CO2 generation -- source term  <[page 1]>
+    - generation rate: 8.18E-6 kg/s/person [current]
+* Controller -- controller  <[page 1]>
+    - Kp: 6.0 ACH/normalized [current]
+    - bias: 3.5 ACH [current]
+    - lower limit: 0.2 ACH [current]
+    - upper limit: 6.0 ACH [current]
+* OCC-SCH-04 -- occupancy schedule  <[page 1]>; aliases: OCC-SCH-04 Rev C
+* outdoor-air source -- source  <[page 1]>
+* people-source -- source  <[page 1]>
+    - one-person carrier flow: 8.18E-8 kg/s [current]
+    - corresponding trace injection: 8.18E-6 kg/s [current]
+
+## Relationships
+* room initialized to concentration of Outdoor CO2 (at 00:00 with zero occupants)  <[page 1]>
+* room uses occupancy schedule OCC-SCH-04 (continuously through 24:00)  <[page 1]>
+* outdoor-air source has opposite sign to physical supply mass flow (source command sign and physical flow sign are opposite)  <[page 1]>
+
+## Requirements
+* Verify the released room CO2 feedback-control configuration over the approved 24-hour weekday occupancy profile using effective parameters current after CR-IAQ-007. [current]  <[page 1]>
+* Initialize room concentration to the outdoor concentration and start at 00:00 with zero occupants. [current]  <[page 1]>
+* Execute the occupancy schedule continuously through 24:00. Treat each schedule interval as piecewise constant. [current]  <[page 1]>
+* Compute room trace concentration using the well-mixed zone balance. Evaluate controller at an internal integration step no larger than 1 s. [current]  <[page 1]>
+* Log at 60 s intervals: time, occupant count, room ppm, room kg/kg, normalized feedback, ACH command, source mass-flow command, physical supply mass flow, people carrier flow, and actual CO2 generation. [current]  <[page 1]>
+* Report the maximum room CO2 and its time. Confirm the result is not greater than 1000 ppm. [current]  <[page 1]>
+* Confirm source command sign and physical flow sign are opposite for the outdoor-air source. [current]  <[page 1]>
+* Confirm one-person people-source carrier flow is 8.18E-8 kg/s and corresponding trace injection is 8.18E-6 kg/s. [current]  <[page 1]>
+* Trend contains 1441 rows including 00:00 and 24:00 endpoints. [current]  <AC-06 [page 1]>
+
+## Constraints
+* Maximum room CO2 <= 1000 ppm. [current]  <AC-01 [page 1]>
+* Outdoor concentration remains 300 ppm in baseline run. [current]  <AC-02 [page 1]>
+* ACH command remains within 0.2..6.0 ACH. [current]  <AC-03 [page 1]>
+
+## Physical relationships
+* physical_supply_m_flow_kg_s = -source_m_flow_command_kg_s. [current]  <AC-04 [page 1]>
+* CO2 source injection equals occupants*8.18E-6 kg/s. [current]  <AC-05 [page 1]>

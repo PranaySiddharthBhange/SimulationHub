@@ -1,0 +1,33 @@
+Subject: Synthetic legacy architecture draft
+Document kind: legacy model
+
+## Entities
+* tankController (PLC-101) -- component; aliases: PLC, tankController, PLC-101
+* tank1 (TK-101) -- tank; aliases: T1, tank1, TK-101
+* tank2 (TK-102) -- tank; aliases: T2, tank2, TK-102
+* valve1 (XV-101) -- valve; aliases: V1, valve1, XV-101
+* valve2 (XV-102) -- valve; aliases: V2, valve2, XV-102
+* valve3 (XV-103) -- valve; aliases: V3, valve3, XV-103
+* source (SRC-101) -- source; aliases: SRC, source, SRC-101
+* ambient1 (DRN-101) -- drain; aliases: DRN, ambient1, DRN-101
+* LT-101 -- component
+* LT-102 -- component
+* START -- input
+* STOP -- input
+* SHUT -- input
+* pause state -- state
+* controlled shutdown concurrency -- control feature
+
+## Relationships
+* source (SRC-101) flows to valve1 (XV-101) (liquid)
+* valve1 (XV-101) flows to tank1 (TK-101) (liquid)
+* tank1 (TK-101) flows to valve2 (XV-102) (liquid)
+* valve2 (XV-102) flows to tank2 (TK-102) (liquid)
+* tank2 (TK-102) flows to valve3 (XV-103) (liquid)
+* valve3 (XV-103) flows to ambient1 (DRN-101) (liquid)
+* tankController (PLC-101) controls valve1 (XV-101) (valve1)
+* tankController (PLC-101) controls valve2 (XV-102) (valve2)
+* tankController (PLC-101) controls valve3 (XV-103) (valve3)
+
+## Unreadable
+* The note states omitted items but does not define their detailed behavior: "Legacy draft does not show:"

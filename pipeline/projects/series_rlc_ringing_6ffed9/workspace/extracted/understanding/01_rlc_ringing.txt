@@ -1,0 +1,65 @@
+Subject: Series RLC Ringing — Pre-Charged Capacitor Released Into A Resistor And Inductor
+Document kind: requirement specification
+
+## Entities
+* capacitor -- component
+    - capacitance: 1 F [current]
+    - voltage: 10 V [current]
+    - voltage: 10 V [current]
+* switch -- component
+    - time open from: 0 s [current]
+    - time open to: 5 s [current]
+    - closing time: 5 s [current]
+* resistor -- component
+    - resistance: 0.2 Ohm [current]
+* inductor -- component
+    - inductance: 1 H [current]
+* loop current -- signal
+    - current: 0 A [current]
+    - current: 0.0 A [current]
+    - current limit: 0.05 [current]
+    - current: 0.0 A [current]
+* capacitor voltage -- signal; aliases: v_C, capacitor_voltage_V
+    - voltage: 10 V [current]
+    - voltage: 10.0 [current]
+    - threshold: -5.0 [current]
+    - voltage: -7.29 V [current]
+    - threshold: 0.0 [current]
+    - voltage: 0.0 [current]
+    - magnitude limit: 0.3 [current]
+* switch_closed -- signal
+    - state: 0 [current]
+    - state: 1 [current]
+* zeta -- parameter
+    - damping ratio: 0.1 [current]
+* omega_n -- parameter
+    - natural frequency: 1 rad/s [current]
+
+## Relationships
+* resistor in series with inductor (once the switch closes)
+* inductor in series with resistor (once the switch closes)
+* switch connects into loop with capacitor (The switch closes once, at a fixed time, connecting the capacitor into a loop with a resistor and an inductor in series.)
+* capacitor discharges through resistor (through the loop after switch closes)
+* capacitor discharges through inductor (through the loop after switch closes)
+
+## Requirements
+* Simulate for 150 seconds and report the capacitor voltage, the loop current, and the switch's open/closed state for the whole run. [current]  <REQ-SIM-001>
+* While the switch is open (t = 0 to t = 5 s), capacitor voltage shall stay exactly at 10 V and current shall stay exactly at 0 A. [current]  <REQ-FUN-001>
+* At t = 5 s the switch shall close once, and capacitor voltage shall begin falling from 10 V. [current]  <REQ-FUN-002>
+* Given the stated R, L, C values, the response shall be underdamped: capacitor voltage shall swing negative (overshoot past 0 V) before settling, rather than decaying monotonically to zero. [current]  <REQ-FUN-003>
+* The ringing shall decay over time and the capacitor voltage shall settle at 0 V well before the end of the run. [current]  <REQ-FUN-004>
+
+## Constraints
+* `switch_closed == 0` at t = 4 s. [current]  <AC-01>
+* `capacitor_voltage_V == 10.0` and `loop_current_A == 0.0` at t = 4 s (absolute tolerance 0.01). [current]  <AC-02>
+* `switch_closed == 1` at t = 6 s. [current]  <AC-03>
+* `capacitor_voltage_V <= -5.0` becomes true at some point during the run (ever value == 1.0). Expected around t = 8.16 s, where voltage reaches about -7.29 V. [current]  <AC-04>
+* `abs(loop_current_A) <= 0.05` at t = 8.16 s -- the loop momentarily stops discharging there before ringing back. [current]  <AC-05>
+* `capacitor_voltage_V <= 0.0` becomes true at some point between t = 5 s and t = 8 s (ever value == 1.0). Expected around t = 6.68 s. [current]  <AC-06>
+* `capacitor_voltage_V == 0.0` and `loop_current_A == 0.0` at t = 150 s (absolute tolerance 0.05). [current]  <AC-07>
+* `abs(capacitor_voltage_V) <= 0.3` holds for the entire interval t = 50 s to t = 150 s. [current]  <AC-08>
+
+## Physical relationships
+* L*C*d^2(v_C)/dt^2 + R*C*d(v_C)/dt + v_C = 0 [current]
+* zeta = (R/2)*sqrt(C/L) = 0.1 [current]
+* omega_n = 1/sqrt(L*C) = 1 rad/s [current]

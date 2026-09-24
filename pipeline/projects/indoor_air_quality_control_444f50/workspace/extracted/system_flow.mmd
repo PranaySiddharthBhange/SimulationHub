@@ -1,0 +1,30 @@
+flowchart TD
+    A["Start simulation at 00:00"] --> B["Initialize ZON-201 room CO2 = SET-OA-201 outdoor CO2<br/>outdoor_co2_ppm = 300<br/>outdoor_co2_mass_fraction_kgkg = 0.0004557<br/>occupants_person = 0"]
+    B --> C["Continuous run to 24:00 = 86400 s<br/>internal integration step <= 1 s<br/>log every 60 s"]
+    C --> D["Apply OCC-SCH-04 Rev C occupancy schedule<br/>00:00-07:00 0; 07:00-08:00 2; 08:00-10:00 8; 10:00-12:00 12; 12:00-13:00 4; 13:00-15:00 15; 15:00-17:00 10; 17:00-18:00 3; 18:00-24:00 0 persons"]
+    D --> E["Compute occupant CO2 generation<br/>actual_co2_generation_kg_s = occupants_person*8.18E-6"]
+    E --> F["Compute people source carrier flow<br/>people_source_carrier_m_flow_kg_s = actual_co2_generation_kg_s/100<br/>C_source = 100 kg/kg"]
+    F --> G["Inject people CO2 source SRC-CO2-201 into ZON-201<br/>trace injection = actual_co2_generation_kg_s"]
+    G --> H["Outdoor-air source SRC-OA-201 uses fixed CO2<br/>C_out = 0.0004557 kg/kg"]
+    H --> I["Update well-mixed room CO2 balance in ZON-201<br/>with inflow, outflow, and people source terms"]
+    I --> J["Measure room CO2 by SEN-CO2-201 in kg/kg<br/>room_co2_mass_fraction_kgkg = C_room"]
+    J --> K{"Sensor valid for more than 60 s invalid?"}
+    K -->|Yes| L["Enter SENSOR_FAULT<br/>ach_command_1_per_h = 4.0<br/>sensor_fault_indication = true"]
+    K -->|No| M["Normalize by GAIN-NORM-201<br/>normalized_co2_feedback = room_co2_mass_fraction_kgkg/0.001519"]
+    L --> N{"Sensor validity restored?"}
+    N -->|Yes| M
+    N -->|No| O["Keep fallback flow command at 4.0 ACH"]
+    O --> P["Compute physical_supply_m_flow_kg_s = ACH_command*100*1.2/3600<br/>source_m_flow_command_kg_s = -physical_supply_m_flow_kg_s"]
+    P --> H
+    M --> Q["Compute requested ACH before saturation<br/>3.5 + 6.0*(normalized_co2_feedback - 1.0)"]
+    Q --> R{"Requested ACH <= 0.2?"}
+    R -->|Yes| S["AUTO_MIN<br/>ach_command_1_per_h = 0.2<br/>sensor_fault_indication = false"]
+    R -->|No| T{"Requested ACH >= 6.0?"}
+    T -->|Yes| U["AUTO_MAX<br/>ach_command_1_per_h = 6.0<br/>sensor_fault_indication = false"]
+    T -->|No| V["AUTO_CO2<br/>ach_command_1_per_h = 3.5 + 6.0*(normalized_co2_feedback - 1.0)<br/>sensor_fault_indication = false"]
+    S --> P
+    U --> P
+    V --> P
+    P --> W{"time_s = 86400?"}
+    W -->|No| D
+    W -->|Yes| X["End at 24:00<br/>final required state includes controller_mode = AUTO_MIN and occupants_person = 0"]

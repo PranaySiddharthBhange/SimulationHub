@@ -1,0 +1,46 @@
+Subject: RECORDED values -- an observation of a run that already happened
+Document kind: dataset
+
+## Entities
+* occupants_person -- recorded quantity
+    - occupants_person: 0 .. 15 person [observed]
+* outdoor_co2_ppm -- recorded quantity
+    - outdoor_co2_ppm: 300 .. 300 ppm [observed]
+* outdoor_co2_mass_fraction_kgkg -- recorded quantity
+    - outdoor_co2_mass_fraction_kgkg: 0.0004557 .. 0.0004557 kgkg [observed]
+* room_co2_ppm -- recorded quantity
+    - room_co2_ppm: 300 .. 996.524 ppm [observed]
+* room_co2_mass_fraction_kgkg -- recorded quantity
+    - room_co2_mass_fraction_kgkg: 0.0004557 .. 0.00151372 kgkg [observed]
+* normalized_co2_feedback -- recorded quantity
+    - normalized_co2_feedback: 0.3 .. 0.996524 [observed]
+* normalized_setpoint -- recorded quantity
+    - normalized_setpoint: 1 .. 1 [observed]
+* ach_command_1_per_h -- recorded quantity
+    - ach_command_1_per_h: 0.2 .. 3.47914 1_per_h [observed]
+* source_m_flow_command_kg_s -- recorded quantity
+    - source_m_flow_command_kg_s: -0.115971 .. -0.00666667 kg_s [observed]
+* physical_supply_m_flow_kg_s -- recorded quantity
+    - physical_supply_m_flow_kg_s: 0.00666667 .. 0.115971 kg_s [observed]
+* people_source_carrier_m_flow_kg_s -- recorded quantity
+    - people_source_carrier_m_flow_kg_s: 0 .. 1.227e-06 kg_s [observed]
+* actual_co2_generation_kg_s -- recorded quantity
+    - actual_co2_generation_kg_s: 0 .. 0.0001227 kg_s [observed]
+* controller_mode -- controller mode; aliases: AUTO_CO2, AUTO_MIN
+    - controller_mode states: AUTO_CO2, AUTO_MIN [observed]
+
+## Behaviors
+* This dataset records a run over 1441 rows from time_s 0 to 86400. [observed]
+* The recorded run is explicitly described as an observation of a run that already happened, not a scenario input and not a command schedule. [observed]
+* At time_s=0 (00:00:00), controller_mode was AUTO_MIN with occupants_person=0 and ach_command_1_per_h=0.2. [observed]
+* At time_s=25200 (07:00:00), occupants_person changed to 2 while controller_mode remained AUTO_MIN. [observed]
+* At time_s=27000 (07:30:00), controller_mode changed to AUTO_CO2 and ach_command_1_per_h rose to 0.22232819645134372. [observed]
+* At time_s=28800 (08:00:00), occupants_person changed to 8. [observed]
+* At time_s=36000 (10:00:00), occupants_person changed to 12. [observed]
+* At time_s=43200 (12:00:00), occupants_person changed to 4. [observed]
+* At time_s=46800 (13:00:00), occupants_person changed to 15. [observed]
+* At time_s=54000 (15:00:00), occupants_person changed to 10 and room_co2_ppm reached 996.2992083489642 with ach_command_1_per_h at 3.4791415294352497. [observed]
+* At time_s=61200 (17:00:00), occupants_person changed to 3. [observed]
+* At time_s=64800 (18:00:00), occupants_person changed to 0 while controller_mode remained AUTO_CO2. [observed]
+* At time_s=70500 (19:35:00), controller_mode changed back to AUTO_MIN and ach_command_1_per_h returned to 0.2. [observed]
+* At time_s=86400 (24:00:00), the run ended with occupants_person=0 and controller_mode=AUTO_MIN. [observed]

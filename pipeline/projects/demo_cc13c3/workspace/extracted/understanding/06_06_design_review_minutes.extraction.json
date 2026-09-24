@@ -1,0 +1,243 @@
+{
+  "document": "# DR-02 Design Review Minutes - Two-Tank Controller\r\n\r\n**Date:** 19 Feb 2026  \r\n**Status:** Final / approved decisions  \r\n**Attendees:** A. Mehta (customer), S. Patel (controls), J. Lin (simulation), R. Gomez (V&V), L. Chen (safety)\r\n\r\n## Discussion\r\nThe URS says STOP waits for either START or SHUT but does not state what happens to an active delay timer. Controls proposed freezing remaining delay. Simulation initially restarted the entire delay on resume. The review board selected **freeze remaining delay** because STOP should pause the process rather than alter the sequence timing.\r\n\r\nThe term `shut` was confirmed to mean a **controlled process shutdown/drain**, not an emergency-stop function. During SHUT, V1 must remain closed while V2 and V3 are commanded open together. This is an intentional exception to the normal prohibition on opening the transfer and drain valves together.\r\n\r\n## Decisions\r\n- **D-01:** Command precedence is `SHUT > STOP > START`.\r\n- **D-02:** STOP closes all valves and stores the interrupted state.\r\n- **D-03:** STOP during any delay freezes the remaining delay; START resumes the remaining delay.\r\n- **D-04:** START while the automatic sequence is already running is ignored.\r\n- **D-05:** START and STOP received during active SHUT are ignored.\r\n- **D-06:** SHUT is complete only when both LT-101 and LT-102 are at or below their low-level setpoints.\r\n- **D-07:** After shutdown completion, all valves are closed and the sequence context is reset to IDLE. A later START begins a new fill cycle.\r\n- **D-08:** V1 and V2 must never be commanded open together.\r\n- **D-09:** V2 and V3 must not be commanded open together in normal auto operation; SHUT is the only permitted exception.\r\n\r\n## Open actions\r\n- **A-17 / Customer:** Confirm whether T1 high should be increased from 0.78 m to 0.80 m. *Closed by CR-004 on 11 Mar 2026.*\r\n- **A-18 / Customer:** Confirm post-transfer delay. *Closed by CR-004: 12 s.*\r\n- **A-19 / Controls:** Consider reducing inter-cycle delay after Tank 2 low. *Closed by CR-004: 8 s.*\r\n- **A-20 / Simulation:** Update legacy model after parameter approval. *No evidence of completion in the supplied packet.*\r\n\r\n## Modeling note\r\nThe final SysML representation should distinguish the operator commands (events), the controller states, the physical valve/tank parts, the hydraulic connections and the requirement/verification elements. Do not model `shut` as a power-loss or emergency-stop event.\r\n",
+  "subject": "DR-02 Design Review Minutes - Two-Tank Controller",
+  "kind": "correspondence",
+  "entities": [
+    {
+      "name": "STOP",
+      "kind": "operator command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "STOP waits for either START or SHUT"
+    },
+    {
+      "name": "START",
+      "kind": "operator command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "START"
+    },
+    {
+      "name": "SHUT",
+      "kind": "operator command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The term `shut` was confirmed to mean a **controlled process shutdown/drain**, not an emergency-stop function."
+    },
+    {
+      "name": "V1",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
+    },
+    {
+      "name": "V2",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
+    },
+    {
+      "name": "V3",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
+    },
+    {
+      "name": "LT-101",
+      "kind": "level transmitter",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "SHUT is complete only when both LT-101 and LT-102 are at or below their low-level setpoints."
+    },
+    {
+      "name": "LT-102",
+      "kind": "level transmitter",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "SHUT is complete only when both LT-101 and LT-102 are at or below their low-level setpoints."
+    },
+    {
+      "name": "IDLE",
+      "kind": "controller state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the sequence context is reset to IDLE"
+    },
+    {
+      "name": "T1",
+      "kind": "tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "high level",
+          "value": "0.78",
+          "unit": "m",
+          "status": "proposed",
+          "supersedes": "",
+          "quote": "increased from 0.78 m to 0.80 m"
+        },
+        {
+          "quantity": "high level",
+          "value": "0.80",
+          "unit": "m",
+          "status": "proposed",
+          "supersedes": "0.78 m",
+          "quote": "increased from 0.78 m to 0.80 m"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Confirm whether T1 high should be increased from 0.78 m to 0.80 m."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "SHUT",
+      "predicate": "commands open together",
+      "object": "V2",
+      "detail": "with V3 during SHUT",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
+    },
+    {
+      "subject": "SHUT",
+      "predicate": "commands open together",
+      "object": "V3",
+      "detail": "with V2 during SHUT",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
+    },
+    {
+      "subject": "SHUT",
+      "predicate": "keeps closed",
+      "object": "V1",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
+    },
+    {
+      "subject": "V1",
+      "predicate": "must never be commanded open together with",
+      "object": "V2",
+      "detail": "",
+      "ref": "D-08",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V1 and V2 must never be commanded open together."
+    },
+    {
+      "subject": "V2",
+      "predicate": "must not be commanded open together with",
+      "object": "V3",
+      "detail": "in normal auto operation; SHUT is the only permitted exception",
+      "ref": "D-09",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V2 and V3 must not be commanded open together in normal auto operation; SHUT is the only permitted exception."
+    }
+  ],
+  "facts": [
+    {
+      "category": "behavior",
+      "statement": "STOP during any delay freezes the remaining delay; START resumes the remaining delay.",
+      "ref": "D-03",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "STOP during any delay freezes the remaining delay; START resumes the remaining delay."
+    },
+    {
+      "category": "behavior",
+      "statement": "START while the automatic sequence is already running is ignored.",
+      "ref": "D-04",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "START while the automatic sequence is already running is ignored."
+    },
+    {
+      "category": "behavior",
+      "statement": "START and STOP received during active SHUT are ignored.",
+      "ref": "D-05",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "START and STOP received during active SHUT are ignored."
+    },
+    {
+      "category": "behavior",
+      "statement": "SHUT is complete only when both LT-101 and LT-102 are at or below their low-level setpoints.",
+      "ref": "D-06",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "SHUT is complete only when both LT-101 and LT-102 are at or below their low-level setpoints."
+    },
+    {
+      "category": "behavior",
+      "statement": "After shutdown completion, all valves are closed and the sequence context is reset to IDLE. A later START begins a new fill cycle.",
+      "ref": "D-07",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "After shutdown completion, all valves are closed and the sequence context is reset to IDLE. A later START begins a new fill cycle."
+    },
+    {
+      "category": "requirement",
+      "statement": "V1 and V2 must never be commanded open together.",
+      "ref": "D-08",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "V1 and V2 must never be commanded open together."
+    },
+    {
+      "category": "requirement",
+      "statement": "V2 and V3 must not be commanded open together in normal auto operation; SHUT is the only permitted exception.",
+      "ref": "D-09",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "V2 and V3 must not be commanded open together in normal auto operation; SHUT is the only permitted exception."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

@@ -1,0 +1,76 @@
+{
+  "verdict": "partially_valid",
+  "check_results": [
+    {
+      "name": "AC-01 valve closed before opening",
+      "expression": "valve_open_cmd == 0 == 1.0 (relative tolerance 0.000%), at t=4.0",
+      "outcome": "pass",
+      "observed": "At t=4.0 s, valve_open_cmd remained 0; event trace shows the command stayed 0 from t=0 until it changed to 1 at t=5.000001000000333 s. Expected valve_open_cmd = 0 at t=4.0 s."
+    },
+    {
+      "name": "AC-02 initial levels preserved during closed interval at 4 s",
+      "expression": "(abs(level_A_m - 0.80) <= 0.001) and (abs(level_B_m - 0.00) <= 0.001) == 1.0 (relative tolerance 0.000%), at t=4.0",
+      "outcome": "pass",
+      "observed": "At t=4.0 s, before the first valve-open event at t=5.000001000000333 s, the closed-valve interval implies no transfer; the reported extrema are level_A_m max=0.8 and level_B_m min=0 with no earlier event that could change them, so the levels are 0.80 m and 0.00 m at t=4.0 s. Expected 0.80 m and 0.00 m within ±0.001 m."
+    },
+    {
+      "name": "AC-03 valve open after opening command",
+      "expression": "valve_open_cmd == 1 == 1.0 (relative tolerance 0.000%), at t=6.0",
+      "outcome": "pass",
+      "observed": "At t=6.0 s, valve_open_cmd was 1; event trace shows the command changed to 1 at t=5.000001000000333 s and stayed there afterward. Expected valve_open_cmd = 1 at t=6.0 s."
+    },
+    {
+      "name": "AC-04 levels show transfer by 15 s",
+      "expression": "(level_A_m <= 0.75) and (level_B_m >= 0.05) == 1.0 (relative tolerance 0.000%), at t=15.0",
+      "outcome": "pass",
+      "observed": "Using the stated post-open law with equal tank areas, the level difference decays exponentially with tau = 10 s after the actual open event at t=5.000001000000333 s. At t=15.0 s, Δt=9.999998999999667 s so level difference ≈0.8*exp(-Δt/10)≈0.294304, giving level_A_m≈0.547152 m and level_B_m≈0.252848 m. This satisfies level_A_m <= 0.75 and level_B_m >= 0.05. Expected both conditions true at t=15.0 s."
+    },
+    {
+      "name": "AC-05 near equilibrium by 45 s",
+      "expression": "(abs(level_A_m - 0.40) <= 0.02) and (abs(level_B_m - 0.40) <= 0.02) == 1.0 (relative tolerance 0.000%), at t=45.0",
+      "outcome": "pass",
+      "observed": "With the actual open event at t=5.000001000000333 s and tau = 10 s, at t=45.0 s Δt=39.99999899999967 s, level difference ≈0.8*exp(-Δt/10)≈0.014653. Therefore level_A_m≈0.407326 m and level_B_m≈0.392674 m, each within 0.02 m of 0.40 m. Expected both within ±0.02 m at t=45.0 s."
+    },
+    {
+      "name": "AC-06 equilibrium at 150 s",
+      "expression": "(abs(level_A_m - 0.40) <= 0.005) and (abs(level_B_m - 0.40) <= 0.005) == 1.0 (relative tolerance 0.000%), final value",
+      "outcome": "pass",
+      "observed": "Final values are level_A_m = 0.399921 m and level_B_m = 0.400079 m. Deviations from 0.40 m are 0.000079 m for each, within ±0.005 m. Expected both within ±0.005 m at final time 150 s."
+    },
+    {
+      "name": "AC-07 total level conserved",
+      "expression": "abs((level_A_m + level_B_m) - 0.80) <= 0.001 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "Reported extrema/final values are consistent with level_A_m + level_B_m = 0.800000 m at start (0.8 + 0.0) and at final time (0.399921 + 0.400079 = 0.800000). The equal-area transfer model with q from A to B gives der(level_A_m)+der(level_B_m)=0, so the sum stays constant throughout. Expected |(level_A_m + level_B_m) - 0.80| <= 0.001 for the full run."
+    },
+    {
+      "name": "AC-08 tank levels stay within bounds",
+      "expression": "(level_A_m >= 0) and (level_A_m <= 1.0) and (level_B_m >= 0) and (level_B_m <= 1.0) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "level_A_m stayed within [0.399921, 0.8] m and level_B_m stayed within [0, 0.400079] m for the full run. Both are within [0, 1.0] m at all reported times. Expected both levels within bounds for the full run."
+    },
+    {
+      "name": "REQ-FUN-002 flow begins after valve opens",
+      "expression": "q_m3s > 0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "q_m3s had max = 0.02 m^3/s after opening, so there was at least one time with q_m3s > 0. Expected q_m3s > 0 at some time after the valve opens."
+    }
+  ],
+  "summary": "The run shows the intended gravity transfer behavior and all stated acceptance checks pass against the reported results: the valve stayed closed through 4 s, opened at 5.000001 s, flow became positive with q_m3s reaching 0.02 m^3/s, the levels remained fixed at 0.80 m and 0.00 m during the closed interval, transfer was clearly underway by 15 s, both tanks were near 0.40 m by 45 s, and the final levels at 150 s were 0.399921 m and 0.400079 m. Total level was conserved at 0.800000 m and both levels stayed within the 0 to 1.0 m bounds. The only discrepancy is timing: the brief states the valve shall open at exactly 5 s, but the real event trace shows the command changed at 5.000001000000333 s instead.",
+  "issues": [
+    "The valve did not open at exactly t = 5.0 s as the narrative states; the real event trace shows valve_open_cmd changed from 0 to 1 at t = 5.000001000000333 s, a delay of about 1.0e-6 s."
+  ],
+  "assumptions": [
+    "The model-generation stage assumed zero connecting flow during 0 to 5 s while the valve command is closed, and q_m3s = k*(level_A_m - level_B_m) after opening, matching the clarified brief behavior.",
+    "The model-generation stage added a nonnegative floor after opening: q_m3s = max(0, k*(level_A_m - level_B_m)) while the valve is open, to prevent tiny reverse flow near equilibrium.",
+    "The model-generation stage included q_m3s as a reported variable even though the note explicitly requires reporting tank levels and valve command, because the 'flow shall begin' requirement needed a directly checkable signal.",
+    "A simulation tolerance of 0.001 was chosen by the model-generation stage because the brief gives millimeter-scale level tolerances but does not specify solver tolerance.",
+    "A further baked-in assumption from the parameter values is equal constant cross-sectional area for both tanks, 0.5 m^2 each, so level conservation is proportional to volume conservation and the equilibrium level is exactly the arithmetic average 0.40 m.",
+    "A further baked-in assumption from the parameters and behavior is that no inflow, outflow, evaporation, leakage, or overflow path exists other than the single connecting path, because the reported tank inlet/outlet flows are zero except for the transfer path."
+  ],
+  "root_causes": [
+    "The 1.0e-6 s opening delay comes from the discrete event timing in the executable model/solver rather than the physical tank dynamics: the event trace records the valve command switch at t = 5.000001000000333 s, so all post-open behavior starts from that actual event time instead of exactly 5.0 s.",
+    "The successful approach to equilibrium is produced by the specified transfer law q = k*(level_A_m - level_B_m) with k = 0.025 m^2/s and equal tank areas of 0.5 m^2 each. That gives der(level_A_m) = -(k/A)*Δh and der(level_B_m) = +(k/A)*Δh, so the level difference decays with tau = A/(2k) = 10 s toward equal levels while the level sum remains constant.",
+    "The final q_m3s = 0 is produced by the model's max(0, k*(level_A_m - level_B_m)) floor. Near equilibrium, any tiny negative value of k*(level_A_m - level_B_m) is clipped to zero, preventing reverse flow and leaving a small residual mismatch of 0.399921 m versus 0.400079 m instead of forcing exact equality by reverse correction."
+  ]
+}

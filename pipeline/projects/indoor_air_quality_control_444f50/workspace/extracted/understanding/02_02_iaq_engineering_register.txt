@@ -1,0 +1,121 @@
+Subject: Room CO2 Feedback-Control System - Synthetic Requirements Register
+Document kind: engineering register
+
+## Entities
+* ZON-201 -- Well-mixed room volume  <IAQ-PER-001 [sheet Component_Schedule]>; aliases: volume
+    - Volume: 100 m^3
+    - controlled room air volume: 100 m^3 [current/active]
+* SRC-OA-201 -- Controlled mass-flow source  <[sheet Component_Schedule]>; aliases: freshAir
+    - Outdoor CO2: 300 ppm
+    - outdoor-air CO2 concentration: 300 ppm [current/active]
+* BND-201 -- Pressure boundary  <[sheet Component_Schedule]>; aliases: boundary4
+    - Pressure: 101325 Pa
+* SRC-CO2-201 -- Trace-substance mass source  <[sheet Component_Schedule]>; aliases: peopleSource
+    - C_source: 100 kg/kg
+    - trace-substance concentration parameter: 100 kg/kg [current/active]
+    - C: 100 kg/kg [current/active]
+* SCH-OCC-201 -- Occupancy schedule  <[sheet Component_Schedule]>; aliases: NumberOfPeople
+    - Maximum occupancy: 15 person
+    - maximum occupants: 15 occupants [current/active]
+* SEN-CO2-201 -- CO2 trace sensor  <[sheet Component_Schedule]>; aliases: traceVolume
+    - Nominal concentration: 0.001519 kg/kg
+    - measurement invalid timeout: 60 s [current/active]
+* GAIN-NORM-201 -- Gain  <[sheet Component_Schedule]>; aliases: gainSensor
+    - Gain: 658.327847 1/(kg/kg)
+    - normalized value: 1.0 [current/active]
+    - measured concentration: 1.519E-3 kg/kg [current/active]
+* CTL-CO2-201 -- PID/P controller  <[sheet Component_Schedule]>; aliases: PID
+    - Kp: 6 ACH/normalized
+    - proportional gain: 4.0 ACH per normalized concentration error [superseded] (supersedes/superseded: CR-IAQ-007)
+    - proportional gain: 6.0 ACH per normalized concentration error [current/active]
+    - output bias: 3.5 ACH [current/active]
+    - fallback command: 4.0 ACH [current/active]
+* SET-CO2-201 -- Constant setpoint  <[sheet Component_Schedule]>; aliases: CO2Set
+    - Setpoint: 1 normalized
+    - CO2 setpoint: 1.0 normalized concentration units [current/active]
+* GAIN-AIR-201 -- Gain  <[sheet Component_Schedule]>; aliases: gain1
+    - Gain: -0.0333333333 kg/s per ACH
+    - minimum ACH command: 0.2 ACH [current/active]
+    - maximum ACH command: 6.0 ACH [current/active]
+* GAIN-PEO-201 -- Gain  <[sheet Component_Schedule]>; aliases: gain
+    - Gain: 8.18e-08 kg/(s.person)
+* SET-OA-201 -- Constant  <[sheet Component_Schedule]>; aliases: CAtm
+    - C_out: 0.0004557 kg/kg
+    - fresh-air concentration: 300 ppm [current/active]
+    - factor: 0.3 [current/active]
+    - nominal mass fraction: 1.519E-3 kg/kg [current/active]
+* DUCT-IN-201 -- Duct segment  <[sheet Component_Schedule]>; aliases: ductIn
+    - Ports: 2 count
+* DUCT-OUT-201 -- Duct segment  <[sheet Component_Schedule]>; aliases: ductOut
+    - Ports: 2 count
+* room CO2 sensor signal -- signal
+* sensor-fault indication -- indication
+
+## Relationships
+* SRC-OA-201 connects_to DUCT-IN-201 (Supply -> duct)  <IF-AIR-01 [sheet Interface_Matrix]>
+* DUCT-IN-201 connects_to ZON-201 (Duct -> room)  <IF-AIR-02 [sheet Interface_Matrix]>
+* ZON-201 connects_to DUCT-OUT-201 (Room -> duct)  <IF-AIR-03 [sheet Interface_Matrix]>
+* DUCT-OUT-201 connects_to BND-201 (Duct -> boundary)  <IF-AIR-04 [sheet Interface_Matrix]>
+* SRC-CO2-201 injects_into ZON-201 (Source -> room)  <IF-TRC-01 [sheet Interface_Matrix]>
+* SCH-OCC-201 signals_to GAIN-PEO-201 (Schedule -> gain)  <IF-SIG-01 [sheet Interface_Matrix]>
+* GAIN-PEO-201 signals_to SRC-CO2-201 (Gain -> source)  <IF-SIG-02 [sheet Interface_Matrix]>
+* SET-OA-201 signals_to SRC-OA-201 (Constant -> source)  <IF-SIG-03 [sheet Interface_Matrix]>
+* ZON-201 signals_to SEN-CO2-201 (Room -> sensor)  <IF-SIG-04 [sheet Interface_Matrix]>
+* SEN-CO2-201 signals_to GAIN-NORM-201 (Sensor -> gain)  <IF-SIG-05 [sheet Interface_Matrix]>
+* GAIN-NORM-201 signals_to CTL-CO2-201 (Gain -> controller)  <IF-SIG-06 [sheet Interface_Matrix]>
+* SET-CO2-201 signals_to CTL-CO2-201 (Constant -> controller)  <IF-SIG-07 [sheet Interface_Matrix]>
+* CTL-CO2-201 signals_to GAIN-AIR-201 (Controller -> gain)  <IF-SIG-08 [sheet Interface_Matrix]>
+* GAIN-AIR-201 signals_to SRC-OA-201 (Gain -> fresh air)  <IF-SIG-09 [sheet Interface_Matrix]>
+* Room CO2 Feedback-Control System - Synthetic Requirements Register provides_outdoor_air_to ZON-201 (through the supply-air path)  <IAQ-FUN-001 [sheet Requirements_Register]>
+* Room CO2 Feedback-Control System - Synthetic Requirements Register discharges_room_air_through BND-201 (through the exhaust path)  <IAQ-FUN-001 [sheet Requirements_Register]>
+
+## Requirements
+* The system shall provide outdoor air to the room through the supply-air path and discharge room air through the exhaust path. [current]  <IAQ-FUN-001 [sheet Requirements_Register]>
+* The ventilation controller shall modulate fresh-air mass flow using measured room CO2 concentration as feedback. [current]  <IAQ-FUN-002 [sheet Requirements_Register]>
+* The occupied-room CO2 concentration shall not exceed 1000 ppm under the design occupancy schedule. [current]  <IAQ-FUN-003 [sheet Requirements_Register]>
+* The outdoor-air CO2 concentration used by the demonstration model shall be 300 ppm. [current]  <IAQ-FUN-004 [sheet Requirements_Register]>
+* CO2 generation shall be proportional to the number of occupants scheduled in the room. [current]  <IAQ-FUN-005 [sheet Requirements_Register]>
+* The controlled room air volume shall be 100 m^3. [current]  <IAQ-PER-001 [sheet Requirements_Register]>
+* The nominal air density for ventilation mass-flow conversion shall be 1.2 kg/m^3. [current]  <IAQ-PER-002 [sheet Requirements_Register]>
+* Each occupant shall contribute 8.18E-6 kg/s of CO2 at the design activity level. [current]  <IAQ-PER-003 [sheet Requirements_Register]>
+* The peopleSource implementation shall use a trace-substance concentration parameter of 100 kg/kg and a carrier mass-flow command equal to occupant CO2 generation divided by 100. [current]  <IAQ-PER-004 [sheet Requirements_Register]>
+* The nominal trace-substance concentration used for equation scaling shall be 1.519E-3 kg/kg. [current]  <IAQ-PER-005 [sheet Requirements_Register]>
+* The fresh-air concentration of 300 ppm shall be represented as 0.3 times the nominal 1000 ppm mass fraction. [current]  <IAQ-PER-006 [sheet Requirements_Register]>
+* The controller input shall be normalized such that a measured concentration of 1.519E-3 kg/kg produces a normalized value of 1.0. [current]  <IAQ-CTL-001 [sheet Requirements_Register]>
+* The CO2 setpoint presented to the controller shall be 1.0 in normalized concentration units. [current]  <IAQ-CTL-002 [sheet Requirements_Register]>
+* The ventilation controller output shall represent an air-change-rate command in ACH. [current]  <IAQ-CTL-003 [sheet Requirements_Register]>
+* The ACH command shall be converted to source mass-flow magnitude using room volume, nominal air density and 3600 s/h. [current]  <IAQ-CTL-005 [sheet Requirements_Register]>
+* The simulation source component shall use negative mass-flow sign for air entering the room because of the source-port sign convention. [current]  <IAQ-CTL-006 [sheet Requirements_Register]>
+* The controller shall use the absolute 1000 ppm room concentration as its compliance limit. [current]  <IAQ-CTL-007 [sheet Requirements_Register]>
+* The controller proportional gain shall be 4.0 ACH per normalized concentration error. [superseded]  <IAQ-CTL-008 [sheet Requirements_Register]>
+* The controller proportional gain shall be 6.0 ACH per normalized concentration error with an output bias of 3.5 ACH. [current]  <IAQ-CTL-009 [sheet Requirements_Register]>
+* Integral action shall be disabled in the released hackathon reference run to avoid negative windup during long unoccupied periods. [current]  <IAQ-CTL-010 [sheet Requirements_Register]>
+* The controller demonstration shall use the approved weekday occupancy schedule with a maximum of 15 occupants. [current]  <IAQ-SCH-001 [sheet Requirements_Register]>
+* The number-of-people signal shall be piecewise constant between defined schedule change times. [current]  <IAQ-SCH-002 [sheet Requirements_Register]>
+* The room CO2 measurement shall be represented internally as a Real-valued trace-substance mass fraction in kg/kg. [current]  <IAQ-INT-001 [sheet Requirements_Register]>
+* The controller shall provide a Real-valued ACH command to the airflow conversion gain. [current]  <IAQ-INT-002 [sheet Requirements_Register]>
+* The occupancy schedule shall provide an integer-valued people count to the CO2 source calculation. [current]  <IAQ-INT-003 [sheet Requirements_Register]>
+* The fresh-air source shall receive both a mass-flow command and a trace-substance concentration parameter. [current]  <IAQ-INT-004 [sheet Requirements_Register]>
+* The 24-hour reference simulation shall log room CO2, outdoor CO2, occupant count, ACH command and physical supply mass flow at 60 s intervals. [current]  <IAQ-VER-001 [sheet Requirements_Register]>
+* During the approved 24-hour reference run, the maximum room CO2 concentration shall be no greater than 1000 ppm. [current]  <IAQ-VER-002 [sheet Requirements_Register]>
+* The conversion between ppm and kg/kg for this benchmark shall use molecular weights 44.01 kg/kmol for CO2 and 28.97 kg/kmol for dry air. [current]  <IAQ-DAT-001 [sheet Requirements_Register]>
+* The value C={100} kg/kg in the peopleSource shall not be interpreted as the physical room concentration or a realistic gas mixture composition. [current]  <IAQ-DAT-002 [sheet Requirements_Register]>
+
+## Constraints
+* The ventilation command shall be limited to 0.2 through 6.0 ACH during automatic operation. [current]  <IAQ-CTL-004 [sheet Requirements_Register]>
+
+## Behaviors
+* If the room CO2 sensor signal is invalid for more than 60 s, the controller shall command 4.0 ACH and raise a sensor-fault indication. [current]  <IAQ-SAF-001 [sheet Requirements_Register]>
+
+## Physical relationships
+* C_out = 0.3 * 1.519E-3 kg/kg. [current]  <[sheet Requirements_Register]>
+* m_air = ACH*V*rho/3600. [current]  <[sheet Requirements_Register]>
+* =C_ppm/1E6*MW_CO2/MW_air  <[sheet Parameter_Calculations]>
+* =Cout_ppm/1E6*MW_CO2/MW_air  <[sheet Parameter_Calculations]>
+* =0.3*C_nom_project  <[sheet Parameter_Calculations]>
+* =V*rho  <[sheet Parameter_Calculations]>
+* =V*rho/3600  <[sheet Parameter_Calculations]>
+* =-V*rho/3600  <[sheet Parameter_Calculations]>
+* =G_person/C_source  <[sheet Parameter_Calculations]>
+* =m_people_carrier*C_source  <[sheet Parameter_Calculations]>
+* =1/C_nom_project  <[sheet Parameter_Calculations]>

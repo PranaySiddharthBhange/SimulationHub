@@ -1,0 +1,101 @@
+{
+  "attempt": 1,
+  "entry_class": "SeriesRLCRingingSystem",
+  "files": [
+    {
+      "filename": "IdealClosingSwitch.mo",
+      "role": "component"
+    },
+    {
+      "filename": "SeriesRLCRingingSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Electrical.Analog.Basic.Capacitor",
+    "Modelica.Electrical.Analog.Basic.Resistor",
+    "Modelica.Electrical.Analog.Basic.Inductor",
+    "Modelica.Electrical.Analog.Ideal.IdealClosingSwitch",
+    "Modelica.Blocks.Sources.BooleanStep",
+    "Modelica.Electrical.Analog.Interfaces.Pin",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.RealOutput"
+  ],
+  "corrections": [
+    "Experiment annotation uses StartTime=0 s, StopTime=150 s, and Interval=0.15 s derived from the merged assumption of 1000 intervals over the 150 s run. Tolerance=1e-6 is an assumption because the brief states no solver tolerance.",
+    "The merged AC-08 full-run always condition conflicts with the explicit pre-charged initial condition of 10 V and the required negative overshoot. The model preserves the brief's stated physics and initial condition rather than altering them to satisfy that merged full-run surrogate check.",
+    "The top-level reported variables are declared as RealOutput connectors to keep them explicit and inspectable; they are assigned by equations from simulated component variables so result trajectories are available at times such as 4 s and 8.16 s."
+  ],
+  "references": [
+    {
+      "path": "01_rlc_ringing.txt <AC-01>",
+      "time_column": "time",
+      "reference_column": "switch_closed",
+      "model_variable": "switch_closed",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Discrete switch state check at t=4.0 s."
+    },
+    {
+      "path": "01_rlc_ringing.txt <AC-02>",
+      "time_column": "time",
+      "reference_column": "capacitor_voltage_V",
+      "model_variable": "capacitor_voltage_V",
+      "absolute_tolerance": 0.01,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Merged assumption applies the AC-02 absolute tolerance 0.01 to the capacitor voltage at t=4.0 s."
+    },
+    {
+      "path": "01_rlc_ringing.txt <AC-02>",
+      "time_column": "time",
+      "reference_column": "loop_current_A",
+      "model_variable": "loop_current_A",
+      "absolute_tolerance": 0.01,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Merged assumption applies the AC-02 absolute tolerance 0.01 to the loop current at t=4.0 s."
+    },
+    {
+      "path": "01_rlc_ringing.txt <AC-03>",
+      "time_column": "time",
+      "reference_column": "switch_closed",
+      "model_variable": "switch_closed",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Discrete switch state check at t=6.0 s."
+    },
+    {
+      "path": "01_rlc_ringing.txt <AC-05>",
+      "time_column": "time",
+      "reference_column": "loop_current_A",
+      "model_variable": "loop_current_A",
+      "absolute_tolerance": 0.05,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Loop current magnitude acceptance at t=8.16 s uses reported trajectory data."
+    },
+    {
+      "path": "01_rlc_ringing.txt <AC-07>",
+      "time_column": "time",
+      "reference_column": "capacitor_voltage_V",
+      "model_variable": "capacitor_voltage_V",
+      "absolute_tolerance": 0.05,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Settled capacitor voltage check at t=150 s."
+    },
+    {
+      "path": "01_rlc_ringing.txt <AC-07>",
+      "time_column": "time",
+      "reference_column": "loop_current_A",
+      "model_variable": "loop_current_A",
+      "absolute_tolerance": 0.05,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Settled loop current check at t=150 s."
+    }
+  ]
+}

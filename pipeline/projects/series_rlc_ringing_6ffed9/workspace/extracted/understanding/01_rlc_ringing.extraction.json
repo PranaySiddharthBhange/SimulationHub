@@ -1,0 +1,493 @@
+{
+  "document": "# Series RLC Ringing — Pre-Charged Capacitor Released Into A Resistor And Inductor\n\n## System\n\nA capacitor is charged to a fixed voltage and held there by an open\nswitch. The switch closes once, at a fixed time, connecting the capacitor\ninto a loop with a resistor and an inductor in series. From that instant\nthe capacitor discharges through the loop with no external source of any\nkind -- the electrical analog of the spring-mass-release case in this same\nfolder, and it should show the same underdamped shape: the capacitor\nvoltage overshoots past zero and rings before settling, rather than\ndischarging smoothly to zero.\n\n- Capacitor: C = 1 F, charged to 10 V and held there (switch open) from\n  t = 0 to t = 5 s.\n- Switch: open (no current can flow) from t = 0 to t = 5 s. Closes once at\n  t = 5 s and never opens again for the rest of the run.\n- Resistor: R = 0.2 Ohm, in series with the inductor once the switch\n  closes.\n- Inductor: L = 1 H, in series with the resistor once the switch closes.\n- Governing equation once the switch closes:\n  `L*C*d^2(v_C)/dt^2 + R*C*d(v_C)/dt + v_C = 0`, starting from\n  v_C = 10 V and current 0 A at the instant of closing.\n- Nothing else acts on this loop at any point: no source, no second\n  switch event, no controller.\n\n## Requirements\n\n- REQ-SIM-001: Simulate for 150 seconds and report the capacitor voltage,\n  the loop current, and the switch's open/closed state for the whole run.\n- REQ-FUN-001: While the switch is open (t = 0 to t = 5 s), capacitor\n  voltage shall stay exactly at 10 V and current shall stay exactly at 0 A.\n- REQ-FUN-002: At t = 5 s the switch shall close once, and capacitor\n  voltage shall begin falling from 10 V.\n- REQ-FUN-003: Given the stated R, L, C values, the response shall be\n  underdamped: capacitor voltage shall swing negative (overshoot past\n  0 V) before settling, rather than decaying monotonically to zero.\n- REQ-FUN-004: The ringing shall decay over time and the capacitor voltage\n  shall settle at 0 V well before the end of the run.\n\n## Acceptance checks\n\n- AC-01 switch open pre-close: `switch_closed == 0` at t = 4 s.\n- AC-02 voltage and current frozen while open: `capacitor_voltage_V ==\n  10.0` and `loop_current_A == 0.0` at t = 4 s (absolute tolerance 0.01).\n- AC-03 switch closes on schedule: `switch_closed == 1` at t = 6 s.\n- AC-04 voltage overshoots past zero (confirms genuine ringing, not a\n  smooth discharge): `capacitor_voltage_V <= -5.0` becomes true at some\n  point during the run (ever value == 1.0). Expected around t = 8.16 s,\n  where voltage reaches about -7.29 V.\n- AC-05 current is near zero at the overshoot trough: `abs(loop_current_A)\n  <= 0.05` at t = 8.16 s -- the loop momentarily stops discharging there\n  before ringing back.\n- AC-06 crosses zero before the overshoot trough: `capacitor_voltage_V <=\n  0.0` becomes true at some point between t = 5 s and t = 8 s (ever value\n  == 1.0). Expected around t = 6.68 s.\n- AC-07 settled by the end of the run: `capacitor_voltage_V == 0.0` and\n  `loop_current_A == 0.0` at t = 150 s (absolute tolerance 0.05).\n- AC-08 stays settled, not still ringing: `abs(capacitor_voltage_V) <=\n  0.3` holds for the entire interval t = 50 s to t = 150 s.\n\n## Notes\n\n- This case is the electrical counterpart to `simple_spring_mass_release`\n  in this same folder, by direct analogy (`L <-> m`, `R <-> c`,\n  `1/C <-> k`). The damping ratio and natural frequency are identical:\n  `zeta = (R/2)*sqrt(C/L) = 0.1`, `omega_n = 1/sqrt(L*C) = 1 rad/s`, so\n  every acceptance-check timing above is the same closed-form solution\n  used there, scaled by the 10 V starting voltage instead of 0.10 m --\n  confirmed numerically, not estimated.\n- `Modelica.Electrical.Analog` provides the resistor, inductor, capacitor,\n  and ideal switch components this case needs directly; there is no\n  reason to hand-roll the electrical equations here.\n- There is exactly one event in this run (the switch closing once).\n  Nothing re-opens the switch, and no source is ever connected again.\n",
+  "subject": "Series RLC Ringing — Pre-Charged Capacitor Released Into A Resistor And Inductor",
+  "kind": "requirement specification",
+  "entities": [
+    {
+      "name": "capacitor",
+      "kind": "component",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "capacitance",
+          "value": "1",
+          "unit": "F",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Capacitor: C = 1 F"
+        },
+        {
+          "quantity": "voltage",
+          "value": "10",
+          "unit": "V",
+          "status": "current",
+          "supersedes": "",
+          "quote": "charged to 10 V"
+        },
+        {
+          "quantity": "voltage",
+          "value": "10",
+          "unit": "V",
+          "status": "current",
+          "supersedes": "",
+          "quote": "v_C = 10 V"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Capacitor: C = 1 F, charged to 10 V and held there (switch open) from\n  t = 0 to t = 5 s."
+    },
+    {
+      "name": "switch",
+      "kind": "component",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "time open from",
+          "value": "0",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "t = 0 to t = 5 s"
+        },
+        {
+          "quantity": "time open to",
+          "value": "5",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "t = 0 to t = 5 s"
+        },
+        {
+          "quantity": "closing time",
+          "value": "5",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "t = 5 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Switch: open (no current can flow) from t = 0 to t = 5 s. Closes once at\n  t = 5 s and never opens again for the rest of the run."
+    },
+    {
+      "name": "resistor",
+      "kind": "component",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "resistance",
+          "value": "0.2",
+          "unit": "Ohm",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Resistor: R = 0.2 Ohm"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Resistor: R = 0.2 Ohm, in series with the inductor once the switch\n  closes."
+    },
+    {
+      "name": "inductor",
+      "kind": "component",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "inductance",
+          "value": "1",
+          "unit": "H",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Inductor: L = 1 H"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Inductor: L = 1 H, in series with the resistor once the switch closes."
+    },
+    {
+      "name": "loop current",
+      "kind": "signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "current",
+          "value": "0",
+          "unit": "A",
+          "status": "current",
+          "supersedes": "",
+          "quote": "current 0 A at the instant of closing"
+        },
+        {
+          "quantity": "current",
+          "value": "0.0",
+          "unit": "A",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`loop_current_A == 0.0` at t = 4 s"
+        },
+        {
+          "quantity": "current limit",
+          "value": "0.05",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "<= 0.05"
+        },
+        {
+          "quantity": "current",
+          "value": "0.0",
+          "unit": "A",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`loop_current_A == 0.0` at t = 150 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the loop current"
+    },
+    {
+      "name": "capacitor voltage",
+      "kind": "signal",
+      "aliases": [
+        "v_C",
+        "capacitor_voltage_V"
+      ],
+      "values": [
+        {
+          "quantity": "voltage",
+          "value": "10",
+          "unit": "V",
+          "status": "current",
+          "supersedes": "",
+          "quote": "v_C = 10 V"
+        },
+        {
+          "quantity": "voltage",
+          "value": "10.0",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`capacitor_voltage_V ==\n  10.0`"
+        },
+        {
+          "quantity": "threshold",
+          "value": "-5.0",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`capacitor_voltage_V <= -5.0`"
+        },
+        {
+          "quantity": "voltage",
+          "value": "-7.29",
+          "unit": "V",
+          "status": "current",
+          "supersedes": "",
+          "quote": "about -7.29 V"
+        },
+        {
+          "quantity": "threshold",
+          "value": "0.0",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`capacitor_voltage_V <=\n  0.0`"
+        },
+        {
+          "quantity": "voltage",
+          "value": "0.0",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`capacitor_voltage_V == 0.0`"
+        },
+        {
+          "quantity": "magnitude limit",
+          "value": "0.3",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`abs(capacitor_voltage_V) <=\n  0.3`"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the capacitor voltage"
+    },
+    {
+      "name": "switch_closed",
+      "kind": "signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "state",
+          "value": "0",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`switch_closed == 0`"
+        },
+        {
+          "quantity": "state",
+          "value": "1",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`switch_closed == 1`"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "switch_closed"
+    },
+    {
+      "name": "zeta",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "damping ratio",
+          "value": "0.1",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`zeta = (R/2)*sqrt(C/L) = 0.1`"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "`zeta = (R/2)*sqrt(C/L) = 0.1`"
+    },
+    {
+      "name": "omega_n",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "natural frequency",
+          "value": "1",
+          "unit": "rad/s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`omega_n = 1/sqrt(L*C) = 1 rad/s`"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "`omega_n = 1/sqrt(L*C) = 1 rad/s`"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "resistor",
+      "predicate": "in series with",
+      "object": "inductor",
+      "detail": "once the switch closes",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Resistor: R = 0.2 Ohm, in series with the inductor once the switch\n  closes."
+    },
+    {
+      "subject": "inductor",
+      "predicate": "in series with",
+      "object": "resistor",
+      "detail": "once the switch closes",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Inductor: L = 1 H, in series with the resistor once the switch closes."
+    },
+    {
+      "subject": "switch",
+      "predicate": "connects into loop with",
+      "object": "capacitor",
+      "detail": "The switch closes once, at a fixed time, connecting the capacitor into a loop with a resistor and an inductor in series.",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The switch closes once, at a fixed time, connecting the capacitor\ninto a loop with a resistor and an inductor in series."
+    },
+    {
+      "subject": "capacitor",
+      "predicate": "discharges through",
+      "object": "resistor",
+      "detail": "through the loop after switch closes",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the capacitor discharges through the loop"
+    },
+    {
+      "subject": "capacitor",
+      "predicate": "discharges through",
+      "object": "inductor",
+      "detail": "through the loop after switch closes",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the capacitor discharges through the loop"
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "L*C*d^2(v_C)/dt^2 + R*C*d(v_C)/dt + v_C = 0",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`L*C*d^2(v_C)/dt^2 + R*C*d(v_C)/dt + v_C = 0`"
+    },
+    {
+      "category": "requirement",
+      "statement": "Simulate for 150 seconds and report the capacitor voltage, the loop current, and the switch's open/closed state for the whole run.",
+      "ref": "REQ-SIM-001",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-SIM-001: Simulate for 150 seconds and report the capacitor voltage,\n  the loop current, and the switch's open/closed state for the whole run."
+    },
+    {
+      "category": "requirement",
+      "statement": "While the switch is open (t = 0 to t = 5 s), capacitor voltage shall stay exactly at 10 V and current shall stay exactly at 0 A.",
+      "ref": "REQ-FUN-001",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-FUN-001: While the switch is open (t = 0 to t = 5 s), capacitor\n  voltage shall stay exactly at 10 V and current shall stay exactly at 0 A."
+    },
+    {
+      "category": "requirement",
+      "statement": "At t = 5 s the switch shall close once, and capacitor voltage shall begin falling from 10 V.",
+      "ref": "REQ-FUN-002",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-FUN-002: At t = 5 s the switch shall close once, and capacitor\n  voltage shall begin falling from 10 V."
+    },
+    {
+      "category": "requirement",
+      "statement": "Given the stated R, L, C values, the response shall be underdamped: capacitor voltage shall swing negative (overshoot past 0 V) before settling, rather than decaying monotonically to zero.",
+      "ref": "REQ-FUN-003",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-FUN-003: Given the stated R, L, C values, the response shall be\n  underdamped: capacitor voltage shall swing negative (overshoot past\n  0 V) before settling, rather than decaying monotonically to zero."
+    },
+    {
+      "category": "requirement",
+      "statement": "The ringing shall decay over time and the capacitor voltage shall settle at 0 V well before the end of the run.",
+      "ref": "REQ-FUN-004",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-FUN-004: The ringing shall decay over time and the capacitor voltage\n  shall settle at 0 V well before the end of the run."
+    },
+    {
+      "category": "constraint",
+      "statement": "`switch_closed == 0` at t = 4 s.",
+      "ref": "AC-01",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-01 switch open pre-close: `switch_closed == 0` at t = 4 s."
+    },
+    {
+      "category": "constraint",
+      "statement": "`capacitor_voltage_V == 10.0` and `loop_current_A == 0.0` at t = 4 s (absolute tolerance 0.01).",
+      "ref": "AC-02",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-02 voltage and current frozen while open: `capacitor_voltage_V ==\n  10.0` and `loop_current_A == 0.0` at t = 4 s (absolute tolerance 0.01)."
+    },
+    {
+      "category": "constraint",
+      "statement": "`switch_closed == 1` at t = 6 s.",
+      "ref": "AC-03",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-03 switch closes on schedule: `switch_closed == 1` at t = 6 s."
+    },
+    {
+      "category": "constraint",
+      "statement": "`capacitor_voltage_V <= -5.0` becomes true at some point during the run (ever value == 1.0). Expected around t = 8.16 s, where voltage reaches about -7.29 V.",
+      "ref": "AC-04",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-04 voltage overshoots past zero (confirms genuine ringing, not a\n  smooth discharge): `capacitor_voltage_V <= -5.0` becomes true at some\n  point during the run (ever value == 1.0). Expected around t = 8.16 s,\n  where voltage reaches about -7.29 V."
+    },
+    {
+      "category": "constraint",
+      "statement": "`abs(loop_current_A) <= 0.05` at t = 8.16 s -- the loop momentarily stops discharging there before ringing back.",
+      "ref": "AC-05",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-05 current is near zero at the overshoot trough: `abs(loop_current_A)\n  <= 0.05` at t = 8.16 s -- the loop momentarily stops discharging there\n  before ringing back."
+    },
+    {
+      "category": "constraint",
+      "statement": "`capacitor_voltage_V <= 0.0` becomes true at some point between t = 5 s and t = 8 s (ever value == 1.0). Expected around t = 6.68 s.",
+      "ref": "AC-06",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-06 crosses zero before the overshoot trough: `capacitor_voltage_V <=\n  0.0` becomes true at some point between t = 5 s and t = 8 s (ever value\n  == 1.0). Expected around t = 6.68 s."
+    },
+    {
+      "category": "constraint",
+      "statement": "`capacitor_voltage_V == 0.0` and `loop_current_A == 0.0` at t = 150 s (absolute tolerance 0.05).",
+      "ref": "AC-07",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-07 settled by the end of the run: `capacitor_voltage_V == 0.0` and\n  `loop_current_A == 0.0` at t = 150 s (absolute tolerance 0.05)."
+    },
+    {
+      "category": "constraint",
+      "statement": "`abs(capacitor_voltage_V) <= 0.3` holds for the entire interval t = 50 s to t = 150 s.",
+      "ref": "AC-08",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-08 stays settled, not still ringing: `abs(capacitor_voltage_V) <=\n  0.3` holds for the entire interval t = 50 s to t = 150 s."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "zeta = (R/2)*sqrt(C/L) = 0.1",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`zeta = (R/2)*sqrt(C/L) = 0.1`"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "omega_n = 1/sqrt(L*C) = 1 rad/s",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "`omega_n = 1/sqrt(L*C) = 1 rad/s`"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

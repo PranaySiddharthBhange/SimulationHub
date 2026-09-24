@@ -1,0 +1,38 @@
+Subject: Seminar / Project Room 201
+Document kind: engineering register
+
+## Entities
+* Seminar / Project Room 201 -- space; aliases: RM-201, 2f8a7c55-ROOM-201-SYNTH
+    - gross floor area: 40.0 m2
+    - net floor area: 38.6 m2
+    - clear height: 2.59 m
+    - reported volume: 100.0 m3
+    - design people: 15
+* ZON-201 -- zone
+* Level 02 -- level
+* SUP-201-A -- air connection
+    - x position: 2.2 m
+    - y position: 1.1 m
+    - z position: 2.45 m
+* OA-VENT-2 -- air system
+* EXH-201-A -- air connection
+    - x position: 8.4 m
+    - y position: 3.6 m
+    - z position: 2.45 m
+* EA-VENT-2 -- air system
+* CO2 sensor -- control placeholder
+* occupancy source -- control placeholder
+
+## Relationships
+* Seminar / Project Room 201 in zone ZON-201
+* Seminar / Project Room 201 on level Level 02
+* SUP-201-A serves as supply connection for Seminar / Project Room 201 (role supply)
+* SUP-201-A part of system OA-VENT-2
+* EXH-201-A serves as exhaust connection for Seminar / Project Room 201 (role exhaust)
+* EXH-201-A part of system EA-VENT-2
+* CO2 sensor located at Seminar / Project Room 201 (north wall, 1.5 m AFF)
+* occupancy source located at Seminar / Project Room 201 (logical schedule)
+
+## Constraints
+* BIM export is authoritative for spatial identity and room volume only. [current]
+* It is not a controls design source. [current]

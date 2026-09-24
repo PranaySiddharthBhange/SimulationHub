@@ -1,0 +1,214 @@
+{
+  "document": "[page 1]\n Synthetic CO2 Room Transmitter - Technical Datasheet\n\n Supplier model CO2-TX-2K - Revision D\n\n Product summary\n Synthetic wall-mount nondispersive-infrared CO2 transmitter for building ventilation applications. This\n datasheet is provided as a hardware evidence source; the baseline simulation uses an ideal concentration\n sensor but retains the same measurement range.\n    Parameter                       Value\n    Measurement principle             NDIR, self-calibrating\n   CO2 range                      0 to 2000 ppm\n    Accuracy at 25 C                   ±(40 ppm + 3% of reading)\n    Resolution                       1 ppm\n     Typical response time (T63)         90 s\n    Analog output                      0-10 V = 0-2000 ppm\n     Digital output                    BACnet MS/TP, CO2 object in ppm\n    Supply                          24 VAC/VDC\n    Operating temperature             0 to 50 C\n   Recommended mounting             1.1 to 1.7 m above finished floor\n     Fault indication                     Value flagged invalid on internal diagnostics\n\n Project integration note\n The physical device reports ppm. ICD-IAQ-03 defines the internal simulation/controller concentration signal\n as trace-substance mass fraction in kg/kg, followed by a normalization gain. Therefore a SysML model may\n legitimately represent both a sensor display quantity in ppm and an internal feedback quantity in kg/kg,\n provided the conversion/interface is explicit.\n\n\n\n\n\nSynthetic hackathon engineering evidence                                                                    Page 1\n[page 1 also supplied as visual image 1]",
+  "subject": "Synthetic CO2 Room Transmitter",
+  "kind": "datasheet",
+  "entities": [
+    {
+      "name": "Synthetic CO2 Room Transmitter",
+      "kind": "CO2 transmitter",
+      "aliases": [
+        "CO2-TX-2K"
+      ],
+      "values": [
+        {
+          "quantity": "CO2 range",
+          "value": "0 to 2000",
+          "unit": "ppm",
+          "status": "current",
+          "supersedes": "",
+          "quote": "CO2 range                      0 to 2000 ppm"
+        },
+        {
+          "quantity": "accuracy at 25 C",
+          "value": "±(40 ppm + 3% of reading)",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Accuracy at 25 C                   ±(40 ppm + 3% of reading)"
+        },
+        {
+          "quantity": "resolution",
+          "value": "1",
+          "unit": "ppm",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Resolution                       1 ppm"
+        },
+        {
+          "quantity": "typical response time (T63)",
+          "value": "90",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Typical response time (T63)         90 s"
+        },
+        {
+          "quantity": "analog output range",
+          "value": "0-10",
+          "unit": "V",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Analog output                      0-10 V = 0-2000 ppm"
+        },
+        {
+          "quantity": "analog output mapped concentration range",
+          "value": "0-2000",
+          "unit": "ppm",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Analog output                      0-10 V = 0-2000 ppm"
+        },
+        {
+          "quantity": "supply",
+          "value": "24",
+          "unit": "VAC/VDC",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Supply                          24 VAC/VDC"
+        },
+        {
+          "quantity": "operating temperature",
+          "value": "0 to 50",
+          "unit": "C",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Operating temperature             0 to 50 C"
+        },
+        {
+          "quantity": "recommended mounting height",
+          "value": "1.1 to 1.7",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Recommended mounting             1.1 to 1.7 m above finished floor"
+        }
+      ],
+      "ref": "CO2-TX-2K",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Supplier model CO2-TX-2K - Revision D"
+    },
+    {
+      "name": "ICD-IAQ-03",
+      "kind": "interface control document",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "ICD-IAQ-03 defines the internal simulation/controller concentration signal"
+    },
+    {
+      "name": "physical device",
+      "kind": "device",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The physical device reports ppm."
+    },
+    {
+      "name": "internal simulation/controller concentration signal",
+      "kind": "signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "quantity basis",
+          "value": "kg/kg",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "as trace-substance mass fraction in kg/kg"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "internal simulation/controller concentration signal"
+    },
+    {
+      "name": "sensor display quantity",
+      "kind": "quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "display unit",
+          "value": "ppm",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "sensor display quantity in ppm"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "sensor display quantity in ppm"
+    },
+    {
+      "name": "internal feedback quantity",
+      "kind": "quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "feedback unit",
+          "value": "kg/kg",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "internal feedback quantity in kg/kg"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "internal feedback quantity in kg/kg"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "physical device",
+      "predicate": "reports",
+      "object": "sensor display quantity",
+      "detail": "ppm",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The physical device reports ppm."
+    },
+    {
+      "subject": "ICD-IAQ-03",
+      "predicate": "defines",
+      "object": "internal simulation/controller concentration signal",
+      "detail": "as trace-substance mass fraction in kg/kg, followed by a normalization gain",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "ICD-IAQ-03 defines the internal simulation/controller concentration signal\n as trace-substance mass fraction in kg/kg, followed by a normalization gain."
+    },
+    {
+      "subject": "Synthetic CO2 Room Transmitter",
+      "predicate": "has digital output",
+      "object": "internal simulation/controller concentration signal",
+      "detail": "BACnet MS/TP, CO2 object in ppm",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Digital output                    BACnet MS/TP, CO2 object in ppm"
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "0-10 V = 0-2000 ppm",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "0-10 V = 0-2000 ppm"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}
