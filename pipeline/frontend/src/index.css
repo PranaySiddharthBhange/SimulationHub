@@ -108,3 +108,33 @@ body {
 .fade-up {
   animation: fade-up 0.22s ease-out both;
 }
+
+code[class*='language-'] .token.comment,
+code[class*='language-'] .token.prolog,
+code[class*='language-'] .token.doctype,
+code[class*='language-'] .token.cdata {
+  color: var(--text-dim);
+  font-style: italic;
+}
+code[class*='language-'] .token.keyword {
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+code[class*='language-'] .token.builtin,
+code[class*='language-'] .token.function,
+code[class*='language-'] .token.class-name,
+code[class*='language-'] .token.property {
+  color: var(--blue);
+}
+code[class*='language-'] .token.boolean,
+code[class*='language-'] .token.number {
+  color: var(--violet);
+}
+code[class*='language-'] .token.string,
+code[class*='language-'] .token.char {
+  color: var(--green);
+}
+code[class*='language-'] .token.operator,
+code[class*='language-'] .token.punctuation {
+  color: var(--text-muted);
+}

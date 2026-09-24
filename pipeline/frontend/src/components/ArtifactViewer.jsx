@@ -1,12 +1,15 @@
 import {
   Check,
   ChartLine,
+  ChevronsLeft,
+  ChevronsRight,
   ClipboardCheck,
   Copy,
   FileCode2,
   FileText,
   FolderTree,
   GitBranch,
+  HelpCircle,
   Loader2,
   Maximize2,
   RotateCcw,
@@ -14,20 +17,24 @@ import {
   ZoomIn,
   ZoomOut,
 } from 'lucide-react'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import mermaid from 'mermaid'
 import { getArtifact } from '../api'
+import { useZoomPan } from '../hooks/useZoomPan'
+import CodeBlock, { languageForFilename } from './CodeBlock'
 import FileBrowser from './FileBrowser'
 import MarkdownView from './MarkdownView'
 
 const TABS = [
-  { key: 'understanding', label: 'Understanding', icon: FileText, kind: 'markdown' },
-  { key: 'diagram', label: 'Flow diagram', icon: GitBranch, kind: 'diagram' },
-  { key: 'sysml', label: 'SysML v2', icon: FileCode2, kind: 'code' },
-  { key: 'modelica', label: 'Modelica', icon: FileCode2, kind: 'code' },
-  { key: 'validation', label: 'Validation', icon: ClipboardCheck, kind: 'validation' },
-  { key: 'result', label: 'Result', icon: ChartLine, kind: 'result' },
-  { key: 'files', label: 'Files', icon: FolderTree, kind: 'files' },
+  { key: 'files', label: 'Files', icon: FolderTree, kind: 'files', ready: 'Source uploads', locked: 'Source uploads' },
+  { key: 'understanding', label: 'Understanding', icon: FileText, kind: 'markdown', ready: 'From Read', locked: 'Unlocks at Read' },
+  { key: 'clarified', label: 'Questions', icon: HelpCircle, kind: 'clarifications', ready: 'Answers on record', locked: 'Unlocks at Confirm' },
+  { key: 'diagram', label: 'Flow diagram', icon: GitBranch, kind: 'diagram', ready: 'System flow', locked: 'Unlocks at Combine' },
+  { key: 'sysml', label: 'SysML v2', icon: FileCode2, kind: 'code', ready: 'Generated model', locked: 'Unlocks at Design' },
+  { key: 'modelica', label: 'Modelica', icon: FileCode2, kind: 'code', ready: 'Compiled bundle', locked: 'Unlocks at Build' },
+  { key: 'result', label: 'Result', icon: ChartLine, kind: 'result', ready: 'Simulation plots', locked: 'Unlocks at Build' },
+  { key: 'validation', label: 'Validation', icon: ClipboardCheck, kind: 'validation', ready: 'Independent review', locked: 'Unlocks at Verify' },
 ]
 
 // The file browser reads the project folder directly, so it has nothing to wait
@@ -55,41 +62,24 @@ function ReportSection({ title, items }) {
 }
 
 function PlotModal({ projectId, plot, onClose }) {
-  const [scale, setScale] = useState(1)
-  const viewportRef = useRef(null)
-  const dragRef = useRef(null)
+  const { scale, min, max, step, viewportRef, changeScale, handlers } = useZoomPan({ min: 1, max: 5, step: 0.25 })
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     const onKeyDown = (event) => {
       if (event.key === 'Escape') onClose()
-      if (event.key === '+' || event.key === '=') setScale((value) => Math.min(5, value + 0.25))
-      if (event.key === '-') setScale((value) => Math.max(1, value - 0.25))
+      if (event.key === '+' || event.key === '=') changeScale(scale + step)
+      if (event.key === '-') changeScale(scale - step)
     }
     window.addEventListener('keydown', onKeyDown)
     return () => {
       document.body.style.overflow = previousOverflow
       window.removeEventListener('keydown', onKeyDown)
     }
-  }, [onClose])
+  }, [onClose, scale, step, changeScale])
 
-  const changeScale = (nextScale) => {
-    const viewport = viewportRef.current
-    if (!viewport) {
-      setScale(nextScale)
-      return
-    }
-    const xRatio = (viewport.scrollLeft + viewport.clientWidth / 2) / viewport.scrollWidth
-    const yRatio = (viewport.scrollTop + viewport.clientHeight / 2) / viewport.scrollHeight
-    setScale(nextScale)
-    requestAnimationFrame(() => {
-      viewport.scrollLeft = xRatio * viewport.scrollWidth - viewport.clientWidth / 2
-      viewport.scrollTop = yRatio * viewport.scrollHeight - viewport.clientHeight / 2
-    })
-  }
-
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
       role="dialog"
@@ -108,8 +98,8 @@ function PlotModal({ projectId, plot, onClose }) {
           <div className="flex shrink-0 items-center gap-1.5">
             <button
               type="button"
-              onClick={() => changeScale(Math.max(1, scale - 0.25))}
-              disabled={scale <= 1}
+              onClick={() => changeScale(scale - step)}
+              disabled={scale <= min}
               className="rounded-lg border border-[var(--border)] p-2 text-[var(--text-muted)] hover:bg-[var(--bg-soft)] disabled:opacity-35"
               aria-label="Zoom out"
             >
@@ -120,8 +110,8 @@ function PlotModal({ projectId, plot, onClose }) {
             </span>
             <button
               type="button"
-              onClick={() => changeScale(Math.min(5, scale + 0.25))}
-              disabled={scale >= 5}
+              onClick={() => changeScale(scale + step)}
+              disabled={scale >= max}
               className="rounded-lg border border-[var(--border)] p-2 text-[var(--text-muted)] hover:bg-[var(--bg-soft)] disabled:opacity-35"
               aria-label="Zoom in"
             >
@@ -129,7 +119,7 @@ function PlotModal({ projectId, plot, onClose }) {
             </button>
             <button
               type="button"
-              onClick={() => changeScale(1)}
+              onClick={() => changeScale(min)}
               className="rounded-lg border border-[var(--border)] p-2 text-[var(--text-muted)] hover:bg-[var(--bg-soft)]"
               aria-label="Fit graph to window"
               title="Fit to window"
@@ -148,37 +138,7 @@ function PlotModal({ projectId, plot, onClose }) {
         <div
           ref={viewportRef}
           className="relative flex-1 cursor-grab overflow-auto bg-[#e8eaed] active:cursor-grabbing"
-          onWheel={(event) => {
-            event.preventDefault()
-            changeScale(Math.max(1, Math.min(5, scale + (event.deltaY < 0 ? 0.25 : -0.25))))
-          }}
-          onDoubleClick={() => changeScale(scale === 1 ? 2 : 1)}
-          onPointerDown={(event) => {
-            if (event.button !== 0) return
-            const viewport = viewportRef.current
-            dragRef.current = {
-              x: event.clientX,
-              y: event.clientY,
-              left: viewport.scrollLeft,
-              top: viewport.scrollTop,
-            }
-            viewport.setPointerCapture(event.pointerId)
-          }}
-          onPointerMove={(event) => {
-            if (!dragRef.current) return
-            const viewport = viewportRef.current
-            viewport.scrollLeft = dragRef.current.left - (event.clientX - dragRef.current.x)
-            viewport.scrollTop = dragRef.current.top - (event.clientY - dragRef.current.y)
-          }}
-          onPointerUp={(event) => {
-            dragRef.current = null
-            if (viewportRef.current?.hasPointerCapture(event.pointerId)) {
-              viewportRef.current.releasePointerCapture(event.pointerId)
-            }
-          }}
-          onPointerCancel={() => {
-            dragRef.current = null
-          }}
+          {...handlers}
         >
           <div
             className="flex items-center justify-center p-6"
@@ -192,11 +152,9 @@ function PlotModal({ projectId, plot, onClose }) {
             />
           </div>
         </div>
-        <div className="shrink-0 border-t border-[var(--border)] bg-white px-4 py-2 text-center text-[11px] text-[var(--text-dim)]">
-          Mouse wheel or +/ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã¢â‚¬Â¹ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â‚¬Å¾Ã‚Â¢ to zoom ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· drag to pan ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· double-click to toggle 200% ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â· Esc to close
-        </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }
 
@@ -238,6 +196,94 @@ function CheckResults({ items }) {
           )
         })}
       </ul>
+    </div>
+  )
+}
+
+const OUTCOME_STYLE = {
+  confirmed: { label: 'Confirmed suggestion', fg: 'var(--green)', bg: '#edf3ec' },
+  changed_by_human: { label: 'Overridden', fg: 'var(--amber)', bg: '#faf1de' },
+  carried_over: { label: 'Carried over', fg: 'var(--blue)', bg: '#eaf1f4' },
+  answered: { label: 'Answered', fg: 'var(--green)', bg: '#edf3ec' },
+  unanswered: { label: 'Not answered', fg: 'var(--red)', bg: '#f8eae7' },
+}
+
+// Confirm (Merge's clarify pause) writes every question it raises to
+// clarified_answers.json -- the artifact `data.decisions` below comes from.
+// Design (Stage 2) can raise its OWN follow-up questions on the first SysML
+// draft, but never persists them anywhere: they only ever exist as
+// `clarification_requested` / `clarification_answered` events in the run
+// log (see reasoner_pipeline.py `execute_reasoner_stage_2`), so they have to
+// be recovered from the same `logs` the Activity panel already streams.
+function stage2Decisions(logs = []) {
+  const decisions = []
+  let pending = null
+  for (const event of logs) {
+    if (event.event === 'clarification_requested' && event.stage === 2) {
+      pending = event.questions || []
+    } else if (event.event === 'clarification_answered' && event.stage === 2 && pending) {
+      const answers = event.answers || {}
+      for (const q of pending) {
+        const given = (answers[q.id] || '').trim()
+        const suggested = (q.suggested_value || '').trim()
+        const outcome = !given ? 'unanswered' : !suggested ? 'answered' : given === suggested ? 'confirmed' : 'changed_by_human'
+        decisions.push({ id: q.id, question: q.question, suggested: q.suggested_value, answer: given, outcome, origin: 'Design' })
+      }
+      pending = null
+    }
+  }
+  if (pending) {
+    for (const q of pending) {
+      decisions.push({ id: q.id, question: q.question, suggested: q.suggested_value, answer: '', outcome: 'unanswered', origin: 'Design' })
+    }
+  }
+  return decisions
+}
+
+function ClarificationsView({ data, logs }) {
+  const confirmDecisions = (data?.decisions || []).map((d) => ({ ...d, suggested: d.merge_suggested, origin: 'Confirm' }))
+  const decisions = [...confirmDecisions, ...stage2Decisions(logs)]
+  if (decisions.length === 0) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-[var(--text-dim)]">
+        <HelpCircle className="h-6 w-6 opacity-40" />
+        <span className="text-[13px]">No open questions were raised for this brief.</span>
+      </div>
+    )
+  }
+  return (
+    <div className="fade-up flex flex-col gap-3 px-5 py-4">
+      {decisions.map((d, i) => {
+        const style = OUTCOME_STYLE[d.outcome] || OUTCOME_STYLE.answered
+        const showSuggested = d.suggested && d.suggested !== d.answer
+        return (
+          <div key={d.id || i} className="rounded-xl border border-[var(--border)] px-4 py-3">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <span className="mr-2 rounded-full bg-[var(--bg-soft)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--text-dim)]">
+                  {d.origin}
+                </span>
+                <span className="text-[13px] font-medium text-[var(--text)]">{d.question}</span>
+              </div>
+              <span
+                className="shrink-0 rounded-full px-2 py-0.5 text-[10.5px] font-semibold"
+                style={{ background: style.bg, color: style.fg }}
+              >
+                {style.label}
+              </span>
+            </div>
+            <div className="mt-2 text-[12.5px] text-[var(--text-muted)]">
+              <span className="text-[var(--text-dim)]">Answer — </span>
+              <span className="text-[var(--text)]">{d.answer || '—'}</span>
+            </div>
+            {showSuggested && (
+              <div className="mt-1 text-[11.5px] text-[var(--text-dim)]">
+                Suggested: <span className="line-through">{d.suggested}</span>
+              </div>
+            )}
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -322,31 +368,198 @@ function CopyButton({ text }) {
   )
 }
 
+// Injects rendered Mermaid SVG markup and resizes it by setting real pixel
+// width/height (derived from its own viewBox), not a CSS transform: a
+// transform only repaints the element bigger/smaller, it does not grow the
+// scrollable-overflow area of an `overflow-auto` ancestor in this layout, so
+// wheel-zooming in never gave the viewport anything to actually scroll or
+// drag-pan through. Real layout sizing does.
+function SvgCanvas({ svg, scale = 1, onSize }) {
+  const ref = useRef(null)
+  const naturalSizeRef = useRef(null)
+
+  useEffect(() => {
+    if (!ref.current) return
+    ref.current.innerHTML = svg || ''
+    const svgEl = ref.current.querySelector('svg')
+    if (!svgEl) return
+    const box = svgEl.viewBox?.baseVal
+    const natural = box?.width ? { width: box.width, height: box.height } : svgEl.getBBox()
+    naturalSizeRef.current = natural.width && natural.height ? natural : null
+    if (naturalSizeRef.current) {
+      svgEl.style.width = `${naturalSizeRef.current.width * scale}px`
+      svgEl.style.height = `${naturalSizeRef.current.height * scale}px`
+      onSize?.(naturalSizeRef.current)
+    }
+  }, [svg]) // eslint-disable-line react-hooks/exhaustive-deps -- onSize is stable per caller; svg is the real trigger
+
+  useEffect(() => {
+    const svgEl = ref.current?.querySelector('svg')
+    const natural = naturalSizeRef.current
+    if (!svgEl || !natural) return
+    svgEl.style.width = `${natural.width * scale}px`
+    svgEl.style.height = `${natural.height * scale}px`
+  }, [scale])
+
+  return <div ref={ref} className="inline-block" aria-label="System flow diagram" />
+}
+
+// A diagram is usually bigger than the panel showing it. Scale it down (never
+// up) to fit within the viewport on first render, so the whole thing is
+// visible instead of only the top-left corner at native size.
+function fitScaleFor(viewport, size, padding = 32) {
+  if (!viewport || !size?.width || !size?.height) return 1
+  const availableWidth = Math.max(1, viewport.clientWidth - padding)
+  const availableHeight = Math.max(1, viewport.clientHeight - padding)
+  return Math.min(1, availableWidth / size.width, availableHeight / size.height)
+}
+
+function ZoomToolbar({ zoom, onMaximize }) {
+  const { scale, min, max, zoomOut, zoomIn, reset } = zoom
+  return (
+    <div className="absolute right-3 top-3 flex items-center gap-0.5 rounded-lg border border-[var(--border)] bg-[var(--panel)]/95 p-1 shadow-sm backdrop-blur-sm">
+      <button
+        type="button"
+        onClick={zoomOut}
+        disabled={scale <= min}
+        className="rounded-md p-1.5 text-[var(--text-muted)] hover:bg-[var(--bg-soft)] disabled:opacity-35"
+        aria-label="Zoom out"
+      >
+        <ZoomOut className="h-3.5 w-3.5" />
+      </button>
+      <span className="w-11 text-center font-mono text-[10.5px] text-[var(--text-muted)]">
+        {Math.round(scale * 100)}%
+      </span>
+      <button
+        type="button"
+        onClick={zoomIn}
+        disabled={scale >= max}
+        className="rounded-md p-1.5 text-[var(--text-muted)] hover:bg-[var(--bg-soft)] disabled:opacity-35"
+        aria-label="Zoom in"
+      >
+        <ZoomIn className="h-3.5 w-3.5" />
+      </button>
+      <button
+        type="button"
+        onClick={reset}
+        className="rounded-md p-1.5 text-[var(--text-muted)] hover:bg-[var(--bg-soft)]"
+        aria-label="Fit diagram to window"
+        title="Fit to window"
+      >
+        <RotateCcw className="h-3.5 w-3.5" />
+      </button>
+      {onMaximize && (
+        <button
+          type="button"
+          onClick={onMaximize}
+          className="rounded-md p-1.5 text-[var(--text-muted)] hover:bg-[var(--bg-soft)]"
+          aria-label="Open full screen"
+          title="Open full screen"
+        >
+          <Maximize2 className="h-3.5 w-3.5" />
+        </button>
+      )}
+    </div>
+  )
+}
+
+function DiagramModal({ svg, onClose }) {
+  const zoom = useZoomPan({ min: 0.1, max: 5, step: 0.25 })
+  const { scale, min, step, viewportRef, changeScale, setFit, handlers } = zoom
+  const didFitRef = useRef(false)
+
+  const handleSize = useCallback(
+    (size) => {
+      if (didFitRef.current) return
+      didFitRef.current = true
+      setFit(Math.max(min, fitScaleFor(viewportRef.current, size, 80)))
+    },
+    [min, setFit, viewportRef],
+  )
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') onClose()
+      if (event.key === '+' || event.key === '=') changeScale(scale + step)
+      if (event.key === '-') changeScale(scale - step)
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener('keydown', onKeyDown)
+    }
+  }, [onClose, scale, step, changeScale])
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-label="System flow diagram viewer"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) onClose()
+      }}
+    >
+      <div className="flex h-[94vh] w-[96vw] max-w-[1800px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-[var(--border)] bg-white px-4 py-3">
+          <div className="text-[13px] font-semibold text-[var(--text)]">System flow diagram</div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--text)] px-3 py-2 text-[12px] font-semibold text-white hover:opacity-85"
+          >
+            <X className="h-4 w-4" /> Close
+          </button>
+        </div>
+        <div className="relative flex-1 overflow-hidden bg-[#e8eaed]">
+          <div
+            ref={viewportRef}
+            className="h-full cursor-grab touch-none select-none overflow-auto p-10 active:cursor-grabbing"
+            {...handlers}
+          >
+            <SvgCanvas svg={svg} scale={scale} onSize={handleSize} />
+          </div>
+          <ZoomToolbar zoom={zoom} />
+        </div>
+      </div>
+    </div>,
+    document.body,
+  )
+}
+
 function MermaidView({ code }) {
-  const containerRef = useRef(null)
   const reactId = useId()
   const renderIdRef = useRef(`system-flow-${reactId.replace(/:/g, "")}`)
   const [error, setError] = useState(null)
+  const [svg, setSvg] = useState(null)
+  const [maximized, setMaximized] = useState(false)
+  const zoom = useZoomPan({ min: 0.1, max: 5, step: 0.25 })
+  const { scale, min, viewportRef, setFit, handlers } = zoom
+  const didFitRef = useRef(false)
+
+  const handleSize = useCallback(
+    (size) => {
+      if (didFitRef.current) return
+      didFitRef.current = true
+      setFit(Math.max(min, fitScaleFor(viewportRef.current, size, 40)))
+    },
+    [min, setFit, viewportRef],
+  )
 
   useEffect(() => {
     let cancelled = false
     setError(null)
-    if (containerRef.current) containerRef.current.innerHTML = ''
+    setSvg(null)
+    didFitRef.current = false
 
     const render = async () => {
       try {
         mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'default' })
         await mermaid.parse(code)
         const result = await mermaid.render(renderIdRef.current, code)
-        if (!cancelled && containerRef.current) {
-          containerRef.current.innerHTML = result.svg
-          const svg = containerRef.current.querySelector('svg')
-          if (svg) {
-            svg.removeAttribute('width')
-            svg.style.maxWidth = 'none'
-            svg.style.height = 'auto'
-          }
-        }
+        if (!cancelled) setSvg(result.svg)
       } catch (renderError) {
         if (!cancelled) setError(renderError?.message || String(renderError))
       }
@@ -354,7 +567,6 @@ function MermaidView({ code }) {
     render()
     return () => {
       cancelled = true
-      if (containerRef.current) containerRef.current.innerHTML = ''
     }
   }, [code])
 
@@ -371,17 +583,30 @@ function MermaidView({ code }) {
     )
   }
 
+  if (!svg) return null
+
   return (
-    <div className="fade-up h-full overflow-auto bg-white px-5 py-6">
-      <div ref={containerRef} className="min-w-max [&_svg]:mx-auto" aria-label="System flow diagram" />
-    </div>
+    <>
+      <div className="fade-up relative h-full overflow-hidden bg-white">
+        <div
+          ref={viewportRef}
+          className="h-full cursor-grab touch-none select-none overflow-auto px-5 py-6 active:cursor-grabbing"
+          {...handlers}
+        >
+          <SvgCanvas svg={svg} scale={scale} onSize={handleSize} />
+        </div>
+        <ZoomToolbar zoom={zoom} onMaximize={() => setMaximized(true)} />
+      </div>
+      {maximized && <DiagramModal svg={svg} onClose={() => setMaximized(false)} />}
+    </>
   )
 }
-export default function ArtifactViewer({ projectId, available, refreshToken }) {
+export default function ArtifactViewer({ projectId, available, refreshToken, logs }) {
   const [tab, setTab] = useState('understanding')
   const [cache, setCache] = useState({})
   const [loading, setLoading] = useState(false)
   const [modelicaFilename, setModelicaFilename] = useState(null)
+  const [collapsed, setCollapsed] = useState(false)
 
   useEffect(() => {
     setCache({})
@@ -418,9 +643,26 @@ export default function ArtifactViewer({ projectId, available, refreshToken }) {
   const displayedFilename = selectedModelicaFile?.filename || data?.filename
 
   return (
-    <div className="card flex h-full flex-col overflow-hidden rounded-xl">
-      <div className="flex items-center justify-between gap-2 border-b border-[var(--border)] bg-[var(--bg-soft)] px-3 py-2">
-        <div className="flex shrink-0 gap-1">
+    <div className="card flex h-full overflow-hidden rounded-xl">
+      <nav
+        className={`flex ${collapsed ? 'w-14' : 'w-56'} shrink-0 flex-col overflow-y-auto border-r border-[var(--border)] bg-[var(--bg-soft)] py-3 transition-[width] duration-200`}
+      >
+        <div className={`mb-1 flex items-center ${collapsed ? 'justify-center px-1' : 'justify-between px-3'}`}>
+          {!collapsed && (
+            <span className="text-[10.5px] font-semibold tracking-wider text-[var(--text-dim)] uppercase">
+              Outputs
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => setCollapsed((c) => !c)}
+            aria-label={collapsed ? 'Expand outputs panel' : 'Collapse outputs panel'}
+            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md text-[var(--text-dim)] transition-colors hover:bg-[var(--panel)] hover:text-[var(--text)]"
+          >
+            {collapsed ? <ChevronsRight className="h-3.5 w-3.5" /> : <ChevronsLeft className="h-3.5 w-3.5" />}
+          </button>
+        </div>
+        <div className="flex flex-col gap-0.5 px-2">
           {TABS.map((t) => {
             const isActive = t.key === tab
             const isAvailable = ALWAYS_AVAILABLE.has(t.key) || available[t.key]
@@ -429,80 +671,108 @@ export default function ArtifactViewer({ projectId, available, refreshToken }) {
                 key={t.key}
                 type="button"
                 onClick={() => setTab(t.key)}
-                className="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12.5px] font-medium transition-colors"
+                title={collapsed ? t.label : undefined}
+                className={`flex items-center gap-2.5 rounded-lg py-2 text-left transition-colors ${collapsed ? 'justify-center px-2' : 'px-3'}`}
                 style={{
-                  background: isActive ? 'var(--panel-2)' : 'transparent',
-                  color: isActive ? 'var(--text)' : 'var(--text-dim)',
+                  background: isActive ? 'var(--panel)' : 'transparent',
+                  border: `1px solid ${isActive ? 'var(--border-strong)' : 'transparent'}`,
                 }}
               >
-                <t.icon className="h-3.5 w-3.5" />
-                {t.label}
-                {isAvailable && <span className="h-1.5 w-1.5 rounded-full bg-[var(--green)]" />}
+                <span className="relative flex h-5 w-5 shrink-0 items-center justify-center">
+                  <t.icon
+                    className="h-4 w-4"
+                    style={{ color: isActive ? 'var(--accent)' : 'var(--text-dim)' }}
+                  />
+                  <span
+                    className="absolute -bottom-0.5 -right-0.5 h-1.5 w-1.5 rounded-full border border-[var(--bg-soft)]"
+                    style={{ background: isAvailable ? 'var(--green)' : 'var(--border-strong)' }}
+                  />
+                </span>
+                {!collapsed && (
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-[12.5px] font-medium text-[var(--text)]">{t.label}</span>
+                    <span className="block truncate text-[10.5px] text-[var(--text-dim)]">
+                      {isAvailable ? t.ready : t.locked}
+                    </span>
+                  </span>
+                )}
               </button>
             )
           })}
         </div>
-        <div className="flex min-w-0 items-center gap-2">
-          {displayedFilename && (
-            <span className="font-mono min-w-0 truncate text-[11px] text-[var(--text-dim)]">{displayedFilename}</span>
-          )}
+      </nav>
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex items-center justify-between gap-2 border-b border-[var(--border)] px-4 py-2.5">
+          <div className="min-w-0">
+            <div className="text-[12.5px] font-semibold text-[var(--text)]">{active.label}</div>
+            {displayedFilename && (
+              <span className="font-mono block min-w-0 truncate text-[11px] text-[var(--text-dim)]">
+                {displayedFilename}
+              </span>
+            )}
+          </div>
           <CopyButton text={content} />
         </div>
-      </div>
 
-      <div className="flex-1 overflow-auto">
-        {loading && (
-          <div className="flex h-full items-center justify-center gap-2 text-sm text-[var(--text-dim)]">
-            <Loader2 className="h-4 w-4 animate-spin" /> loadingÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¦
-          </div>
-        )}
-        {!loading && !ALWAYS_AVAILABLE.has(tab) && !available[tab] && (
-          <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-[var(--text-dim)]">
-            <active.icon className="h-6 w-6 opacity-40" />
-            <span className="text-[13px]">Not generated yet</span>
-          </div>
-        )}
-        {active.kind === 'files' && <FileBrowser projectId={projectId} refreshToken={refreshToken} />}
-        {!loading && available[tab] && content && active.kind === 'markdown' && <MarkdownView text={content} />}
-        {!loading && available[tab] && content && active.kind === 'prose' && (
-          <div className="fade-up whitespace-pre-wrap px-5 py-4 text-[13.5px] leading-relaxed text-[var(--text)]">
-            {content}
-          </div>
-        )}
-        {!loading && available[tab] && content && active.kind === 'diagram' && <MermaidView code={content} />}
-        {!loading && available[tab] && content && active.kind === 'code' && (
-          <div className="fade-up">
-            {tab === 'modelica' && data?.files?.length > 1 && (
-              <div className="flex flex-wrap gap-1.5 border-b border-[var(--border)] px-4 py-2.5">
-                {data.files.map((file) => (
-                  <button
-                    key={file.filename}
-                    type="button"
-                    onClick={() => setModelicaFilename(file.filename)}
-                    className="rounded-md border px-2.5 py-1 font-mono text-[11px] transition-colors"
-                    style={{
-                      borderColor:
-                        file.filename === selectedModelicaFile?.filename ? 'var(--accent)' : 'var(--border)',
-                      color:
-                        file.filename === selectedModelicaFile?.filename ? 'var(--accent)' : 'var(--text-dim)',
-                    }}
-                  >
-                    {file.filename}
-                  </button>
-                ))}
-              </div>
-            )}
-            <pre className="font-mono px-5 py-4 text-[12.5px] leading-relaxed text-[var(--text)]">
-              <code>{content}</code>
-            </pre>
-          </div>
-        )}
-        {!loading && available[tab] && data && active.kind === 'validation' && (
-          <ValidationView data={data} />
-        )}
-        {!loading && available[tab] && data && active.kind === 'result' && (
-          <ResultView projectId={projectId} data={data} />
-        )}
+        <div className="flex-1 overflow-auto">
+          {loading && (
+            <div className="flex h-full items-center justify-center gap-2 text-sm text-[var(--text-dim)]">
+              <Loader2 className="h-4 w-4 animate-spin" /> loading…
+            </div>
+          )}
+          {!loading && !ALWAYS_AVAILABLE.has(tab) && !available[tab] && (
+            <div className="flex h-full flex-col items-center justify-center gap-2 text-center text-[var(--text-dim)]">
+              <active.icon className="h-6 w-6 opacity-40" />
+              <span className="text-[13px]">Not generated yet</span>
+            </div>
+          )}
+          {active.kind === 'files' && <FileBrowser projectId={projectId} refreshToken={refreshToken} />}
+          {!loading && available[tab] && content && active.kind === 'markdown' && <MarkdownView text={content} />}
+          {!loading && available[tab] && content && active.kind === 'prose' && (
+            <div className="fade-up whitespace-pre-wrap px-5 py-4 text-[13.5px] leading-relaxed text-[var(--text)]">
+              {content}
+            </div>
+          )}
+          {!loading && available[tab] && content && active.kind === 'diagram' && <MermaidView code={content} />}
+          {!loading && available[tab] && content && active.kind === 'code' && (
+            <div className="fade-up">
+              {tab === 'modelica' && data?.files?.length > 1 && (
+                <div className="flex flex-wrap gap-1.5 border-b border-[var(--border)] px-4 py-2.5">
+                  {data.files.map((file) => (
+                    <button
+                      key={file.filename}
+                      type="button"
+                      onClick={() => setModelicaFilename(file.filename)}
+                      className="rounded-md border px-2.5 py-1 font-mono text-[11px] transition-colors"
+                      style={{
+                        borderColor:
+                          file.filename === selectedModelicaFile?.filename ? 'var(--accent)' : 'var(--border)',
+                        color:
+                          file.filename === selectedModelicaFile?.filename ? 'var(--accent)' : 'var(--text-dim)',
+                      }}
+                    >
+                      {file.filename}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <CodeBlock
+                code={content}
+                language={languageForFilename(displayedFilename) || (tab === 'sysml' ? 'sysml' : 'modelica')}
+              />
+            </div>
+          )}
+          {!loading && available[tab] && data && active.kind === 'clarifications' && (
+            <ClarificationsView data={data} logs={logs} />
+          )}
+          {!loading && available[tab] && data && active.kind === 'validation' && (
+            <ValidationView data={data} />
+          )}
+          {!loading && available[tab] && data && active.kind === 'result' && (
+            <ResultView projectId={projectId} data={data} />
+          )}
+        </div>
       </div>
     </div>
   )

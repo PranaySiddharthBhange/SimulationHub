@@ -1,4 +1,4 @@
-import { File, Loader2, UploadCloud, X } from 'lucide-react'
+import { Cloud, File, HardDrive, Loader2, UploadCloud, X } from 'lucide-react'
 import { useRef, useState } from 'react'
 
 export default function NewProjectModal({ onClose, onCreate }) {
@@ -60,7 +60,9 @@ export default function NewProjectModal({ onClose, onCreate }) {
                   background: stage1Backend === 'ollama' ? 'var(--accent-soft)' : 'transparent',
                 }}
               >
-                <div className="font-semibold text-[var(--text)]">Local Gemma</div>
+                <div className="flex items-center gap-1.5 font-semibold text-[var(--text)]">
+                  <HardDrive className="h-3.5 w-3.5" /> Local
+                </div>
                 <div className="mt-0.5 text-[11px] text-[var(--text-dim)]">Private text extraction through Ollama</div>
               </button>
               <button
@@ -72,7 +74,9 @@ export default function NewProjectModal({ onClose, onCreate }) {
                   background: stage1Backend === 'openai' ? 'var(--accent-soft)' : 'transparent',
                 }}
               >
-                <div className="font-semibold text-[var(--text)]">Cloud GPT-5.4</div>
+                <div className="flex items-center gap-1.5 font-semibold text-[var(--text)]">
+                  <Cloud className="h-3.5 w-3.5" /> Cloud
+                </div>
                 <div className="mt-0.5 text-[11px] text-[var(--text-dim)]">OpenAI extraction with visual support</div>
               </button>
             </div>

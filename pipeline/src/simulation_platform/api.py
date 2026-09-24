@@ -330,6 +330,7 @@ def get_project(project_id: str):
     meta = _read_meta(project_id)
     return {
         "project_id": project_id,
+        "name": meta.get("name", project_id),
         "stage1_backend": meta.get("stage1_backend", "ollama"),
         "status": effective["status"],
         "current_stage": effective["current_stage"],
@@ -586,6 +587,18 @@ def get_diagram(project_id: str):
     if not path.exists():
         raise HTTPException(404, "not generated yet")
     return {"filename": path.name, "content": path.read_text(encoding="utf-8")}
+
+
+@app.get("/api/projects/{project_id}/artifacts/clarified")
+def get_clarifications(project_id: str):
+    """Every question Confirm raised and what was answered -- see
+    `reasoner_pipeline._answers_record` for how `decisions` is built."""
+
+    path = _ws.extracted_dir(project_id) / "clarified_answers.json"
+    if not path.exists():
+        raise HTTPException(404, "not generated yet")
+    record = json.loads(path.read_text(encoding="utf-8"))
+    return {"filename": path.name, "decisions": record.get("decisions", [])}
 
 
 @app.get("/api/projects/{project_id}/artifacts/modelica")
