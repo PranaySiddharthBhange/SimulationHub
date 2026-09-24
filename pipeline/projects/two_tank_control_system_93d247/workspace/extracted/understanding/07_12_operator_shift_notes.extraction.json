@@ -10,16 +10,7 @@
         "TK-101",
         "T1"
       ],
-      "values": [
-        {
-          "quantity": "display level",
-          "value": "~0.05",
-          "unit": "m",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "Initial both tank displays ~0.05 m"
-        }
-      ],
+      "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -32,16 +23,7 @@
         "TK-102",
         "T2"
       ],
-      "values": [
-        {
-          "quantity": "display level",
-          "value": "~0.05",
-          "unit": "m",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "Initial both tank displays ~0.05 m"
-        }
-      ],
+      "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -85,36 +67,36 @@
       "quote": "valve3 = XV-103"
     },
     {
-      "name": "E-stop",
-      "kind": "control",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "E-stop is outside this demo scope."
-    },
-    {
-      "name": "shut",
-      "kind": "command",
+      "name": "both tank displays",
+      "kind": "display",
       "aliases": [],
       "values": [
         {
-          "quantity": "time",
-          "value": "700",
-          "unit": "s",
+          "quantity": "level",
+          "value": "~0.05",
+          "unit": "m",
           "status": "observed",
           "supersedes": "",
-          "quote": "Shut at 700"
+          "quote": "Initial both tank displays ~0.05 m"
         }
       ],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "'shut' is controlled drain"
+      "quote": "Initial both tank displays ~0.05 m"
     },
     {
-      "name": "Start",
+      "name": "all three output lamps",
+      "kind": "indicator",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "all three output lamps off"
+    },
+    {
+      "name": "Start event",
       "kind": "command",
       "aliases": [],
       "values": [
@@ -125,14 +107,6 @@
           "status": "observed",
           "supersedes": "",
           "quote": "Start event at 20 s"
-        },
-        {
-          "quantity": "time",
-          "value": "280",
-          "unit": "s",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "Start at 280"
         }
       ],
       "ref": "",
@@ -148,7 +122,7 @@
         {
           "quantity": "time",
           "value": "220",
-          "unit": "s",
+          "unit": "",
           "status": "observed",
           "supersedes": "",
           "quote": "Stop at 220"
@@ -156,7 +130,7 @@
         {
           "quantity": "time",
           "value": "650",
-          "unit": "s",
+          "unit": "",
           "status": "observed",
           "supersedes": "",
           "quote": "Stop at 650"
@@ -166,6 +140,45 @@
       "anchor": "",
       "from_image": false,
       "quote": "Stop at 220 kills all valve lamps."
+    },
+    {
+      "name": "shut",
+      "kind": "command",
+      "aliases": [
+        "SHUT"
+      ],
+      "values": [
+        {
+          "quantity": "time",
+          "value": "700",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Shut at 700"
+        },
+        {
+          "quantity": "time",
+          "value": "900",
+          "unit": "s",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "idle to 900 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "'shut' is controlled drain"
+    },
+    {
+      "name": "E-stop",
+      "kind": "command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "E-stop is outside this demo scope."
     },
     {
       "name": "Jin's old model",
@@ -185,9 +198,78 @@
       "anchor": "",
       "from_image": false,
       "quote": "Jin's old model"
+    },
+    {
+      "name": "Controls",
+      "kind": "actor",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "dead time",
+          "value": "12",
+          "unit": "s",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Controls says 12 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controls says 12 s"
     }
   ],
   "relationships": [
+    {
+      "subject": "tank1",
+      "predicate": "alias_of",
+      "object": "TK-101",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "tank1 = TK-101"
+    },
+    {
+      "subject": "tank2",
+      "predicate": "alias_of",
+      "object": "TK-102",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "tank2 = TK-102"
+    },
+    {
+      "subject": "valve1",
+      "predicate": "alias_of",
+      "object": "XV-101",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "valve1 = XV-101"
+    },
+    {
+      "subject": "valve2",
+      "predicate": "alias_of",
+      "object": "XV-102",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "valve2 = XV-102"
+    },
+    {
+      "subject": "valve3",
+      "predicate": "alias_of",
+      "object": "XV-103",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "valve3 = XV-103"
+    },
     {
       "subject": "shut",
       "predicate": "is",
@@ -197,22 +279,12 @@
       "anchor": "",
       "from_image": false,
       "quote": "'shut' is controlled drain"
-    },
-    {
-      "subject": "E-stop",
-      "predicate": "is outside scope of",
-      "object": "this demo",
-      "detail": "",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "E-stop is outside this demo scope."
     }
   ],
   "facts": [
     {
       "category": "scheduled_command",
-      "statement": "Start at 20 s.",
+      "statement": "Start event at 20 s.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -275,6 +347,15 @@
     },
     {
       "category": "behavior",
+      "statement": "Tank levels hold steady through pause.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "Tank levels hold steady through pause."
+    },
+    {
+      "category": "behavior",
       "statement": "Start at 280 picks transfer back up; it does NOT go back to fill.",
       "ref": "",
       "anchor": "",
@@ -284,12 +365,12 @@
     },
     {
       "category": "behavior",
-      "statement": "transfer + drain lamps are on together during SHUT, and this is intentional, not an interlock failure.",
+      "statement": "Shut at 700: transfer + drain lamps are on together.",
       "ref": "",
       "anchor": "",
       "status": "observed",
       "from_image": false,
-      "quote": "transfer + drain lamps are on together. This is intentional for SHUT, not an interlock failure."
+      "quote": "Shut at 700: transfer + drain lamps are on together."
     }
   ],
   "unreadable": [],

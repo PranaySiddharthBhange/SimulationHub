@@ -1,4 +1,4 @@
-Subject: Partial Magnetic Architecture - Draft
+Subject: Partial Magnetic Architecture
 Document kind: architecture diagram
 
 ## Entities
@@ -15,6 +15,3 @@ Document kind: architecture diagram
 * IronCore connects to AirGap (flux)
 * AirGap connects to FluxSensor (Phi)
 * AirGap connects to MeasuringCoil (induction)
-
-## Constraints
-* Draft model does not expose leakage branch, element-wise core segmentation, electric ground, magnetic ground, and revision/configuration values. [proposed]

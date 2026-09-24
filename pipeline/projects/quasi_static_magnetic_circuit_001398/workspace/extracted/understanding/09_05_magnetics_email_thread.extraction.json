@@ -23,19 +23,29 @@
       "quote": "The v1.0 file still has sigma=0.05."
     },
     {
-      "name": "CR-MAG-006",
-      "kind": "change request",
+      "name": "nominal geometry",
+      "kind": "geometry",
       "aliases": [],
       "values": [
         {
           "quantity": "sigma",
           "value": "0.08",
           "unit": "",
-          "status": "approved",
-          "supersedes": "0.05",
-          "quote": "Approved sigma=0.08 for the released nominal benchmark. Archive the 0.05 model for traceability."
+          "status": "proposed",
+          "supersedes": "",
+          "quote": "The calibration fit using the nominal geometry is closer to sigma=0.08."
         }
       ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The calibration fit using the nominal geometry is closer to sigma=0.08."
+    },
+    {
+      "name": "CR-MAG-006",
+      "kind": "change request",
+      "aliases": [],
+      "values": [],
       "ref": "CR-MAG-006",
       "anchor": "",
       "from_image": false,
@@ -52,17 +62,25 @@
           "unit": "mm",
           "status": "measured",
           "supersedes": "",
-          "quote": "the technician measured 1.58 mm at the physical shim stack."
+          "quote": "the technician measured 1.58 mm at the physical shim stack"
+        },
+        {
+          "quantity": "delta",
+          "value": "1.58",
+          "unit": "mm",
+          "status": "as-built",
+          "supersedes": "",
+          "quote": "prototype/as-built validation configuration: delta=1.58 mm"
         }
       ],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "the technician measured 1.58 mm at the physical shim stack."
+      "quote": "the technician measured 1.58 mm at the physical shim stack"
     },
     {
       "name": "analytic benchmark",
-      "kind": "benchmark",
+      "kind": "benchmark model",
       "aliases": [],
       "values": [
         {
@@ -71,51 +89,21 @@
           "unit": "mm",
           "status": "nominal",
           "supersedes": "",
-          "quote": "Please do NOT silently replace the 1.50 mm nominal gap in the analytic benchmark."
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "Please do NOT silently replace the 1.50 mm nominal gap in the analytic benchmark."
-    },
-    {
-      "name": "nominal model",
-      "kind": "model",
-      "aliases": [],
-      "values": [
+          "quote": "the 1.50 mm nominal gap in the analytic benchmark"
+        },
         {
           "quantity": "delta",
           "value": "1.50",
           "unit": "mm",
           "status": "nominal",
           "supersedes": "",
-          "quote": "- nominal model: delta=1.50 mm"
+          "quote": "nominal model: delta=1.50 mm"
         }
       ],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "- nominal model: delta=1.50 mm"
-    },
-    {
-      "name": "prototype/as-built validation configuration",
-      "kind": "validation configuration",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "delta",
-          "value": "1.58",
-          "unit": "mm",
-          "status": "as-built",
-          "supersedes": "",
-          "quote": "- prototype/as-built validation configuration: delta=1.58 mm"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "- prototype/as-built validation configuration: delta=1.58 mm"
+      "quote": "the 1.50 mm nominal gap in the analytic benchmark"
     },
     {
       "name": "CoreCatalog_A",
@@ -145,7 +133,7 @@
           "quantity": "mu_r",
           "value": "1200",
           "unit": "",
-          "status": "unknown",
+          "status": "used",
           "supersedes": "",
           "quote": "the batch characterization sheet used 1200"
         }
@@ -176,13 +164,22 @@
     },
     {
       "name": "linear reference benchmark",
-      "kind": "benchmark",
+      "kind": "benchmark model",
       "aliases": [],
-      "values": [],
+      "values": [
+        {
+          "quantity": "mu_r",
+          "value": "1200",
+          "unit": "",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "approved 1200 for the linear reference benchmark"
+        }
+      ],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "CR-MAG-004 already approved 1200 for the linear reference benchmark."
+      "quote": "approved 1200 for the linear reference benchmark"
     },
     {
       "name": "measurement-coil sketch",
@@ -214,7 +211,7 @@
           "unit": "turns",
           "status": "unknown",
           "supersedes": "",
-          "quote": "Coil Data B says 50"
+          "quote": "Coil Data B says 50 and has the polarity dots."
         }
       ],
       "ref": "",
@@ -224,7 +221,7 @@
     },
     {
       "name": "released nominal benchmark",
-      "kind": "benchmark",
+      "kind": "benchmark model",
       "aliases": [],
       "values": [
         {
@@ -232,7 +229,7 @@
           "value": "0.08",
           "unit": "",
           "status": "approved",
-          "supersedes": "",
+          "supersedes": "0.05",
           "quote": "Approved sigma=0.08 for the released nominal benchmark."
         }
       ],
@@ -265,12 +262,30 @@
   "facts": [
     {
       "category": "requirement",
-      "statement": "We need both:\n- nominal model: delta=1.50 mm\n- prototype/as-built validation configuration: delta=1.58 mm",
+      "statement": "Do not silently replace the 1.50 mm nominal gap in the analytic benchmark; both nominal and prototype/as-built configurations are needed.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
       "from_image": false,
-      "quote": "We need both:\n- nominal model: delta=1.50 mm\n- prototype/as-built validation configuration: delta=1.58 mm"
+      "quote": "Please do NOT silently replace the 1.50 mm nominal gap in the analytic benchmark. We need both:"
+    },
+    {
+      "category": "requirement",
+      "statement": "Approved sigma=0.08 for the released nominal benchmark.",
+      "ref": "CR-MAG-006",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Approved sigma=0.08 for the released nominal benchmark."
+    },
+    {
+      "category": "requirement",
+      "statement": "Archive the 0.05 model for traceability.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Archive the 0.05 model for traceability."
     }
   ],
   "unreadable": [],

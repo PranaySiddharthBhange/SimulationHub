@@ -1,0 +1,40 @@
+model CoolingReturnTank
+  parameter Modelica.Units.SI.Area crossArea;
+  parameter Modelica.Units.SI.Height maxLevel;
+  parameter Modelica.Units.SI.Height initialLevel;
+  parameter Real initialWNaCl(unit="kg/kg") = 0;
+  parameter Modelica.Units.SI.Temperature initialTemperature = 353.15;
+  parameter Modelica.Units.SI.MassFlowRate nominalPumpOutflow = 0.30;
+  parameter Modelica.Units.SI.HeatFlowRate coolerDuty;
+  Modelica.Blocks.Interfaces.RealInput inflowMassFlow annotation(Placement(transformation(extent={{-120,70},{-100,90}})));
+  Modelica.Blocks.Interfaces.RealInput inflowWNaCl annotation(Placement(transformation(extent={{-120,30},{-100,50}})));
+  Modelica.Blocks.Interfaces.RealInput inflowTempC annotation(Placement(transformation(extent={{-120,-10},{-100,10}})));
+  Modelica.Blocks.Interfaces.BooleanInput coolerOn annotation(Placement(transformation(extent={{-120,-50},{-100,-30}})));
+  Modelica.Blocks.Interfaces.BooleanInput pumpOn annotation(Placement(transformation(extent={{-120,-90},{-100,-70}})));
+  Modelica.Blocks.Interfaces.RealOutput level_m annotation(Placement(transformation(extent={{100,60},{120,80}})));
+  Modelica.Blocks.Interfaces.RealOutput temperature_C annotation(Placement(transformation(extent={{100,20},{120,40}})));
+  Modelica.Blocks.Interfaces.RealOutput w_NaCl annotation(Placement(transformation(extent={{100,-20},{120,0}})));
+  Modelica.Blocks.Interfaces.RealOutput outflowMassFlow annotation(Placement(transformation(extent={{100,-60},{120,-40}})));
+  Modelica.Blocks.Interfaces.RealOutput outflowWNaCl annotation(Placement(transformation(extent={{100,-100},{120,-80}})));
+  Modelica.Blocks.Interfaces.RealOutput outflowTempC annotation(Placement(transformation(extent={{100,-140},{120,-120}})));
+protected
+  constant Modelica.Units.SI.Density rho = 1000;
+  Modelica.Units.SI.Mass m(start=crossArea*initialLevel*rho, fixed=true);
+  Modelica.Units.SI.Mass mSalt(start=crossArea*initialLevel*rho*initialWNaCl, fixed=true);
+  Modelica.Units.SI.Temperature T(start=initialTemperature, fixed=true);
+  Modelica.Units.SI.SpecificHeatCapacity cpMix;
+  Modelica.Units.SI.MassFlowRate mOut;
+equation
+  cpMix = WaterNaClMedium.cp(T, if m > 1e-9 then mSalt/m else initialWNaCl);
+  mOut = if level_m <= 0.02 then 0 else if pumpOn then min(nominalPumpOutflow, m) else 0;
+  der(m) = inflowMassFlow - mOut;
+  der(mSalt) = inflowMassFlow*inflowWNaCl - mOut*(if m > 1e-9 then mSalt/m else initialWNaCl);
+  der(T) = if m > 1e-6 then (inflowMassFlow*4180*((inflowTempC + 273.15) - T) + (if coolerOn then coolerDuty else 0))/(m*cpMix) else 0;
+  level_m = m/(rho*crossArea);
+  temperature_C = T - 273.15;
+  w_NaCl = if m > 1e-9 then mSalt/m else initialWNaCl;
+  outflowMassFlow = mOut;
+  outflowWNaCl = w_NaCl;
+  outflowTempC = temperature_C;
+  annotation(Icon(graphics={Rectangle(extent={{-80,-80},{80,80}}, lineColor={0,128,255}),Rectangle(extent={{-80,-80},{80,0}}, lineColor={0,128,255}, fillColor={170,213,255}, fillPattern=FillPattern.Solid),Text(extent={{-100,100},{100,140}}, textString="%name")}));
+end CoolingReturnTank;

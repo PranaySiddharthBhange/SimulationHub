@@ -1,0 +1,48 @@
+model EvaporatorUnit
+  parameter Modelica.Units.SI.Area crossArea;
+  parameter Modelica.Units.SI.Height maxLevel;
+  parameter Modelica.Units.SI.Height initialLevel;
+  parameter Real initialWNaCl(unit="kg/kg") = 0;
+  parameter Modelica.Units.SI.Temperature initialTemperature = 293.15;
+  parameter Modelica.Units.SI.MassFlowRate nominalInflow;
+  parameter Modelica.Units.SI.MassFlowRate nominalConcentrateOutflow;
+  parameter Modelica.Units.SI.HeatFlowRate heaterDuty = 20000;
+  parameter Modelica.Units.SI.MassFlowRate nominalCondensateFlow = 0.01;
+  Modelica.Blocks.Interfaces.BooleanInput inletOn annotation(Placement(transformation(extent={{-120,70},{-100,90}})));
+  Modelica.Blocks.Interfaces.RealInput inletWNaCl annotation(Placement(transformation(extent={{-120,30},{-100,50}})));
+  Modelica.Blocks.Interfaces.RealInput inletTempC annotation(Placement(transformation(extent={{-120,-10},{-100,10}})));
+  Modelica.Blocks.Interfaces.BooleanInput heaterOn annotation(Placement(transformation(extent={{-120,-50},{-100,-30}})));
+  Modelica.Blocks.Interfaces.BooleanInput concentrateOutOn annotation(Placement(transformation(extent={{-120,-90},{-100,-70}})));
+  Modelica.Blocks.Interfaces.RealOutput level_m annotation(Placement(transformation(extent={{100,70},{120,90}})));
+  Modelica.Blocks.Interfaces.RealOutput w_NaCl annotation(Placement(transformation(extent={{100,35},{120,55}})));
+  Modelica.Blocks.Interfaces.RealOutput temperature_C annotation(Placement(transformation(extent={{100,0},{120,20}})));
+  Modelica.Blocks.Interfaces.RealOutput condensateMassFlow annotation(Placement(transformation(extent={{100,-35},{120,-15}})));
+  Modelica.Blocks.Interfaces.RealOutput concentrateMassFlow annotation(Placement(transformation(extent={{100,-70},{120,-50}})));
+  Modelica.Blocks.Interfaces.RealOutput concentrateWNaCl annotation(Placement(transformation(extent={{100,-105},{120,-85}})));
+  Modelica.Blocks.Interfaces.RealOutput concentrateTempC annotation(Placement(transformation(extent={{100,-140},{120,-120}})));
+protected
+  constant Modelica.Units.SI.Density rho = 1000;
+  Modelica.Units.SI.Mass m(start=crossArea*initialLevel*rho, fixed=true);
+  Modelica.Units.SI.Mass mSalt(start=crossArea*initialLevel*rho*initialWNaCl, fixed=true);
+  Modelica.Units.SI.Temperature T(start=initialTemperature, fixed=true);
+  Modelica.Units.SI.SpecificHeatCapacity cpMix;
+  Modelica.Units.SI.MassFlowRate mIn;
+  Modelica.Units.SI.MassFlowRate mVap;
+  Modelica.Units.SI.MassFlowRate mConc;
+equation
+  cpMix = WaterNaClMedium.cp(T, if m > 1e-9 then mSalt/m else initialWNaCl);
+  mIn = if inletOn and level_m < maxLevel then nominalInflow else 0;
+  mVap = if heaterOn and level_m >= 0.05 and (if m > 1e-9 then mSalt/m else initialWNaCl) < 0.18 then nominalCondensateFlow else 0;
+  mConc = if concentrateOutOn and level_m > 0 then min(nominalConcentrateOutflow, m) else 0;
+  der(m) = mIn - mVap - mConc;
+  der(mSalt) = mIn*inletWNaCl - mConc*(if m > 1e-9 then mSalt/m else initialWNaCl);
+  der(T) = if m > 1e-6 then ((if heaterOn then heaterDuty else 0) - mVap*2.2e6 + mIn*4180*((inletTempC + 273.15) - T))/(m*cpMix) else 0;
+  level_m = m/(rho*crossArea);
+  w_NaCl = if m > 1e-9 then mSalt/m else initialWNaCl;
+  temperature_C = T - 273.15;
+  condensateMassFlow = mVap;
+  concentrateMassFlow = mConc;
+  concentrateWNaCl = w_NaCl;
+  concentrateTempC = temperature_C;
+  annotation(Icon(graphics={Rectangle(extent={{-80,-80},{80,80}}, lineColor={255,0,0}),Ellipse(extent={{-50,20},{50,80}}, lineColor={255,0,0}),Text(extent={{-100,100},{100,140}}, textString="%name")}));
+end EvaporatorUnit;

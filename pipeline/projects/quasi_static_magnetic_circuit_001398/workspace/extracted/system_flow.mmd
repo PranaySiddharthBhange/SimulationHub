@@ -1,0 +1,33 @@
+flowchart TD
+    A["Start simulation"] --> B["Set released nominal benchmark<br/>delta = 1.50 mm<br/>mu_r = 1200<br/>sigma = 0.08<br/>N_exc = 600<br/>N_meas = 50<br/>f = 50 Hz"]
+    B --> C["Initialize time_s and reported variables"]
+    C --> D{"time_s < 0.10 s?"}
+    D -->|Yes| E["Set I_rms_A = 0 A RMS"]
+    D -->|No| F{"time_s <= 0.50 s?"}
+    F -->|Yes| G["Linear ramp I_rms_A<br/>0 to 2.0 A RMS<br/>from 0.10 s to 0.50 s"]
+    F -->|No| H{"time_s <= 1.0 s?"}
+    H -->|Yes| I["Hold I_rms_A = 2.0 A RMS"]
+    H -->|No| J["Evaluate final acceptance checks at 1.0 s"]
+    E --> K["Compute mmf_At = N_exc*I_rms_A"]
+    G --> K
+    I --> K
+    K --> L["Compute reluctances<br/>R_core from CORE-L, CORE-U, CORE-R, CORE-D<br/>R_gap for GAP-1<br/>R_leak = R_gap*(1-sigma)/sigma<br/>R_parallel = 1/(1/R_gap + 1/R_leak)<br/>R_total = R_core + R_parallel"]
+    L --> M["Compute Phi_core_Wb = mmf_At/R_total"]
+    M --> N["Split flux<br/>Phi_gap_Wb = (1-sigma)*Phi_core_Wb<br/>Phi_leak_Wb = sigma*Phi_core_Wb<br/>Phi_gap_over_Phi_core = 0.92"]
+    N --> O["Compute B_core_T and B_gap_T<br/>B = Phi/A"]
+    O --> P["Compute H_core_A_m = B_core_T/(mu0*mu_r)<br/>H_gap_A_m = B_gap_T/mu0"]
+    P --> Q["Compute magnetic drops<br/>Vm_core_At across series iron path<br/>Vm_gap_At across GAP-1<br/>Vm across LEAK-1 equals Vm_gap_At"]
+    Q --> R["Compute induced voltages<br/>U_exc_induced_V_rms = 2*pi*f*N_exc*Phi_core_Wb<br/>U_meas_induced_signed_V_rms = -2*pi*f*N_meas*Phi_gap_Wb"]
+    R --> S{"time_s < 1.0 s?"}
+    S -->|Yes| T["Advance time_s"]
+    T --> D
+    S -->|No| J
+    J --> U{"REQ-ELC-003 final hold at 2 A RMS<br/>I_rms_A == 2.0 +/- 0.001?"}
+    U -->|Yes| V{"REQ-VV-001 mmf balance residual<br/>abs((mmf_At - Vm_core_At - Vm_gap_At)/mmf_At) <= 0.005?"}
+    U -->|No| Z["End with failed acceptance report"]
+    V -->|Yes| W{"REQ-VV-002 useful/core ratio final<br/>Phi_gap_over_Phi_core == 0.92 +/- 0.002?"}
+    V -->|No| Z
+    W -->|Yes| X{"REQ-VV-003 and REQ-IND-002 final values pass?<br/>Phi_core_Wb 0.0005249354 +/- 5.249354e-06<br/>Phi_gap_Wb 0.0004829406 +/- 4.829406e-06<br/>Phi_leak_Wb 4.199483e-05 +/- 4.199483e-07<br/>B_core_T 0.839897 +/- 0.00839897<br/>B_gap_T 0.772705 +/- 0.00772705<br/>U_exc_induced_V_rms 98.948 +/- 0.98948<br/>U_meas_induced_signed_V_rms -7.586 +/- 0.07586<br/>and U_meas_induced_signed_V_rms < 0?"}
+    W -->|No| Z
+    X -->|Yes| Y["End at 1.0 s with acceptance report<br/>include reported variables"]
+    X -->|No| Z

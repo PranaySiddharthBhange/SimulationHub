@@ -1,0 +1,104 @@
+{
+  "attempt": 1,
+  "entry_class": "TwoTankSequenceSystem",
+  "files": [
+    {
+      "filename": "TankInventory.mo",
+      "role": "component"
+    },
+    {
+      "filename": "IdealOnOffValve.mo",
+      "role": "component"
+    },
+    {
+      "filename": "PLC101.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "TwoTankSequenceSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Units.SI.Area",
+    "Modelica.Units.SI.Height",
+    "Modelica.Units.SI.Time",
+    "Modelica.Units.SI.VolumeFlowRate"
+  ],
+  "corrections": [
+    "Assumption from the brief's preserved merge decision: ideal Boolean valve commands are used directly as flow switches and valve stroke dynamics are neglected for the hackathon simulation, although stroke_open_s=0.8 s and stroke_close_s=0.6 s are source evidence only and are not modeled dynamically.",
+    "Assumption for physical plausibility needed to execute the signal-flow inventory model: each tank's continuous balance limits actual outflow by available inventory through TankInventory.outflowActual_m3s so levels do not become negative; this implements the brief's instruction to preserve physical plausibility without changing commanded valve states.",
+    "Assumption for physical plausibility needed to execute the signal-flow inventory model: incoming accumulation is cut off at tankHeight=1.0 m when inflow exceeds outflow so levels do not exceed the stated tank height and LT valid range upper bound; the brief did not provide a different overflow law.",
+    "Assumption for experiment settings: annotation Tolerance=1e-06 was chosen because the brief confirms StartTime=0 s, StopTime=900 s, and sample interval/scan time 0.1 s, but does not state a simulation solver tolerance explicitly.",
+    "Derived consequence used in the system topology: TK_101 actual discharge, not XV_102 nominal request directly, is connected as TK_102 inflow so Tank 1 inventory limits transfer when empty, consistent with the stated downstream-only signal-flow rule and the balance equations when inventory is available."
+  ],
+  "references": [
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "controller_state_id",
+      "model_variable": "controller_state_id",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance checks AC-03, AC-04, AC-07 and shutdown/sequence state attainment are written against the integer-coded reported controller state variable."
+    },
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "tank1_level_m",
+      "model_variable": "tank1_level_m",
+      "absolute_tolerance": 1e-06,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Acceptance check AC-01 and URS-CTL-005 use reported Tank 1 level in metres."
+    },
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "tank2_level_m",
+      "model_variable": "tank2_level_m",
+      "absolute_tolerance": 1e-06,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "URS-CTL-005 uses reported Tank 2 level in metres."
+    },
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "valve1_cmd",
+      "model_variable": "valve1_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance checks AC-02, AC-03, AC-05, AC-06, AC-07 and AC-08 use the reported Boolean command to XV-101/V1."
+    },
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "valve2_cmd",
+      "model_variable": "valve2_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance checks AC-02, AC-03, AC-05, AC-06, AC-07 and AC-08 use the reported Boolean command to XV-102/V2."
+    },
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "valve3_cmd",
+      "model_variable": "valve3_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Acceptance checks AC-02, AC-03, AC-05, AC-06, AC-07 and AC-08 use the reported Boolean command to XV-103/V3."
+    }
+  ]
+}

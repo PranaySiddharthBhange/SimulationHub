@@ -125,7 +125,7 @@
     },
     {
       "name": "LIS-301",
-      "kind": "level indicator",
+      "kind": "instrument",
       "aliases": [],
       "values": [
         {
@@ -152,7 +152,7 @@
     },
     {
       "name": "QI-302",
-      "kind": "indicator",
+      "kind": "instrument",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -162,7 +162,7 @@
     },
     {
       "name": "LIS-501",
-      "kind": "level indicator",
+      "kind": "instrument",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -172,7 +172,7 @@
     },
     {
       "name": "QIS-502",
-      "kind": "indicator",
+      "kind": "instrument",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -212,7 +212,7 @@
     },
     {
       "name": "P&ID;",
-      "kind": "document/artifact",
+      "kind": "document",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -229,6 +229,16 @@
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "A StandardWater configuration may be used"
+    },
+    {
+      "name": "water-NaCl mixture",
+      "kind": "simulation medium",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The intended physical simulation medium is a water-NaCl mixture."
     },
     {
       "name": "evaporator/condenser",
@@ -263,50 +273,80 @@
       "quote": "B2 with\nconcentrated brine"
     },
     {
-      "subject": "V8",
-      "predicate": "connects flow from",
-      "object": "B1",
-      "detail": "to B3 when opened",
+      "subject": "B1",
+      "predicate": "transfers to",
+      "object": "B3",
+      "detail": "via V8 during Charge water",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "Open V8, B1 to B3"
     },
     {
-      "subject": "V9",
-      "predicate": "connects flow from",
-      "object": "B2",
-      "detail": "to B3 when opened",
+      "subject": "B2",
+      "predicate": "transfers to",
+      "object": "B3",
+      "detail": "via V9 during Charge brine / mix",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "Open V9, B2 to B3"
     },
     {
-      "subject": "V11",
-      "predicate": "connects flow from",
-      "object": "B3",
-      "detail": "to B4 when opened",
+      "subject": "B3",
+      "predicate": "transfers to",
+      "object": "B4",
+      "detail": "via V11 during Buffer transfer",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "Open V11, B3 to B4"
     },
     {
-      "subject": "V12",
-      "predicate": "connects flow from",
-      "object": "B4",
-      "detail": "to B5 when opened",
+      "subject": "B4",
+      "predicate": "transfers to",
+      "object": "B5",
+      "detail": "via V12 during Evaporator charge",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "open V12, B4 to B5"
     },
     {
-      "subject": "P1",
-      "predicate": "returns cooled process streams to",
-      "object": "charging-vessel header system",
+      "subject": "K1",
+      "predicate": "condenses",
+      "object": "vapor",
       "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "K1 condenses the vapor"
+    },
+    {
+      "subject": "B6",
+      "predicate": "cools",
+      "object": "condensate",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B6\ncools condensate"
+    },
+    {
+      "subject": "B7",
+      "predicate": "cools",
+      "object": "concentrate",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B7 cools concentrate"
+    },
+    {
+      "subject": "P1",
+      "predicate": "returns",
+      "object": "cooled process streams",
+      "detail": "to the charging-vessel header system",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -314,33 +354,13 @@
     },
     {
       "subject": "P2",
-      "predicate": "returns cooled process streams to",
-      "object": "charging-vessel header system",
-      "detail": "",
+      "predicate": "returns",
+      "object": "cooled process streams",
+      "detail": "to the charging-vessel header system",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "Pumps P1 and P2 return cooled process streams to the\ncharging-vessel header system."
-    },
-    {
-      "subject": "central controller",
-      "predicate": "commands",
-      "object": "discrete on/off valves",
-      "detail": "",
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "The central controller shall command discrete on/off valves."
-    },
-    {
-      "subject": "controller parallel split and join",
-      "predicate": "occurs",
-      "object": "after evaporation",
-      "detail": "",
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "controller parallel split and join after evaporation"
     }
   ],
   "facts": [
@@ -355,147 +375,75 @@
     },
     {
       "category": "requirement",
-      "statement": "Charge water phase required action: Open V8, B1 to B3.",
+      "statement": "Charge water action: open V8 from B1 to B3 until LIS-301 >= 0.13 m.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "released",
       "from_image": false,
-      "quote": "Charge water         Open V8, B1 to B3"
+      "quote": "Charge water         Open V8, B1 to B3                                             LIS-301 >= 0.13 m"
     },
     {
       "category": "requirement",
-      "statement": "Charge water completion condition: LIS-301 >= 0.13 m.",
+      "statement": "Charge brine / mix action: open V9 from B2 to B3 until QI-302 reaches recipe target.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "released",
       "from_image": false,
-      "quote": "LIS-301 >= 0.13 m"
+      "quote": "Charge brine / mix      Open V9, B2 to B3                                             QI-302 reaches recipe target"
     },
     {
       "category": "requirement",
-      "statement": "Charge brine / mix required action: Open V9, B2 to B3.",
+      "statement": "Buffer transfer action: open V11 from B3 to B4 until LIS-301 < 0.01 m.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "released",
       "from_image": false,
-      "quote": "Charge brine / mix      Open V9, B2 to B3"
+      "quote": "Buffer transfer         Open V11, B3 to B4                                            LIS-301 < 0.01 m"
     },
     {
       "category": "requirement",
-      "statement": "Charge brine / mix completion condition: QI-302 reaches recipe target.",
+      "statement": "Evaporator charge action: when B5 is idle, open V12 from B4 to B5 until LIS-501 reaches batch level.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "released",
       "from_image": false,
-      "quote": "QI-302 reaches recipe target"
+      "quote": "Evaporator charge     When B5 is idle, open V12, B4 to B5                              LIS-501 reaches batch level"
     },
     {
       "category": "requirement",
-      "statement": "Buffer transfer required action: Open V11, B3 to B4.",
+      "statement": "Evaporation action: enable B5 heater until QIS-502 reaches evaporation target.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "released",
       "from_image": false,
-      "quote": "Buffer transfer         Open V11, B3 to B4"
+      "quote": "Evaporation            Enable B5 heater                                            QIS-502 reaches evaporation target"
     },
     {
       "category": "requirement",
-      "statement": "Buffer transfer completion condition: LIS-301 < 0.01 m.",
+      "statement": "Condensate branch action: cool B6, then return condensate; completion is cooling complete and B6 returned.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "released",
       "from_image": false,
-      "quote": "LIS-301 < 0.01 m"
-    },
-    {
-      "category": "behavior",
-      "statement": "When B5 is idle, open V12, B4 to B5.",
-      "ref": "",
-      "anchor": "[page 1]",
-      "status": "released",
-      "from_image": false,
-      "quote": "When B5 is idle, open V12, B4 to B5"
+      "quote": "Condensate branch      Cool B6, then return condensate                                  Cooling complete and B6 returned"
     },
     {
       "category": "requirement",
-      "statement": "Evaporator charge completion condition: LIS-501 reaches batch level.",
+      "statement": "Concentrate branch action: transfer B5 to B7, cool B7, return concentrate; completion is cooling complete and B7 returned.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "released",
       "from_image": false,
-      "quote": "LIS-501 reaches batch level"
+      "quote": "Concentrate branch      Transfer B5 to B7, cool B7, return concentrate                      Cooling complete and B7 returned"
     },
     {
       "category": "requirement",
-      "statement": "Evaporation required action: Enable B5 heater.",
+      "statement": "Cycle reset action: wait for both branches; completion is both complete and time > 2500 s.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "released",
       "from_image": false,
-      "quote": "Evaporation            Enable B5 heater"
-    },
-    {
-      "category": "requirement",
-      "statement": "Evaporation completion condition: QIS-502 reaches evaporation target.",
-      "ref": "",
-      "anchor": "[page 1]",
-      "status": "released",
-      "from_image": false,
-      "quote": "QIS-502 reaches evaporation target"
-    },
-    {
-      "category": "requirement",
-      "statement": "Condensate branch required action: Cool B6, then return condensate.",
-      "ref": "",
-      "anchor": "[page 1]",
-      "status": "released",
-      "from_image": false,
-      "quote": "Condensate branch      Cool B6, then return condensate"
-    },
-    {
-      "category": "requirement",
-      "statement": "Condensate branch completion condition: Cooling complete and B6 returned.",
-      "ref": "",
-      "anchor": "[page 1]",
-      "status": "released",
-      "from_image": false,
-      "quote": "Cooling complete and B6 returned"
-    },
-    {
-      "category": "requirement",
-      "statement": "Concentrate branch required action: Transfer B5 to B7, cool B7, return concentrate.",
-      "ref": "",
-      "anchor": "[page 1]",
-      "status": "released",
-      "from_image": false,
-      "quote": "Concentrate branch      Transfer B5 to B7, cool B7, return concentrate"
-    },
-    {
-      "category": "requirement",
-      "statement": "Concentrate branch completion condition: Cooling complete and B7 returned.",
-      "ref": "",
-      "anchor": "[page 1]",
-      "status": "released",
-      "from_image": false,
-      "quote": "Cooling complete and B7 returned"
-    },
-    {
-      "category": "requirement",
-      "statement": "Cycle reset required action: Wait for both branches.",
-      "ref": "",
-      "anchor": "[page 1]",
-      "status": "released",
-      "from_image": false,
-      "quote": "Cycle reset             Wait for both branches"
-    },
-    {
-      "category": "constraint",
-      "statement": "Both complete and time > 2500 s.",
-      "ref": "",
-      "anchor": "[page 1]",
-      "status": "released",
-      "from_image": false,
-      "quote": "Both complete and time > 2500 s"
+      "quote": "Cycle reset             Wait for both branches                                         Both complete and time > 2500 s"
     },
     {
       "category": "requirement",
@@ -544,12 +492,57 @@
     },
     {
       "category": "requirement",
-      "statement": "It shall continue beyond 2500 s to demonstrate cycle reset.",
+      "statement": "The acceptance simulation shall continue beyond 2500 s to demonstrate cycle reset.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "released",
       "from_image": false,
       "quote": "It shall continue beyond 2500 s to demonstrate cycle reset."
+    },
+    {
+      "category": "constraint",
+      "statement": "Tank connections can pass above or below the liquid level.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "Tank connections can pass above or below the liquid level."
+    },
+    {
+      "category": "constraint",
+      "statement": "The preferred numerical treatment is a regularized asymmetric loss-factor formulation with hysteresis around the port elevation.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "The preferred numerical treatment is a regularized\nasymmetric loss-factor formulation with hysteresis around the port elevation."
+    },
+    {
+      "category": "constraint",
+      "statement": "The intended physical simulation medium is a water-NaCl mixture.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "The intended physical simulation medium is a water-NaCl mixture."
+    },
+    {
+      "category": "constraint",
+      "statement": "A StandardWater configuration may be used as an integration baseline to verify topology and sequence behavior before enabling composition-dependent property functions.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A StandardWater configuration may be used\nas an integration baseline to verify topology and sequence behavior before enabling composition-dependent\nproperty functions."
+    },
+    {
+      "category": "constraint",
+      "statement": "The evaporator/condenser may be represented as a combined simulation component provided the physical condenser K1 remains identifiable in the system architecture.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "The evaporator/condenser\nmay be represented as a combined simulation component provided the physical condenser K1 remains\nidentifiable in the system architecture."
     }
   ],
   "unreadable": [],

@@ -1,9 +1,9 @@
 ﻿"""Structured prompt for consolidating independent Stage 1 understanding notes."""
 
 from simulation_platform.prompts.common import COMMON
-from simulation_platform.skills.domains import DOMAIN_SKILLS
+from simulation_platform.skills.domains import domain_catalogue
 
-_DOMAIN_LIST = "\n".join(f"- {key}" for key in DOMAIN_SKILLS)
+_DOMAIN_LIST = domain_catalogue()
 
 MERGE_SPECIFIC_INSTRUCTIONS = f"""You are consolidating independent Stage 1 understanding notes into one
 resolved engineering brief. The context contains only those notes, separated
@@ -142,13 +142,18 @@ the same instruction produced a ratio of two reported variables against an
 expected number on one dataset, and a plain English restatement of the
 criterion on another. Only the first can ever be checked.
 
-- Write a comparison, not a description: `quantity_a >= 0.80` rather than "the
-  quantity reaches its stated limit".
+- Write a comparison, not a description: `quantity_a >= limit_a` rather than
+  "the quantity reaches its stated limit".
 - For a condition that must hold, make the expression Boolean and set
   `expected` to 1.0. Combine conditions with and/or/not, for example
   `not (output_a > 0.5 and output_b > 0.5)`.
 - `kind` is `final` for the end of the run, `at` with `at_time` for a stated
-  instant, and `always` for something that must hold throughout.
+  instant, `always` for something that must hold throughout, and `ever` for
+  something that must be true at least once. A staged process reaches each
+  stage's target and then moves past it, so those targets are `ever`, or `at`
+  when the evidence gives the instant -- never `final`, which would claim the
+  target still holds after a later stage has undone it and would contradict
+  the check for that later stage.
 - CHECK THAT THINGS HAPPEN, not only that they never go wrong. A set made only
   of bounds and exclusions -- a value never exceeded, two outputs never active
   together -- is satisfied perfectly by a model that does nothing at all, and
@@ -170,6 +175,26 @@ criterion on another. Only the first can ever be checked.
 - A criterion you cannot express over the reported variables is one the later
   stages cannot verify: state it in the narrative instead, and do not invent a
   numeric check to stand in for it.
+
+### Record what you resolved, not only what you could not
+
+Populate `resolutions` with every material conflict you DID settle: the topic,
+the value or behaviour you adopted, each candidate you rejected with the reason
+it lost, and the evidence that decided it. A conflict is material when a
+different answer would change the model -- a differing setpoint, duration,
+threshold, command behaviour or topology. Do not record a cosmetic difference.
+
+Resolving a conflict correctly does not make it invisible. A reviewer is shown
+each of these already answered with your choice as the default, so they can
+confirm it in one click or overrule it, and an engineer may still disagree with
+a change record that the documents themselves disagree about. Settling a
+decision silently denies them that, and the better your evidence gets the more
+decisions would vanish from view. So resolve it, state it here, and let the
+reviewer see it.
+
+This is separate from `questions` and `clarifications`, which remain for what
+the evidence genuinely does NOT settle. A conflict belongs in exactly one of
+the two: resolved and recorded here, or open and asked there.
 
 For every material unresolved decision, populate both `questions` with a short
 question string and `clarifications` with one structured record. Each
@@ -211,13 +236,33 @@ Check especially final sentences, page or sheet markers, numeric values with
 units, command schedules, report requirements, aliases, and stated absences.
 Do not add a catch-all section outside the Understanding schema.
 
-Populate `domains` with only the genuinely applicable general engineering
-domains from this list. Leave it empty when none is clearly supported:
+Populate `domains` with every general engineering domain whose physics this
+system actually contains. The two mistakes here do not cost the same. An extra
+domain adds background guidance a later stage can simply not use, which costs
+almost nothing. A missing one removes physics that stage then never sees, and
+it has no way to recover what it was not given -- a process that boils solvent
+out of a solution, modelled without the phase-change domain, loses the latent
+term that dominates its energy balance. So when a domain's physics is present
+at all, include it, even where another domain already covers part of the same
+system. Leave `domains` empty only when none of them applies.
+
+Choose against the DESCRIPTION, not the key. A key is a short identifier and
+does not tell you what the domain covers; read what each one is for:
 
 {_DOMAIN_LIST}
 
 Domain selection supplies general knowledge to later stages; it never replaces
 problem-specific evidence in `narrative`.
+
+Choose by which PHYSICS the model must actually contain, not by what the system
+is called. Domains overlap on purpose and a real plant usually needs several:
+one that moves liquid between vessels, heats it, tracks a dissolved species AND
+boils some of it off needs the level, thermal, species and phase-change domains
+together, because each contributes a term the others do not. Leaving one out
+because another looks similar silently drops its physics -- a phase change
+modelled with only a sensible-heat term loses the latent term that dominates
+it. Include every domain whose physics genuinely appears in this system, and
+leave out only those whose physics does not.
 """
 
 MERGE_PROMPT = COMMON + "\n\n" + MERGE_SPECIFIC_INSTRUCTIONS

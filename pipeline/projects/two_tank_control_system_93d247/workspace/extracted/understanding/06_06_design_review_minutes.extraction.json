@@ -11,7 +11,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "STOP"
+      "quote": "STOP waits for either START or SHUT"
     },
     {
       "name": "START",
@@ -21,7 +21,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "START"
+      "quote": "STOP waits for either START or SHUT"
     },
     {
       "name": "SHUT",
@@ -43,7 +43,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "V1"
+      "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
     },
     {
       "name": "V2",
@@ -53,7 +53,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "V2"
+      "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
     },
     {
       "name": "V3",
@@ -63,7 +63,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "V3"
+      "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
     },
     {
       "name": "LT-101",
@@ -73,7 +73,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "LT-101"
+      "quote": "both LT-101 and LT-102 are at or below their low-level setpoints."
     },
     {
       "name": "LT-102",
@@ -83,17 +83,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "LT-102"
-    },
-    {
-      "name": "IDLE",
-      "kind": "controller state",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "IDLE"
+      "quote": "both LT-101 and LT-102 are at or below their low-level setpoints."
     },
     {
       "name": "T1",
@@ -120,7 +110,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "T1 high should be increased from 0.78 m to 0.80 m"
+      "quote": "Confirm whether T1 high should be increased from 0.78 m to 0.80 m."
     },
     {
       "name": "post-transfer delay",
@@ -133,7 +123,7 @@
           "unit": "s",
           "status": "approved",
           "supersedes": "",
-          "quote": "Closed by CR-004: 12 s"
+          "quote": "Closed by CR-004: 12 s."
         }
       ],
       "ref": "",
@@ -152,7 +142,7 @@
           "unit": "s",
           "status": "approved",
           "supersedes": "",
-          "quote": "Closed by CR-004: 8 s"
+          "quote": "Closed by CR-004: 8 s."
         }
       ],
       "ref": "",
@@ -161,17 +151,47 @@
       "quote": "Consider reducing inter-cycle delay after Tank 2 low. *Closed by CR-004: 8 s.*"
     },
     {
-      "name": "CR-004",
-      "kind": "change request",
+      "name": "IDLE",
+      "kind": "controller state",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "CR-004"
+      "quote": "the sequence context is reset to IDLE"
     }
   ],
   "relationships": [
+    {
+      "subject": "STOP",
+      "predicate": "waits for either",
+      "object": "START",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "STOP waits for either START or SHUT"
+    },
+    {
+      "subject": "STOP",
+      "predicate": "waits for either",
+      "object": "SHUT",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "STOP waits for either START or SHUT"
+    },
+    {
+      "subject": "V1",
+      "predicate": "remains closed during",
+      "object": "SHUT",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
+    },
     {
       "subject": "V2",
       "predicate": "commanded open together with",
@@ -183,40 +203,48 @@
       "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
     },
     {
-      "subject": "V1",
-      "predicate": "must remain closed while",
-      "object": "V2",
-      "detail": "during SHUT when V2 and V3 are commanded open together",
-      "ref": "",
+      "subject": "SHUT",
+      "predicate": "complete only when",
+      "object": "LT-101",
+      "detail": "at or below their low-level setpoints",
+      "ref": "D-06",
       "anchor": "",
       "from_image": false,
-      "quote": "During SHUT, V1 must remain closed while V2 and V3 are commanded open together."
+      "quote": "SHUT is complete only when both LT-101 and LT-102 are at or below their low-level setpoints."
     },
     {
-      "subject": "V1",
-      "predicate": "must never be commanded open together with",
-      "object": "V2",
-      "detail": "",
-      "ref": "",
+      "subject": "SHUT",
+      "predicate": "complete only when",
+      "object": "LT-102",
+      "detail": "at or below their low-level setpoints",
+      "ref": "D-06",
       "anchor": "",
       "from_image": false,
-      "quote": "V1 and V2 must never be commanded open together."
-    },
-    {
-      "subject": "V2",
-      "predicate": "must not be commanded open together with",
-      "object": "V3",
-      "detail": "in normal auto operation; SHUT is the only permitted exception",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V2 and V3 must not be commanded open together in normal auto operation; SHUT is the only permitted exception."
+      "quote": "SHUT is complete only when both LT-101 and LT-102 are at or below their low-level setpoints."
     }
   ],
   "facts": [
     {
       "category": "requirement",
-      "statement": "Command precedence is `SHUT > STOP > START`.",
+      "statement": "STOP should pause the process rather than alter the sequence timing by freezing remaining delay.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "The review board selected **freeze remaining delay** because STOP should pause the process rather than alter the sequence timing."
+    },
+    {
+      "category": "requirement",
+      "statement": "SHUT means a controlled process shutdown/drain, not an emergency-stop function.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "The term `shut` was confirmed to mean a **controlled process shutdown/drain**, not an emergency-stop function."
+    },
+    {
+      "category": "requirement",
+      "statement": "Command precedence is SHUT > STOP > START.",
       "ref": "D-01",
       "anchor": "",
       "status": "approved",
@@ -242,7 +270,7 @@
       "quote": "**D-03:** STOP during any delay freezes the remaining delay; START resumes the remaining delay."
     },
     {
-      "category": "requirement",
+      "category": "behavior",
       "statement": "START while the automatic sequence is already running is ignored.",
       "ref": "D-04",
       "anchor": "",
@@ -251,7 +279,7 @@
       "quote": "**D-04:** START while the automatic sequence is already running is ignored."
     },
     {
-      "category": "requirement",
+      "category": "behavior",
       "statement": "START and STOP received during active SHUT are ignored.",
       "ref": "D-05",
       "anchor": "",
@@ -296,31 +324,13 @@
       "quote": "**D-09:** V2 and V3 must not be commanded open together in normal auto operation; SHUT is the only permitted exception."
     },
     {
-      "category": "behavior",
-      "statement": "STOP during any delay freezes the remaining delay; START resumes the remaining delay.",
-      "ref": "D-03",
+      "category": "requirement",
+      "statement": "Do not model shut as a power-loss or emergency-stop event.",
+      "ref": "",
       "anchor": "",
       "status": "approved",
       "from_image": false,
-      "quote": "**D-03:** STOP during any delay freezes the remaining delay; START resumes the remaining delay."
-    },
-    {
-      "category": "behavior",
-      "statement": "START while the automatic sequence is already running is ignored.",
-      "ref": "D-04",
-      "anchor": "",
-      "status": "approved",
-      "from_image": false,
-      "quote": "**D-04:** START while the automatic sequence is already running is ignored."
-    },
-    {
-      "category": "behavior",
-      "statement": "START and STOP received during active SHUT are ignored.",
-      "ref": "D-05",
-      "anchor": "",
-      "status": "approved",
-      "from_image": false,
-      "quote": "**D-05:** START and STOP received during active SHUT are ignored."
+      "quote": "Do not model `shut` as a power-loss or emergency-stop event."
     }
   ],
   "unreadable": [],

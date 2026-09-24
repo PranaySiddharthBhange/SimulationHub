@@ -1,22 +1,23 @@
 Subject: reference magnetic circuit
-Document kind: engineering diagram
+Document kind: engineering drawing
 
 ## Entities
-* yoke -- magnetic circuit component
-* leg -- magnetic circuit component
-* coil -- electromagnetic coil
-* N.I -- magnetomotive force
-* Φσ -- magnetic flux
-* cross section -- geometric feature
-* l -- dimension
-    - length: l
+* yoke -- magnetic core section
+* leg -- magnetic core section
+* coil -- coil
+* N.I -- magnetomotive force source; aliases: Θ=N.I
+* Φ_σ -- magnetic flux
+* cross section -- cross section view
 * a -- dimension
     - size: a
-* δ -- dimension
+* l -- dimension
+    - length: l
+* δ -- air gap dimension
     - gap: δ
 
 ## Relationships
-* coil is on leg
-* Φσ is at δ
-* cross section has dimension a (square cross-section with both sides labeled a)
-* yoke connects to leg (forming a rectangular magnetic core)
+* coil located_in leg (coil is drawn wound around the left leg)
+* N.I associated_with coil (magnetomotive force source is indicated at the coil)
+* Φ_σ passes_through δ (flux arrow is drawn crossing the air gap opening on the right side)
+* yoke connected_to leg (the top and bottom yokes join the left leg as a rectangular magnetic core)
+* cross section has_dimension a

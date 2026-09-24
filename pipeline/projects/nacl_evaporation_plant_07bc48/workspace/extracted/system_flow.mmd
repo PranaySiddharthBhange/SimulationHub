@@ -1,0 +1,59 @@
+flowchart TD
+    A["Start simulation"] --> B{"startEnable and B3 available?"}
+    B -->|No| B
+    B -->|Yes| C["Initial state<br/>All automated valves closed<br/>P1 off, P2 off<br/>B5 heater off<br/>B6 cooler off, B7 cooler off"]
+    C --> D["Step1 Charge water<br/>Open V8<br/>Transfer B1 to B3"]
+    D --> E{"LIS-301 >= 0.13 m?"}
+    E -->|No| D
+    E -->|Yes| F["Step2 Charge brine/mix<br/>Open V9<br/>Continue charging B2 to B3"]
+    F --> G{"QI-302 >= 0.080 kg/kg?"}
+    G -->|No| F
+    G -->|Yes| H["Step3 Buffer transfer<br/>Open V11<br/>Transfer B3 to B4"]
+    H --> I{"LIS-301 < 0.01 m?"}
+    I -->|No| H
+    I -->|Yes| J["Step4 B5 idle check<br/>No transfer actuator"]
+    J --> K{"LIS-501 < 0.01 m and V15 closed?"}
+    K -->|No| J
+    K -->|Yes| L["Step5 Evaporator charge<br/>Open V12<br/>Transfer B4 to B5"]
+    L --> M{"LIS-501 >= 0.18 m?"}
+    M -->|No| L
+    M -->|Yes| N{"LIS-501 >= 0.05 m and FIS-801 >= 0.10 kg/s?"}
+    N -->|No| N
+    N -->|Yes| O["Step6 Evaporation<br/>B5 heater on"]
+    O --> P{"QIS-502 >= 0.180 kg/kg?"}
+    P -->|No| Q{"LIS-501 < 0.05 m or FIS-801 < 0.10 kg/s?"}
+    Q -->|Yes| N
+    Q -->|No| O
+    P -->|Yes| R["Parallel split after evaporation"]
+    R -->|Branch A| S["Branch A condensate cooling<br/>B6 cooler on"]
+    R -->|Branch B| X["Step7 B7 availability check<br/>No transfer actuator"]
+    S --> T{"TIS-602 <= 20 degC?"}
+    T -->|No| S
+    T -->|Yes| U{"LIS-601 > 0.02 m?"}
+    U -->|No| U
+    U -->|Yes| V["Step13 Condensate return<br/>P2 on + B1 return valve group<br/>Route B6 -> P2 -> B1"]
+    V -->|PIS-1001 < 0.8 bar while running| W["P2 low discharge pressure alarm"]
+    V -->|Return complete| AC["Branch A complete"]
+    W -->|Continue| AC
+    X --> Y{"LIS-701 < 0.01 m?"}
+    Y -->|No| Y
+    Y -->|Yes| Z["Step8 Concentrate transfer<br/>Open V15<br/>Transfer B5 to B7"]
+    Z --> AA["Step9 Concentrate cooling<br/>B7 cooler on"]
+    AA --> AB{"TIS-702 <= 25 degC?"}
+    AB -->|No| AA
+    AB -->|Yes| AD{"LIS-701 > 0.02 m?"}
+    AD -->|No| AD
+    AD -->|Yes| AE["Step10/11 Concentrate return<br/>P1 on + B2 return valve group<br/>Route B7 -> P1 -> B2"]
+    AE -->|PIS-901 < 0.8 bar while running| AF["P1 low discharge pressure alarm"]
+    AE -->|Return complete| AG["Branch B complete"]
+    AF -->|Continue| AG
+    AC --> AH{"Both branches complete?"}
+    AG --> AH
+    AH -->|No| AH
+    AH -->|Yes| AI["JoinWait"]
+    AI --> AJ{"time_s > 2500 s?"}
+    AJ -->|No| AI
+    AJ -->|Yes| AK["Cycle reset to Initial"]
+    AK --> AL{"time_s >= 3000 s?"}
+    AL -->|No| C
+    AL -->|Yes| AM["End simulation"]

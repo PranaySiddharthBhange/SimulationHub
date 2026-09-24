@@ -1,25 +1,39 @@
-Subject: RECORDED values -- an observation of a run that already happened
+Subject: quasistatic ramp results
 Document kind: dataset
 
 ## Entities
-* run -- observed run
-    - row count: 201 rows [observed]
-    - column count: 15 columns [observed]
-    - time_s: 0 .. 1 [observed]
-    - I_rms_A: 0 .. 2 [observed]
-    - mmf_At: 0 .. 1200 [observed]
-    - Phi_core_Wb: 0 .. 0.000524935 [observed]
-    - Phi_gap_Wb: 0 .. 0.000482941 [observed]
-    - Phi_leak_Wb: 0 .. 4.19948e-05 [observed]
-    - B_core_T: 0 .. 0.839897 [observed]
-    - B_gap_T: 0 .. 0.772705 [observed]
-    - H_core_A_m: 0 .. 556.974 [observed]
-    - H_gap_A_m: 0 .. 614899 [observed]
-    - Vm_core_At: 0 .. 277.651 [observed]
-    - Vm_gap_At: 0 .. 922.349 [observed]
-    - U_exc_induced_V_rms: 0 .. 98.948 [observed]
-    - U_meas_induced_signed_V_rms: -7.58601 .. -0 [observed]
-    - Phi_gap_over_Phi_core: 0 .. 0.92 [observed]
+* run -- observation
+* time_s -- recorded variable
+    - range: 0 .. 1 [observed]
+* I_rms_A -- recorded variable
+    - range: 0 .. 2 [observed]
+* mmf_At -- recorded variable
+    - range: 0 .. 1200 [observed]
+* Phi_core_Wb -- recorded variable
+    - range: 0 .. 0.000524935 [observed]
+* Phi_gap_Wb -- recorded variable
+    - range: 0 .. 0.000482941 [observed]
+* Phi_leak_Wb -- recorded variable
+    - range: 0 .. 4.19948e-05 [observed]
+* B_core_T -- recorded variable
+    - range: 0 .. 0.839897 [observed]
+* B_gap_T -- recorded variable
+    - range: 0 .. 0.772705 [observed]
+* H_core_A_m -- recorded variable
+    - range: 0 .. 556.974 [observed]
+* H_gap_A_m -- recorded variable
+    - range: 0 .. 614899 [observed]
+* Vm_core_At -- recorded variable
+    - range: 0 .. 277.651 [observed]
+* Vm_gap_At -- recorded variable
+    - range: 0 .. 922.349 [observed]
+* U_exc_induced_V_rms -- recorded variable
+    - range: 0 .. 98.948 [observed]
+* U_meas_induced_signed_V_rms -- recorded variable
+    - range: -7.58601 .. -0 [observed]
+* Phi_gap_over_Phi_core -- recorded variable
+    - range: 0 .. 0.92 [observed]
 
 ## Physical relationships
-* The rest of the rows repeat the previous row's state except where a discrete column changes value. [observed]
+* Observed at time_s=0.105, Phi_gap_over_Phi_core=0.92. [observed]
+* Observed at time_s=1.0, Phi_gap_over_Phi_core=0.92. [observed]

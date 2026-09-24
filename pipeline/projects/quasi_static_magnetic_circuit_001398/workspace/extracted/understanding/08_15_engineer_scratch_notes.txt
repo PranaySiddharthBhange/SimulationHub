@@ -5,34 +5,36 @@ Document kind: engineering notes
 * EP-03 current -- electrical quantity
     - current: 2 Arms
     - current: 2.828 A peak
-* Old v1 model -- model
-    - sigma: 0.05 [archived]
 * sigma -- parameter
+    - sigma: 0.05 [archived]
     - sigma: .08
-    - useful/core: .92
+* Useful/core -- derived quantity
+    - Useful/core: .92
 * Gap -- magnetic path element
+    - gap: 1.58 mm [measured]
+    - gap: 1.50 mm
 * leakage -- magnetic path element
 * Phi_core -- magnetic quantity
 * gap B calculation -- calculation
-* Physical prototype -- prototype
-    - gap: ~1.58 mm [measured]
-    - gap: 1.50 mm [analytic]
 * Excitation induced U -- electrical quantity
 * measurement coil -- coil
-* Linear benchmark -- case
-* nonlinear inductor case -- case
+* ramp -- input profile
+* Physical prototype -- prototype
+* analytic case -- analysis case
+* Linear benchmark -- benchmark case
+* nonlinear inductor case -- analysis case
 
 ## Relationships
 * Gap in parallel with leakage (same magnetic voltage, different flux)
-* Excitation induced U proportional to ramp (Magnitudes)
-* measurement coil proportional to ramp (Magnitudes)
+* Excitation induced U has orientation positive orientation
+* measurement coil has orientation negative
+* Excitation induced U proportional to ramp (Magnitudes are both proportional to ramp)
+* measurement coil proportional to ramp (Magnitudes are both proportional to ramp)
 
-## Constraints
-* Linear benchmark only.
+## Requirements
+* Do not put total Phi_core into gap B calculation.
 
 ## Physical relationships
 * Useful/core = 1 - sigma.
-
-## Unreadable
-* The term "release truth" gives status context but no controlled status label is explicitly defined in the note.
-* The phrase "measurement coil negative" is ambiguous about whether it refers to orientation, polarity, or sign convention.
+* With sigma=.08 -> .92.
+* Magnitudes are both proportional to ramp.

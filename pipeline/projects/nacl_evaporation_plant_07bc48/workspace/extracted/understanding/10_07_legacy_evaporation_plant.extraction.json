@@ -36,7 +36,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B1(area=0.070, levelMax=0.60)"
+          "quote": "Tank B1(area=0.070, levelMax=0.60);"
         },
         {
           "quantity": "levelMax",
@@ -44,7 +44,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B1(area=0.070, levelMax=0.60)"
+          "quote": "Tank B1(area=0.070, levelMax=0.60);"
         }
       ],
       "ref": "",
@@ -63,7 +63,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B2(area=0.070, levelMax=0.60)"
+          "quote": "Tank B2(area=0.070, levelMax=0.60);"
         },
         {
           "quantity": "levelMax",
@@ -71,7 +71,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B2(area=0.070, levelMax=0.60)"
+          "quote": "Tank B2(area=0.070, levelMax=0.60);"
         }
       ],
       "ref": "",
@@ -90,7 +90,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B3(area=0.050, levelMax=0.45)"
+          "quote": "Tank B3(area=0.050, levelMax=0.45);"
         },
         {
           "quantity": "levelMax",
@@ -98,7 +98,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B3(area=0.050, levelMax=0.45)"
+          "quote": "Tank B3(area=0.050, levelMax=0.45);"
         }
       ],
       "ref": "",
@@ -117,7 +117,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B4(area=0.055, levelMax=0.45)"
+          "quote": "Tank B4(area=0.055, levelMax=0.45);"
         },
         {
           "quantity": "levelMax",
@@ -125,7 +125,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B4(area=0.055, levelMax=0.45)"
+          "quote": "Tank B4(area=0.055, levelMax=0.45);"
         }
       ],
       "ref": "",
@@ -144,7 +144,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B5(area=0.060, levelMax=0.45)"
+          "quote": "TankWithEvaporator B5(area=0.060, levelMax=0.45);"
         },
         {
           "quantity": "levelMax",
@@ -152,7 +152,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B5(area=0.060, levelMax=0.45)"
+          "quote": "TankWithEvaporator B5(area=0.060, levelMax=0.45);"
         }
       ],
       "ref": "",
@@ -171,7 +171,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B6(area=0.050, levelMax=0.40)"
+          "quote": "TankWithHeatPort B6(area=0.050, levelMax=0.40);"
         },
         {
           "quantity": "levelMax",
@@ -179,7 +179,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B6(area=0.050, levelMax=0.40)"
+          "quote": "TankWithHeatPort B6(area=0.050, levelMax=0.40);"
         }
       ],
       "ref": "",
@@ -198,7 +198,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B7(area=0.050, levelMax=0.40)"
+          "quote": "TankWithHeatPort B7(area=0.050, levelMax=0.40);"
         },
         {
           "quantity": "levelMax",
@@ -206,7 +206,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B7(area=0.050, levelMax=0.40)"
+          "quote": "TankWithHeatPort B7(area=0.050, levelMax=0.40);"
         }
       ],
       "ref": "",
@@ -225,7 +225,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B3_water_level=0.13"
+          "quote": "B3_water_level=0.13,"
         },
         {
           "quantity": "B3_target_X",
@@ -233,7 +233,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B3_target_X=0.080"
+          "quote": "B3_target_X=0.080,"
         },
         {
           "quantity": "B5_batch_level",
@@ -241,7 +241,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B5_batch_level=0.18"
+          "quote": "B5_batch_level=0.18,"
         },
         {
           "quantity": "B5_target_X",
@@ -249,7 +249,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B5_target_X=0.180"
+          "quote": "B5_target_X=0.180,"
         },
         {
           "quantity": "B6_target_T",
@@ -257,14 +257,14 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "B6_target_T=293.15"
+          "quote": "B6_target_T=293.15,"
         },
         {
           "quantity": "B7_target_T",
           "value": "293.15",
           "unit": "",
           "status": "stale",
-          "supersedes": "20 C",
+          "supersedes": "CR-017",
           "quote": "B7_target_T=293.15, // STALE: 20 C, superseded by CR-017"
         },
         {
@@ -273,7 +273,7 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "restartTime=2500"
+          "quote": "restartTime=2500);"
         }
       ],
       "ref": "",
@@ -282,7 +282,7 @@
       "quote": "Controller controller("
     },
     {
-      "name": "LIS_301",
+      "name": "controller.sensors.LIS_301",
       "kind": "sensor signal",
       "aliases": [],
       "values": [],
@@ -292,7 +292,7 @@
       "quote": "controller.sensors.LIS_301 = B3.level;"
     },
     {
-      "name": "QI_302",
+      "name": "controller.sensors.QI_302",
       "kind": "sensor signal",
       "aliases": [],
       "values": [],
@@ -302,7 +302,7 @@
       "quote": "controller.sensors.QI_302  = B3.medium.Xi[1];"
     },
     {
-      "name": "LIS_501",
+      "name": "controller.sensors.LIS_501",
       "kind": "sensor signal",
       "aliases": [],
       "values": [],
@@ -312,7 +312,7 @@
       "quote": "controller.sensors.LIS_501 = B5.level;"
     },
     {
-      "name": "QIS_502",
+      "name": "controller.sensors.QIS_502",
       "kind": "sensor signal",
       "aliases": [],
       "values": [],
@@ -322,7 +322,7 @@
       "quote": "controller.sensors.QIS_502 = B5.medium.Xi[1];"
     },
     {
-      "name": "TIS_602",
+      "name": "controller.sensors.TIS_602",
       "kind": "sensor signal",
       "aliases": [],
       "values": [],
@@ -332,7 +332,7 @@
       "quote": "controller.sensors.TIS_602 = B6.medium.T;"
     },
     {
-      "name": "TIS_702",
+      "name": "controller.sensors.TIS_702",
       "kind": "sensor signal",
       "aliases": [],
       "values": [],
@@ -342,153 +342,183 @@
       "quote": "controller.sensors.TIS_702 = B7.medium.T;"
     },
     {
-      "name": "T5_Heater",
-      "kind": "actuator",
+      "name": "controller.actuators.T5_Heater",
+      "kind": "actuator signal",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "controller.actuators.T5_Heater"
-    }
-  ],
-  "relationships": [
+      "quote": "B5.heatPort.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;"
+    },
     {
-      "subject": "LIS_301",
-      "predicate": "measures",
-      "object": "B3",
-      "detail": "B3.level",
+      "name": "B5.heatPort.Q_flow",
+      "kind": "heat flow variable",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B5.heatPort.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;"
+    },
+    {
+      "name": "B3.level",
+      "kind": "level variable",
+      "aliases": [],
+      "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "controller.sensors.LIS_301 = B3.level;"
     },
     {
-      "subject": "QI_302",
-      "predicate": "measures",
-      "object": "B3",
-      "detail": "B3.medium.Xi[1]",
+      "name": "B3.medium.Xi[1]",
+      "kind": "composition variable",
+      "aliases": [],
+      "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "controller.sensors.QI_302  = B3.medium.Xi[1];"
     },
     {
-      "subject": "LIS_501",
-      "predicate": "measures",
-      "object": "B5",
-      "detail": "B5.level",
+      "name": "B5.level",
+      "kind": "level variable",
+      "aliases": [],
+      "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "controller.sensors.LIS_501 = B5.level;"
     },
     {
-      "subject": "QIS_502",
-      "predicate": "measures",
-      "object": "B5",
-      "detail": "B5.medium.Xi[1]",
+      "name": "B5.medium.Xi[1]",
+      "kind": "composition variable",
+      "aliases": [],
+      "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "controller.sensors.QIS_502 = B5.medium.Xi[1];"
     },
     {
-      "subject": "TIS_602",
-      "predicate": "measures",
-      "object": "B6",
-      "detail": "B6.medium.T",
+      "name": "B6.medium.T",
+      "kind": "temperature variable",
+      "aliases": [],
+      "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "controller.sensors.TIS_602 = B6.medium.T;"
     },
     {
-      "subject": "TIS_702",
-      "predicate": "measures",
-      "object": "B7",
-      "detail": "B7.medium.T",
+      "name": "B7.medium.T",
+      "kind": "temperature variable",
+      "aliases": [],
+      "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "controller.sensors.TIS_702 = B7.medium.T;"
     },
     {
-      "subject": "controller",
-      "predicate": "connects sensor",
-      "object": "LIS_301",
-      "detail": "controller.sensors.LIS_301",
+      "name": "B7/P1",
+      "kind": "branch endpoint",
+      "aliases": [],
+      "values": [],
       "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "controller.sensors.LIS_301 = B3.level;"
-    },
-    {
-      "subject": "controller",
-      "predicate": "connects sensor",
-      "object": "QI_302",
-      "detail": "controller.sensors.QI_302",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "controller.sensors.QI_302  = B3.medium.Xi[1];"
-    },
-    {
-      "subject": "controller",
-      "predicate": "connects sensor",
-      "object": "LIS_501",
-      "detail": "controller.sensors.LIS_501",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "controller.sensors.LIS_501 = B5.level;"
-    },
-    {
-      "subject": "controller",
-      "predicate": "connects sensor",
-      "object": "QIS_502",
-      "detail": "controller.sensors.QIS_502",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "controller.sensors.QIS_502 = B5.medium.Xi[1];"
-    },
-    {
-      "subject": "controller",
-      "predicate": "connects sensor",
-      "object": "TIS_602",
-      "detail": "controller.sensors.TIS_602",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "controller.sensors.TIS_602 = B6.medium.T;"
-    },
-    {
-      "subject": "controller",
-      "predicate": "connects sensor",
-      "object": "TIS_702",
-      "detail": "controller.sensors.TIS_702",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "controller.sensors.TIS_702 = B7.medium.T;"
-    },
-    {
-      "subject": "B7",
-      "predicate": "returns to",
-      "object": "B1",
-      "detail": "Branch B; archived teaching controller; superseded by CR-017 in the released benchmark",
-      "ref": "CR-017",
       "anchor": "",
       "from_image": false,
       "quote": "Branch B: B7/P1 to B1; Branch A: B6/P2 to B2."
     },
     {
-      "subject": "B6",
-      "predicate": "returns to",
+      "name": "B6/P2",
+      "kind": "branch endpoint",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Branch B: B7/P1 to B1; Branch A: B6/P2 to B2."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "controller.sensors.LIS_301",
+      "predicate": "equals",
+      "object": "B3.level",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.LIS_301 = B3.level;"
+    },
+    {
+      "subject": "controller.sensors.QI_302",
+      "predicate": "equals",
+      "object": "B3.medium.Xi[1]",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.QI_302  = B3.medium.Xi[1];"
+    },
+    {
+      "subject": "controller.sensors.LIS_501",
+      "predicate": "equals",
+      "object": "B5.level",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.LIS_501 = B5.level;"
+    },
+    {
+      "subject": "controller.sensors.QIS_502",
+      "predicate": "equals",
+      "object": "B5.medium.Xi[1]",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.QIS_502 = B5.medium.Xi[1];"
+    },
+    {
+      "subject": "controller.sensors.TIS_602",
+      "predicate": "equals",
+      "object": "B6.medium.T",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.TIS_602 = B6.medium.T;"
+    },
+    {
+      "subject": "controller.sensors.TIS_702",
+      "predicate": "equals",
+      "object": "B7.medium.T",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.TIS_702 = B7.medium.T;"
+    },
+    {
+      "subject": "B7/P1",
+      "predicate": "to",
+      "object": "B1",
+      "detail": "Branch B",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Branch B: B7/P1 to B1; Branch A: B6/P2 to B2."
+    },
+    {
+      "subject": "B6/P2",
+      "predicate": "to",
       "object": "B2",
-      "detail": "Branch A; archived teaching controller; superseded by CR-017 in the released benchmark",
-      "ref": "CR-017",
+      "detail": "Branch A",
+      "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "Branch B: B7/P1 to B1; Branch A: B6/P2 to B2."
@@ -497,7 +527,7 @@
   "facts": [
     {
       "category": "behavior",
-      "statement": "B5.heatPort.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;",
+      "statement": "B5.heatPort.Q_flow = if controller.actuators.T5_Heater then 20000 else 0",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -506,7 +536,7 @@
     },
     {
       "category": "physical_relationship",
-      "statement": "controller.sensors.LIS_301 = B3.level;",
+      "statement": "controller.sensors.LIS_301 = B3.level",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -515,7 +545,7 @@
     },
     {
       "category": "physical_relationship",
-      "statement": "controller.sensors.QI_302  = B3.medium.Xi[1];",
+      "statement": "controller.sensors.QI_302  = B3.medium.Xi[1]",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -524,7 +554,7 @@
     },
     {
       "category": "physical_relationship",
-      "statement": "controller.sensors.LIS_501 = B5.level;",
+      "statement": "controller.sensors.LIS_501 = B5.level",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -533,7 +563,7 @@
     },
     {
       "category": "physical_relationship",
-      "statement": "controller.sensors.QIS_502 = B5.medium.Xi[1];",
+      "statement": "controller.sensors.QIS_502 = B5.medium.Xi[1]",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -542,7 +572,7 @@
     },
     {
       "category": "physical_relationship",
-      "statement": "controller.sensors.TIS_602 = B6.medium.T;",
+      "statement": "controller.sensors.TIS_602 = B6.medium.T",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -551,12 +581,30 @@
     },
     {
       "category": "physical_relationship",
-      "statement": "controller.sensors.TIS_702 = B7.medium.T;",
+      "statement": "controller.sensors.TIS_702 = B7.medium.T",
       "ref": "",
       "anchor": "",
       "status": "unknown",
       "from_image": false,
       "quote": "controller.sensors.TIS_702 = B7.medium.T;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "OLD return routing preserved from archived teaching controller: Branch B: B7/P1 to B1; Branch A: B6/P2 to B2.",
+      "ref": "",
+      "anchor": "",
+      "status": "archived",
+      "from_image": false,
+      "quote": "// OLD return routing preserved from archived teaching controller:\n  // Branch B: B7/P1 to B1; Branch A: B6/P2 to B2."
+    },
+    {
+      "category": "constraint",
+      "statement": "This is superseded by CR-017 in the released benchmark.",
+      "ref": "CR-017",
+      "anchor": "",
+      "status": "superseded",
+      "from_image": false,
+      "quote": "// This is superseded by CR-017 in the released benchmark."
     }
   ],
   "unreadable": [],

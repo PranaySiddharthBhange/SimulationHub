@@ -31,39 +31,46 @@ Document kind: legacy model
     - B5_batch_level: 0.18
     - B5_target_X: 0.180
     - B6_target_T: 293.15
-    - B7_target_T: 293.15 [superseded/stale] (supersedes/superseded: 20 C)
+    - B7_target_T: 293.15 [superseded/stale] (supersedes/superseded: CR-017)
     - restartTime: 2500
-* LIS_301 -- sensor signal
-* QI_302 -- sensor signal
-* LIS_501 -- sensor signal
-* QIS_502 -- sensor signal
-* TIS_602 -- sensor signal
-* TIS_702 -- sensor signal
-* T5_Heater -- actuator
+* controller.sensors.LIS_301 -- sensor signal
+* controller.sensors.QI_302 -- sensor signal
+* controller.sensors.LIS_501 -- sensor signal
+* controller.sensors.QIS_502 -- sensor signal
+* controller.sensors.TIS_602 -- sensor signal
+* controller.sensors.TIS_702 -- sensor signal
+* controller.actuators.T5_Heater -- actuator signal
+* B5.heatPort.Q_flow -- heat flow variable
+* B3.level -- level variable
+* B3.medium.Xi[1] -- composition variable
+* B5.level -- level variable
+* B5.medium.Xi[1] -- composition variable
+* B6.medium.T -- temperature variable
+* B7.medium.T -- temperature variable
+* B7/P1 -- branch endpoint
+* B6/P2 -- branch endpoint
 
 ## Relationships
-* LIS_301 measures B3 (B3.level)
-* QI_302 measures B3 (B3.medium.Xi[1])
-* LIS_501 measures B5 (B5.level)
-* QIS_502 measures B5 (B5.medium.Xi[1])
-* TIS_602 measures B6 (B6.medium.T)
-* TIS_702 measures B7 (B7.medium.T)
-* controller connects sensor LIS_301 (controller.sensors.LIS_301)
-* controller connects sensor QI_302 (controller.sensors.QI_302)
-* controller connects sensor LIS_501 (controller.sensors.LIS_501)
-* controller connects sensor QIS_502 (controller.sensors.QIS_502)
-* controller connects sensor TIS_602 (controller.sensors.TIS_602)
-* controller connects sensor TIS_702 (controller.sensors.TIS_702)
-* B7 returns to B1 (Branch B; archived teaching controller; superseded by CR-017 in the released benchmark)  <CR-017>
-* B6 returns to B2 (Branch A; archived teaching controller; superseded by CR-017 in the released benchmark)  <CR-017>
+* controller.sensors.LIS_301 equals B3.level
+* controller.sensors.QI_302 equals B3.medium.Xi[1]
+* controller.sensors.LIS_501 equals B5.level
+* controller.sensors.QIS_502 equals B5.medium.Xi[1]
+* controller.sensors.TIS_602 equals B6.medium.T
+* controller.sensors.TIS_702 equals B7.medium.T
+* B7/P1 to B1 (Branch B)
+* B6/P2 to B2 (Branch A)
+
+## Constraints
+* This is superseded by CR-017 in the released benchmark. [superseded]  <CR-017>
 
 ## Behaviors
-* B5.heatPort.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;
+* B5.heatPort.Q_flow = if controller.actuators.T5_Heater then 20000 else 0
 
 ## Physical relationships
-* controller.sensors.LIS_301 = B3.level;
-* controller.sensors.QI_302  = B3.medium.Xi[1];
-* controller.sensors.LIS_501 = B5.level;
-* controller.sensors.QIS_502 = B5.medium.Xi[1];
-* controller.sensors.TIS_602 = B6.medium.T;
-* controller.sensors.TIS_702 = B7.medium.T;
+* controller.sensors.LIS_301 = B3.level
+* controller.sensors.QI_302  = B3.medium.Xi[1]
+* controller.sensors.LIS_501 = B5.level
+* controller.sensors.QIS_502 = B5.medium.Xi[1]
+* controller.sensors.TIS_602 = B6.medium.T
+* controller.sensors.TIS_702 = B7.medium.T
+* OLD return routing preserved from archived teaching controller: Branch B: B7/P1 to B1; Branch A: B6/P2 to B2. [archived]

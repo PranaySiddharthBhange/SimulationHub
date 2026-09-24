@@ -1,0 +1,56 @@
+{
+  "attempt": 2,
+  "entry_class": "MagneticCircuitBenchmarkSystem",
+  "files": [
+    {
+      "filename": "CurrentRamp.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ExcitingMMF.mo",
+      "role": "component"
+    },
+    {
+      "filename": "IronCoreSegment.mo",
+      "role": "component"
+    },
+    {
+      "filename": "AirGapBranch.mo",
+      "role": "component"
+    },
+    {
+      "filename": "LeakageBranch.mo",
+      "role": "component"
+    },
+    {
+      "filename": "MagneticCircuitBenchmarkSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Icons.Block",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Magnetic.FluxTubes.Basic.ConstantReluctance",
+    "Modelica.Magnetic.FluxTubes.Interfaces.PositiveMagneticPort",
+    "Modelica.Magnetic.FluxTubes.Interfaces.NegativeMagneticPort",
+    "Modelica.Magnetic.FluxTubes.Sensors.MagneticFluxSensor",
+    "Modelica.Magnetic.FluxTubes.Sources.SignalMagneticPotentialDifference",
+    "Modelica.Magnetic.FluxTubes.Basic.Ground",
+    "Modelica.Magnetic.FluxTubes.Sensors.MagneticPotentialDifferenceSensor",
+    "Modelica.Blocks.Sources.Constant",
+    "Modelica.Blocks.Math.Gain",
+    "Modelica.Blocks.Math.Product",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Replaced the aggregated magneticCircuit block with separately inspectable named physical units CORE_L, CORE_U, CORE_R, GAP_1, LEAK_1, CORE_D, the MMF source, and magnetic ground so the OMEdit diagram matches the stated series core path and parallel useful-gap/leakage split.",
+    "Used Modelica.Magnetic.FluxTubes.Basic.ConstantReluctance for each named linear magnetic element because the brief defines a linear quasi-static magnetic circuit and explicitly excludes nonlinear and force-producing behavior.",
+    "Represented the exciting coil's magnetic action as a signal-driven magnetic potential difference source fed by mmf_At = N_exc*I_rms_A. This captures the stated positive current to positive mmf relation. The brief names an electrical ground and coil, but it does not provide enough electrical winding parameters to build a coupled electrical winding component with the same quasi-static phasor formulation, so the electrical coil itself is represented by the current schedule plus MMF conversion block rather than a detailed electrical winding model.",
+    "Used Phi_gap_over_Phi_core = 0.92 when Phi_core_Wb is zero to avoid division by zero while preserving the resolved useful/core ratio as a reported variable during the zero-current interval; this is an assumption carried over from the prior bundle because the brief does not explicitly define the ratio at zero flux.",
+    "Used the nominal released benchmark gap delta = 0.00150 m and not the distinct as-built prototype gap 0.00158 m, per the clarified authoritative configuration.",
+    "Computed the measuring-coil signed voltage as -2*pi*f*N_meas*Phi_gap_Wb using a gain and a polarity factor, preserving the explicitly negative orientation relative to positive useful air-gap flux.",
+    "Computed Vm_core_At by derived relation Vm_core_At = mmf_At - Vm_gap_At, using the explicit mmf balance Vm_core_At + Vm_gap_At = mmf_At and the parallel-branch magnetic potential difference measured across the branch nodes."
+  ],
+  "references": []
+}

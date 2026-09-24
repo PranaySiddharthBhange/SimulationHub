@@ -5,7 +5,7 @@
   "entities": [
     {
       "name": "Controller",
-      "kind": "control element",
+      "kind": "controller",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -109,8 +109,8 @@
       "quote": "P1 and P2 require dry-run inhibit from source-tank level."
     },
     {
-      "name": "source-tank",
-      "kind": "tank",
+      "name": "source-tank level",
+      "kind": "level signal",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -120,7 +120,7 @@
     },
     {
       "name": "Automated process valves",
-      "kind": "valves",
+      "kind": "process valves",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -156,7 +156,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "combines evaporator and condenser equations"
+      "quote": "evaporator and condenser equations"
     },
     {
       "name": "condenser",
@@ -166,11 +166,11 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "combines evaporator and condenser equations"
+      "quote": "evaporator and condenser equations"
     },
     {
       "name": "Junction volumes",
-      "kind": "volume elements",
+      "kind": "volume element",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -186,7 +186,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "StandardWater is a topology/control integration baseline only"
+      "quote": "StandardWater is a topology/control integration baseline only; intended physical variant remains WaterNaCl."
     },
     {
       "name": "WaterNaCl",
@@ -199,8 +199,18 @@
       "quote": "intended physical variant remains WaterNaCl"
     },
     {
+      "name": "return-header stream",
+      "kind": "stream",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "return-header stream identity"
+    },
+    {
       "name": "B7",
-      "kind": "cooling step",
+      "kind": "cooling stage",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -212,39 +222,39 @@
   "relationships": [
     {
       "subject": "Controller",
-      "predicate": "has topology",
+      "predicate": "implemented_as",
       "object": "StateGraph",
-      "detail": "sequential with a parallel split after evaporation and a join before cycle reset",
+      "detail": "sequential",
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Controller remains a sequential StateGraph with a parallel split after evaporation and a join before cycle reset."
+      "quote": "Controller remains a sequential StateGraph"
     },
     {
-      "subject": "B5 heater",
-      "predicate": "has permissive from",
-      "object": "LIS-501",
-      "detail": ">= 0.05 m",
+      "subject": "Controller",
+      "predicate": "has_parallel_split_after",
+      "object": "evaporation",
+      "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "B5 heater permissive: `LIS-501 >= 0.05 m` and `FIS-801 >= 0.10 kg/s`."
+      "quote": "parallel split after evaporation"
     },
     {
-      "subject": "B5 heater",
-      "predicate": "has permissive from",
-      "object": "FIS-801",
-      "detail": ">= 0.10 kg/s",
+      "subject": "Controller",
+      "predicate": "has_join_before",
+      "object": "cycle reset",
+      "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "B5 heater permissive: `LIS-501 >= 0.05 m` and `FIS-801 >= 0.10 kg/s`."
+      "quote": "a join before cycle reset"
     },
     {
       "subject": "P1",
-      "predicate": "requires dry-run inhibit from",
-      "object": "source-tank",
-      "detail": "source-tank level",
+      "predicate": "requires_dry-run_inhibit_from",
+      "object": "source-tank level",
+      "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -252,9 +262,9 @@
     },
     {
       "subject": "P2",
-      "predicate": "requires dry-run inhibit from",
-      "object": "source-tank",
-      "detail": "source-tank level",
+      "predicate": "requires_dry-run_inhibit_from",
+      "object": "source-tank level",
+      "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -262,7 +272,7 @@
     },
     {
       "subject": "legacy Modelica component",
-      "predicate": "combines equations for",
+      "predicate": "combines_equations_for",
       "object": "evaporator",
       "detail": "and condenser",
       "ref": "",
@@ -271,10 +281,20 @@
       "quote": "legacy Modelica component combines evaporator and condenser equations"
     },
     {
+      "subject": "legacy Modelica component",
+      "predicate": "combines_equations_for",
+      "object": "condenser",
+      "detail": "and evaporator",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "legacy Modelica component combines evaporator and condenser equations"
+    },
+    {
       "subject": "StandardWater",
-      "predicate": "is baseline only for",
+      "predicate": "is_baseline_only_for",
       "object": "WaterNaCl",
-      "detail": "topology/control integration baseline only; intended physical variant remains WaterNaCl",
+      "detail": "topology/control integration baseline only",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -282,6 +302,24 @@
     }
   ],
   "facts": [
+    {
+      "category": "requirement",
+      "statement": "Controller remains a sequential StateGraph with a parallel split after evaporation and a join before cycle reset.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Controller remains a sequential StateGraph with a parallel split after evaporation and a join before cycle reset."
+    },
+    {
+      "category": "behavior",
+      "statement": "B5 heater permissive when LIS-501 >= 0.05 m and FIS-801 >= 0.10 kg/s.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "B5 heater permissive: `LIS-501 >= 0.05 m` and `FIS-801 >= 0.10 kg/s`."
+    },
     {
       "category": "requirement",
       "statement": "P1 and P2 require dry-run inhibit from source-tank level.",
@@ -293,6 +331,24 @@
     },
     {
       "category": "requirement",
+      "statement": "Automated process valves are discrete and fail closed.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Automated process valves are discrete and fail closed."
+    },
+    {
+      "category": "requirement",
+      "statement": "K1 remains a physical condenser even if the legacy Modelica component combines evaporator and condenser equations.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "K1 remains a physical condenser even if the legacy Modelica component combines evaporator and condenser equations."
+    },
+    {
+      "category": "requirement",
       "statement": "Junction volumes are mandatory where closed valve combinations could otherwise leave pressure/composition states undefined.",
       "ref": "",
       "anchor": "",
@@ -301,22 +357,13 @@
       "quote": "Junction volumes are mandatory where closed valve combinations could otherwise leave pressure/composition states undefined."
     },
     {
-      "category": "behavior",
-      "statement": "B5 heater permissive requires LIS-501 >= 0.05 m and FIS-801 >= 0.10 kg/s.",
-      "ref": "",
-      "anchor": "",
-      "status": "approved",
-      "from_image": false,
-      "quote": "B5 heater permissive: `LIS-501 >= 0.05 m` and `FIS-801 >= 0.10 kg/s`."
-    },
-    {
       "category": "requirement",
-      "statement": "Automated process valves are discrete and fail closed.",
+      "statement": "StandardWater is a topology/control integration baseline only; intended physical variant remains WaterNaCl.",
       "ref": "",
       "anchor": "",
       "status": "approved",
       "from_image": false,
-      "quote": "Automated process valves are discrete and fail closed."
+      "quote": "StandardWater is a topology/control integration baseline only; intended physical variant remains WaterNaCl."
     }
   ],
   "unreadable": [],

@@ -1,86 +1,69 @@
 {
   "document": "Image evidence: magnetic_circuit_sysmlv2_full_dataset/03_architecture_diagrams/03_reference_magnetic_circuit.png, image 1",
   "subject": "reference magnetic circuit",
-  "kind": "engineering diagram",
+  "kind": "engineering drawing",
   "entities": [
     {
       "name": "yoke",
-      "kind": "magnetic circuit component",
+      "kind": "magnetic core section",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "label \"yoke\" on the top and bottom horizontal members of the core"
+      "quote": "label 'yoke' appears on the top and bottom horizontal core members"
     },
     {
       "name": "leg",
-      "kind": "magnetic circuit component",
+      "kind": "magnetic core section",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "label \"leg\" on the left vertical member of the core"
+      "quote": "label 'leg' appears on the left vertical core member"
     },
     {
       "name": "coil",
-      "kind": "electromagnetic coil",
+      "kind": "coil",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "label \"coil\" adjacent to winding symbols on the left side inside the core"
+      "quote": "label 'coil' appears inside the magnetic core window near the left side"
     },
     {
       "name": "N.I",
-      "kind": "magnetomotive force",
-      "aliases": [],
+      "kind": "magnetomotive force source",
+      "aliases": [
+        "Θ=N.I"
+      ],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "label \"N.I\" beside a circled polarity marker near the coil"
+      "quote": "label 'Θ=N.I' appears adjacent to the coil"
     },
     {
-      "name": "Φσ",
+      "name": "Φ_σ",
       "kind": "magnetic flux",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "label \"Φσ\" at the air-gap on the right side of the core"
+      "quote": "label 'Φ_σ' appears to the right of the air gap opening"
     },
     {
       "name": "cross section",
-      "kind": "geometric feature",
+      "kind": "cross section view",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "label \"cross section\" beside the square inset at upper right"
-    },
-    {
-      "name": "l",
-      "kind": "dimension",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "length",
-          "value": "l",
-          "unit": "",
-          "status": "unknown",
-          "supersedes": "",
-          "quote": "dimension label \"l\" across the top horizontal extent and again on the left vertical extent"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "dimension label \"l\" across the top horizontal extent and again on the left vertical extent"
+      "quote": "label 'cross section' appears beside the small square detail at upper right"
     },
     {
       "name": "a",
@@ -93,17 +76,36 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "dimension label \"a\" on the cross-section inset horizontal and vertical sides"
+          "quote": "dimension 'a' is shown horizontally and vertically on the cross section detail"
         }
       ],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "dimension label \"a\" on the cross-section inset horizontal and vertical sides"
+      "quote": "dimension 'a' is shown horizontally and vertically on the cross section detail"
+    },
+    {
+      "name": "l",
+      "kind": "dimension",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "l",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "dimension 'l' is shown across the top width and along the left overall height"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "dimension 'l' is shown across the top width and along the left overall height"
     },
     {
       "name": "δ",
-      "kind": "dimension",
+      "kind": "air gap dimension",
       "aliases": [],
       "values": [
         {
@@ -112,55 +114,65 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "dimension label \"δ\" marking the air-gap opening on the right side"
+          "quote": "dimension 'δ' is shown vertically across the air gap opening"
         }
       ],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "dimension label \"δ\" marking the air-gap opening on the right side"
+      "quote": "dimension 'δ' is shown vertically across the air gap opening"
     }
   ],
   "relationships": [
     {
       "subject": "coil",
-      "predicate": "is on",
+      "predicate": "located_in",
       "object": "leg",
-      "detail": "",
+      "detail": "coil is drawn wound around the left leg",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "the winding symbols and label \"coil\" are placed along the left side adjacent to the member labeled \"leg\""
+      "quote": "the coil symbols are drawn adjacent to and around the left 'leg'"
     },
     {
-      "subject": "Φσ",
-      "predicate": "is at",
+      "subject": "N.I",
+      "predicate": "associated_with",
+      "object": "coil",
+      "detail": "magnetomotive force source is indicated at the coil",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'Θ=N.I' appears adjacent to the coil"
+    },
+    {
+      "subject": "Φ_σ",
+      "predicate": "passes_through",
       "object": "δ",
-      "detail": "",
+      "detail": "flux arrow is drawn crossing the air gap opening on the right side",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "label \"Φσ\" is drawn at the same right-side opening where the gap dimension \"δ\" is marked"
-    },
-    {
-      "subject": "cross section",
-      "predicate": "has dimension",
-      "object": "a",
-      "detail": "square cross-section with both sides labeled a",
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "the square inset labeled \"cross section\" has horizontal and vertical dimensions both marked \"a\""
+      "quote": "label 'Φ_σ' appears to the right of the air gap opening with the flux path drawn through the gap"
     },
     {
       "subject": "yoke",
-      "predicate": "connects to",
+      "predicate": "connected_to",
       "object": "leg",
-      "detail": "forming a rectangular magnetic core",
+      "detail": "the top and bottom yokes join the left leg as a rectangular magnetic core",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "the members labeled \"yoke\" and \"leg\" are drawn as connected parts of the rectangular core"
+      "quote": "the labelled 'yoke' members and labelled 'leg' member form a rectangular core"
+    },
+    {
+      "subject": "cross section",
+      "predicate": "has_dimension",
+      "object": "a",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label 'cross section' appears beside the small square detail with dimension 'a' shown"
     }
   ],
   "facts": [],

@@ -1,0 +1,62 @@
+{
+  "questions": [
+    "What are the exact corrected automated-valve memberships and required simultaneous openings for the B1 return valve group and B2 return valve group after CR-017?",
+    "Should the executable sequence use the stage actions and exit guards from the requirement specifications and BAT-09 where they conflict in wording with the Step1-Step9 behavior phrasing in the control sequence design note?",
+    "Return routing after CR-017: Merge resolved this to Recovered condensate returns B6 -> P2 -> B1; cooled concentrate returns B7 -> P1 -> B2.. Confirm, or choose a different value.",
+    "B7 cooling completion temperature: Merge resolved this to B7 cooling completion is <=25 degC.. Confirm, or choose a different value.",
+    "Physical medium for final acceptance: Merge resolved this to Final composition-based acceptance uses the WaterNaCl medium; StandardWater is baseline-only for topology/control integration.. Confirm, or choose a different value.",
+    "Current vessel geometric data when legacy model differs: Merge resolved this to Use equipment-register geometry and levels as current values.. Confirm, or choose a different value."
+  ],
+  "answers": {
+    "clarify_return_valve_groups": "Use CR-017 routing: B6/P2 returns to B1 and B7/P1 returns to B2; preserve the listed five-valve sets as candidate members pending confirmation of which set belongs to which destination.",
+    "clarify_sequence_wording_conflict": "Use the requirement-specification and BAT-09 interpretation: actuate each device during its stage and use the stated threshold as the stage exit condition.",
+    "resolve_return_routing": "Recovered condensate returns B6 -> P2 -> B1; cooled concentrate returns B7 -> P1 -> B2.",
+    "resolve_B7_cooling_target": "B7 cooling completion is <=25 degC.",
+    "resolve_medium_for_final_acceptance": "Final composition-based acceptance uses the WaterNaCl medium; StandardWater is baseline-only for topology/control integration.",
+    "resolve_vessel_dimensions": "Use equipment-register geometry and levels as current values."
+  },
+  "decisions": [
+    {
+      "id": "clarify_return_valve_groups",
+      "question": "What are the exact corrected automated-valve memberships and required simultaneous openings for the B1 return valve group and B2 return valve group after CR-017?",
+      "merge_suggested": "Use CR-017 routing: B6/P2 returns to B1 and B7/P1 returns to B2; preserve the listed five-valve sets as candidate members pending confirmation of which set belongs to which destination.",
+      "answer": "Use CR-017 routing: B6/P2 returns to B1 and B7/P1 returns to B2; preserve the listed five-valve sets as candidate members pending confirmation of which set belongs to which destination.",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "clarify_sequence_wording_conflict",
+      "question": "Should the executable sequence use the stage actions and exit guards from the requirement specifications and BAT-09 where they conflict in wording with the Step1-Step9 behavior phrasing in the control sequence design note?",
+      "merge_suggested": "Use the requirement-specification and BAT-09 interpretation: actuate each device during its stage and use the stated threshold as the stage exit condition.",
+      "answer": "Use the requirement-specification and BAT-09 interpretation: actuate each device during its stage and use the stated threshold as the stage exit condition.",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_return_routing",
+      "question": "Return routing after CR-017: Merge resolved this to Recovered condensate returns B6 -> P2 -> B1; cooled concentrate returns B7 -> P1 -> B2.. Confirm, or choose a different value.",
+      "merge_suggested": "Recovered condensate returns B6 -> P2 -> B1; cooled concentrate returns B7 -> P1 -> B2.",
+      "answer": "Recovered condensate returns B6 -> P2 -> B1; cooled concentrate returns B7 -> P1 -> B2.",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_B7_cooling_target",
+      "question": "B7 cooling completion temperature: Merge resolved this to B7 cooling completion is <=25 degC.. Confirm, or choose a different value.",
+      "merge_suggested": "B7 cooling completion is <=25 degC.",
+      "answer": "B7 cooling completion is <=25 degC.",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_medium_for_final_acceptance",
+      "question": "Physical medium for final acceptance: Merge resolved this to Final composition-based acceptance uses the WaterNaCl medium; StandardWater is baseline-only for topology/control integration.. Confirm, or choose a different value.",
+      "merge_suggested": "Final composition-based acceptance uses the WaterNaCl medium; StandardWater is baseline-only for topology/control integration.",
+      "answer": "Final composition-based acceptance uses the WaterNaCl medium; StandardWater is baseline-only for topology/control integration.",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_vessel_dimensions",
+      "question": "Current vessel geometric data when legacy model differs: Merge resolved this to Use equipment-register geometry and levels as current values.. Confirm, or choose a different value.",
+      "merge_suggested": "Use equipment-register geometry and levels as current values.",
+      "answer": "Use equipment-register geometry and levels as current values.",
+      "outcome": "confirmed"
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "verdict": "partially_valid",
+  "check_results": [
+    {
+      "name": "AC-01_first_transfer_reaches_T1_high",
+      "expression": "tank1_level_m >= 0.80 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "tank1_level_m max = 0.8 m during the run (expected >= 0.80 m ever). Event trace shows transition out of FILL_T1 at t=170.0000000385502 s, consistent with reaching the threshold."
+    },
+    {
+      "name": "AC-02_stop_interval_220_280_all_valves_closed_at_midpoint",
+      "expression": "(valve1_cmd == 0) and (valve2_cmd == 0) and (valve3_cmd == 0) == 1.0 (relative tolerance 0.000%), at t=250.0",
+      "outcome": "pass",
+      "observed": "At t=250 s, event trace shows valve1_cmd = 0 since 170.0000000385502 s, valve2_cmd = 0 since 220.0999999999918 s, and valve3_cmd = 0 since t=0 (next change at 452.0000001222957 s); expected all 0."
+    },
+    {
+      "name": "AC-03_resume_interrupted_transfer_after_280",
+      "expression": "controller_state_id == 3 and valve2_cmd == 1 and valve1_cmd == 0 and valve3_cmd == 0 == 1.0 (relative tolerance 0.000%), at t=280.0",
+      "outcome": "fail",
+      "observed": "At t=280.0 s, controller_state_id is still 7, valve2_cmd = 0, valve1_cmd = 0, valve3_cmd = 0. Resume occurs later at t=280.0999999999952 s when controller_state_id changes to 3 and valve2_cmd to 1. Expected at t=280.0 s: state 3, V2=1, V1=0, V3=0."
+    },
+    {
+      "name": "AC-04_second_fill_begins_after_first_drain",
+      "expression": "controller_state_id == 1 and valve1_cmd == 1 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "controller_state_id = 1 and valve1_cmd = 1 occurred at t=20.00000000000001 s (expected ever)."
+    },
+    {
+      "name": "AC-05_stop_interval_650_700_all_valves_closed_at_midpoint",
+      "expression": "(valve1_cmd == 0) and (valve2_cmd == 0) and (valve3_cmd == 0) == 1.0 (relative tolerance 0.000%), at t=675.0",
+      "outcome": "pass",
+      "observed": "At t=675 s, event trace shows valve1_cmd = 0 since 170.0000000385502 s, valve2_cmd = 0 since 440.0000001198908 s, valve3_cmd = 0 since 650.0000000000792 s; expected all 0."
+    },
+    {
+      "name": "AC-06_shutdown_entry_outputs",
+      "expression": "valve1_cmd == 0 and valve2_cmd == 1 and valve3_cmd == 1 == 1.0 (relative tolerance 0.000%), at t=700.0",
+      "outcome": "pass",
+      "observed": "At t=700.0 s, shutdown entry occurs at t=700.0000000000906 s with valve1_cmd = 0, valve2_cmd = 1, valve3_cmd = 1; expected V1=0, V2=1, V3=1."
+    },
+    {
+      "name": "AC-07_final_idle_after_shutdown",
+      "expression": "controller_state_id == 0 and valve1_cmd == 0 and valve2_cmd == 0 and valve3_cmd == 0 == 1.0 (relative tolerance 0.000%), final value",
+      "outcome": "fail",
+      "observed": "Final values at t=900 s are controller_state_id = 8, valve1_cmd = 0, valve2_cmd = 1, valve3_cmd = 1. Expected final state IDLE (0) with all valves closed."
+    },
+    {
+      "name": "AC-08_no_V1_with_V2",
+      "expression": "not (valve1_cmd > 0.5 and valve2_cmd > 0.5) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "Event trace never shows valve1_cmd = 1 at the same time as valve2_cmd = 1. valve1_cmd is 1 only from 20.00000000000001 s to 170.0000000385502 s; valve2_cmd first becomes 1 at 180.0000000405505 s."
+    },
+    {
+      "name": "AC-08_no_V2_with_V3_outside_shutdown",
+      "expression": "not (valve2_cmd > 0.5 and valve3_cmd > 0.5 and controller_state_id != 8) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "Simultaneous valve2_cmd = 1 and valve3_cmd = 1 occurs only from t=700.0000000000906 s onward, when controller_state_id = 8 (SHUTDOWN). No outside-shutdown overlap appears in the event trace."
+    },
+    {
+      "name": "URS-FUN-004_wait_after_fill_opens_transfer",
+      "expression": "controller_state_id == 3 and valve2_cmd == 1 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "controller_state_id = 3 and valve2_cmd = 1 at t=180.0000000405505 s and again at t=280.0999999999952 s (expected ever)."
+    },
+    {
+      "name": "URS-PER-005_post_transfer_wait_reaches_12s_context",
+      "expression": "controller_state_id == 4 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "controller_state_id = 4 at t=440.0000001198908 s (expected ever). wait_remaining_s max = 12 s is also consistent with a 12 s post-transfer wait."
+    },
+    {
+      "name": "URS-FUN-007_drain_state_reached",
+      "expression": "controller_state_id == 5 and valve3_cmd == 1 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "controller_state_id = 5 and valve3_cmd = 1 at t=452.0000001222957 s (expected ever)."
+    },
+    {
+      "name": "URS-MOD-003_shutdown_state_reached",
+      "expression": "controller_state_id == 8 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "controller_state_id = 8 at t=700.0000000000906 s (expected ever)."
+    },
+    {
+      "name": "URS-CTL-005_shutdown_completion_both_low",
+      "expression": "tank1_level_m <= 0.05 and tank2_level_m <= 0.05 == 1.0 (absolute tolerance 1e-06), ever value",
+      "outcome": "pass",
+      "observed": "At t=0 s, tank1_level_m = 0.05 m and tank2_level_m = 0.05 m, satisfying the stated ever condition. However, after SHUT begins the final values are tank1_level_m = -1.0002e-10 m and tank2_level_m = 148.672 m, so shutdown completion did not occur."
+    }
+  ],
+  "summary": "The run shows the intended early sequence: Tank 1 fills to 0.80 m, transfer starts after the 10 s wait, the first STOP leaves all valves closed, transfer resumes after the second START, drain is reached, the second STOP pauses with all valves closed, and SHUT drives V2 and V3 open together at 700 s. However, the run does not satisfy the full brief because AC-03 fails at the exact 280.0 s check point: the controller is still PAUSED with V2 closed at 280.0 s and only resumes at 280.1 s. More seriously, shutdown never completes: by 900 s the controller is still in SHUTDOWN with valve2_cmd=1 and valve3_cmd=1, tank1_level_m≈0 m, and tank2_level_m=148.672 m, so the required return to IDLE before the end of the demonstration does not happen.",
+  "issues": [
+    "AC-03 failed: at t=280.0 s the controller is still controller_state_id = 7 with valve2_cmd = 0, valve1_cmd = 0, valve3_cmd = 0; the required resumed transfer condition (state 3, V2=1, V1=0, V3=0) appears only at t=280.0999999999952 s.",
+    "AC-07 failed: at the final time t=900 s the model remains in controller_state_id = 8 (SHUTDOWN) with valve1_cmd = 0, valve2_cmd = 1, valve3_cmd = 1 instead of returning to controller_state_id = 0 with all valves closed.",
+    "The shutdown phase is physically wrong for Tank 2: tank2_level_m rises to a maximum of 149.341 m and is still 148.672 m at t=900 s, far above the 1.0 m measurement range and incompatible with shutdown draining Tank 2 to T2_Low.",
+    "The expected second automatic restart after the first drain is not demonstrated in the actual trajectory: after WAIT_AFTER_DRAIN the run never enters controller_state_id = 6 or returns to controller_state_id = 1 following the first drain. The event trace stops at DRAIN_T2, then PAUSED at 650 s, then SHUTDOWN at 700 s."
+  ],
+  "assumptions": [
+    "For mechanically evaluable checks, controller_state_id is reported as an integer-coded state variable with mapping IDLE=0, FILL_T1=1, WAIT_AFTER_FILL=2, TRANSFER_T1_T2=3, WAIT_AFTER_TRANSFER=4, DRAIN_T2=5, WAIT_AFTER_DRAIN=6, PAUSED=7, SHUTDOWN=8; the notes establish the state names but not a numeric encoding.",
+    "The model uses ideal Boolean valve commands directly as flow switches and neglects valve stroke dynamics, following the valve datasheet hackathon simplification.",
+    "Checks at exact command times 280 s and 700 s assume the reported outputs reflect the commanded controller response at those sample times; the notes provide a PLC scan time of 0.1 s but do not prescribe a separate command-processing latency model.",
+    "No explicit requirement states whether tank levels are clipped at 0 and tank height; later stages should preserve physical plausibility, but no additional saturation law beyond the stated valid measurement range 0.0..1.0 m is introduced here.",
+    "Root-cause correction made during model generation: an earlier output-to-output connector misuse around TK_102.outflowActual_m3s was removed by making that signal internal.",
+    "Root-cause correction made during model generation: tank inventory components expose only consumed connectors, avoiding unused-output and output-to-output over-determination.",
+    "Modeling choice during generation: the plant was implemented as signal-flow inventory balances using d(tank1_level_m)/dt = (valve1_cmd*qFill - valve2_cmd*qTransfer)/A1 and d(tank2_level_m)/dt = (valve2_cmd*qTransfer - valve3_cmd*qDrain)/A2, with internal inventory cutoffs.",
+    "Physical-plausibility assumption during generation: each tank prevents net depletion below 0 m and prevents net filling above 1 m by limiting the actual outgoing request used in its own balance when empty/full; no separate clipping of reported level is applied.",
+    "A further assumption implied by the observed behavior is that Tank 2 inflow was effectively driven by a level-valued signal rather than a volumetric flow signal somewhere in the implemented model, because the reported TK_102.inflow_m3s has min/max/final of -1.0002e-10/0.8/-1.0002e-10 instead of 0/0.0045/0."
+  ],
+  "root_causes": [
+    "AC-03 misses the exact 280.0 s acceptance point because the controller processes the resume one PLC scan later. The event trace shows PB_START goes high at 280.0000000281023 s, but controller_state_id and valve2_cmd do not change from PAUSED/closed to TRANSFER/open until 280.0999999999952 s, which is one 0.1 s scan period later. So the pause/resume logic works, but not at the exact sample time used by the acceptance check.",
+    "AC-07 and the non-completing shutdown are caused by Tank 2 accumulating mass instead of draining during transfer/shutdown. The governing balance intended for Tank 2 is d(level2)/dt = (valve2_cmd*qTransfer - valve3_cmd*qDrain)/A2, which with both V2 and V3 open in SHUTDOWN should be slightly negative because 0.0045 < 0.0050 m^3/s. The actual results contradict that: tank2_level_m grows to 149.341 m and TK_102.inflow_m3s reports values up to 0.8 rather than the expected 0.0045 m^3/s. That means the implemented Tank 2 inflow path is scaled or wired incorrectly, so Tank 2 receives a much larger effective inflow than the drain can remove. Because LT-102 never falls to T2_Low after SHUT begins, the shutdown-completion condition is never satisfied, and the controller correctly remains latched in SHUTDOWN with V2 and V3 commanded open.",
+    "The missing observed WAIT_AFTER_DRAIN / automatic restart follows from the same Tank 2 inventory error. In DRAIN_T2 the controller is supposed to wait until LT-102 <= 0.05 m before entering WAIT_AFTER_DRAIN and, 8 s later, restarting FILL_T1. But tank2_level_m increases instead of decreasing once transfer to Tank 2 has begun, so LT-102 never reaches the low threshold after drain starts. Therefore the state machine has no physical condition to leave DRAIN_T2 before the operator STOP at 650 s intervenes."
+  ]
+}

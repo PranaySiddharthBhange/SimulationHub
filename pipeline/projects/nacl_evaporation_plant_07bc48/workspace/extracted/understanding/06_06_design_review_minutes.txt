@@ -2,7 +2,7 @@ Subject: Design Review DR-07 - NaCl Evaporation Bench
 Document kind: correspondence
 
 ## Entities
-* Controller -- control element
+* Controller -- controller
 * StateGraph -- control model
 * B5 heater -- heater
     - level permissive threshold: 0.05 m [approved]
@@ -13,30 +13,35 @@ Document kind: correspondence
     - threshold: 0.10 kg/s [approved]
 * P1 -- pump
 * P2 -- pump
-* source-tank -- tank
-* Automated process valves -- valves
+* source-tank level -- level signal
+* Automated process valves -- process valves
 * K1 -- condenser
 * legacy Modelica component -- model component
 * evaporator -- process unit
 * condenser -- process unit
-* Junction volumes -- volume elements
+* Junction volumes -- volume element
 * StandardWater -- physical variant
 * WaterNaCl -- physical variant
-* B7 -- cooling step
+* return-header stream -- stream
+* B7 -- cooling stage
 
 ## Relationships
-* Controller has topology StateGraph (sequential with a parallel split after evaporation and a join before cycle reset)
-* B5 heater has permissive from LIS-501 (>= 0.05 m)
-* B5 heater has permissive from FIS-801 (>= 0.10 kg/s)
-* P1 requires dry-run inhibit from source-tank (source-tank level)
-* P2 requires dry-run inhibit from source-tank (source-tank level)
-* legacy Modelica component combines equations for evaporator (and condenser)
-* StandardWater is baseline only for WaterNaCl (topology/control integration baseline only; intended physical variant remains WaterNaCl)
+* Controller implemented_as StateGraph (sequential)
+* Controller has_parallel_split_after evaporation
+* Controller has_join_before cycle reset
+* P1 requires_dry-run_inhibit_from source-tank level
+* P2 requires_dry-run_inhibit_from source-tank level
+* legacy Modelica component combines_equations_for evaporator (and condenser)
+* legacy Modelica component combines_equations_for condenser (and evaporator)
+* StandardWater is_baseline_only_for WaterNaCl (topology/control integration baseline only)
 
 ## Requirements
+* Controller remains a sequential StateGraph with a parallel split after evaporation and a join before cycle reset. [approved]
 * P1 and P2 require dry-run inhibit from source-tank level. [approved]
-* Junction volumes are mandatory where closed valve combinations could otherwise leave pressure/composition states undefined. [approved]
 * Automated process valves are discrete and fail closed. [approved]
+* K1 remains a physical condenser even if the legacy Modelica component combines evaporator and condenser equations. [approved]
+* Junction volumes are mandatory where closed valve combinations could otherwise leave pressure/composition states undefined. [approved]
+* StandardWater is a topology/control integration baseline only; intended physical variant remains WaterNaCl. [approved]
 
 ## Behaviors
-* B5 heater permissive requires LIS-501 >= 0.05 m and FIS-801 >= 0.10 kg/s. [approved]
+* B5 heater permissive when LIS-501 >= 0.05 m and FIS-801 >= 0.10 kg/s. [approved]

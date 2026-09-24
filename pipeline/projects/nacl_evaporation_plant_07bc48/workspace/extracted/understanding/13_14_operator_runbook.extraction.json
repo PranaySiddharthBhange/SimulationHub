@@ -1,6 +1,6 @@
 {
-  "document": "Operator Runbook - Bench Evaporation Plant, Rev A\nSynthetic hackathon engineering evidence\n1. Pre-start\nConfirm B1 contains the water-rich initial charge and B2 contains the concentrated NaCl initial charge.\nConfirm manual drain valves V26 and V27 are closed and cooling-water valves V13, V17 and V29 are aligned for service.\nConfirm condenser cooling-water flow indication FIS-801 is available before heating.\nVerify B6 and B7 are sufficiently empty for the next batch.\n2. Automatic batch observation\nNormal operator observation is B3 fill/mix -> B4 buffer -> B5 charge -> heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping. The controller owns the automated valve set; do not manually override an automated valve during an acceptance run.\n3. Expected qualitative trends\nVariable | Expected trend\nB3 level | Rises during water and brine charge, then falls while V11 transfers to B4.\nB3 concentration | Changes primarily while V9 adds brine; then remains approximately constant until discharge.\nB5 temperature | Rises during heating, then plateaus near composition-dependent boiling temperature.\nB5 concentration | Rises during evaporation until target is reached.\nB6 level | Rises as condensate is produced; later falls during return pumping.\nB7 level | Rises when V15 transfers concentrate; later falls during return pumping.\n4. Abnormal indications\nRepeated tiny integration steps near a tank port level may indicate missing hysteresis or non-regularized port loss equations.\nOscillation at the B5 boiling transition may indicate missing Q_up anti-chattering logic.\nA WaterNaCl simulation that stalls at pump start is a known legacy numerical issue; first validate the same topology with StandardWater.\nDo not resolve return-routing questions from pump location alone; check the approved routing change record.\n",
-  "subject": "Operator Runbook - Bench Evaporation Plant",
+  "document": "Operator Runbook - Bench Evaporation Plant, Rev A\nSynthetic hackathon engineering evidence\n1. Pre-start\nConfirm B1 contains the water-rich initial charge and B2 contains the concentrated NaCl initial charge.\nConfirm manual drain valves V26 and V27 are closed and cooling-water valves V13, V17 and V29 are aligned for service.\nConfirm condenser cooling-water flow indication FIS-801 is available before heating.\nVerify B6 and B7 are sufficiently empty for the next batch.\n2. Automatic batch observation\nNormal operator observation is B3 fill/mix -> B4 buffer -> B5 charge -> heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping. The controller owns the automated valve set; do not manually override an automated valve during an acceptance run.\n3. Expected qualitative trends\nVariable | Expected trend\nB3 level | Rises during water and brine charge, then falls while V11 transfers to B4.\nB3 concentration | Changes primarily while V9 adds brine; then remains approximately constant until discharge.\nB5 temperature | Rises during heating, then plateaus near composition-dependent boiling temperature.\nB5 concentration | Rises during evaporation until target is reached.\nB6 level | Rises as condensate is produced; later falls during return pumping.\nB7 level | Rises when V15 transfers concentrate; later falls during return pumping.\n4. Abnormal indications\nRepeated tiny integration steps near a tank port level may indicate missing hysteresis or non-regularized port loss equations.\nOscillation at the B5 boiling transition may indicate missing Q_up anti-chattering logic.\nA WaterNaCl simulation that stalls at pump start is a known legacy numerical issue; first validate the same topology with StandardWater.\nDo not resolve return-routing questions from pump location alone; check the approved routing change record.",
+  "subject": "Operator Runbook - Bench Evaporation Plant, Rev A",
   "kind": "operator runbook",
   "entities": [
     {
@@ -75,7 +75,7 @@
     },
     {
       "name": "FIS-801",
-      "kind": "flow indication",
+      "kind": "condenser cooling-water flow indication",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -111,7 +111,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Normal operator observation is B3 fill/mix -> B4 buffer -> B5 charge -> heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping."
+      "quote": "B3 fill/mix -> B4 buffer -> B5 charge -> heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping."
     },
     {
       "name": "B4",
@@ -121,7 +121,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Normal operator observation is B3 fill/mix -> B4 buffer -> B5 charge -> heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping."
+      "quote": "B3 fill/mix -> B4 buffer -> B5 charge -> heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping."
     },
     {
       "name": "B5",
@@ -131,7 +131,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Normal operator observation is B3 fill/mix -> B4 buffer -> B5 charge -> heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping."
+      "quote": "B3 fill/mix -> B4 buffer -> B5 charge -> heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping."
     },
     {
       "name": "controller",
@@ -151,7 +151,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "then falls while V11 transfers to B4."
+      "quote": "then falls while V11 transfers to B4"
     },
     {
       "name": "V9",
@@ -162,6 +162,16 @@
       "anchor": "",
       "from_image": false,
       "quote": "Changes primarily while V9 adds brine"
+    },
+    {
+      "name": "V15",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Rises when V15 transfers concentrate"
     },
     {
       "name": "WaterNaCl",
@@ -181,7 +191,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "first validate the same topology with StandardWater."
+      "quote": "first validate the same topology with StandardWater"
     },
     {
       "name": "pump",
@@ -192,16 +202,6 @@
       "anchor": "",
       "from_image": false,
       "quote": "pump start"
-    },
-    {
-      "name": "Q_up",
-      "kind": "logic",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "missing Q_up anti-chattering logic"
     }
   ],
   "relationships": [
@@ -209,7 +209,7 @@
       "subject": "B3",
       "predicate": "feeds",
       "object": "B4",
-      "detail": "fill/mix to buffer",
+      "detail": "Normal operator observation sequence",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -219,51 +219,21 @@
       "subject": "B4",
       "predicate": "feeds",
       "object": "B5",
-      "detail": "buffer to charge",
+      "detail": "Normal operator observation sequence",
       "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "B4 buffer -> B5 charge"
     },
     {
-      "subject": "B5",
-      "predicate": "undergoes",
-      "object": "heating/evaporation",
-      "detail": "",
+      "subject": "B3",
+      "predicate": "transfers to",
+      "object": "B4",
+      "detail": "via V11",
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "B5 charge -> heating/evaporation"
-    },
-    {
-      "subject": "heating/evaporation",
-      "predicate": "branches into",
-      "object": "simultaneous condensate/concentrate finishing branches",
-      "detail": "",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping"
-    },
-    {
-      "subject": "simultaneous condensate/concentrate finishing branches",
-      "predicate": "followed by",
-      "object": "return pumping",
-      "detail": "",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping"
-    },
-    {
-      "subject": "V11",
-      "predicate": "transfers from",
-      "object": "B3",
-      "detail": "to B4",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "then falls while V11 transfers to B4."
+      "quote": "then falls while V11 transfers to B4"
     },
     {
       "subject": "V9",
@@ -273,7 +243,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Changes primarily while V9 adds brine"
+      "quote": "B3 concentration | Changes primarily while V9 adds brine"
     },
     {
       "subject": "V15",
@@ -283,7 +253,17 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Rises when V15 transfers concentrate; later falls during return pumping."
+      "quote": "B7 level | Rises when V15 transfers concentrate"
+    },
+    {
+      "subject": "FIS-801",
+      "predicate": "indicates flow for",
+      "object": "condenser",
+      "detail": "cooling-water flow indication",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "condenser cooling-water flow indication FIS-801 is available before heating"
     }
   ],
   "facts": [
@@ -325,17 +305,32 @@
     },
     {
       "category": "requirement",
-      "statement": "The controller owns the automated valve set; do not manually override an automated valve during an acceptance run.",
+      "statement": "Do not manually override an automated valve during an acceptance run.",
       "ref": "",
       "anchor": "",
       "status": "current",
       "from_image": false,
-      "quote": "The controller owns the automated valve set; do not manually override an automated valve during an acceptance run."
+      "quote": "do not manually override an automated valve during an acceptance run."
+    },
+    {
+      "category": "requirement",
+      "statement": "First validate the same topology with StandardWater.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "first validate the same topology with StandardWater."
+    },
+    {
+      "category": "requirement",
+      "statement": "Do not resolve return-routing questions from pump location alone; check the approved routing change record.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Do not resolve return-routing questions from pump location alone; check the approved routing change record."
     }
   ],
-  "unreadable": [
-    "Entity V15 appears in expected qualitative trends but is not introduced elsewhere in the document.",
-    "The phrase \"approved routing change record\" is referenced but not identified further."
-  ],
+  "unreadable": [],
   "unverified_quotes": []
 }

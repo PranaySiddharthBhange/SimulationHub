@@ -7,22 +7,22 @@ Document kind: datasheet
     - nominal opening time: 0.7 s [nominal]
     - nominal closing time: 0.5 s [nominal]
     - leakage at closed: <0.02 % Kv
-    - permitted medium temperature range: 0-120 degC
-* V1 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V3 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V5 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V6 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V8 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V9 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V11 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V12 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V15 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V18 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V20 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V22 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V23 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V24 -- automated valve tag  <[page 1]>; aliases: Automated valve family
-* V25 -- automated valve tag  <[page 1]>; aliases: Automated valve family
+    - permitted medium temperature range: 0-120 degC [permitted]
+* V1 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V3 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V5 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V6 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V8 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V9 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V11 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V12 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V15 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V18 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V20 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V22 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V23 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V24 -- automated valve  <[page 1]>; aliases: Automated valve family
+* V25 -- automated valve  <[page 1]>; aliases: Automated valve family
 * P1 -- return pump  <[page 1]>
     - nominal mass flow: 0.30 kg/s [nominal]
     - nominal differential pressure: 1.8 bar [nominal]
@@ -30,28 +30,27 @@ Document kind: datasheet
     - nominal mass flow: 0.30 kg/s [nominal]
     - nominal differential pressure: 1.8 bar [nominal]
 * LIS-701 -- level indicator switch  <[page 1]>
-    - minimum source level permissive threshold: >0.02 m
+    - source level permissive threshold: >0.02 m
 * LIS-601 -- level indicator switch  <[page 1]>
-    - minimum source level permissive threshold: >0.02 m
+    - source level permissive threshold: >0.02 m
 * PIS-901 -- pressure indicator switch  <[page 1]>
     - low discharge pressure alarm threshold: <0.8 bar
 * PIS-1001 -- pressure indicator switch  <[page 1]>
     - low discharge pressure alarm threshold: <0.8 bar
-* pump discharge headers -- header  <[page 1]>
+* Pump discharge headers -- header  <[page 1]>
 * charging-vessel return manifolds -- manifold  <[page 1]>
-* approved process-routing change record -- change record  <[page 1]>
 
 ## Relationships
-* P1 service Concentrate return  <[page 1]>
-* P2 service Condensate return  <[page 1]>
+* P1 has service Concentrate return  <[page 1]>
+* P2 has service Condensate return  <[page 1]>
 * P1 has minimum source level permissive from LIS-701 (>0.02 m)  <[page 1]>
 * P2 has minimum source level permissive from LIS-601 (>0.02 m)  <[page 1]>
 * P1 has low discharge pressure alarm from PIS-901 (<0.8 bar)  <[page 1]>
 * P2 has low discharge pressure alarm from PIS-1001 (<0.8 bar)  <[page 1]>
-* pump discharge headers cross-connected to charging-vessel return manifolds  <[page 1]>
+* Pump discharge headers are cross-connected to charging-vessel return manifolds  <[page 1]>
 
 ## Behaviors
-* If LIS-701 is >0.02 m, that is the minimum source level permissive for P1.  <[page 1]>
-* If LIS-601 is >0.02 m, that is the minimum source level permissive for P2.  <[page 1]>
-* If PIS-901 is <0.8 bar, low discharge pressure alarm applies for P1.  <[page 1]>
-* If PIS-1001 is <0.8 bar, low discharge pressure alarm applies for P2.  <[page 1]>
+* Minimum source level permissive for P1 is LIS-701 >0.02 m.  <[page 1]>
+* Minimum source level permissive for P2 is LIS-601 >0.02 m.  <[page 1]>
+* Low discharge pressure alarm for P1 is PIS-901 <0.8 bar.  <[page 1]>
+* Low discharge pressure alarm for P2 is PIS-1001 <0.8 bar.  <[page 1]>

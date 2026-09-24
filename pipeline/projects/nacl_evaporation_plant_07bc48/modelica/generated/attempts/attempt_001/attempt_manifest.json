@@ -1,0 +1,56 @@
+{
+  "attempt": 1,
+  "entry_class": "NaClBatchPlantSystem",
+  "files": [
+    {
+      "filename": "SimpleBatchVessel.mo",
+      "role": "component"
+    },
+    {
+      "filename": "EvaporatorCondenserUnit.mo",
+      "role": "component"
+    },
+    {
+      "filename": "CentralController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "NaClBatchPlantSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Sources.BooleanConstant",
+    "Modelica.Blocks.Sources.Constant",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Assumption: A custom signal-flow implementation is used instead of Modelica.Fluid with WaterNaCl because the brief requires a custom WaterNaCl medium, but the evidence provided here does not supply a complete executable Modelica medium implementation for rho(T,p,w), h(T,p,w), cp(T,w), and p_sat(T,w). This bundle therefore preserves composition and sequence behavior with explicit mass-balance states rather than claiming full fluid-network fidelity.",
+    "Assumption: B1 initial level is set to 0.5 m and B2 initial level is set to 0.35 m following the provided SysML draft, because BAT-09 states only B3/B4/B5/B6/B7 initial levels <= 0.01 m and does not state B1/B2 initial levels explicitly in the narrative brief.",
+    "Assumption: Vessel density is fixed at 1000 kg/m3 and cp at 4180 J/(kg.K) for executable mass/temperature balances. The brief requires WaterNaCl as the final medium, but the necessary full property correlations beyond the viscosity expression are not numerically specified here.",
+    "Assumption: The evaporation unit keeps K1 identifiable by using a combined EvaporatorCondenserUnit class with separate condensate and concentrate outputs, consistent with the requirement note permitting a combined simulation component if K1 remains identifiable in the architecture.",
+    "Assumption: Condenser cooling-water flow proof FIS801_kg_s is modeled as a constant 0.12 kg/s, which is within the observed reference range 0.12..0.16 kg/s and satisfies the BAT-09 initial condition >=0.10 kg/s. The brief gives no operator schedule for cooling-water flow.",
+    "Assumption: Cooler implementation uses direct constant heat-removal duties of -6500 W for B6 and -4500 W for B7 whenever commanded on, because the brief states only on/off commands and nominal duties and explicitly leaves the detailed cooler implementation unresolved.",
+    "Assumption: Nominal transfer and return mass flows are set to 0.30 kg/s to match the stated nominal pump data and to provide one executable common rate for valve-driven transfers where no distinct valve flow capacities are stated.",
+    "Derived: The B3 incoming composition is 0 during Step1 and equal to B2 composition during Step2 because the resolved topology states B1 supplies water and B2 supplies brine to B3 through V8 and V9 respectively.",
+    "Limitation: The controller brief states a parallel split after evaporation and a join before reset. This executable controller preserves branch-specific commands and join completion flags, but it sequences Branch A before Branch B inside one mode machine rather than simulating two simultaneously active discrete regions.",
+    "Question remains materially open in the evidence: the exact mandatory simultaneous valve combinations inside the corrected B1 return valve group and B2 return valve group after CR-017 are not specified. This bundle uses the preserved five-valve candidate sets from the clarified understanding as grouped actuation evidence only."
+  ],
+  "references": [
+    {
+      "path": "14_10_batch_run_3000s.txt",
+      "time_column": "time",
+      "reference_column": "FIS801_kg_s",
+      "model_variable": "FIS801_kg_s",
+      "absolute_tolerance": 0.05,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Reference run evidence shows condenser cooling-water flow proof in the range 0.12..0.16 kg/s; the model reports a constant proof signal only as a permissive input, not as a forcing trajectory."
+    }
+  ]
+}

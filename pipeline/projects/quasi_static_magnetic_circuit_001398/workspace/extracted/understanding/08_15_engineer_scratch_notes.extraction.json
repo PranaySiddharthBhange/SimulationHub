@@ -31,8 +31,8 @@
       "quote": "EP-03 current is RMS phasor magnitude."
     },
     {
-      "name": "Old v1 model",
-      "kind": "model",
+      "name": "sigma",
+      "kind": "parameter",
       "aliases": [],
       "values": [
         {
@@ -41,7 +41,15 @@
           "unit": "",
           "status": "archived",
           "supersedes": "",
-          "quote": "Old v1 model sigma=0.05 is not release truth."
+          "quote": "sigma=0.05"
+        },
+        {
+          "quantity": "sigma",
+          "value": ".08",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "sigma=.08"
         }
       ],
       "ref": "",
@@ -50,20 +58,12 @@
       "quote": "Old v1 model sigma=0.05 is not release truth."
     },
     {
-      "name": "sigma",
-      "kind": "parameter",
+      "name": "Useful/core",
+      "kind": "derived quantity",
       "aliases": [],
       "values": [
         {
-          "quantity": "sigma",
-          "value": ".08",
-          "unit": "",
-          "status": "unknown",
-          "supersedes": "",
-          "quote": "With sigma=.08"
-        },
-        {
-          "quantity": "useful/core",
+          "quantity": "Useful/core",
           "value": ".92",
           "unit": "",
           "status": "unknown",
@@ -74,17 +74,34 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Useful/core = 1 - sigma. With sigma=.08 -> .92."
+      "quote": "Useful/core = 1 - sigma."
     },
     {
       "name": "Gap",
       "kind": "magnetic path element",
       "aliases": [],
-      "values": [],
+      "values": [
+        {
+          "quantity": "gap",
+          "value": "1.58",
+          "unit": "mm",
+          "status": "measured",
+          "supersedes": "",
+          "quote": "measured ~1.58 mm gap"
+        },
+        {
+          "quantity": "gap",
+          "value": "1.50",
+          "unit": "mm",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "1.50 mm"
+        }
+      ],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Gap + leakage are parallel: same magnetic voltage, different flux."
+      "quote": "Physical prototype measured ~1.58 mm gap, but analytic case is 1.50 mm."
     },
     {
       "name": "leakage",
@@ -114,34 +131,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Do not put total Phi_core into gap B calculation."
-    },
-    {
-      "name": "Physical prototype",
-      "kind": "prototype",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "gap",
-          "value": "~1.58",
-          "unit": "mm",
-          "status": "measured",
-          "supersedes": "",
-          "quote": "Physical prototype measured ~1.58 mm gap"
-        },
-        {
-          "quantity": "gap",
-          "value": "1.50",
-          "unit": "mm",
-          "status": "analytic",
-          "supersedes": "",
-          "quote": "analytic case is 1.50 mm"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "Physical prototype measured ~1.58 mm gap, but analytic case is 1.50 mm."
+      "quote": "gap B calculation"
     },
     {
       "name": "Excitation induced U",
@@ -151,7 +141,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Excitation induced U is positive orientation; measurement coil negative."
+      "quote": "Excitation induced U is positive orientation;"
     },
     {
       "name": "measurement coil",
@@ -161,11 +151,41 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Excitation induced U is positive orientation; measurement coil negative."
+      "quote": "measurement coil negative."
+    },
+    {
+      "name": "ramp",
+      "kind": "input profile",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Magnitudes are both proportional to ramp."
+    },
+    {
+      "name": "Physical prototype",
+      "kind": "prototype",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Physical prototype measured ~1.58 mm gap"
+    },
+    {
+      "name": "analytic case",
+      "kind": "analysis case",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "analytic case is 1.50 mm."
     },
     {
       "name": "Linear benchmark",
-      "kind": "case",
+      "kind": "benchmark case",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -175,13 +195,13 @@
     },
     {
       "name": "nonlinear inductor case",
-      "kind": "case",
+      "kind": "analysis case",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Saturation discussion belongs to a separate nonlinear inductor case."
+      "quote": "separate nonlinear inductor case"
     }
   ],
   "relationships": [
@@ -197,9 +217,29 @@
     },
     {
       "subject": "Excitation induced U",
+      "predicate": "has orientation",
+      "object": "positive orientation",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Excitation induced U is positive orientation;"
+    },
+    {
+      "subject": "measurement coil",
+      "predicate": "has orientation",
+      "object": "negative",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "measurement coil negative."
+    },
+    {
+      "subject": "Excitation induced U",
       "predicate": "proportional to",
       "object": "ramp",
-      "detail": "Magnitudes",
+      "detail": "Magnitudes are both proportional to ramp",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -209,7 +249,7 @@
       "subject": "measurement coil",
       "predicate": "proportional to",
       "object": "ramp",
-      "detail": "Magnitudes",
+      "detail": "Magnitudes are both proportional to ramp",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -227,18 +267,33 @@
       "quote": "Useful/core = 1 - sigma."
     },
     {
-      "category": "constraint",
-      "statement": "Linear benchmark only.",
+      "category": "physical_relationship",
+      "statement": "With sigma=.08 -> .92.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
       "from_image": false,
-      "quote": "Linear benchmark only."
+      "quote": "With sigma=.08 -> .92."
+    },
+    {
+      "category": "requirement",
+      "statement": "Do not put total Phi_core into gap B calculation.",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Do not put total Phi_core into gap B calculation."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Magnitudes are both proportional to ramp.",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Magnitudes are both proportional to ramp."
     }
   ],
-  "unreadable": [
-    "The term \"release truth\" gives status context but no controlled status label is explicitly defined in the note.",
-    "The phrase \"measurement coil negative\" is ambiguous about whether it refers to orientation, polarity, or sign convention."
-  ],
+  "unreadable": [],
   "unverified_quotes": []
 }

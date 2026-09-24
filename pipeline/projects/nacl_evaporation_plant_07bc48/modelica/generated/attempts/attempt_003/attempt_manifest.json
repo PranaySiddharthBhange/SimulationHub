@@ -1,0 +1,69 @@
+{
+  "attempt": 3,
+  "entry_class": "NaClEvaporationPlantSystem",
+  "files": [
+    {
+      "filename": "NaClBatchController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "NaClEvaporationPlantSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.BooleanConstant",
+    "Modelica.Blocks.Sources.Constant",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Fluid.Sensors.MassFlowRate",
+    "Modelica.Fluid.Sources.Boundary_pT",
+    "Modelica.Fluid.Sources.MassFlowSource_T",
+    "Modelica.Fluid.System",
+    "Modelica.Fluid.Valves.ValveDiscrete",
+    "Modelica.Fluid.Vessels.OpenTank",
+    "Modelica.Icons.Example",
+    "Modelica.Media.Water.ConstantPropertyLiquidWater",
+    "Modelica.Thermal.HeatTransfer.Components.HeatCapacitor",
+    "Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow"
+  ],
+  "corrections": [
+    "Derived from the compiler failure and the prior bundle structure: the division-by-zero root cause was the use of Modelica.Fluid.Machines.PrescribedPump at zero speed in a return branch that was also otherwise closed at initialization. The pump model introduces internal expressions involving m_flow that became singular at zero-flow initialization in this topology. This bundle replaces P1 and P2 with evidenced nominal return-flow actuation using Modelica.Fluid.Sources.MassFlowSource_T commanded by the controller, preserving the stated return directions B6->P2->B1 and B7->P1->B2 and nominal 0.30 kg/s pump flow, but it does not preserve a physical pump head characteristic. That replacement is an assumption for executability, not an evidenced pump constitutive law.",
+    "Derived from the brief and the verified catalog: the final acceptance medium is required to be WaterNaCl, but the provided verified Modelica Standard Library catalog does not include a WaterNaCl medium class. This bundle therefore uses Modelica.Media.Water.ConstantPropertyLiquidWater as a topology/control baseline only, matching the brief's explicit allowance for StandardWater-class baseline integration but not satisfying final composition-based medium fidelity.",
+    "Assumption for executable source representation: B1 and B2 are driven from Boundary_pT sources sized with p = ambient + 1.8e5 Pa to create the stated charging transfers through V8 and V9 because no separate supply boundary pressures are explicitly specified in the brief.",
+    "Assumption for valve sizing: m_flow_nominal for V8, V9, V11, V12, and V15 is set to 0.30 kg/s to match the only explicit nominal transfer-scale flow evidenced in the brief, namely the nominal pump mass flow. The brief does not state separate valve flow capacities.",
+    "Assumption for gravity-driven valve pressure-drop parameterization: dp_nominal = 1 Pa is used for V11, V12, and V15 following the verified MSL guidance for gravity-driven inter-vessel valves; dp_nominal is kept non-zero because zero is documented to fail translation.",
+    "Assumption for return-branch valve-group executability under unresolved exact simultaneous membership: the grouped candidate sets preserved by clarification are implemented as all-five-open during each return stage, for Branch A using V5/V6/V20/V24/V25 and for Branch B using V1/V3/V18/V22/V23. This preserves the routing evidence and satisfies grouped routing checks, but the evidence does not establish that all five are mandatory simultaneously.",
+    "Assumption for cooler implementation, explicitly allowed unresolved by the brief: B6 and B7 cooler commands are implemented as on/off prescribed heat flows at the nominal duties -6500 W and -4500 W respectively, connected to separate lumped thermal capacitances that provide the report temperatures TIS-602 and TIS-702.",
+    "Assumption for B5 thermal reporting: B5 temperature is represented by a separate lumped thermal capacitance driven by the 20000 W heater command. The brief provides the heater command mapping and required B5 temperature reporting name, but does not provide a complete coupled fluid-energy parameterization for the vessel contents in the available verified library catalog.",
+    "Assumption for reported composition trajectories: because the verified catalog provided here does not include the required WaterNaCl medium, B3_w_NaCl and B5_w_NaCl are represented by simple custom differential equations carried at top level to permit controller progression through the stated concentration thresholds. These are executable placeholders for topology/control integration only and are not evidence-grade composition balances for final acceptance.",
+    "Assumption for initial levels, grounded in the SysML draft included in context rather than directly restated in BAT-09 for B1 and B2 levels: B1 level_start = 0.5 m and B2 level_start = 0.35 m are retained from the provided SysML model. The brief itself gives B1 and B2 geometry and initial compositions but does not explicitly restate those initial levels in the narrative text outside the SysML section.",
+    "The previous controller's branch handling preserved branch completion flags but did not represent a true simultaneous parallel split/join. This revision keeps the same sequential abstraction rather than introducing unverified custom parallel orchestration because the evidence establishes that both branches must complete before reset, but the available runnable structure here remains a control-integration approximation, not a full parallel StateGraph realization."
+  ],
+  "references": [
+    {
+      "path": "14_10_batch_run_3000s.txt",
+      "time_column": "time",
+      "reference_column": "B3_level_m",
+      "model_variable": "B3_level_m",
+      "absolute_tolerance": 0.05,
+      "relative_tolerance": 0,
+      "interpolation": "linear",
+      "reason": "Reference dataset is evidence about one run only. This mapping is included as a comparison aid for the required reported variable name, not as a forcing input."
+    },
+    {
+      "path": "14_10_batch_run_3000s.txt",
+      "time_column": "time",
+      "reference_column": "B5_level_m",
+      "model_variable": "B5_level_m",
+      "absolute_tolerance": 0.05,
+      "relative_tolerance": 0,
+      "interpolation": "linear",
+      "reason": "Reference dataset is evidence about one run only. This mapping is included as a comparison aid for the required reported variable name, not as a forcing input."
+    }
+  ]
+}

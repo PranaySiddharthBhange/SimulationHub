@@ -3,42 +3,42 @@ Document kind: legacy model
 
 ## Entities
 * MagneticCircuit_v1 -- model
-* Modelica.Magnetic.QuasiStatic.FluxTubes -- import
 * a -- parameter
-    - length: 0.025
+    - Length: 0.025
 * l -- parameter
-    - length: 0.150
+    - Length: 0.150
 * delta -- parameter
-    - length: 0.0015
-* mu_r -- parameter  <CR-MAG-004>
-    - relative permeability: 1000 [superseded] (supersedes/superseded: 1200)
-* sigma -- parameter  <CR-MAG-006>
-    - sigma: 0.05 [superseded] (supersedes/superseded: 0.08)
+    - Length: 0.0015
+* mu_r -- parameter
+    - Real: 1000 [superseded] (supersedes/superseded: 1200)
+* sigma -- parameter
+    - Real: 0.05 [superseded] (supersedes/superseded: 0.08)
 * N_exc -- parameter
-    - turns: 600
+    - Integer: 600
 * N_meas -- parameter
-    - turns: 40 [superseded] (supersedes/superseded: 50)
+    - Integer: 40 [superseded] (supersedes/superseded: 50)
 * f -- parameter
-    - frequency: 50
-* leftLeg -- component
-* upperYoke -- component
-* rightLeg -- component
-* airGap -- component
-* leakage -- component
-* lowerYoke -- component
-* Phi_gap -- variable
-* Phi_core -- variable
-* Electric and magnetic grounds -- ground
-* EP-03 -- document
+    - Frequency: 50
+* leftLeg -- magnetic circuit element
+* upperYoke -- magnetic circuit element
+* rightLeg -- magnetic circuit element
+* airGap -- magnetic circuit element
+* leakage -- magnetic circuit element
+* lowerYoke -- magnetic circuit element
+* Electric and magnetic grounds -- grounds
+* Phi_gap -- magnetic flux quantity
+* Phi_core -- magnetic flux quantity
+* benchmark current -- current quantity
+    - current: 2 A [archived/legacy]
+    - current: 2 A [approved/released]
 
 ## Relationships
-* leftLeg connects_to upperYoke (series topology note)
-* upperYoke connects_to rightLeg (series topology note)
-* rightLeg connects_to airGap (parallel branch after rightLeg)
-* rightLeg connects_to leakage (parallel branch after rightLeg)
-* airGap connects_to lowerYoke (parallel path to lowerYoke)
-* leakage connects_to lowerYoke (parallel path to lowerYoke)
-* airGap in_parallel_with leakage
+* leftLeg connects_to upperYoke (topology note)
+* upperYoke connects_to rightLeg (topology note)
+* rightLeg branches_to_parallel airGap ((airGap || leakage))
+* rightLeg branches_to_parallel leakage ((airGap || leakage))
+* airGap rejoins_at lowerYoke (parallel branch to lowerYoke)
+* leakage rejoins_at lowerYoke (parallel branch to lowerYoke)
 
 ## Physical relationships
 * Phi_gap = (1-sigma)*Phi_core

@@ -4,542 +4,8 @@
   "kind": "dataset",
   "entities": [
     {
-      "name": "B3",
-      "kind": "tank",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "level",
-          "value": "0.005 .. 0.22",
-          "unit": "m",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B3_level_m: 0.005 .. 0.22"
-        },
-        {
-          "quantity": "NaCl mass fraction",
-          "value": "0 .. 0.08",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B3_w_NaCl: 0 .. 0.08"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "B3_level_m, B4_level_m, B5_level_m, B6_level_m, B7_level_m, B3_w_NaCl, B5_w_NaCl, B5_temp_C, B6_temp_C, B7_temp_C"
-    },
-    {
-      "name": "B4",
-      "kind": "tank",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "level",
-          "value": "0.005 .. 0.195",
-          "unit": "m",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B4_level_m: 0.005 .. 0.195"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "B3_level_m, B4_level_m, B5_level_m, B6_level_m, B7_level_m"
-    },
-    {
-      "name": "B5",
-      "kind": "tank",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "level",
-          "value": "0.005 .. 0.18",
-          "unit": "m",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B5_level_m: 0.005 .. 0.18"
-        },
-        {
-          "quantity": "NaCl mass fraction",
-          "value": "0.08 .. 0.18",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B5_w_NaCl: 0.08 .. 0.18"
-        },
-        {
-          "quantity": "temperature",
-          "value": "20 .. 108",
-          "unit": "C",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B5_temp_C: 20 .. 108"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "B5_level_m, B6_level_m, B7_level_m, B3_w_NaCl, B5_w_NaCl, B5_temp_C, B6_temp_C, B7_temp_C"
-    },
-    {
-      "name": "B6",
-      "kind": "tank",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "level",
-          "value": "0.005 .. 0.09",
-          "unit": "m",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B6_level_m: 0.005 .. 0.09"
-        },
-        {
-          "quantity": "temperature",
-          "value": "19 .. 80",
-          "unit": "C",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B6_temp_C: 19 .. 80"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "B6_level_m, B7_level_m, B3_w_NaCl, B5_w_NaCl, B5_temp_C, B6_temp_C, B7_temp_C"
-    },
-    {
-      "name": "B7",
-      "kind": "tank",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "level",
-          "value": "0.005 .. 0.105",
-          "unit": "m",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B7_level_m: 0.005 .. 0.105"
-        },
-        {
-          "quantity": "temperature",
-          "value": "20 .. 76",
-          "unit": "C",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B7_temp_C: 20 .. 76"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "B7_level_m, B3_w_NaCl, B5_w_NaCl, B5_temp_C, B6_temp_C, B7_temp_C"
-    },
-    {
-      "name": "FIS801",
-      "kind": "flow indicator",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "mass flow",
-          "value": "0.12 .. 0.16",
-          "unit": "kg_s",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "FIS801_kg_s: 0.12 .. 0.16"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "FIS801_kg_s: 0.12 .. 0.16"
-    },
-    {
-      "name": "P1",
-      "kind": "pump command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "command",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "P1_cmd: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "P1_cmd: 0 .. 1"
-    },
-    {
-      "name": "P2",
-      "kind": "pump command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "command",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "P2_cmd: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "P2_cmd: 0 .. 1"
-    },
-    {
-      "name": "B5_heater",
-      "kind": "heater command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "command",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B5_heater_cmd: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "B5_heater_cmd: 0 .. 1"
-    },
-    {
-      "name": "B6_cooler",
-      "kind": "cooler command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "command",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B6_cooler_cmd: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "B6_cooler_cmd: 0 .. 1"
-    },
-    {
-      "name": "B7_cooler",
-      "kind": "cooler command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "command",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "B7_cooler_cmd: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "B7_cooler_cmd: 0 .. 1"
-    },
-    {
-      "name": "V1",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V1_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V1_open: 0 .. 1"
-    },
-    {
-      "name": "V3",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V3_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V3_open: 0 .. 1"
-    },
-    {
-      "name": "V5",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V5_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V5_open: 0 .. 1"
-    },
-    {
-      "name": "V6",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V6_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V6_open: 0 .. 1"
-    },
-    {
-      "name": "V8",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V8_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V8_open: 0 .. 1"
-    },
-    {
-      "name": "V9",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V9_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V9_open: 0 .. 1"
-    },
-    {
-      "name": "V11",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V11_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V11_open: 0 .. 1"
-    },
-    {
-      "name": "V12",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V12_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V12_open: 0 .. 1"
-    },
-    {
-      "name": "V15",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V15_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V15_open: 0 .. 1"
-    },
-    {
-      "name": "V18",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V18_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V18_open: 0 .. 1"
-    },
-    {
-      "name": "V20",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V20_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V20_open: 0 .. 1"
-    },
-    {
-      "name": "V22",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V22_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V22_open: 0 .. 1"
-    },
-    {
-      "name": "V23",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V23_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V23_open: 0 .. 1"
-    },
-    {
-      "name": "V24",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V24_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V24_open: 0 .. 1"
-    },
-    {
-      "name": "V25",
-      "kind": "valve command",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "open",
-          "value": "0 .. 1",
-          "unit": "",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "V25_open: 0 .. 1"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V25_open: 0 .. 1"
-    },
-    {
       "name": "controller_state",
-      "kind": "state variable",
+      "kind": "control state",
       "aliases": [],
       "values": [
         {
@@ -558,29 +24,609 @@
     },
     {
       "name": "region",
-      "kind": "region variable",
+      "kind": "operating region",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "region: A+B, Join, Single"
+    },
+    {
+      "name": "B3_level_m",
+      "kind": "measured quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level range",
+          "value": "0.005 .. 0.22",
+          "unit": "m",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B3_level_m: 0.005 .. 0.22"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B3_level_m: 0.005 .. 0.22"
+    },
+    {
+      "name": "B4_level_m",
+      "kind": "measured quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level range",
+          "value": "0.005 .. 0.195",
+          "unit": "m",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B4_level_m: 0.005 .. 0.195"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B4_level_m: 0.005 .. 0.195"
+    },
+    {
+      "name": "B5_level_m",
+      "kind": "measured quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level range",
+          "value": "0.005 .. 0.18",
+          "unit": "m",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B5_level_m: 0.005 .. 0.18"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B5_level_m: 0.005 .. 0.18"
+    },
+    {
+      "name": "B6_level_m",
+      "kind": "measured quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level range",
+          "value": "0.005 .. 0.09",
+          "unit": "m",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B6_level_m: 0.005 .. 0.09"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B6_level_m: 0.005 .. 0.09"
+    },
+    {
+      "name": "B7_level_m",
+      "kind": "measured quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level range",
+          "value": "0.005 .. 0.105",
+          "unit": "m",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B7_level_m: 0.005 .. 0.105"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B7_level_m: 0.005 .. 0.105"
+    },
+    {
+      "name": "B3_w_NaCl",
+      "kind": "measured quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "NaCl mass fraction range",
+          "value": "0 .. 0.08",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B3_w_NaCl: 0 .. 0.08"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B3_w_NaCl: 0 .. 0.08"
+    },
+    {
+      "name": "B5_w_NaCl",
+      "kind": "measured quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "NaCl mass fraction range",
+          "value": "0.08 .. 0.18",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B5_w_NaCl: 0.08 .. 0.18"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B5_w_NaCl: 0.08 .. 0.18"
+    },
+    {
+      "name": "B5_temp_C",
+      "kind": "measured quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "temperature range",
+          "value": "20 .. 108",
+          "unit": "C",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B5_temp_C: 20 .. 108"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B5_temp_C: 20 .. 108"
+    },
+    {
+      "name": "B6_temp_C",
+      "kind": "measured quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "temperature range",
+          "value": "19 .. 80",
+          "unit": "C",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B6_temp_C: 19 .. 80"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B6_temp_C: 19 .. 80"
+    },
+    {
+      "name": "B7_temp_C",
+      "kind": "measured quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "temperature range",
+          "value": "20 .. 76",
+          "unit": "C",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B7_temp_C: 20 .. 76"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B7_temp_C: 20 .. 76"
+    },
+    {
+      "name": "FIS801_kg_s",
+      "kind": "measured quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "mass flow range",
+          "value": "0.12 .. 0.16",
+          "unit": "kg_s",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "FIS801_kg_s: 0.12 .. 0.16"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "FIS801_kg_s: 0.12 .. 0.16"
+    },
+    {
+      "name": "P1_cmd",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "P1_cmd: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1_cmd: 0 .. 1"
+    },
+    {
+      "name": "P2_cmd",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "P2_cmd: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P2_cmd: 0 .. 1"
+    },
+    {
+      "name": "B5_heater_cmd",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B5_heater_cmd: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B5_heater_cmd: 0 .. 1"
+    },
+    {
+      "name": "B6_cooler_cmd",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B6_cooler_cmd: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B6_cooler_cmd: 0 .. 1"
+    },
+    {
+      "name": "B7_cooler_cmd",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "B7_cooler_cmd: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B7_cooler_cmd: 0 .. 1"
+    },
+    {
+      "name": "V1_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V1_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V1_open: 0 .. 1"
+    },
+    {
+      "name": "V3_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V3_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V3_open: 0 .. 1"
+    },
+    {
+      "name": "V5_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V5_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V5_open: 0 .. 1"
+    },
+    {
+      "name": "V6_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V6_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V6_open: 0 .. 1"
+    },
+    {
+      "name": "V8_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V8_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V8_open: 0 .. 1"
+    },
+    {
+      "name": "V9_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V9_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V9_open: 0 .. 1"
+    },
+    {
+      "name": "V11_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V11_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V11_open: 0 .. 1"
+    },
+    {
+      "name": "V12_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V12_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V12_open: 0 .. 1"
+    },
+    {
+      "name": "V15_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V15_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V15_open: 0 .. 1"
+    },
+    {
+      "name": "V18_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V18_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V18_open: 0 .. 1"
+    },
+    {
+      "name": "V20_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V20_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V20_open: 0 .. 1"
+    },
+    {
+      "name": "V22_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V22_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V22_open: 0 .. 1"
+    },
+    {
+      "name": "V23_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V23_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V23_open: 0 .. 1"
+    },
+    {
+      "name": "V24_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V24_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V24_open: 0 .. 1"
+    },
+    {
+      "name": "V25_open",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "open state range",
+          "value": "0 .. 1",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "V25_open: 0 .. 1"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V25_open: 0 .. 1"
     }
   ],
   "relationships": [],
   "facts": [
     {
-      "category": "physical_relationship",
-      "statement": "This run is a recorded observation rather than a scenario input or command schedule.",
-      "ref": "",
-      "anchor": "",
-      "status": "observed",
-      "from_image": false,
-      "quote": "These are RECORDED values -- an observation of a run that already happened, not a scenario input and not a command schedule."
-    },
-    {
-      "category": "physical_relationship",
-      "statement": "The run started at time_s=0 in controller_state=Initial and region=Single.",
+      "category": "behavior",
+      "statement": "The recorded run starts at time_s=0 in controller_state=Initial and region=Single.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -588,8 +634,8 @@
       "quote": "time_s=0 | controller_state=Initial | region=Single"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=20 the controller_state changed to Step1 while region remained Single.",
+      "category": "behavior",
+      "statement": "At time_s=20, controller_state changes to Step1 while region remains Single.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -597,8 +643,8 @@
       "quote": "time_s=20 | controller_state=Step1 | region=Single"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=180 the controller_state changed to Step2 while region remained Single.",
+      "category": "behavior",
+      "statement": "At time_s=180, controller_state changes to Step2 while region remains Single.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -606,8 +652,8 @@
       "quote": "time_s=180 | controller_state=Step2 | region=Single"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=340 the controller_state changed to Step3 while region remained Single.",
+      "category": "behavior",
+      "statement": "At time_s=340, controller_state changes to Step3 while region remains Single.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -615,8 +661,8 @@
       "quote": "time_s=340 | controller_state=Step3 | region=Single"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=500 the controller_state changed to Step4 while region remained Single.",
+      "category": "behavior",
+      "statement": "At time_s=500, controller_state changes to Step4 while region remains Single.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -624,8 +670,8 @@
       "quote": "time_s=500 | controller_state=Step4 | region=Single"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=560 the controller_state changed to Step5 while region remained Single.",
+      "category": "behavior",
+      "statement": "At time_s=560, controller_state changes to Step5 while region remains Single.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -633,8 +679,8 @@
       "quote": "time_s=560 | controller_state=Step5 | region=Single"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=720 the controller_state changed to Step6 while region remained Single.",
+      "category": "behavior",
+      "statement": "At time_s=720, controller_state changes to Step6 while region remains Single.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -642,8 +688,8 @@
       "quote": "time_s=720 | controller_state=Step6 | region=Single"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=1600 the run entered controller_state=Parallel:Step12+Step8 and region=A+B.",
+      "category": "behavior",
+      "statement": "At time_s=1600, controller_state changes to Parallel:Step12+Step8 and region changes to A+B.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -651,8 +697,8 @@
       "quote": "time_s=1600 | controller_state=Parallel:Step12+Step8 | region=A+B"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=1770 the controller_state changed to Parallel:Step12+Step9 in region=A+B.",
+      "category": "behavior",
+      "statement": "At time_s=1770, controller_state changes to Parallel:Step12+Step9 while region remains A+B.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -660,8 +706,8 @@
       "quote": "time_s=1770 | controller_state=Parallel:Step12+Step9 | region=A+B"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=1900 the controller_state changed to Parallel:Step13+Step9 in region=A+B.",
+      "category": "behavior",
+      "statement": "At time_s=1900, controller_state changes to Parallel:Step13+Step9 while region remains A+B.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -669,8 +715,8 @@
       "quote": "time_s=1900 | controller_state=Parallel:Step13+Step9 | region=A+B"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=2050 the controller_state changed to Parallel:Step13+Step10 in region=A+B.",
+      "category": "behavior",
+      "statement": "At time_s=2050, controller_state changes to Parallel:Step13+Step10 while region remains A+B.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -678,8 +724,8 @@
       "quote": "time_s=2050 | controller_state=Parallel:Step13+Step10 | region=A+B"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=2200 the controller_state changed to Parallel:DoneA+Step10 in region=A+B.",
+      "category": "behavior",
+      "statement": "At time_s=2200, controller_state changes to Parallel:DoneA+Step10 while region remains A+B.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -687,8 +733,8 @@
       "quote": "time_s=2200 | controller_state=Parallel:DoneA+Step10 | region=A+B"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=2250 the controller_state changed to JoinWait and region=Join.",
+      "category": "behavior",
+      "statement": "At time_s=2250, controller_state changes to JoinWait and region changes to Join.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -696,8 +742,8 @@
       "quote": "time_s=2250 | controller_state=JoinWait | region=Join"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=2505 the controller_state changed to Step1_cycle2 and region=Single.",
+      "category": "behavior",
+      "statement": "At time_s=2505, controller_state changes to Step1_cycle2 and region changes to Single.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -705,8 +751,8 @@
       "quote": "time_s=2505 | controller_state=Step1_cycle2 | region=Single"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=2665 the controller_state changed to Step2_cycle2 and region=Single.",
+      "category": "behavior",
+      "statement": "At time_s=2665, controller_state changes to Step2_cycle2 while region remains Single.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -714,8 +760,8 @@
       "quote": "time_s=2665 | controller_state=Step2_cycle2 | region=Single"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=2825 the controller_state changed to Step3_cycle2 and region=Single.",
+      "category": "behavior",
+      "statement": "At time_s=2825, controller_state changes to Step3_cycle2 while region remains Single.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -723,13 +769,22 @@
       "quote": "time_s=2825 | controller_state=Step3_cycle2 | region=Single"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=2985 the controller_state changed to Step4_cycle2 and region=Single.",
+      "category": "behavior",
+      "statement": "At time_s=2985, controller_state changes to Step4_cycle2 while region remains Single.",
       "ref": "",
       "anchor": "",
       "status": "observed",
       "from_image": false,
       "quote": "time_s=2985 | controller_state=Step4_cycle2 | region=Single"
+    },
+    {
+      "category": "behavior",
+      "statement": "By time_s=3000, controller_state remains Step4_cycle2 and region remains Single.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "time_s=3000 | controller_state=Step4_cycle2 | region=Single"
     }
   ],
   "unreadable": [],

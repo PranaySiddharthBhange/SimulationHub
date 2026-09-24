@@ -310,6 +310,40 @@ def _omc_version(omc_path: Path, timeout: float) -> str:
     return "unknown"
 
 
+def _simulation_failure_detail(output: str) -> str:
+    """Why the run stopped, taken from the simulation log rather than discarded.
+
+    A model that compiles and then fails at runtime used to be reported as
+    "Simulation did not finish successfully" and nothing else. The real reason
+    -- a division by zero, a solver that would not converge, an assertion with
+    the offending variable and time -- was sitting in the captured output and
+    never reached the repair loop, which then returned the identical bundle
+    twice in a row because it had nothing to act on.
+    """
+
+    interesting = (
+        "assert", "division by zero", "nonlinear", "singular", "not converge",
+        "convergence", "stepsize", "initialization", "LOG_STDOUT", "LOG_ASSERT",
+        "| error |", "| warning |", "terminated", "Integrator", "iteration",
+    )
+    hits: list[str] = []
+    for line in output.splitlines():
+        stripped = line.strip()
+        if not stripped or stripped in hits:
+            continue
+        if any(token.lower() in stripped.lower() for token in interesting):
+            hits.append(stripped)
+    if not hits:
+        # Better a raw tail than nothing: the last lines carry the stop point.
+        hits = [line.strip() for line in output.strip().splitlines()[-6:] if line.strip()]
+    if not hits:
+        return "Simulation did not finish successfully"
+    return (
+        "Simulation compiled but did not finish. The simulation log says:\n  "
+        + "\n  ".join(hits[:12])
+    )
+
+
 def compile_files(
     execution_id: str,
     files: dict[str, str],
@@ -441,7 +475,7 @@ def compile_files(
             log_path.write_text(output, encoding="utf-8")
         if status == CompileStatus.FAILED and not errors:
             errors.append(CompileError(error_id="ERR-001", severity="ERROR", category=ErrorCategory.UNKNOWN,
-                                       file="", message="Simulation did not finish successfully", raw=output))
+                                       file="", message=_simulation_failure_detail(output), raw=output))
 
         return CompileResult(
             execution_id=execution_id,

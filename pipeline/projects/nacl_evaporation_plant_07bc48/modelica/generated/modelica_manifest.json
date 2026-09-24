@@ -1,0 +1,53 @@
+{
+  "entry_class": "NaClBatchPlantSystem",
+  "files": [
+    {
+      "filename": "BatchTank.mo",
+      "role": "component"
+    },
+    {
+      "filename": "EvaporatorCondenser.mo",
+      "role": "component"
+    },
+    {
+      "filename": "CentralController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "NaClBatchPlantSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Sources.BooleanConstant",
+    "Modelica.Blocks.Sources.Constant",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Explicit: the over-determined system in the previous bundle came from giving the same connector variables more than one equation. In the system model, B5K1.feed_kg_s and B5K1.feed_w had both a connect(...) equation and a direct assignment equation; connector variables must have one writer. The revised bundle keeps exactly one definition for each such connector input. The same root cause also existed in the previous topology around B3, where two outlet connectors were both connected into one input connector; this revision replaces that with one summed scalar equation for B3.qIn_kg_s and one mixed-composition equation for B3.wIn_kg_kg.",
+    "Assumption retained from the brief: simulation StopTime is 3000 s so behavior beyond 2500 s can be represented.",
+    "Assumption: because the brief requires WaterNaCl for final acceptance but does not provide a complete executable Modelica medium package with all required properties and coefficients, this bundle keeps the prior simplified lumped mass-fraction formulation rather than claiming a final WaterNaCl-compliant fluid-library implementation. This is an explicit limitation, not an established fact about the plant.",
+    "Assumption: B1 initial level is set to 0.5 m and B2 initial level is set to 0.35 m, following the provided SysML draft rather than a direct statement in the brief's BAT-09 initial conditions, which only specified B3/B4/B5/B6/B7 initial levels and B1/B2 initial compositions.",
+    "Assumption: B6 and B7 cooling are represented as direct applied heat flows of -6500 W and -4500 W when commanded, because the notes give on/off commands and nominal duties but do not define a more detailed cooler implementation.",
+    "Assumption: the reported variable controller_state uses Integer(mode) and region uses 1 before the post-evaporation parallel region and 2 during/after it. The brief requires these names to be logged but does not define a machine-numeric encoding.",
+    "Assumption: FIS801_kg_s is represented by a constant 0.12 kg/s proof signal, consistent with the stated initial condition and observed reference range 0.12..0.16 kg/s, because no time-varying cooling-water schedule is provided.",
+    "Derived: the floor mMin_kg is set to 0.001 kg, strictly below the inventory corresponding to the stated nearly-empty and idle thresholds, so level can cross the guards 0.01 m and 0.02 m rather than being clamped on them."
+  ],
+  "references": [
+    {
+      "path": "14_10_batch_run_3000s.txt",
+      "time_column": "time",
+      "reference_column": "FIS801_kg_s",
+      "model_variable": "FIS801_kg_s",
+      "absolute_tolerance": 0.04,
+      "relative_tolerance": 0,
+      "interpolation": "previous",
+      "reason": "Reference evidence reports condenser cooling-water flow proof in the observed range 0.12..0.16 kg/s over 0..3000 s; the model uses a constant 0.12 kg/s proof because no command schedule is provided."
+    }
+  ]
+}

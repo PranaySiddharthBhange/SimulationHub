@@ -6,16 +6,17 @@ Document kind: test procedure
 * measuring coil -- coil
 * electrical ground -- ground
 * magnetic ground -- ground
-* AV-11 -- validation comparison
+* AV-11 -- comparison/check
+* gap -- air gap
     - gap: 1.50 mm [nominal]
     - shim value: 1.58 mm [as_built/as-built]
 * quasi-static excitation -- excitation
-    - frequency: 50 Hz
-    - current-phasor magnitude: 0 A
-    - time: 0.10 s
-    - current-phasor magnitude: 2.0 A
-    - time: 0.50 s
-    - time: 1.0 s
+    - frequency: 50 Hz [current]
+    - current-phasor magnitude: 0 A [current]
+    - time: 0.10 s [current]
+    - current-phasor magnitude: 2.0 A [current]
+    - time: 0.50 s [current]
+    - time: 1.0 s [current]
 * N*I -- signal
 * Phi_core -- signal
 * Phi_gap -- signal
@@ -24,26 +25,25 @@ Document kind: test procedure
 * H -- signal
 * Exciting induced-voltage magnitude -- signal
 * Measuring induced-voltage magnitude -- signal
-* air gap -- magnetic region
+* air gap -- region
 * useful flux -- flux
 * total core flux -- flux
-* air-gap B -- signal
+* air-gap B -- magnetic quantity
 
 ## Relationships
-* measuring coil recorded induced voltage is negative relative to positive air-gap flux arrow
+* measuring coil recorded induced voltage is negative relative to air gap (positive air-gap flux arrow)
 * electrical ground instantiated in simulation model
 * magnetic ground instantiated in simulation model
 * Phi_gap equals Phi_core (0.92*Phi_core)
 * Phi_leak equals Phi_core (0.08*Phi_core)
-* total core flux applied to air gap
 
 ## Requirements
-* Connect the exciting coil with the documented polarity dot orientation.
-* Connect the measuring coil so its recorded induced voltage is negative relative to the positive air-gap flux arrow.
-* Confirm electrical ground and magnetic ground are instantiated in the simulation model.
-* Use the nominal 1.50 mm gap for AV-11. [nominal]  <AV-11>
-* Apply 50 Hz quasi-static excitation with an RMS current-phasor magnitude ramp: 0 A until 0.10 s, linear ramp to 2.0 A by 0.50 s, then hold to 1.0 s.
+* Connect the exciting coil with the documented polarity dot orientation. [current]
+* Connect the measuring coil so its recorded induced voltage is negative relative to the positive air-gap flux arrow. [current]
+* Confirm electrical ground and magnetic ground are instantiated in the simulation model. [current]
+* Use the nominal 1.50 mm gap for AV-11. [nominal]
+* Apply 50 Hz quasi-static excitation with an RMS current-phasor magnitude ramp: 0 A until 0.10 s, linear ramp to 2.0 A by 0.50 s, then hold to 1.0 s. [current]
 
 ## Physical relationships
-* Phi_gap | 0.92*Phi_core
-* Phi_leak | 0.08*Phi_core
+* Phi_gap = 0.92*Phi_core [expected]
+* Phi_leak = 0.08*Phi_core [expected]

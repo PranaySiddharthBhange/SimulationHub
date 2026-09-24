@@ -1,0 +1,105 @@
+{
+  "attempt": 2,
+  "entry_class": "TwoTankSequenceSystem",
+  "files": [
+    {
+      "filename": "Tank1Inventory.mo",
+      "role": "component"
+    },
+    {
+      "filename": "Tank2Inventory.mo",
+      "role": "component"
+    },
+    {
+      "filename": "IdealOnOffValve.mo",
+      "role": "component"
+    },
+    {
+      "filename": "PLC101.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "TwoTankSequenceSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Blocks.Sources.RealExpression"
+  ],
+  "corrections": [
+    "Replaced the single generic TankInventory class with two separately inspectable top-level component classes, Tank1Inventory and Tank2Inventory, so each named physical unit appears as its own component file while preserving the same legacy-note balance form der(level)=(inflow-outflow)/area.",
+    "Fixed the root-cause topology issue behind the unused TK_102.outflowActual_m3s connector: the previous system routed Tank 2 inflow both from TK_101.outflowActual_m3s and from zeroFlow.y, which over-constrained TK_102.inflow_m3s and bypassed the downstream terminal path. The revised system keeps the actual topology SRC-101 -> XV-101 -> TK-101 -> XV-102 -> TK-102 -> XV-103 -> DRN-101 by using TK_102.outflowActual_m3s as the terminal discharge connection and removing the incorrect extra inflow connection.",
+    "The terminal sink DRN-101 is represented in this signal-flow bundle by the zeroFlow RealExpression acting only as a non-accumulating downstream terminus for Tank 2 actual discharge. This is an assumption required because the chosen signal-flow formulation uses scalar flow signals rather than acausal Fluid boundary components.",
+    "The model preserves the brief's adopted legacy-note balances and the Merge assumption to use ideal Boolean valve commands directly as flow switches, rather than introducing valve stroke dynamics or an unstated hydraulic pressure-drop law.",
+    "The physical cutoff law preserves nonnegative inventory and prevents filling above 1.0 m by limiting actual outflow when empty and suppressing net inflow when full inside each tank balance. This uses the stated measurement-valid range 0.0..1.0 m as the physical bound because the brief does not provide a separate approved saturation law beyond that range.",
+    "Command pulses are implemented with BooleanTable using paired toggle times per occurrence and width cmdWidth = 2*scanPeriod = 0.2 s so each scheduled START, STOP, and SHUT press is visible to the sampled PLC logic, matching the stated 0.1 s scan time."
+  ],
+  "references": [
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "controller_state_id",
+      "model_variable": "controller_state_id",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0,
+      "interpolation": "previous",
+      "reason": "Acceptance checks AC-03, AC-04, AC-07, AC-08, AC-06 and URS-FUN-004/007 and URS-MOD-003 are written against the reported integer-coded controller state variable and exact commanded outputs at specified times or ever/final conditions."
+    },
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "valve1_cmd",
+      "model_variable": "valve1_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0,
+      "interpolation": "previous",
+      "reason": "Acceptance checks AC-02, AC-03, AC-04, AC-05, AC-06, AC-07 and AC-08 use the reported Boolean valve1 command."
+    },
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "valve2_cmd",
+      "model_variable": "valve2_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0,
+      "interpolation": "previous",
+      "reason": "Acceptance checks AC-02, AC-03, AC-05, AC-06, AC-07 and AC-08 use the reported Boolean valve2 command."
+    },
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "valve3_cmd",
+      "model_variable": "valve3_cmd",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0,
+      "interpolation": "previous",
+      "reason": "Acceptance checks AC-02, AC-03, AC-05, AC-06, AC-07 and AC-08 use the reported Boolean valve3 command."
+    },
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "tank1_level_m",
+      "model_variable": "tank1_level_m",
+      "absolute_tolerance": 1e-06,
+      "relative_tolerance": 0,
+      "interpolation": "linear",
+      "reason": "Acceptance checks AC-01 and URS-CTL-005 use tank1_level_m threshold attainment."
+    },
+    {
+      "path": "11_09_test_procedure_TP17.txt",
+      "time_column": "time_s",
+      "reference_column": "tank2_level_m",
+      "model_variable": "tank2_level_m",
+      "absolute_tolerance": 1e-06,
+      "relative_tolerance": 0,
+      "interpolation": "linear",
+      "reason": "Acceptance check URS-CTL-005 uses tank2_level_m threshold attainment."
+    }
+  ]
+}

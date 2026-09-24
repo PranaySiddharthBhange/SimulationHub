@@ -4,29 +4,27 @@ Document kind: correspondence
 ## Entities
 * StateGraph -- model note
 * P1 -- pump
-* B7 -- branch/header
-    - cooling setpoint: 20 C [observed]
-    - cooling setpoint: 25 C [proposed]
-    - cooling completion: 25 C [proposed]
-    - cooling completion: 25 C [approved] (supersedes/superseded: The legacy StateGraph routing text is superseded.)
+* B7 -- branch
+    - cooling completion temperature limit: 25 C [proposed]
+    - cooling completion temperature limit: 25 C [approved]
+    - cooler setpoint: 20 C [observed]
+    - cooler setpoint: 25 C [proposed]
 * V18 -- valve
 * V23 -- valve
 * V22 -- valve
 * V1 -- valve
 * V3 -- valve
-* B1 -- branch/header
+* B1 -- header
 * P2 -- pump
-* B6 -- branch/header
-    - cooling setpoint: 20 C [observed]
-    - cooling completion: 20 C [proposed]
+* B6 -- branch
+    - cooling completion temperature limit: 20 C [proposed]
 * V20 -- valve
 * V24 -- valve
 * V25 -- valve
 * V5 -- valve
 * V6 -- valve
-* B2 -- branch/header
-* URS -- requirement source
-* Process -- actor
+* B2 -- header
+* URS -- requirement specification
 * CR-017 -- change request  <CR-017>
 * WaterNaCl -- medium variant
 * StandardWater -- medium variant
@@ -34,16 +32,15 @@ Document kind: correspondence
 ## Relationships
 * P1 routes via B1 (branch (B7) -> V18/V23/V22 + V1/V3)
 * P2 routes via B2 (branch (B6) -> V20/V24/V25 + V5/V6)
-* recovered condensate returns to B1
-* cooled concentrate returns to B2
-* bottom headers are cross-connected pump physical location (is not the destination)
-* B6 condensate returns to B1  <CR-017>
-* B7 concentrate returns to B2  <CR-017>
+* B6 condensate returns to B1 (approved by CR-017)  <CR-017>
+* B7 concentrate returns to B2 (approved by CR-017)  <CR-017>
+* bottom headers are cross-connected bottom headers
 
 ## Requirements
 * Process wants recovered condensate back to B1 and cooled concentrate back to B2.
 * B6 condensate returns to B1. [approved]  <CR-017>
 * B7 concentrate returns to B2. [approved]  <CR-017>
+* The legacy StateGraph routing text is superseded. [approved]
 
 ## Constraints
 * B6 <= 20 C [proposed]

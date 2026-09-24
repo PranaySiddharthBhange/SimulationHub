@@ -44,12 +44,17 @@ class Check(Record):
         "An arithmetic or Boolean expression over the model's reported variable names, "
         "evaluable against a result file. Use the exact variable names declared in the "
         "narrative, combined with + - * / ( ), comparisons, and and/or/not. "
-        "It must NOT be an English sentence: 'quantity_a >= 0.80' is a valid expression, "
+        "It must NOT be an English sentence: 'quantity_a >= limit_a' is a valid expression, "
         "'the quantity reaches its limit before the next phase' is not."
     ))
-    kind: Literal["final", "always", "at"] = Field(description=(
+    kind: Literal["final", "always", "at", "ever"] = Field(description=(
         "'final' compares the value at the end of the run, 'always' requires the "
-        "expression to hold at every sample, 'at' compares it at the instant in at_time."
+        "expression to hold at every sample, 'at' compares it at the instant in at_time, "
+        "and 'ever' requires it to hold at a minimum of one sample during the run. "
+        "Use 'ever' for a target that is reached and then left behind, which is most "
+        "stage targets in a sequenced process: a later stage undoes the condition an "
+        "earlier one had to meet. Marking such a target 'final' asserts it still holds "
+        "at the end, and contradicts the check for the stage that undid it."
     ))
     at_time: float | None = Field(default=None, description=(
         "The instant this is evaluated at, in seconds. Required when kind is 'at', null otherwise."
@@ -59,8 +64,12 @@ class Check(Record):
         "meaning the condition holds."
     ))
     absolute_tolerance: float = Field(default=1e-6, ge=0, description=(
-        "Absolute tolerance. Use the tolerance the evidence states. When none is stated, "
-        "choose one justified by the quantity's own precision rather than an exact match."
+        "Absolute tolerance on the VALUE of the expression. It is never a tolerance on "
+        "time: to allow slack around an instant, choose an at_time safely inside the "
+        "interval where the condition must hold, rather than widening this. "
+        "For a Boolean expression with expected 1.0 it must be 0, because a tolerance of "
+        "1.0 or more also admits false and the check can then never fail. Otherwise use "
+        "the tolerance the evidence states, or one the quantity's own precision justifies."
     ))
     relative_tolerance: float = Field(default=0, ge=0, description="Relative tolerance, when the evidence gives one.")
     source: str = Field(description=(
@@ -68,6 +77,23 @@ class Check(Record):
         "identifier that states it when the note records one. Take both from the note "
         "itself; never write an identifier that does not appear there."
     ))
+
+    @model_validator(mode="after")
+    def tolerance_cannot_admit_false(self):
+        """A Boolean check with a tolerance of 1.0 or more can never fail.
+
+        Clamped rather than rejected: a hard error here would fail the whole
+        Merge stage over one field. Found live -- asked for acceptance criteria
+        on a sequencing benchmark, the model expressed the allowed slack around
+        an event's INSTANT as a tolerance on the expression's value, giving five
+        of eleven checks a tolerance of 2.0 against an expected of 1.0. Every
+        one of them passed whether the condition held or not.
+        """
+
+        boolean_like = any(token in self.expression for token in ("==", "!=", ">=", "<=", ">", "<", " and ", " or ", "not "))
+        if boolean_like and self.expected in (0.0, 1.0) and self.absolute_tolerance >= 0.5:
+            object.__setattr__(self, "absolute_tolerance", 0.0)
+        return self
 
 
 class TableRole(Record):
@@ -90,6 +116,31 @@ class MergeClarification(Record):
     options: list[str] = Field(default_factory=list)
 
 
+class ResolvedConflict(Record):
+    """A material conflict Merge settled on the evidence, shown to the human anyway.
+
+    Merge only ever surfaced what it could NOT resolve. As extraction improved,
+    it began resolving conflicts it used to ask about -- on one benchmark the
+    open questions went from three to zero in a single run -- so the better it
+    got, the less a reviewer saw. The decisions did not stop being consequential
+    just because the evidence settled them, and an engineer may still disagree
+    with a change record the documents themselves disagree about. Recording them
+    here lets Clarify present each one already answered, for confirmation or
+    override, instead of applying it silently.
+    """
+
+    id: str = Field(description="Stable identifier for this decision, e.g. resolve_<quantity>.")
+    topic: str = Field(description="The quantity or behaviour in dispute, in a few words.")
+    chosen: str = Field(description="The value or behaviour adopted, with its unit.")
+    rejected: list[str] = Field(default_factory=list, description=(
+        "Each candidate not adopted, with the reason it lost -- superseded, proposed, "
+        "observed once, archived."
+    ))
+    reasoning: str = Field(description=(
+        "The evidence that decided it: which note, which status, which change record."
+    ))
+
+
 class Understanding(Record):
     title: str
     # The principal handoff: purpose, system boundary, resolved configuration,
@@ -101,6 +152,9 @@ class Understanding(Record):
     assumptions: list[str] = Field(default_factory=list)
     questions: list[str] = Field(default_factory=list)
     clarifications: list[MergeClarification] = Field(default_factory=list)
+    # Conflicts Merge DID settle. Surfaced to the human for confirmation so a
+    # resolution is never applied silently -- see `ResolvedConflict`.
+    resolutions: list[ResolvedConflict] = Field(default_factory=list)
     # Which general engineering domain(s) this system belongs to (from
     # `skills.domains.DOMAIN_SKILLS`'s keys), so Stage 2/3 can be handed the
     # relevant domain's standard equations/conventions -- see
@@ -125,6 +179,11 @@ class Clarification(Record):
     reasoning: str
     suggested_value: str
     options: list[str] = Field(default_factory=list)
+    # True when Merge already settled this on the evidence and is asking the
+    # reviewer to confirm rather than to decide. Kept explicit rather than
+    # inferred from the id or the wording, because the UI presents the two
+    # cases quite differently: one is a question, the other is a sign-off.
+    resolved: bool = False
 
 
 class MermaidDraft(Record):
@@ -193,12 +252,42 @@ class Review(Record):
     issues: list[str]
 
 
+class CheckResult(Record):
+    """One acceptance check from the brief, evaluated against the real run.
+
+    Reported per check rather than summarised, because a check nobody
+    evaluated and a check that passed look identical in prose. Confirmed
+    live: a run that never accepted a STOP command, and so could not satisfy
+    the two checks covering pause and resume, was still described as mostly
+    working -- the failing checks appeared as narrative issues rather than as
+    checks marked failed.
+    """
+
+    name: str = Field(description="The check's name exactly as the brief states it.")
+    expression: str = Field(description="The check's expression exactly as the brief states it.")
+    outcome: Literal["pass", "fail", "not_evaluable"] = Field(description=(
+        "`pass` when the real numbers satisfy it within its tolerance, `fail` when they do "
+        "not, and `not_evaluable` ONLY when a variable it names is absent from the result "
+        "file. Never report `not_evaluable` because a value is hard to read off: find it."
+    ))
+    observed: str = Field(description=(
+        "The actual value or event found in the result data, with the time it was read at, "
+        "and the expected value beside it. Quote real numbers -- this is the evidence the "
+        "outcome rests on."
+    ))
+
+
 class ValidationReport(Record):
     """Stage 4's output -- an independent review of the REAL simulated
     trajectory against the actual problem statement, never the generating
     model's own self-report. See `skills/stage4_validation.py`."""
 
     verdict: Literal["valid", "invalid", "partially_valid"]
+    check_results: list[CheckResult] = Field(default_factory=list, description=(
+        "Every acceptance check in the brief, in the order the brief lists them, each with "
+        "its own outcome. Omit none: a check missing from this list reads as one that was "
+        "never looked at."
+    ))
     # One plain-language paragraph for the person who commissioned the run,
     # not another engineer -- see the prompt's own instruction on audience.
     summary: str

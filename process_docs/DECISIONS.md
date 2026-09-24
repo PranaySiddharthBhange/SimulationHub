@@ -168,3 +168,35 @@ D54 | Treat the Modelica Standard Library catalog as verified baseline guidance 
 D55 | Remove unsupported universal Modelica rules from the generation prompt | A single mode writer, a particular `when` layout, `noEvent` cutoff, hysteresis margin, or StopTime safety percentage is a conservative pattern for this generated controller, not a requirement for every valid Modelica model. The prompt now preserves confirmed thresholds and horizons, reports infeasible timing instead of changing requirements, and permits evidence-based alternatives that pass compiler and trajectory checks.
 
 D56 | Preserve every Modelica generation attempt under a versioned archive | Failed drafts contain diagnostic evidence needed to understand repairs and regressions. Stage 3 writes `modelica/generated/attempts/attempt_NNN/` with the complete files and manifest, while the active bundle remains separately replaceable. Stage reruns remove only active outputs and validation results, never archived attempts.
+
+## SysML v2 generation verified against the real parser
+
+D57 | Write discrete behaviour with native SysML v2 `state` and `transition` syntax | The prompt previously banned the `transition` keyword and required each transition to be an `action def` carrying a prose `doc` comment. Tested directly against the installed kernel, the ban was wrong: `state X { entry; then S1; state S1; transition T first S1 if <guard> do assign <a> := <b> then S2; }` parses with zero issues, and a dotted reference such as `if Vessel_A.level_m >= 0.13` resolves normally. Under the ban the operating sequence could only be read by reading fourteen comments in order; with it the sequence is readable as a machine.
+
+D58 | A transition takes exactly one `do` clause; multiple commands go in a single `do action { ... }` block | Two or more `do assign` clauses on one transition are rejected, and the parser reports `no viable alternative at input 'transition'` — it blames the whole transition rather than the offending second clause, so the repair loop cannot localise it. This exhausted all five attempts on the tank case without converging. Verified: one `do assign` passes, two `do assign` clauses fail, `do action { assign a := ...; assign b := ...; }` passes, and `state S { entry assign a := ...; }` passes.
+
+D59 | Every connection needs two resolvable ends | A bare `connection <name>;` standing for a physical route fails with `Must have at least two related elements`. Because routes are written as one contiguous block, that single mistake fails every line in the block at once. A route through an intermediate element is two `connect` statements, not one named connection.
+
+D60 | Return a syntactically closed file | A file that stops part way through a declaration fails with `mismatched input '<EOF>' expecting '}'`. When the model runs long it must include less, never stop before the structure is closed.
+
+D61 | Raise a state machine only where the brief establishes discrete behaviour | The prompt asked for "each state/phase" without ever asking whether the system has states. The magnetic-circuit model came out with five states — PreStart, ZeroCurrentHold, RampToFinalCurrent, FinalHold, Complete — for a system whose approved design review DR-MAG-03 calls quasi-static and linear, with no actuators, operator commands or interlocks in any document. Three of those states are segments of a prescribed waveform (REQ-ELC-003: 0 A until 0.10 s, linear ramp to 2.0 A RMS by 0.50 s, hold to 1.0 s) and two were invented. The distinguishing test is whether what happens next depends on what the system DID — a measurement crossing a threshold, a command, an interlock — or merely on the clock; a guard testing only elapsed time is the signature of the mistake. A prescribed time function is a source carrying its segment times and values, not a state machine, and a transition must never re-enter its own state to recompute a continuously varying value.
+
+D62 | Describe the system completely and connect what is declared | A model that silently omits equipment represents less than the brief does, and a reader can work through complexity but cannot recover what was never written down. Where a change record superseded a route without restating it, connect the confirmed part of the path and record the unresolved part in a `doc` on the element rather than inventing the missing segment or deleting the element. Confirmed live on the NaCl case: ten return-group valves are reported controller outputs whose group membership CR-017 superseded without restating, so they are declared and left unrouted by decision, not by oversight.
+
+D63 | Do not re-emit acceptance checks as SysML requirements | The checks already reach the next stage inside the structured `Understanding`, so a `requirement` restating a check's expression, expected value and tolerance carries nothing. Left unstated, this produced fourteen duplicate requirement blocks on one case. A `requirement` is for behaviour the checks do NOT capture: a mutual exclusion, an interlock, a permissive, a priority rule.
+
+### Verified status and measured cost to SysML v2
+
+All three benchmark cases pass the real SysML v2 parser and carry every resolved value and confirmed Clarify answer into the model: the tank keeps the 0.80 m setpoint with the 12 s and 8 s waits; the magnetic case keeps N_meas=50, mu_r=1200, sigma=0.08 and delta=1.50 mm and places the right-leg iron before the split so gap and leakage sit in parallel; the NaCl case keeps the CR-017 corrected return routing rather than the reversed routing its superseded correspondence describes.
+
+| case | docs | Stage 1 | Merge | Clarify | Stage 2 | total |
+| --- | --- | --- | --- | --- | --- | --- |
+| Two-tank control | 12 | $0.056 | $0.009 | $0.003 | $0.011 | **$0.079** |
+| Quasi-static magnetic | 15 | $0.056 | $0.008 | $0.003 | $0.017 | **$0.084** |
+| NaCl evaporation | 15 | $0.073 | $0.012 | $0.003 | $0.066 | **$0.154** |
+
+Roughly $0.08-$0.15 per case from scratch through SysML v2, about $0.32 for all three, measured from logged per-call spend on cloud extraction rather than from list pricing.
+
+Two properties of that distribution matter more than the total. Stage 1 is 45-70% of the bill at one call per document, so cost scales with how many documents are supplied, not with how hard the reasoning is. Stage 2 is the variable part and is driven entirely by parser repair attempts — one attempt cost $0.011, two $0.017, three $0.066, and a run that exhausts five and fails cost about $0.17 — because each retry resends the brief, the previous draft and the accumulated errors. That is why the syntax decisions above are worth more than they appear: they move cases from the expensive tail to the first attempt.
+
+Stage 3 and Stage 4 have not been run, so no cost is recorded for them.

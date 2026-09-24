@@ -1,10 +1,8 @@
-Subject: tankController1
+Subject: reference control diagram
 Document kind: engineering diagram
 
 ## Entities
-* system -- configuration element
-* g -- parameter
-    - value: 9.8
+* system -- system
 * source -- source
 * valve1 -- valve
 * tank1 -- tank
@@ -14,27 +12,29 @@ Document kind: engineering diagram
 * shut -- command input
 * tankController1 -- controller
 * level1 -- signal
-* tank1.level -- measurement signal
+* tank1.level -- signal
 * level2 -- signal
-* tank2.level -- measurement signal
+* tank2.level -- signal
 * valve2 -- valve
 * tank2 -- tank
     - level: 0.05
-* ambient1 -- ambient source
+* ambient1 -- ambient
 * valve3 -- valve
+* defaults -- defaults block
+    - g: 9 [default]
 
 ## Relationships
-* source connects_to valve1
-* valve1 connects_to tank1
-* tank1 connects_to valve2
-* valve2 connects_to tank2
-* ambient1 connects_to valve3
-* valve3 connects_to tank2
-* start feeds tankController1
-* stop feeds tankController1
-* shut feeds tankController1
-* tank1.level feeds tankController1 (via level1)
-* tank2.level feeds tankController1 (via level2)
+* source connects to valve1
+* valve1 feeds tank1
+* tank1 feeds valve2
+* valve2 feeds tank2
+* ambient1 connects to valve3
+* valve3 feeds tank2
+* start inputs to tankController1
+* stop inputs to tankController1
+* shut inputs to tankController1
+* tank1.level inputs to tankController1
+* tank2.level inputs to tankController1
 * tankController1 controls valve1
 * tankController1 controls valve2
 * tankController1 controls valve3

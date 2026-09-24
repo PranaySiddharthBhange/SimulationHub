@@ -3,36 +3,44 @@ Document kind: operator log
 
 ## Entities
 * tank1 -- tank; aliases: TK-101, T1
-    - display level: ~0.05 m [observed]
 * tank2 -- tank; aliases: TK-102, T2
-    - display level: ~0.05 m [observed]
 * valve1 -- valve; aliases: XV-101, V1
 * valve2 -- valve; aliases: XV-102
 * valve3 -- valve; aliases: XV-103
-* E-stop -- control
-* shut -- command
-    - time: 700 s [observed]
-* Start -- command
+* both tank displays -- display
+    - level: ~0.05 m [observed]
+* all three output lamps -- indicator
+* Start event -- command
     - time: 20 s [observed]
-    - time: 280 s [observed]
 * Stop -- command
-    - time: 220 s [observed]
-    - time: 650 s [observed]
+    - time: 220 [observed]
+    - time: 650 [observed]
+* shut -- command; aliases: SHUT
+    - time: 700 [observed]
+    - time: 900 s [observed]
+* E-stop -- command
 * Jin's old model -- model
     - high target: 0.78 [archived]
+* Controls -- actor
+    - dead time: 12 s [observed]
 
 ## Relationships
+* tank1 alias_of TK-101
+* tank2 alias_of TK-102
+* valve1 alias_of XV-101
+* valve2 alias_of XV-102
+* valve3 alias_of XV-103
 * shut is controlled drain
-* E-stop is outside scope of this demo
 
 ## Behaviors
 * V1 drops out at the high target. [observed]
 * Stop at 220 kills all valve lamps. [observed]
+* Tank levels hold steady through pause. [observed]
 * Start at 280 picks transfer back up; it does NOT go back to fill. [observed]
-* transfer + drain lamps are on together during SHUT, and this is intentional, not an interlock failure. [observed]
+* Shut at 700: transfer + drain lamps are on together. [observed]
 
 ## Scheduled commands
-* Start at 20 s. [observed]
+* Start event at 20 s. [observed]
 * Stop at 220. [observed]
 * Start at 280. [observed]
 * Stop at 650. [observed]

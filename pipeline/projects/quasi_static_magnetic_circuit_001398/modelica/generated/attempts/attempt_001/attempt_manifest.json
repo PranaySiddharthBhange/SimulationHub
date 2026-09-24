@@ -1,0 +1,55 @@
+{
+  "attempt": 1,
+  "entry_class": "MagneticCircuitBenchmarkSystem",
+  "files": [
+    {
+      "filename": "CurrentRamp.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ExcitingMMF.mo",
+      "role": "component"
+    },
+    {
+      "filename": "MagneticCircuitCore.mo",
+      "role": "component"
+    },
+    {
+      "filename": "MagneticCircuitBenchmarkSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Icons.Block",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Assumption: the brief provides a magnetic-circuit topology and names magnetic/electrical grounds, flux sensor, exciting coil, and measuring coil, but the verified library catalog for this domain does not include an MSL winding or quasi-static magnetic/electrical coupling component list sufficient to build the stated coupled coil-ground network directly from catalog components. Therefore the returned executable bundle represents the resolved benchmark analytically with signal components for the current schedule and MMF, and a custom magnetic-circuit component for the quasi-static reluctance relationships and reported variables.",
+    "Assumption: experiment tolerance and output interval are not explicitly stated in the brief. The system model uses StartTime=0, StopTime=1.0 from the evidence, with Tolerance=1e-6 and Interval=0.002 as executable simulation settings.",
+    "Assumption: Phi_gap_over_Phi_core is assigned 0.92 when Phi_core_Wb is exactly zero to avoid division by zero while preserving the released benchmark branch ratio parameter sigma=0.08. This affects only zero-excitation instants; the accepted attained and final checks occur at positive excitation."
+  ],
+  "references": [
+    {
+      "path": "quasistatic_ramp_results",
+      "time_column": "time",
+      "reference_column": "I_rms_A",
+      "model_variable": "I_rms_A",
+      "absolute_tolerance": 0.001,
+      "relative_tolerance": 0,
+      "interpolation": "linear",
+      "reason": "Reference dataset records one observed 0..1 s run and includes current magnitude, but it is evidence for comparison rather than an input driver."
+    },
+    {
+      "path": "quasistatic_ramp_results",
+      "time_column": "time",
+      "reference_column": "Phi_gap_over_Phi_core",
+      "model_variable": "Phi_gap_over_Phi_core",
+      "absolute_tolerance": 0.002,
+      "relative_tolerance": 0,
+      "interpolation": "linear",
+      "reason": "Reference dataset confirms the useful/core flux ratio at observed times including 0.105 s and 1.0 s."
+    }
+  ]
+}

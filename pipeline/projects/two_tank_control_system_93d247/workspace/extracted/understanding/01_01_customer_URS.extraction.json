@@ -1,5 +1,5 @@
 {
-  "document": "[page 1]\n  User Requirement Specification - Two-Tank Sequence\n                        Controller\n\n    Document             URS-001\n    Revision             A\n    Date                   15 Jan 2026\n     Status                  Released - baseline, subject to approved changes\n     Classification              Synthetic hackathon artifact\n\n 1. Purpose and Scope\n The package controls a demonstration liquid-transfer process consisting of two tanks, three actuated\n isolation valves, two level measurements and three operator pushbuttons. The controller is expected to\n execute the normal sequence automatically once started and to support pause/resume and controlled\n shutdown commands.\n 2. System Identification\n\n     Project tag          Description                         Common alias\n     TK-101            Tank 1                                          tank1 / T1\n     TK-102            Tank 2                                          tank2 / T2\n     XV-101                  Inlet valve to Tank 1                              valve1 / V1\n     XV-102              Transfer valve Tank 1 to Tank 2                    valve2 / V2\n     XV-103            Tank 2 drain valve                                valve3 / V3\n     PLC-101           Sequence controller                                 tankController\n\n 3. Functional Requirements\n URS-F-001 - START shall initiate automatic operation when the system is in its initial condition.\n URS-F-002 - Normal operation shall fill Tank 1 by opening V1.\n URS-F-003 - V1 shall close when Tank 1 reaches the specified high-level limit.\n URS-F-004 - After a 10 s waiting period, V2 shall open and transfer liquid from Tank 1 to Tank 2.\n URS-F-005 - V2 shall close when Tank 1 reaches its minimum operating level.\n URS-F-006 - After a 10 s waiting period, V3 shall open and drain Tank 2.\n URS-F-007 - V3 shall close when Tank 2 reaches its minimum operating level.\n URS-F-008 - The automatic process shall continue cyclically unless stopped or shut down.\n URS-M-001 - STOP shall close all three valves and suspend automatic operation until another operator command is\n      received.\n URS-M-002 - START after STOP shall continue the process operation rather than force a new empty-cycle\n        initialization.\n URS-M-003 - SHUT shall empty both tanks by opening V2 and V3 and shall inhibit V1.\n URS-M-004 - When shutdown emptying is achieved, V2 and V3 shall close and the controller shall return to the start\n       configuration.\n\n\n\n\n\nSYNTHETIC ENGINEERING DATA - HACKATHON USE                                                           Page 1\n[page 1 also supplied as visual image 1]\n[page 2]\n 4. Initial Engineering Setpoints\n The following values were agreed for the Rev A baseline. Approved engineering changes issued after this\n document take precedence.\n    Parameter                    Rev A value      Unit      Comment\n    Tank 1 initial level                   0.05        m       Demo initialization\n    Tank 2 initial level                   0.05        m       Demo initialization\n    Tank 1 high limit                     0.78        m          Subject to later controls tuning\n    Tank 1 low limit                     0.05        m          Residual heel\n    Tank 2 low limit                     0.05        m          Residual heel\n     Wait after T1 high                 10               s        No valve open during wait\n     Wait after T1 low                  10               s        No valve open during wait\n     Wait after T2 low                  10               s           Before next automatic fill cycle\n 5. Interfaces\n Level measurements LT-101 and LT-102 shall be available to PLC-101. START, STOP and SHUT are\n momentary commands. Valve commands are binary open/closed outputs. The supplier shall provide\n actuators that fail closed on loss of power.\n 6. Verification Intent\n Sequence operation, stop/resume behavior and controlled shutdown shall be demonstrated in simulation.\n The exact demonstration command schedule will be issued in the validation procedure.\n\n\n\n\n\nSYNTHETIC ENGINEERING DATA - HACKATHON USE                                                           Page 2",
+  "document": "tank_sysmlv2_full_dataset/01_requirements/01_customer_URS.pdf",
   "subject": "User Requirement Specification - Two-Tank Sequence Controller",
   "kind": "requirement specification",
   "entities": [
@@ -8,11 +8,10 @@
       "kind": "tank",
       "aliases": [
         "tank1",
-        "T1",
-        "Tank 1"
+        "T1"
       ],
       "values": [],
-      "ref": "",
+      "ref": "TK-101",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "TK-101            Tank 1                                          tank1 / T1"
@@ -22,11 +21,10 @@
       "kind": "tank",
       "aliases": [
         "tank2",
-        "T2",
-        "Tank 2"
+        "T2"
       ],
       "values": [],
-      "ref": "",
+      "ref": "TK-102",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "TK-102            Tank 2                                          tank2 / T2"
@@ -39,7 +37,7 @@
         "V1"
       ],
       "values": [],
-      "ref": "",
+      "ref": "XV-101",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "XV-101                  Inlet valve to Tank 1                              valve1 / V1"
@@ -52,7 +50,7 @@
         "V2"
       ],
       "values": [],
-      "ref": "",
+      "ref": "XV-102",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "XV-102              Transfer valve Tank 1 to Tank 2                    valve2 / V2"
@@ -65,7 +63,7 @@
         "V3"
       ],
       "values": [],
-      "ref": "",
+      "ref": "XV-103",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "XV-103            Tank 2 drain valve                                valve3 / V3"
@@ -77,7 +75,7 @@
         "tankController"
       ],
       "values": [],
-      "ref": "",
+      "ref": "PLC-101",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "PLC-101           Sequence controller                                 tankController"
@@ -87,7 +85,7 @@
       "kind": "level measurement",
       "aliases": [],
       "values": [],
-      "ref": "",
+      "ref": "LT-101",
       "anchor": "[page 2]",
       "from_image": false,
       "quote": "Level measurements LT-101 and LT-102 shall be available to PLC-101."
@@ -97,47 +95,102 @@
       "kind": "level measurement",
       "aliases": [],
       "values": [],
-      "ref": "",
+      "ref": "LT-102",
       "anchor": "[page 2]",
       "from_image": false,
       "quote": "Level measurements LT-101 and LT-102 shall be available to PLC-101."
     },
     {
       "name": "START",
-      "kind": "operator pushbutton command",
+      "kind": "operator command",
       "aliases": [],
       "values": [],
       "ref": "",
-      "anchor": "[page 2]",
+      "anchor": "[page 1]",
       "from_image": false,
-      "quote": "START, STOP and SHUT are\n momentary commands."
+      "quote": "URS-F-001 - START shall initiate automatic operation when the system is in its initial condition."
     },
     {
       "name": "STOP",
-      "kind": "operator pushbutton command",
+      "kind": "operator command",
       "aliases": [],
       "values": [],
       "ref": "",
-      "anchor": "[page 2]",
+      "anchor": "[page 1]",
       "from_image": false,
-      "quote": "START, STOP and SHUT are\n momentary commands."
+      "quote": "URS-M-001 - STOP shall close all three valves and suspend automatic operation until another operator command is"
     },
     {
       "name": "SHUT",
-      "kind": "operator pushbutton command",
+      "kind": "operator command",
       "aliases": [],
       "values": [],
       "ref": "",
-      "anchor": "[page 2]",
+      "anchor": "[page 1]",
       "from_image": false,
-      "quote": "START, STOP and SHUT are\n momentary commands."
+      "quote": "URS-M-003 - SHUT shall empty both tanks by opening V2 and V3 and shall inhibit V1."
     },
     {
-      "name": "TK-101",
-      "kind": "tank",
-      "aliases": [
-        "Tank 1"
+      "name": "Tank 1 high limit",
+      "kind": "setpoint",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "0.78",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Tank 1 high limit                     0.78        m"
+        }
       ],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Tank 1 high limit                     0.78        m          Subject to later controls tuning"
+    },
+    {
+      "name": "Tank 1 low limit",
+      "kind": "setpoint",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "0.05",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Tank 1 low limit                     0.05        m"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Tank 1 low limit                     0.05        m          Residual heel"
+    },
+    {
+      "name": "Tank 2 low limit",
+      "kind": "setpoint",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "0.05",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Tank 2 low limit                     0.05        m"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 2]",
+      "from_image": false,
+      "quote": "Tank 2 low limit                     0.05        m          Residual heel"
+    },
+    {
+      "name": "Tank 1",
+      "kind": "tank",
+      "aliases": [],
       "values": [
         {
           "quantity": "initial level",
@@ -146,35 +199,17 @@
           "status": "approved",
           "supersedes": "",
           "quote": "Tank 1 initial level                   0.05        m"
-        },
-        {
-          "quantity": "high limit",
-          "value": "0.78",
-          "unit": "m",
-          "status": "approved",
-          "supersedes": "",
-          "quote": "Tank 1 high limit                     0.78        m"
-        },
-        {
-          "quantity": "low limit",
-          "value": "0.05",
-          "unit": "m",
-          "status": "approved",
-          "supersedes": "",
-          "quote": "Tank 1 low limit                     0.05        m"
         }
       ],
-      "ref": "Rev A",
+      "ref": "",
       "anchor": "[page 2]",
       "from_image": false,
-      "quote": "Tank 1 initial level                   0.05        m"
+      "quote": "Tank 1 initial level                   0.05        m       Demo initialization"
     },
     {
-      "name": "TK-102",
+      "name": "Tank 2",
       "kind": "tank",
-      "aliases": [
-        "Tank 2"
-      ],
+      "aliases": [],
       "values": [
         {
           "quantity": "initial level",
@@ -183,28 +218,20 @@
           "status": "approved",
           "supersedes": "",
           "quote": "Tank 2 initial level                   0.05        m"
-        },
-        {
-          "quantity": "low limit",
-          "value": "0.05",
-          "unit": "m",
-          "status": "approved",
-          "supersedes": "",
-          "quote": "Tank 2 low limit                     0.05        m"
         }
       ],
-      "ref": "Rev A",
+      "ref": "",
       "anchor": "[page 2]",
       "from_image": false,
-      "quote": "Tank 2 initial level                   0.05        m"
+      "quote": "Tank 2 initial level                   0.05        m       Demo initialization"
     },
     {
-      "name": "T1 high wait",
-      "kind": "wait period",
+      "name": "Wait after T1 high",
+      "kind": "setpoint",
       "aliases": [],
       "values": [
         {
-          "quantity": "wait after high",
+          "quantity": "waiting period",
           "value": "10",
           "unit": "s",
           "status": "approved",
@@ -212,18 +239,18 @@
           "quote": "Wait after T1 high                 10               s"
         }
       ],
-      "ref": "Rev A",
+      "ref": "",
       "anchor": "[page 2]",
       "from_image": false,
-      "quote": "Wait after T1 high                 10               s"
+      "quote": "Wait after T1 high                 10               s        No valve open during wait"
     },
     {
-      "name": "T1 low wait",
-      "kind": "wait period",
+      "name": "Wait after T1 low",
+      "kind": "setpoint",
       "aliases": [],
       "values": [
         {
-          "quantity": "wait after low",
+          "quantity": "waiting period",
           "value": "10",
           "unit": "s",
           "status": "approved",
@@ -231,18 +258,18 @@
           "quote": "Wait after T1 low                  10               s"
         }
       ],
-      "ref": "Rev A",
+      "ref": "",
       "anchor": "[page 2]",
       "from_image": false,
-      "quote": "Wait after T1 low                  10               s"
+      "quote": "Wait after T1 low                  10               s        No valve open during wait"
     },
     {
-      "name": "T2 low wait",
-      "kind": "wait period",
+      "name": "Wait after T2 low",
+      "kind": "setpoint",
       "aliases": [],
       "values": [
         {
-          "quantity": "wait after low",
+          "quantity": "waiting period",
           "value": "10",
           "unit": "s",
           "status": "approved",
@@ -250,10 +277,10 @@
           "quote": "Wait after T2 low                  10               s"
         }
       ],
-      "ref": "Rev A",
+      "ref": "",
       "anchor": "[page 2]",
       "from_image": false,
-      "quote": "Wait after T2 low                  10               s"
+      "quote": "Wait after T2 low                  10               s           Before next automatic fill cycle"
     }
   ],
   "relationships": [
@@ -272,16 +299,6 @@
       "predicate": "transfer valve from",
       "object": "TK-101",
       "detail": "to TK-102",
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "XV-102              Transfer valve Tank 1 to Tank 2                    valve2 / V2"
-    },
-    {
-      "subject": "XV-102",
-      "predicate": "transfer valve to",
-      "object": "TK-102",
-      "detail": "from TK-101",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -435,6 +452,15 @@
       "status": "released baseline",
       "from_image": false,
       "quote": "Level measurements LT-101 and LT-102 shall be available to PLC-101."
+    },
+    {
+      "category": "requirement",
+      "statement": "START, STOP and SHUT are momentary commands.",
+      "ref": "",
+      "anchor": "[page 2]",
+      "status": "released baseline",
+      "from_image": false,
+      "quote": "START, STOP and SHUT are\n momentary commands."
     },
     {
       "category": "requirement",

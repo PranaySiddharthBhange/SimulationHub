@@ -2,34 +2,28 @@ Subject: PLC-101 sequence behavior
 Document kind: test procedure
 
 ## Entities
-* PLC-101 -- controller  <[page 1]>; aliases: PLC-101 sequence behavior
+* PLC-101 -- controller  <[page 1]>
 * T1 -- tank  <[page 1]>
     - initial level: 0.05 m [current]
-    - effective high-level setpoint: 0.80 m [approved]
+    - effective high-level setpoint: 0.80 m [current]
 * T2 -- tank  <[page 1]>
     - initial level: 0.05 m [current]
-    - inter-cycle delay: 8 s [approved]
 * V1 -- valve  <[page 1]>
 * V2 -- valve  <[page 1]>
 * V3 -- valve  <[page 1]>
 * START -- operator command  <[page 1]>
-    - time: 20 s [scheduled]
-    - time: 280 s [scheduled]
 * STOP -- operator command  <[page 1]>
-    - time: 220 s [scheduled]
-    - time: 650 s [scheduled]
 * SHUT -- operator command  <[page 1]>
-    - time: 700 s [scheduled]
 * IDLE -- controller state  <[page 1]>
 * SHUTDOWN -- controller state  <[page 1]>
 
 ## Relationships
-* PLC-101 controls V1 (sequence behavior includes commanding valve states)  <[page 1]>
-* PLC-101 controls V2 (sequence behavior includes commanding valve states)  <[page 1]>
-* PLC-101 controls V3 (sequence behavior includes commanding valve states)  <[page 1]>
-* SHUT inhibits V1  <[page 1]>
-* SHUT commands open together V2 (with V3 until both tanks are at low level)  <[page 1]>
-* SHUT commands open together V3 (with V2 until both tanks are at low level)  <[page 1]>
+* PLC-101 controls V1 (controller sequence behavior includes valve commands)  <[page 1]>
+* PLC-101 controls V2 (controller sequence behavior includes valve commands)  <[page 1]>
+* PLC-101 controls V3 (controller sequence behavior includes valve commands)  <[page 1]>
+* V2 opens together with V3 (for controlled draining at SHUT)  <[page 1]>
+* V1 not commanded simultaneously with V2 (during normal automatic operation)  <[page 1]>
+* V2 not commanded simultaneously with V3 (during normal automatic operation; permitted in SHUTDOWN)  <[page 1]>
 
 ## Requirements
 * T1 shall reach the effective high-level setpoint of 0.80 m before the first transfer begins. [approved]  <AC-01 [page 1]>
@@ -42,11 +36,11 @@ Document kind: test procedure
 * Normal automatic operation shall never command V1 and V2 simultaneously, nor V2 and V3 simultaneously. The latter combination is permitted only in SHUTDOWN. [approved]  <AC-08 [page 1]>
 
 ## Constraints
-* A tolerance of +/-2 s is acceptable for state-boundary comparisons when the effective parameter set is used. [current]  <[page 1]>
+* A tolerance of +/-2 s is acceptable for state-boundary comparisons when the effective parameter set is used. [approved]  <[page 1]>
 
 ## Scheduled commands
-* At 20 s, START. [current]  <[page 1]>
-* At 220 s, STOP. [current]  <[page 1]>
-* At 280 s, START. [current]  <[page 1]>
-* At 650 s, STOP. [current]  <[page 1]>
-* At 700 s, SHUT. [current]  <[page 1]>
+* At 20 s, command START. [approved]  <[page 1]>
+* At 220 s, command STOP. [approved]  <[page 1]>
+* At 280 s, command START. [approved]  <[page 1]>
+* At 650 s, command STOP. [approved]  <[page 1]>
+* At 700 s, command SHUT. [approved]  <[page 1]>

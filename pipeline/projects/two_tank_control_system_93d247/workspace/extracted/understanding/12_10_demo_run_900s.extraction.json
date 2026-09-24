@@ -20,7 +20,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "columns: time_s, cmd_start, cmd_stop, cmd_shut, tank1_level_m, tank2_level_m, valve1_open, valve2_open, valve3_open, controller_state, wait_remaining_s"
+      "quote": "cmd_start"
     },
     {
       "name": "cmd_stop",
@@ -39,7 +39,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "columns: time_s, cmd_start, cmd_stop, cmd_shut, tank1_level_m, tank2_level_m, valve1_open, valve2_open, valve3_open, controller_state, wait_remaining_s"
+      "quote": "cmd_stop"
     },
     {
       "name": "cmd_shut",
@@ -58,7 +58,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "columns: time_s, cmd_start, cmd_stop, cmd_shut, tank1_level_m, tank2_level_m, valve1_open, valve2_open, valve3_open, controller_state, wait_remaining_s"
+      "quote": "cmd_shut"
     },
     {
       "name": "tank1_level_m",
@@ -77,7 +77,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "columns: time_s, cmd_start, cmd_stop, cmd_shut, tank1_level_m, tank2_level_m, valve1_open, valve2_open, valve3_open, controller_state, wait_remaining_s"
+      "quote": "tank1_level_m"
     },
     {
       "name": "tank2_level_m",
@@ -96,11 +96,11 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "columns: time_s, cmd_start, cmd_stop, cmd_shut, tank1_level_m, tank2_level_m, valve1_open, valve2_open, valve3_open, controller_state, wait_remaining_s"
+      "quote": "tank2_level_m"
     },
     {
       "name": "valve1_open",
-      "kind": "valve state",
+      "kind": "valve position signal",
       "aliases": [],
       "values": [
         {
@@ -115,11 +115,11 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "columns: time_s, cmd_start, cmd_stop, cmd_shut, tank1_level_m, tank2_level_m, valve1_open, valve2_open, valve3_open, controller_state, wait_remaining_s"
+      "quote": "valve1_open"
     },
     {
       "name": "valve2_open",
-      "kind": "valve state",
+      "kind": "valve position signal",
       "aliases": [],
       "values": [
         {
@@ -134,11 +134,11 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "columns: time_s, cmd_start, cmd_stop, cmd_shut, tank1_level_m, tank2_level_m, valve1_open, valve2_open, valve3_open, controller_state, wait_remaining_s"
+      "quote": "valve2_open"
     },
     {
       "name": "valve3_open",
-      "kind": "valve state",
+      "kind": "valve position signal",
       "aliases": [],
       "values": [
         {
@@ -153,7 +153,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "columns: time_s, cmd_start, cmd_stop, cmd_shut, tank1_level_m, tank2_level_m, valve1_open, valve2_open, valve3_open, controller_state, wait_remaining_s"
+      "quote": "valve3_open"
     },
     {
       "name": "controller_state",
@@ -161,7 +161,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "states observed",
+          "quantity": "range",
           "value": "DRAIN_T2, FILL_T1, IDLE, PAUSED, SHUTDOWN, TRANSFER_T1_T2, WAIT_AFTER_DRAIN, WAIT_AFTER_FILL, WAIT_AFTER_TRANSFER",
           "unit": "",
           "status": "observed",
@@ -172,7 +172,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "columns: time_s, cmd_start, cmd_stop, cmd_shut, tank1_level_m, tank2_level_m, valve1_open, valve2_open, valve3_open, controller_state, wait_remaining_s"
+      "quote": "controller_state"
     },
     {
       "name": "wait_remaining_s",
@@ -191,14 +191,14 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "columns: time_s, cmd_start, cmd_stop, cmd_shut, tank1_level_m, tank2_level_m, valve1_open, valve2_open, valve3_open, controller_state, wait_remaining_s"
+      "quote": "wait_remaining_s"
     }
   ],
   "relationships": [],
   "facts": [
     {
-      "category": "physical_relationship",
-      "statement": "The recorded run spans time_s from 0 to 900 s.",
+      "category": "constraint",
+      "statement": "This dataset records one run over time_s from 0 to 900 s.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -206,17 +206,8 @@
       "quote": "time_s: 0 .. 900"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=0 the run is in IDLE with all three valves closed and both tank levels at 0.05 m.",
-      "ref": "",
-      "anchor": "",
-      "status": "observed",
-      "from_image": false,
-      "quote": "time_s=0 | cmd_start=0 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.05 | tank2_level_m=0.05 | valve1_open=0 | valve2_open=0 | valve3_open=0 | controller_state=IDLE | wait_remaining_s=0"
-    },
-    {
-      "category": "physical_relationship",
-      "statement": "At time_s=20, cmd_start becomes 1 and the run is in FILL_T1 with valve1_open=1.",
+      "category": "behavior",
+      "statement": "At time_s=20, the run left IDLE and entered FILL_T1 with cmd_start=1 and valve1_open=1.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -224,17 +215,8 @@
       "quote": "time_s=20 | cmd_start=1 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.055 | tank2_level_m=0.05 | valve1_open=1 | valve2_open=0 | valve3_open=0 | controller_state=FILL_T1 | wait_remaining_s=0"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=169, FILL_T1 reaches tank1_level_m=0.8 and wait_remaining_s=10 while valve1_open=1.",
-      "ref": "",
-      "anchor": "",
-      "status": "observed",
-      "from_image": false,
-      "quote": "time_s=169 | cmd_start=0 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.8 | tank2_level_m=0.05 | valve1_open=1 | valve2_open=0 | valve3_open=0 | controller_state=FILL_T1 | wait_remaining_s=10"
-    },
-    {
-      "category": "physical_relationship",
-      "statement": "At time_s=170, the run transitions to WAIT_AFTER_FILL with all valves closed and wait_remaining_s=9.",
+      "category": "behavior",
+      "statement": "At time_s=170, the run left FILL_T1 and entered WAIT_AFTER_FILL with valve1_open=0 and wait_remaining_s=9.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -242,8 +224,8 @@
       "quote": "time_s=170 | cmd_start=0 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.8 | tank2_level_m=0.05 | valve1_open=0 | valve2_open=0 | valve3_open=0 | controller_state=WAIT_AFTER_FILL | wait_remaining_s=9"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=180, the run transitions to TRANSFER_T1_T2 with valve2_open=1.",
+      "category": "behavior",
+      "statement": "At time_s=180, the run entered TRANSFER_T1_T2 with valve2_open=1.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -251,8 +233,8 @@
       "quote": "time_s=180 | cmd_start=0 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.79625 | tank2_level_m=0.05321 | valve1_open=0 | valve2_open=1 | valve3_open=0 | controller_state=TRANSFER_T1_T2 | wait_remaining_s=0"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=220, cmd_stop becomes 1 and the run is in PAUSED with all valves closed.",
+      "category": "behavior",
+      "statement": "At time_s=220, the run entered PAUSED with cmd_stop=1 and all three valve open signals at 0.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -260,8 +242,8 @@
       "quote": "time_s=220 | cmd_start=0 | cmd_stop=1 | cmd_shut=0 | tank1_level_m=0.65 | tank2_level_m=0.17857 | valve1_open=0 | valve2_open=0 | valve3_open=0 | controller_state=PAUSED | wait_remaining_s=0"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=280, cmd_start becomes 1 and the run resumes TRANSFER_T1_T2 with valve2_open=1.",
+      "category": "behavior",
+      "statement": "At time_s=280, the run resumed TRANSFER_T1_T2 with cmd_start=1 and valve2_open=1.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -269,17 +251,8 @@
       "quote": "time_s=280 | cmd_start=1 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.64625 | tank2_level_m=0.18179 | valve1_open=0 | valve2_open=1 | valve3_open=0 | controller_state=TRANSFER_T1_T2 | wait_remaining_s=0"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=439, TRANSFER_T1_T2 reaches tank1_level_m=0.05 and tank2_level_m=0.69286 with wait_remaining_s=12.",
-      "ref": "",
-      "anchor": "",
-      "status": "observed",
-      "from_image": false,
-      "quote": "time_s=439 | cmd_start=0 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.05 | tank2_level_m=0.69286 | valve1_open=0 | valve2_open=1 | valve3_open=0 | controller_state=TRANSFER_T1_T2 | wait_remaining_s=12"
-    },
-    {
-      "category": "physical_relationship",
-      "statement": "At time_s=440, the run transitions to WAIT_AFTER_TRANSFER with all valves closed and wait_remaining_s=11.",
+      "category": "behavior",
+      "statement": "At time_s=440, the run entered WAIT_AFTER_TRANSFER with all valve open signals at 0 and wait_remaining_s=11.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -287,8 +260,8 @@
       "quote": "time_s=440 | cmd_start=0 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.05 | tank2_level_m=0.69286 | valve1_open=0 | valve2_open=0 | valve3_open=0 | controller_state=WAIT_AFTER_TRANSFER | wait_remaining_s=11"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=452, the run transitions to DRAIN_T2 with valve3_open=1.",
+      "category": "behavior",
+      "statement": "At time_s=452, the run entered DRAIN_T2 with valve3_open=1.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -296,8 +269,8 @@
       "quote": "time_s=452 | cmd_start=0 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.05 | tank2_level_m=0.68929 | valve1_open=0 | valve2_open=0 | valve3_open=1 | controller_state=DRAIN_T2 | wait_remaining_s=0"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=632, the run transitions to WAIT_AFTER_DRAIN with all valves closed and wait_remaining_s=7.",
+      "category": "behavior",
+      "statement": "At time_s=632, the run entered WAIT_AFTER_DRAIN with all valve open signals at 0 and wait_remaining_s=7.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -305,8 +278,8 @@
       "quote": "time_s=632 | cmd_start=0 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.05 | tank2_level_m=0.05 | valve1_open=0 | valve2_open=0 | valve3_open=0 | controller_state=WAIT_AFTER_DRAIN | wait_remaining_s=7"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=640, the run transitions to FILL_T1 with valve1_open=1.",
+      "category": "behavior",
+      "statement": "At time_s=640, the run entered FILL_T1 with valve1_open=1.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -314,8 +287,8 @@
       "quote": "time_s=640 | cmd_start=0 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.055 | tank2_level_m=0.05 | valve1_open=1 | valve2_open=0 | valve3_open=0 | controller_state=FILL_T1 | wait_remaining_s=0"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=650, cmd_stop becomes 1 and the run is in PAUSED with all valves closed.",
+      "category": "behavior",
+      "statement": "At time_s=650, the run entered PAUSED with cmd_stop=1 and all three valve open signals at 0.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -323,8 +296,8 @@
       "quote": "time_s=650 | cmd_start=0 | cmd_stop=1 | cmd_shut=0 | tank1_level_m=0.1 | tank2_level_m=0.05 | valve1_open=0 | valve2_open=0 | valve3_open=0 | controller_state=PAUSED | wait_remaining_s=0"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=700, cmd_shut becomes 1 and the run is in SHUTDOWN with valve2_open=1 and valve3_open=1.",
+      "category": "behavior",
+      "statement": "At time_s=700, the run entered SHUTDOWN with cmd_shut=1, valve2_open=1, and valve3_open=1.",
       "ref": "",
       "anchor": "",
       "status": "observed",
@@ -332,22 +305,13 @@
       "quote": "time_s=700 | cmd_start=0 | cmd_stop=0 | cmd_shut=1 | tank1_level_m=0.09625 | tank2_level_m=0.05 | valve1_open=0 | valve2_open=1 | valve3_open=1 | controller_state=SHUTDOWN | wait_remaining_s=0"
     },
     {
-      "category": "physical_relationship",
-      "statement": "At time_s=714, the run returns to IDLE with all valves closed and both tank levels at 0.05 m.",
+      "category": "behavior",
+      "statement": "At time_s=714, the run returned to IDLE with all valve open signals at 0.",
       "ref": "",
       "anchor": "",
       "status": "observed",
       "from_image": false,
       "quote": "time_s=714 | cmd_start=0 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.05 | tank2_level_m=0.05 | valve1_open=0 | valve2_open=0 | valve3_open=0 | controller_state=IDLE | wait_remaining_s=0"
-    },
-    {
-      "category": "physical_relationship",
-      "statement": "At time_s=900, the run remains in IDLE with all valves closed and both tank levels at 0.05 m.",
-      "ref": "",
-      "anchor": "",
-      "status": "observed",
-      "from_image": false,
-      "quote": "time_s=900 | cmd_start=0 | cmd_stop=0 | cmd_shut=0 | tank1_level_m=0.05 | tank2_level_m=0.05 | valve1_open=0 | valve2_open=0 | valve3_open=0 | controller_state=IDLE | wait_remaining_s=0"
     }
   ],
   "unreadable": [],

@@ -44,7 +44,7 @@
           "quantity": "permitted medium temperature range",
           "value": "0-120",
           "unit": "degC",
-          "status": "unknown",
+          "status": "permitted",
           "supersedes": "",
           "quote": "Permitted medium                         Water / aqueous NaCl, 0-120 degC"
         }
@@ -56,7 +56,7 @@
     },
     {
       "name": "V1",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -68,7 +68,7 @@
     },
     {
       "name": "V3",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -80,7 +80,7 @@
     },
     {
       "name": "V5",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -92,7 +92,7 @@
     },
     {
       "name": "V6",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -104,7 +104,7 @@
     },
     {
       "name": "V8",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -116,7 +116,7 @@
     },
     {
       "name": "V9",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -128,7 +128,7 @@
     },
     {
       "name": "V11",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -140,7 +140,7 @@
     },
     {
       "name": "V12",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -152,7 +152,7 @@
     },
     {
       "name": "V15",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -164,7 +164,7 @@
     },
     {
       "name": "V18",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -176,7 +176,7 @@
     },
     {
       "name": "V20",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -188,7 +188,7 @@
     },
     {
       "name": "V22",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -200,7 +200,7 @@
     },
     {
       "name": "V23",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -212,7 +212,7 @@
     },
     {
       "name": "V24",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -224,7 +224,7 @@
     },
     {
       "name": "V25",
-      "kind": "automated valve tag",
+      "kind": "automated valve",
       "aliases": [
         "Automated valve family"
       ],
@@ -294,7 +294,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "minimum source level permissive threshold",
+          "quantity": "source level permissive threshold",
           "value": ">0.02",
           "unit": "m",
           "status": "unknown",
@@ -313,7 +313,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "minimum source level permissive threshold",
+          "quantity": "source level permissive threshold",
           "value": ">0.02",
           "unit": "m",
           "status": "unknown",
@@ -365,7 +365,7 @@
       "quote": "Low discharge pressure alarm            PIS-901 <0.8 bar                          PIS-1001 <0.8 bar"
     },
     {
-      "name": "pump discharge headers",
+      "name": "Pump discharge headers",
       "kind": "header",
       "aliases": [],
       "values": [],
@@ -383,22 +383,12 @@
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "Pump discharge headers are cross-connected to the charging-vessel return manifolds."
-    },
-    {
-      "name": "approved process-routing change record",
-      "kind": "change record",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "determined by the approved process-routing change record, not by pump physical location alone."
     }
   ],
   "relationships": [
     {
       "subject": "P1",
-      "predicate": "service",
+      "predicate": "has service",
       "object": "Concentrate return",
       "detail": "",
       "ref": "",
@@ -408,7 +398,7 @@
     },
     {
       "subject": "P2",
-      "predicate": "service",
+      "predicate": "has service",
       "object": "Condensate return",
       "detail": "",
       "ref": "",
@@ -457,8 +447,8 @@
       "quote": "Low discharge pressure alarm            PIS-901 <0.8 bar                          PIS-1001 <0.8 bar"
     },
     {
-      "subject": "pump discharge headers",
-      "predicate": "cross-connected to",
+      "subject": "Pump discharge headers",
+      "predicate": "are cross-connected to",
       "object": "charging-vessel return manifolds",
       "detail": "",
       "ref": "",
@@ -470,7 +460,7 @@
   "facts": [
     {
       "category": "behavior",
-      "statement": "If LIS-701 is >0.02 m, that is the minimum source level permissive for P1.",
+      "statement": "Minimum source level permissive for P1 is LIS-701 >0.02 m.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "unknown",
@@ -479,7 +469,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If LIS-601 is >0.02 m, that is the minimum source level permissive for P2.",
+      "statement": "Minimum source level permissive for P2 is LIS-601 >0.02 m.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "unknown",
@@ -488,7 +478,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If PIS-901 is <0.8 bar, low discharge pressure alarm applies for P1.",
+      "statement": "Low discharge pressure alarm for P1 is PIS-901 <0.8 bar.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "unknown",
@@ -497,7 +487,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If PIS-1001 is <0.8 bar, low discharge pressure alarm applies for P2.",
+      "statement": "Low discharge pressure alarm for P2 is PIS-1001 <0.8 bar.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "unknown",

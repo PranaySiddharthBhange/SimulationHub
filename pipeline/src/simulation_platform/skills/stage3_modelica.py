@@ -93,10 +93,36 @@ diagram alone, and be able to trace the material path and every control signal.
 - EVERY CONNECTOR ON EVERY PLACED COMPONENT IS DRIVEN OR CONSUMED. An
   unconnected Modelica input silently defaults to ZERO -- the model still
   compiles, still simulates, still reports success, and the signal path it
-  belongs to simply carries nothing for the whole run. Declare only the ports
-  you actually wire, and wire every port you declare. Before returning, walk
-  each component's connectors and confirm each one appears in a `connect(...)`
-  or is given a value by an equation in the system model.
+  belongs to simply carries nothing for the whole run. Wire every port you
+  declare. Before returning, walk each component's connectors and confirm each
+  one appears in a `connect(...)` or is given a value by an equation in the
+  system model.
+- AN INPUT AN INSTANCE DOES NOT USE IS WIRED TO A CONSTANT. One reusable class
+  instantiated per unit carries the union of every unit's ports -- only the
+  heated vessel takes a duty command, only some take a second inlet -- so some
+  inputs have no natural source on some instances. Do not resolve that by
+  writing a near-duplicate class per unit, and do not leave the input dangling.
+  Give it a source that says zero explicitly:
+
+      Modelica.Blocks.Sources.Constant noHeat(k = 0)
+        annotation(Placement(transformation(extent={{-100,-10},{-80,10}})));
+    equation
+      connect(noHeat.y, B1.Qcmd)
+        annotation(Line(points={{-79,0},{-60,0}}, color={0,0,127}));
+
+  This is deliberate rather than accidental zero, it needs no bookkeeping, and
+  the diagram shows plainly that the port is tied off.
+
+  Do NOT make such a port conditional. `RealInput Qcmd if useHeatPort;` looks
+  like the answer and is a trap: a conditional component is REMOVED from the
+  model when its guard is false, so the class can no longer mention it in any
+  equation -- `Qin = if useHeatPort then Qcmd else 0;` is rejected with
+  "'B1.Qcmd' refers to a component with a false condition" even though the
+  guard is tested right there. Seen live: the same error came back identically
+  on two consecutive repair attempts, because the message points at the class's
+  equation while the cause is the declaration. Using one correctly requires a
+  protected internal connector and a `connect` to it, which is not worth it
+  here.
 
 - EVERY CONNECTOR DECLARATION CARRIES A `Placement` on its class boundary, so
   connections attach where they should: inputs on the left edge (x from -120 to
@@ -114,6 +140,85 @@ MODELICA LANGUAGE HARD RULES -- each of these has cost a full repair loop,
 because the compiler's own message for it names the wrong token, the wrong
 file, or nothing at all. Check every one before returning a bundle:
 
+- A CLAMP MUST NOT SIT ON A THRESHOLD THE BRIEF TESTS. A vessel that stops
+  draining at `level <= 0.01` can never satisfy a criterion written
+  `level < 0.01`, and a stage waiting on that criterion waits forever. Seen
+  live: a plant charged and mixed correctly, then stalled for the rest of the
+  run because "empty" was clamped at exactly the value "empty" is defined as,
+  and every later stage and its checks stayed at zero.
+  When you introduce a floor to keep a quantity physical, put it strictly
+  BELOW any threshold a guard or check compares against -- drain to
+  effectively zero and let the guard decide -- and record the floor in
+  `corrections`. Before returning, take each threshold the brief states and
+  confirm the quantity can actually cross it in the direction required.
+- REPORT EVERY VARIABLE THE BRIEF'S CONTRACT NAMES. The brief lists the
+  variables the model must report, and a check reading one that is absent
+  cannot be evaluated at all -- which is a worse outcome than failing, because
+  nothing is learned. Declare each one at the top level under the exact name
+  the brief uses, even where it only mirrors an internal value.
+- A CONSTANT BOOLEAN IS `BooleanConstant`, NEVER A ONE-ENTRY `BooleanTable`.
+  BooleanTable TOGGLES at every time it lists, so
+  `BooleanTable(table={0}, startValue=true)` starts true and flips to false at
+  t=0, staying false for the entire run. That is how a permissive meant to read
+  "always available" ends up permanently false, and it is nearly invisible:
+  the model compiles, simulates the full horizon, and every safety check passes
+  because the sequence it was gating never ran. Seen live -- a plant sat in its
+  initial state for 3000 s with its start command arriving correctly, because
+  the one other condition in the guard was wired this way.
+  Write `Modelica.Blocks.Sources.BooleanConstant(k = true)` for a signal that
+  simply holds. Reserve BooleanTable for a signal that genuinely changes at
+  stated times, and give each momentary occurrence a PAIR of entries.
+- A PERMISSIVE IN A TRANSITION GUARD IS COMPUTED, NOT ASSUMED. If a guard reads
+  a condition the brief defines from plant state -- a vessel being empty, a
+  flow proof being present -- derive it from that state, so it becomes true
+  when the plant makes it true. Wiring it to a source fixes the whole sequence
+  to whatever that source happens to say.
+- NEVER DIVIDE BY A FLOW. A flow is zero whenever its valve or pump is off,
+  which in a sequenced process is most of the run, and the simulation stops the
+  instant it happens: "division by zero at time 43, (a=0) / (b=0), where
+  divisor b expression is: B3.qIn". It compiles and initialises cleanly first,
+  so this only ever shows up part way into the run.
+  A composition or specific quantity is carried by INVENTORY, not by the
+  instantaneous flow that changes it. Track the extensive quantities as states
+  and divide once, by a mass that cannot vanish:
+
+      der(m)      = qIn*rho_in - qOut*rho;
+      der(m_salt) = qIn*rho_in*w_in - qOut*rho*w;
+      w           = m_salt / max(m, m_min);
+
+  where `m_min` is a small positive floor recorded as an assumption. The same
+  applies to any other divisor a schedule can drive to zero -- a level, an
+  area, an elapsed time. Guard the divisor at its definition rather than
+  wrapping each use in an `if`.
+- COUNT EQUATIONS AGAINST VARIABLES BEFORE RETURNING. Every non-parameter
+  variable you declare must be determined by exactly one equation, and a
+  `connect` determines the connected variable. Two short of that is rejected
+  with "Too few equations, under-determined system. The model has N equation(s)
+  and M variable(s)", which names no variable and no file, so the count is the
+  only way to find it. Walk your own declarations: for each one, name the
+  equation or connection that gives it its value. A variable you declared for a
+  report you never wrote is the usual culprit -- delete it rather than padding
+  the model with an equation to match.
+- TAKE A CLASS PATH FROM THE CATALOG EXACTLY AS WRITTEN. Do not assemble one
+  from the part of the library it feels like it belongs to: conversion blocks
+  live under `Modelica.Blocks.Math`, not `Modelica.Blocks.Sources`, and
+  `Modelica.Blocks.Sources.BooleanToReal` is rejected with "not found in
+  scope". If a class you want is not in the catalog, use one that is.
+- `Integer(e)` CONVERTS AN ENUMERATION; `integer(x)` ROUNDS A REAL. They differ
+  by one letter and are different builtins. To report an enumeration state as a
+  number write `stateId = Integer(mode);` -- lowercase `integer(mode)` is
+  rejected with "Type mismatch for positional argument 1 in integer(...)",
+  because that builtin takes a Real and rounds it toward minus infinity.
+- `edge()` AND `pre()` TAKE A VARIABLE, NEVER AN EXPRESSION. Give the
+  expression its own Boolean and pass that:
+      Boolean startSample;
+    equation
+      startSample = sample(0, scanPeriod) and startButton;
+      startPulse  = edge(startSample);
+  Writing `edge(sample(0, scanPeriod) and startButton)` is rejected with
+  "First argument to edge in component <REMOVE ME> must be a variable" -- the
+  component name is not even reported, so the message does not say where to
+  look. The same applies to `pre()`.
 - RESERVED WORDS. These are keywords and can NEVER be used as the name of a
   variable, parameter, component, connector, or class:
   algorithm and annotation block break class connect connector constant
@@ -284,11 +389,28 @@ not a generic template:
    and false at t2, giving exactly ONE rising edge, so a momentary command
    listed at t1 and again at t2 loses its second occurrence entirely. Give each
    momentary command a PAIR of table entries per occurrence -- `table={t1,
-   t1 + w, t2, t2 + w}` for a short width w -- which produces one clean rising
-   edge per listed time. Then `cmdPulse = cmd and not pre(cmd);` is a genuine
-   one-shot for every occurrence.
+   t1 + w, t2, t2 + w}` -- which produces one clean rising edge per listed
+   time. Then `cmdPulse = cmd and not pre(cmd);` is a genuine one-shot for
+   every occurrence.
+   The width w is NOT free: when the controller latches its inputs on a scan
+   period, a press shorter than one scan can fall entirely between two scans
+   and be missed, and nothing reports it -- the model compiles, simulates
+   cleanly, and simply never performs the commanded action. Confirmed live on
+   a sequencing benchmark: scanPeriod was 0.1 s and each press was given
+   w = 0.05 s, so a STOP at 220 s was never seen, the controller stayed in its
+   transfer state for the next 200 s, and the run still looked plausible
+   because a later command happened to land on a scan boundary and did fire.
+   Set `w` to at least twice the scan period, so at least one scan instant
+   falls strictly inside every press. Derive it rather than guessing: declare
+   `parameter Real cmdWidth = 2 * scanPeriod;` and build the tables from it.
+   If the commands are not sampled at all, w only needs to be long enough to
+   produce a distinct rising edge.
    Before returning, count the transitions the schedule must cause and confirm
-   the model can produce every one of them.
+   the model can produce every one of them. For each scheduled command, check
+   the arithmetic explicitly: that its press is wide enough for the scan that
+   reads it, and that the state it arrives in actually has a transition
+   accepting it. A command the controller cannot see and a command the state
+   machine ignores fail identically and silently.
 Acceptance thresholds and the experiment horizon from the Understanding are
 authoritative. Do not add epsilon margins, change StopTime, or tune against a
 reference trajectory unless the brief explicitly provides a tolerance or approves
@@ -351,14 +473,24 @@ A robust controller shape for a one-shot schedule is:
 
 ```
   parameter Modelica.Units.SI.Time scanPeriod = 0.1;
+  parameter Real cmdWidth = 2 * scanPeriod "command press width; see the schedule rule above";
   discrete Mode mode(start = Mode.Idle, fixed = true);
   discrete Real tEnter(start = 0, fixed = true);
   discrete Real waitRemaining(start = 0, fixed = true);
   Real waitElapsed;
+  // edge() and pre() take a VARIABLE, never an expression, so the sampled
+  // command needs its own Boolean to hold it. Writing
+  // `edge(sample(0, scanPeriod) and startButton)` is rejected with
+  // "First argument to edge in component ... must be a variable", and the
+  // same applies to pre().
+  Boolean startSample;
+  Boolean stopSample;
 equation
   // startButton / stopButton come in as BooleanInput from the command sources
-  startPulse = edge(sample(0, scanPeriod) and startButton);
-  stopPulse  = edge(sample(0, scanPeriod) and stopButton);
+  startSample = sample(0, scanPeriod) and startButton;
+  stopSample  = sample(0, scanPeriod) and stopButton;
+  startPulse  = edge(startSample);
+  stopPulse   = edge(stopSample);
   waitElapsed = time - pre(tEnter);
 algorithm
   when {startPulse, stopPulse, pre(mode) == Mode.Running and level >= levelHigh,

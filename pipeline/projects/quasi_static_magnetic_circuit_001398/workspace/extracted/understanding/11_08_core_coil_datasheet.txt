@@ -2,26 +2,27 @@ Subject: Core and Coil Data Sheet - Rev B
 Document kind: datasheet
 
 ## Entities
-* core -- component  <[page 1]>
+* core -- core  <[page 1]>
     - effective mu_r: 1200 [approved/released]
-    - effective mu_r: 1000 [archived] (supersedes/superseded: 1200)
+    - effective mu_r: 1000 [archived/legacy] (supersedes/superseded: 1200)
     - cross-section: 25 mm x 25 mm mm x mm [approved/released]
     - nominal air gap: 1.50 mm [nominal]
     - prototype gap: 1.58 mm [as_built/as-built]
+* Linear benchmark iron -- material  <[page 1]>
 * exciting coil -- coil  <[page 1]>
     - turns: 600
     - reference frequency: 50 Hz
-    - final benchmark current: 2.0 A RMS [approved]
+    - final benchmark current: 2.0 A RMS [current]
 * measuring coil -- coil  <[page 1]>
     - turns: 50 [approved/released]
-    - turns: 40 [archived]
-* positive current -- control element  <[page 1]>
-* positive mmf -- control element  <[page 1]>
+    - turns: 40 [old_prototype/old prototype]
 * useful flux arrow -- reference direction  <[page 1]>
 
 ## Relationships
-* positive current corresponds to positive mmf (polarity)  <[page 1]>
-* measuring coil located in core (Air-gap region)  <[page 1]>
+* core has_material Linear benchmark iron  <[page 1]>
+* measuring coil located_in Air-gap region  <[page 1]>
+* Positive current produces positive mmf  <[page 1]>
+* measuring coil orientation_relative_to useful flux arrow (Negative relative)  <[page 1]>
 
-## Physical relationships
-* Positive current -> positive mmf  <[page 1]>
+## Constraints
+* Approved project change records may supersede catalog values. [approved]  <[page 1]>

@@ -63,10 +63,27 @@ MODELICA_LIBRARY_CATALOG: dict[str, str] = {
     "fluid_level_and_flow": """\
 FLUID LEVEL AND FLOW (vessels, valves, pipes, pumps)
 
-PREFERRED -- the acausal Fluid components, which carry their own icons and
-render as a readable process diagram:
+When the brief describes a PLANT -- named vessels with an area and a height,
+valves or pumps between them, and a source or drain at the boundary -- build it
+from the acausal Fluid components below. This is not a preference to weigh
+against the signal-flow form further down; it is the form to use, because those
+components carry their own icons, ports and hydraulics, so the process diagram,
+the level dynamics and the port behaviour all come for free. The MSL's own
+two-tank controlled-tank example is built from exactly these classes -- two
+vessels, discrete valves, a supply and a drain boundary, operator buttons and
+one controller -- and is the shape to follow for a plant of that kind.
+
+Writing the same plant by hand instead costs more than it looks. Confirmed
+live: a two-vessel sequencing plant was generated with a custom tank class per
+vessel, a custom valve, and Real signals in place of fluid ports. It compiled
+and simulated, but it rendered as unlabelled rectangles rather than tanks with
+levels, the two vessels were duplicated classes instead of one type
+instantiated twice, and nothing enforced mass continuity across a connection
+because a Real signal is not a flow.
+
 - Modelica.Fluid.System: the required global fluid settings; exactly one
-  `inner Modelica.Fluid.System system;` in the top-level model.
+  `inner Modelica.Fluid.System system;` in the top-level model. Every Fluid
+  component looks it up by name, and without it nothing elaborates.
 - Modelica.Fluid.Vessels.OpenTank: a vented vessel. Set `crossArea`, `height`
   and `level_start` from the brief, and give it one `portsData` entry per
   connection with that port's `height` (an inlet at the top, an outlet at the
@@ -122,6 +139,12 @@ commanded rate rather than a pressure-driven flow, and say so in `corrections`:
 Also available for a richer hydraulic network when the brief supports it:
 Modelica.Fluid.Sources.MassFlowSource_T, Modelica.Fluid.Pipes.StaticPipe,
 Modelica.Fluid.Machines.PrescribedPump, Modelica.Fluid.Sensors.*.
+
+The signal-flow form below is for a brief that gives a level or flow balance
+WITHOUT a plant of connected units to hang it on -- a lumped inventory, a rate
+the brief states directly. Do not fall back to it for a plant because it feels
+more controllable: the warnings it carries are the hazards of that form, not
+evidence that it is the safer one.
 
 In the signal-flow form a vessel's level follows from its own volume balance,
 `der(level) = (inflow - outflow)/area`, or equivalently from the chain
@@ -275,11 +298,45 @@ Required/recommended MSL classes:
 - Modelica.Constants.* for genuine physical constants.
 - Modelica.Icons.Example for the top-level experiment.
 
-Do not reach for Modelica.Media or Modelica.Fluid unless the brief supplies a
-real medium model's required data. Carry mass, energy and composition as the
-states and derive level, density and temperature-dependent properties from the
-brief's own correlations; a missing correlation coefficient is a gap to report,
-never one to fill in.
+Which form to use depends on what the brief gives you, and getting this wrong
+is expensive in both directions.
+
+When the brief describes a PLANT -- named vessels with geometry and port
+heights, valves, pumps, and material routed between them -- and supplies the
+medium data a real medium model needs (density, enthalpy, specific heat,
+saturation pressure and viscosity as functions of composition), build it from
+Modelica.Fluid. Those components carry their own icons, ports and hydraulics,
+so the diagram, the level dynamics and the port behaviour all come for free,
+and a `connect()` topology is what the preflight and a human reviewer both
+expect to see. The MSL's own staged batch plant, verified present in the
+installed library, is built exactly this way and is the pattern to follow:
+
+- inner Modelica.Fluid.System system: REQUIRED, exactly one in the top-level
+  model. Every Fluid component looks it up by name; without it nothing elaborates.
+- Modelica.Fluid.Vessels.OpenTank, or a tank with top ports where the brief
+  gives port elevations -- a port above the liquid surface must restrict flow,
+  which is hydraulics, not sizing.
+- Modelica.Fluid.Valves.ValveDiscrete / ValveDiscreteRamp: commanded on/off
+  valves taking a Boolean command.
+- Modelica.Fluid.Machines.PrescribedPump: a commanded pump.
+- Modelica.Fluid.Pipes.StaticPipe / DynamicPipe: the routing between units,
+  including static head where elevations differ.
+- Modelica.Fluid.Fittings.TeeJunctionVolume / MultiPort: a junction volume
+  wherever several branches meet or can be isolated together. Connecting two
+  pressure-drop-only elements directly leaves pressure undetermined there.
+- Modelica.Media.Water.StandardWater for a pure-water baseline; a
+  composition-dependent medium where the acceptance criteria are about
+  composition, since a pure-water medium cannot carry a species mass fraction
+  at all.
+
+Use the signal-equation form instead -- Integrator blocks over mass, energy and
+each species, with properties from the brief's own correlations -- when the
+brief gives correlations but no medium model, or describes a lumped process
+rather than a plant of connected units. It is a legitimate style, not a
+fallback: keep it when it fits.
+
+Either way, a missing correlation coefficient or medium property is a gap to
+report, never one to fill in.
 """,
 
     "batch_sequential_process": """\
@@ -310,18 +367,42 @@ transitions, so it can interrupt any stage.
 
 
 def modelica_catalog_block(domains: list[str]) -> str:
-    """Return catalogs relevant to the domains selected during Merge."""
+    """Return catalogs relevant to the domains selected during Merge.
 
-    matched = [MODELICA_LIBRARY_CATALOG[d] for d in domains if d in MODELICA_LIBRARY_CATALOG]
-    if not matched:
+    Served from `data/modelica_catalog.json` wherever that file covers the
+    domain, and from the prose entries here for the rest. The JSON is the
+    authority on WHICH class to use because every class in it was confirmed
+    present by querying the installed library, and a catalogue held as data can
+    be re-checked against an installation while prose cannot. The prose entries
+    remain the authority on the physics of a domain -- what the balance is,
+    which loop closes to zero -- which is not a list of class names.
+
+    Naming the same class in both would be worse than either alone: the two
+    would drift and the model would be reading a contradiction, so a domain the
+    JSON covers is served only from the JSON.
+    """
+
+    from simulation_platform.skills.modelica_library import catalog, catalog_block
+
+    covered = {d for c in catalog()["components"] for d in c.get("domains", [])}
+    verified = catalog_block([d for d in domains if d in covered])
+    prose = [MODELICA_LIBRARY_CATALOG[d] for d in domains
+             if d in MODELICA_LIBRARY_CATALOG and d not in covered]
+    if not verified and not prose:
         return ""
-    return (
-        "\n\nVERIFIED MODELICA STANDARD LIBRARY CATALOG FOR THIS SYSTEM'S DOMAIN(S) "
+
+    parts = [
+        "\n\nMODELICA STANDARD LIBRARY GUIDANCE FOR THIS SYSTEM'S DOMAIN(S) "
         "(general domain knowledge -- the brief's own entities, structure and values "
-        "always take precedence over anything below):\n\n"
-        + _SIGNAL_FLOW_NOTE
-        + "\n\n"
-        + "\n\n".join(matched)
-        + "\n\nUse only relevant entries. Record every fully-qualified MSL class actually "
+        "always take precedence over anything below):\n",
+        _SIGNAL_FLOW_NOTE,
+    ]
+    if verified:
+        parts.append(verified)
+    if prose:
+        parts.extend(prose)
+    parts.append(
+        "Use only relevant entries. Record every fully-qualified MSL class actually "
         "instantiated in library_components."
     )
+    return "\n\n".join(parts)

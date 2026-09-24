@@ -5,59 +5,87 @@ Document kind: engineering register
 * iron core -- component  <[sheet README]>
 * discrete air gap -- component  <[sheet README]>
 * leakage branch -- component  <[sheet README]>
-* exciting coil -- component  <[sheet README]>; aliases: ExcitingCoil
+* exciting coil -- component  <[sheet README]>
+    - turns: 600 [nominal]
     - turns: 600 turn [current/effective]
-    - turns: 600 turn [current/active]
-    - turns: 600 turn [approved/released]
-    - turns: 600 turn
-* measuring coil -- component  <[sheet README]>; aliases: MeasuringCoil
-    - turns: 40 turn [superseded] (supersedes/superseded: 50)
+    - turns: 600 turn [current/effective]
+* measuring coil -- component  <[sheet README]>
+    - turns: 50 [nominal]
+    - turns: 40 turn [superseded]
     - turns: 50 turn [current/effective]
-    - turns: 50 turn [current/active]
-    - turns: 40 turn [proposed/draft]
-    - turns: 40 turn [approved/released]
-    - turns: 50 turn [approved/released]
-    - turns: 50 turn
-* flux sensor -- sensor  <[sheet README]>; aliases: FluxSensor
-* electric ground -- reference  <[sheet README]>; aliases: ElectricGround
-* magnetic grounds -- reference  <[sheet README]>; aliases: MagneticGround
-* left leg -- magnetic element  <CORE-L [sheet Magnetic_Elements]>; aliases: CORE-L
-    - area: 0.0006250000000000001 m^2
-    - length: 0.125 m
-    - relative permeability: 1200
-* upper yoke -- magnetic element  <CORE-U [sheet Magnetic_Elements]>; aliases: CORE-U
-    - area: 0.0006250000000000001 m^2
-    - length: 0.125 m
-    - relative permeability: 1200
-* right leg -- magnetic element  <CORE-R [sheet Magnetic_Elements]>; aliases: CORE-R
-    - area: 0.0006250000000000001 m^2
-    - length: 0.1235 m
-    - relative permeability: 1200
-* air gap -- magnetic element  <GAP-1 [sheet Magnetic_Elements]>; aliases: GAP-1
-    - area: 0.0006250000000000001 m^2
-    - length: 0.0015 m
-    - relative permeability: 1
-* lower yoke -- magnetic element  <CORE-D [sheet Magnetic_Elements]>; aliases: CORE-D
-    - area: 0.0006250000000000001 m^2
-    - length: 0.125 m
-    - relative permeability: 1200
-* leakage path -- magnetic element  <LEAK-1 [sheet Magnetic_Elements]>; aliases: LEAK-1
+    - turns: 50 turn [current/effective]
+* flux sensor -- component  <[sheet README]>
+* electric ground -- component  <[sheet README]>
+* magnetic grounds -- component  <[sheet README]>
+* Core side a -- parameter  <[sheet README]>
+    - side a: 25 mm [nominal]
+    - Core side a: 0.025 m [current/effective]
+* Reference dimension l -- parameter  <[sheet README]>
+    - reference dimension l: 150 mm [nominal]
+    - Reference dimension l: 0.15 m [current/effective]
+* Nominal gap delta -- parameter  <[sheet README]>
+    - gap delta: 1.50 mm [nominal]
+    - Nominal air gap delta: 0.0015 m [current/effective]
+    - Measured shim gap: 0.00158 m [as_built/as-built]
+* Relative permeability -- parameter  <[sheet README]>
+    - relative permeability: 1200 [nominal]
+    - Relative permeability: 1000 1 [superseded]
+    - Effective relative permeability: 1200 1 [current/effective]
+* Leakage coefficient sigma -- parameter  <[sheet README]>
+    - leakage coefficient sigma: 0.08 [nominal]
+    - Leakage coefficient sigma: 0.05 1 [superseded]
+    - Leakage coefficient sigma: 0.08 1 [current/effective]
+* Frequency -- parameter  <[sheet README]>
+    - frequency: 50 Hz [nominal]
+    - Frequency: 50 Hz [current/effective]
+* Current ramp -- signal  <[sheet README]>
+    - current ramp: 0 -> 2 A RMS [nominal]
+    - Final RMS current magnitude: 2 A [current/effective]
+    - Ramp start: 0.1 s [current/effective]
+    - Ramp end: 0.5 s [current/effective]
 * CurrentRamp -- source  <[sheet Interfaces]>
+* ExcitingCoil -- coil  <[sheet Interfaces]>
+* ElectricGround -- ground  <[sheet Interfaces]>
+* CORE-L -- magnetic flux-tube element  <[sheet Magnetic_Elements]>
+    - Area: 0.0006250000000000001 m^2 [current]
+    - Length: 0.125 m [current]
+    - mu_r: 1200 [current]
+* CORE-U -- magnetic flux-tube element  <[sheet Magnetic_Elements]>
+    - Area: 0.0006250000000000001 m^2 [current]
+    - Length: 0.125 m [current]
+    - mu_r: 1200 [current]
+* CORE-R -- magnetic flux-tube element  <[sheet Magnetic_Elements]>
+    - Area: 0.0006250000000000001 m^2 [current]
+    - Length: 0.1235 m [current]
+    - mu_r: 1200 [current]
+* GAP-1 -- magnetic flux-tube element  <[sheet Magnetic_Elements]>
+    - Area: 0.0006250000000000001 m^2 [current]
+    - Length: 0.0015 m [current]
+    - mu_r: 1 [current]
+* CORE-D -- magnetic flux-tube element  <[sheet Magnetic_Elements]>
+    - Area: 0.0006250000000000001 m^2 [current]
+    - Length: 0.125 m [current]
+    - mu_r: 1200 [current]
+* LEAK-1 -- magnetic flux-tube element  <[sheet Magnetic_Elements]>
+    - useful/core flux ratio: 0.92 [current]
+* MagneticGround -- ground  <[sheet Interfaces]>
+* FluxSensor -- sensor  <[sheet Interfaces]>
+* MeasuringCoil -- coil  <[sheet Interfaces]>
 
 ## Relationships
-* CurrentRamp supplies exciting coil (i_ref to electric current)  <IF-EL-01 [sheet Interfaces]>
-* exciting coil referenced_to electric ground (pin_p/pin_n to reference)  <IF-EL-02 [sheet Interfaces]>
-* exciting coil magnetically_coupled_to left leg (magnetic ports; Electromagnetic conversion N*I)  <IF-MAG-01 [sheet Interfaces]>
-* left leg in_series_with upper yoke (Series core path)  <IF-MAG-02 [sheet Interfaces]>
-* upper yoke in_series_with right leg (Series core path)  <IF-MAG-03 [sheet Interfaces]>
-* right leg branches_to air gap (Useful branch)  <IF-MAG-04 [sheet Interfaces]>
-* right leg branches_to leakage path (Leakage branch)  <IF-MAG-05 [sheet Interfaces]>
-* air gap rejoins_at lower yoke (Useful branch rejoin)  <IF-MAG-06 [sheet Interfaces]>
-* leakage path rejoins_at lower yoke (Leakage branch rejoin)  <IF-MAG-07 [sheet Interfaces]>
-* lower yoke referenced_to magnetic grounds (Zero magnetic potential)  <IF-MAG-08 [sheet Interfaces]>
-* air gap sensed_by flux sensor (useful flux to Phi_gap)  <IF-SEN-01 [sheet Interfaces]>
-* air gap magnetically_coupled_to measuring coil (Phi_gap to magnetic coupling; Induced voltage)  <IF-IND-01 [sheet Interfaces]>
-* leakage path in_parallel_with air gap (useful/core flux ratio = 1-sigma = 0.92)  <LEAK-1 [sheet Magnetic_Elements]>
+* CurrentRamp provides ExcitingCoil (i_ref to electric current)  <[sheet Interfaces]>
+* ExcitingCoil references ElectricGround (pin_p/pin_n to reference)  <[sheet Interfaces]>
+* ExcitingCoil connects to CORE-L (magnetic ports to magnetic port)  <[sheet Interfaces]>
+* CORE-L series to CORE-U (Series core path)  <[sheet Interfaces]>
+* CORE-U series to CORE-R (Series core path)  <[sheet Interfaces]>
+* CORE-R branches to GAP-1 (Useful branch)  <[sheet Interfaces]>
+* CORE-R branches to LEAK-1 (Leakage branch)  <[sheet Interfaces]>
+* GAP-1 rejoins at CORE-D (Useful branch rejoin)  <[sheet Interfaces]>
+* LEAK-1 rejoins at CORE-D (Leakage branch rejoin)  <[sheet Interfaces]>
+* CORE-D references MagneticGround (port_n to reference)  <[sheet Interfaces]>
+* GAP-1 provides useful flux to FluxSensor (Phi_gap)  <[sheet Interfaces]>
+* GAP-1 magnetically couples to MeasuringCoil (Induced voltage)  <[sheet Interfaces]>
+* GAP-1 parallel with LEAK-1  <[sheet Magnetic_Elements]>
 
 ## Requirements
 * The electromagnetic converter shall create positive magnetic mmf when positive exciting-coil current is applied. [current]  <REQ-FUN-001 [sheet Requirements]>
@@ -99,12 +127,8 @@ Document kind: engineering register
 * Magnetic potential difference across GAP-1 and LEAK-1 shall be equal because the elements are connected in parallel. [current]  <REQ-MAG-006 [sheet Requirements]>
 * Flux continuity shall be satisfied at the split: Phi_core = Phi_gap + Phi_leak. [current]  <REQ-MAG-007 [sheet Requirements]>
 * Induced-voltage phasor magnitude for a sinusoidal flux shall satisfy |U| = 2*pi*f*N*|Phi|. [current]  <REQ-IND-003 [sheet Requirements]>
-* l_core = 3*(l-a)+(l-a-delta) [approved]  <[sheet Analytic_Calculation]>
-* R_core = l_core/(mu0*mu_r*A) [approved]  <[sheet Analytic_Calculation]>
-* R_gap = delta/(mu0*A) [approved]  <[sheet Analytic_Calculation]>
 * R_leak = R_gap*(1-sigma)/sigma [approved]  <[sheet Analytic_Calculation]>
 * R_par = 1/(1/R_gap+1/R_leak) [approved]  <[sheet Analytic_Calculation]>
-* R_total = R_core+R_par [approved]  <[sheet Analytic_Calculation]>
 * F=N*I [approved]  <[sheet Analytic_Calculation]>
 * Phi_core = F/R_total [approved]  <[sheet Analytic_Calculation]>
 * Phi_gap = (1-sigma)*Phi_core [approved]  <[sheet Analytic_Calculation]>
@@ -115,7 +139,7 @@ Document kind: engineering register
 * H_gap = B_gap/mu0 [approved]  <[sheet Analytic_Calculation]>
 * Vm_core = H_core*l_core [approved]  <[sheet Analytic_Calculation]>
 * Vm_gap = H_gap*delta [approved]  <[sheet Analytic_Calculation]>
-* residual = N*I - Vm_core - Vm_gap [approved]  <[sheet Analytic_Calculation]>
-* Uexc = 2*pi*f*N_exc*Phi_core [approved]  <[sheet Analytic_Calculation]>
-* Umeas = 2*pi*f*N_meas*Phi_gap [approved]  <[sheet Analytic_Calculation]>
-* ratio = Phi_gap/Phi_core [approved]  <[sheet Analytic_Calculation]>
+* N*I - Vm_core - Vm_gap [approved]  <[sheet Analytic_Calculation]>
+* 2*pi*f*N_exc*Phi_core [approved]  <[sheet Analytic_Calculation]>
+* 2*pi*f*N_meas*Phi_gap [approved]  <[sheet Analytic_Calculation]>
+* Phi_gap/Phi_core [approved]  <[sheet Analytic_Calculation]>

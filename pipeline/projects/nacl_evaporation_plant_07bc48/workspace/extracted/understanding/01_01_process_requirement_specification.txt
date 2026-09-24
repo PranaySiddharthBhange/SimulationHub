@@ -14,56 +14,53 @@ Document kind: requirement specification
 * V9 -- valve  <[page 1]>
 * V11 -- valve  <[page 1]>
 * V12 -- valve  <[page 1]>
-* LIS-301 -- level indicator  <[page 1]>
+* LIS-301 -- instrument  <[page 1]>
     - level threshold: 0.13 m [required]
     - level threshold: 0.01 m [required]
-* QI-302 -- indicator  <[page 1]>
-* LIS-501 -- level indicator  <[page 1]>
-* QIS-502 -- indicator  <[page 1]>
+* QI-302 -- instrument  <[page 1]>
+* LIS-501 -- instrument  <[page 1]>
+* QIS-502 -- instrument  <[page 1]>
 * central controller -- controller  <[page 1]>
 * P1 -- pump  <[page 1]>
 * P2 -- pump  <[page 1]>
-* P&ID; -- document/artifact  <[page 1]>
+* P&ID; -- document  <[page 1]>
 * StandardWater configuration -- configuration  <[page 1]>
+* water-NaCl mixture -- simulation medium  <[page 1]>
 * evaporator/condenser -- combined simulation component  <[page 1]>
 
 ## Relationships
 * B1 initially charged with water  <[page 1]>
 * B2 initially charged with concentrated brine  <[page 1]>
-* V8 connects flow from B1 (to B3 when opened)  <[page 1]>
-* V9 connects flow from B2 (to B3 when opened)  <[page 1]>
-* V11 connects flow from B3 (to B4 when opened)  <[page 1]>
-* V12 connects flow from B4 (to B5 when opened)  <[page 1]>
-* P1 returns cooled process streams to charging-vessel header system  <[page 1]>
-* P2 returns cooled process streams to charging-vessel header system  <[page 1]>
-* central controller commands discrete on/off valves  <[page 1]>
-* controller parallel split and join occurs after evaporation  <[page 1]>
+* B1 transfers to B3 (via V8 during Charge water)  <[page 1]>
+* B2 transfers to B3 (via V9 during Charge brine / mix)  <[page 1]>
+* B3 transfers to B4 (via V11 during Buffer transfer)  <[page 1]>
+* B4 transfers to B5 (via V12 during Evaporator charge)  <[page 1]>
+* K1 condenses vapor  <[page 1]>
+* B6 cools condensate  <[page 1]>
+* B7 cools concentrate  <[page 1]>
+* P1 returns cooled process streams (to the charging-vessel header system)  <[page 1]>
+* P2 returns cooled process streams (to the charging-vessel header system)  <[page 1]>
 
 ## Requirements
 * The laboratory plant shall concentrate a water/sodium-chloride batch using staged charging, mixing, buffering, evaporation, condensation, cooling and return pumping. [approved]  <[page 1]>
-* Charge water phase required action: Open V8, B1 to B3. [approved]  <[page 1]>
-* Charge water completion condition: LIS-301 >= 0.13 m. [approved]  <[page 1]>
-* Charge brine / mix required action: Open V9, B2 to B3. [approved]  <[page 1]>
-* Charge brine / mix completion condition: QI-302 reaches recipe target. [approved]  <[page 1]>
-* Buffer transfer required action: Open V11, B3 to B4. [approved]  <[page 1]>
-* Buffer transfer completion condition: LIS-301 < 0.01 m. [approved]  <[page 1]>
-* Evaporator charge completion condition: LIS-501 reaches batch level. [approved]  <[page 1]>
-* Evaporation required action: Enable B5 heater. [approved]  <[page 1]>
-* Evaporation completion condition: QIS-502 reaches evaporation target. [approved]  <[page 1]>
-* Condensate branch required action: Cool B6, then return condensate. [approved]  <[page 1]>
-* Condensate branch completion condition: Cooling complete and B6 returned. [approved]  <[page 1]>
-* Concentrate branch required action: Transfer B5 to B7, cool B7, return concentrate. [approved]  <[page 1]>
-* Concentrate branch completion condition: Cooling complete and B7 returned. [approved]  <[page 1]>
-* Cycle reset required action: Wait for both branches. [approved]  <[page 1]>
+* Charge water action: open V8 from B1 to B3 until LIS-301 >= 0.13 m. [approved]  <[page 1]>
+* Charge brine / mix action: open V9 from B2 to B3 until QI-302 reaches recipe target. [approved]  <[page 1]>
+* Buffer transfer action: open V11 from B3 to B4 until LIS-301 < 0.01 m. [approved]  <[page 1]>
+* Evaporator charge action: when B5 is idle, open V12 from B4 to B5 until LIS-501 reaches batch level. [approved]  <[page 1]>
+* Evaporation action: enable B5 heater until QIS-502 reaches evaporation target. [approved]  <[page 1]>
+* Condensate branch action: cool B6, then return condensate; completion is cooling complete and B6 returned. [approved]  <[page 1]>
+* Concentrate branch action: transfer B5 to B7, cool B7, return concentrate; completion is cooling complete and B7 returned. [approved]  <[page 1]>
+* Cycle reset action: wait for both branches; completion is both complete and time > 2500 s. [approved]  <[page 1]>
 * The central controller shall command discrete on/off valves. [approved]  <[page 1]>
 * Automated valves shall fail closed. [approved]  <[page 1]>
 * Small junction volumes shall be used where multiple isolating pressure-drop components could otherwise leave undefined pressure, enthalpy or composition states. [approved]  <[page 1]>
 * All non-horizontal pipes shall include static head in their pressure-drop relationship. [approved]  <[page 1]>
 * The acceptance simulation shall demonstrate a full charge-mix-buffer-evaporate-cool-return cycle, including the controller parallel split and join after evaporation. [approved]  <[page 1]>
-* It shall continue beyond 2500 s to demonstrate cycle reset. [approved]  <[page 1]>
+* The acceptance simulation shall continue beyond 2500 s to demonstrate cycle reset. [approved]  <[page 1]>
 
 ## Constraints
-* Both complete and time > 2500 s. [approved]  <[page 1]>
-
-## Behaviors
-* When B5 is idle, open V12, B4 to B5. [approved]  <[page 1]>
+* Tank connections can pass above or below the liquid level. [approved]  <[page 1]>
+* The preferred numerical treatment is a regularized asymmetric loss-factor formulation with hysteresis around the port elevation. [approved]  <[page 1]>
+* The intended physical simulation medium is a water-NaCl mixture. [approved]  <[page 1]>
+* A StandardWater configuration may be used as an integration baseline to verify topology and sequence behavior before enabling composition-dependent property functions. [approved]  <[page 1]>
+* The evaporator/condenser may be represented as a combined simulation component provided the physical condenser K1 remains identifiable in the system architecture. [approved]  <[page 1]>

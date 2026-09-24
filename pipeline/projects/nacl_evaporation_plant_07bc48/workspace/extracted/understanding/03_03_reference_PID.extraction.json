@@ -1,7 +1,7 @@
 {
-  "document": "Visual evidence: nacl_evaporation_sysmlv2_full_dataset/03_architecture_diagrams/03_reference_PID.png, image 1",
+  "document": "Image evidence: nacl_evaporation_sysmlv2_full_dataset/03_architecture_diagrams/03_reference_PID.png, image 1",
   "subject": "reference PID",
-  "kind": "engineering drawing",
+  "kind": "engineering diagram",
   "entities": [
     {
       "name": "B1",
@@ -11,71 +11,27 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "B1 top-left vessel label"
+      "quote": "Label 'B1' on upper-left vessel"
     },
     {
       "name": "LIS 101",
       "kind": "instrument",
-      "aliases": [
-        "LIS101"
-      ],
+      "aliases": [],
       "values": [],
-      "ref": "101",
+      "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "LIS 101 instrument bubble to right of B1"
+      "quote": "Bubble 'LIS 101' to the right of B1"
     },
     {
       "name": "QI 102",
       "kind": "instrument",
-      "aliases": [
-        "QI102"
-      ],
-      "values": [],
-      "ref": "102",
-      "anchor": "",
-      "from_image": true,
-      "quote": "QI 102 instrument bubble to right of B1"
-    },
-    {
-      "name": "V1",
-      "kind": "valve",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V1 on left vertical header near top"
-    },
-    {
-      "name": "V2",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V2 on left upper branch above V1"
-    },
-    {
-      "name": "V3",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V3 on branch entering top of B1"
-    },
-    {
-      "name": "V8",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V8 on line from B1 bottom toward B3"
+      "quote": "Bubble 'QI 102' below LIS 101 at B1"
     },
     {
       "name": "B2",
@@ -85,71 +41,27 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "B2 top-right vessel label"
+      "quote": "Label 'B2' on upper-right vessel"
     },
     {
       "name": "LIS 201",
       "kind": "instrument",
-      "aliases": [
-        "LIS201"
-      ],
+      "aliases": [],
       "values": [],
-      "ref": "201",
+      "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "LIS 201 instrument bubble to left of B2"
+      "quote": "Bubble 'LIS 201' to the left of B2"
     },
     {
       "name": "QI 202",
       "kind": "instrument",
-      "aliases": [
-        "QI202"
-      ],
-      "values": [],
-      "ref": "202",
-      "anchor": "",
-      "from_image": true,
-      "quote": "QI 202 instrument bubble to left of B2"
-    },
-    {
-      "name": "V6",
-      "kind": "valve",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V6 on branch entering top of B2 from right"
-    },
-    {
-      "name": "V7",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V7 on vertical line below B2"
-    },
-    {
-      "name": "V4",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V4 on far-right upper vertical header"
-    },
-    {
-      "name": "V5",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V5 on far-right upper vertical header below V4"
+      "quote": "Bubble 'QI 202' below LIS 201 at B2"
     },
     {
       "name": "B3",
@@ -159,7 +71,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "B3 central vessel label"
+      "quote": "Label 'B3' on central upper vessel"
     },
     {
       "name": "M",
@@ -169,61 +81,27 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "M above B3"
+      "quote": "Circle labeled 'M' above B3"
     },
     {
       "name": "LIS 301",
       "kind": "instrument",
-      "aliases": [
-        "LIS301"
-      ],
+      "aliases": [],
       "values": [],
-      "ref": "301",
+      "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "LIS 301 instrument bubble left of B3"
+      "quote": "Bubble 'LIS 301' to the left of B3"
     },
     {
       "name": "QI 302",
       "kind": "instrument",
-      "aliases": [
-        "QI302"
-      ],
-      "values": [],
-      "ref": "302",
-      "anchor": "",
-      "from_image": true,
-      "quote": "QI 302 instrument bubble right of B3"
-    },
-    {
-      "name": "V9",
-      "kind": "valve",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V9 on line from B2 toward B3"
-    },
-    {
-      "name": "salt",
-      "kind": "material",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "salt label on inlet arrow to B3"
-    },
-    {
-      "name": "H2O",
-      "kind": "material",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "H2O label on line below B2"
+      "quote": "Bubble 'QI 302' to the right of B3"
     },
     {
       "name": "B4",
@@ -233,105 +111,17 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "B4 left-middle vessel label"
-    },
-    {
-      "name": "V11",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V11 on line from B3/B4 connection"
+      "quote": "Label 'B4' on mid-left vessel"
     },
     {
       "name": "LIS 401",
       "kind": "instrument",
-      "aliases": [
-        "LIS401"
-      ],
-      "values": [],
-      "ref": "401",
-      "anchor": "",
-      "from_image": true,
-      "quote": "LIS 401 instrument bubble right of B4"
-    },
-    {
-      "name": "V12",
-      "kind": "valve",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V12 below B4"
-    },
-    {
-      "name": "B5",
-      "kind": "vessel",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "B5 lower-left vessel label"
-    },
-    {
-      "name": "LIS 501",
-      "kind": "instrument",
-      "aliases": [
-        "LIS501"
-      ],
-      "values": [],
-      "ref": "501",
-      "anchor": "",
-      "from_image": true,
-      "quote": "LIS 501 instrument bubble left of B5"
-    },
-    {
-      "name": "QIS 502",
-      "kind": "instrument",
-      "aliases": [
-        "QIS502"
-      ],
-      "values": [],
-      "ref": "502",
-      "anchor": "",
-      "from_image": true,
-      "quote": "QIS 502 instrument bubble right of B5"
-    },
-    {
-      "name": "TI 503",
-      "kind": "instrument",
-      "aliases": [
-        "TI503"
-      ],
-      "values": [],
-      "ref": "503",
-      "anchor": "",
-      "from_image": true,
-      "quote": "TI 503 instrument bubble right of B5"
-    },
-    {
-      "name": "V16",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V16 below B5"
-    },
-    {
-      "name": "V17",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V17 on cooling water line at B5 lower left"
+      "quote": "Bubble 'LIS 401' to the right of B4"
     },
     {
       "name": "K1",
@@ -341,39 +131,57 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "K1 slanted exchanger in center-right"
+      "quote": "Label 'K1' on slanted exchanger in center-right"
     },
     {
       "name": "FIS 801",
       "kind": "instrument",
-      "aliases": [
-        "FIS801"
-      ],
-      "values": [],
-      "ref": "801",
-      "anchor": "",
-      "from_image": true,
-      "quote": "FIS 801 instrument bubble above right end of K1"
-    },
-    {
-      "name": "V13",
-      "kind": "valve",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V13 on cooling water line entering K1"
+      "quote": "Bubble 'FIS 801' above-right of K1"
     },
     {
-      "name": "cooling water",
-      "kind": "material",
+      "name": "B5",
+      "kind": "vessel",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "cooling water labels at K1, B6, B7, and B5"
+      "quote": "Label 'B5' on lower-left vessel"
+    },
+    {
+      "name": "LIS 501",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Bubble 'LIS 501' to the left of B5"
+    },
+    {
+      "name": "QIS 502",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Bubble 'QIS 502' to the right of B5"
+    },
+    {
+      "name": "TI 503",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Bubble 'TI 503' below QIS 502 at B5"
     },
     {
       "name": "B6",
@@ -383,51 +191,27 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "B6 right-middle vessel label"
+      "quote": "Label 'B6' on lower-right vessel"
     },
     {
       "name": "LIS 601",
       "kind": "instrument",
-      "aliases": [
-        "LIS601"
-      ],
+      "aliases": [],
       "values": [],
-      "ref": "601",
+      "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "LIS 601 instrument bubble left of B6"
+      "quote": "Bubble 'LIS 601' to the left of B6"
     },
     {
       "name": "TIS 602",
       "kind": "instrument",
-      "aliases": [
-        "TIS602"
-      ],
-      "values": [],
-      "ref": "602",
-      "anchor": "",
-      "from_image": true,
-      "quote": "TIS 602 instrument bubble right of B6"
-    },
-    {
-      "name": "V29",
-      "kind": "valve",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V29 on cooling water line at B6"
-    },
-    {
-      "name": "V14",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V14 on line to right of B6"
+      "quote": "Bubble 'TIS 602' to the right of B6"
     },
     {
       "name": "B7",
@@ -437,71 +221,27 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "B7 lower-center vessel label"
+      "quote": "Label 'B7' on bottom-center vessel"
     },
     {
       "name": "LIS 701",
       "kind": "instrument",
-      "aliases": [
-        "LIS701"
-      ],
+      "aliases": [],
       "values": [],
-      "ref": "701",
+      "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "LIS 701 instrument bubble right of B7"
+      "quote": "Bubble 'LIS 701' to the right of B7"
     },
     {
       "name": "TIS 702",
       "kind": "instrument",
-      "aliases": [
-        "TIS702"
-      ],
-      "values": [],
-      "ref": "702",
-      "anchor": "",
-      "from_image": true,
-      "quote": "TIS 702 instrument bubble right of B7"
-    },
-    {
-      "name": "V15",
-      "kind": "valve",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V15 on line above B7"
-    },
-    {
-      "name": "V10",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V10 on vertical line below B7 left"
-    },
-    {
-      "name": "V18",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V18 on branch below B7"
-    },
-    {
-      "name": "V19",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V19 on lower horizontal line center-left"
+      "quote": "Bubble 'TIS 702' below LIS 701 at B7"
     },
     {
       "name": "P1",
@@ -511,99 +251,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "P1 bottom-left pump label"
-    },
-    {
-      "name": "PIS 901",
-      "kind": "instrument",
-      "aliases": [
-        "PIS901"
-      ],
-      "values": [],
-      "ref": "901",
-      "anchor": "",
-      "from_image": true,
-      "quote": "PIS 901 instrument bubble above P1"
-    },
-    {
-      "name": "V20",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V20 on lower vertical branch near right-center"
-    },
-    {
-      "name": "V21",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V21 on bottom horizontal line center"
-    },
-    {
-      "name": "V22",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V22 on lower left vertical header"
-    },
-    {
-      "name": "V23",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V23 on bottom horizontal line left of V21"
-    },
-    {
-      "name": "V24",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V24 on bottom horizontal line left of P2"
-    },
-    {
-      "name": "V25",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V25 on lower right vertical header"
-    },
-    {
-      "name": "V26",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V26 on lower right vertical header"
-    },
-    {
-      "name": "V27",
-      "kind": "valve",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V27 on lower center vertical branch"
+      "quote": "Label 'P1' at bottom-left pump symbol"
     },
     {
       "name": "P2",
@@ -613,19 +261,337 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "P2 bottom-right pump label"
+      "quote": "Label 'P2' at bottom-right pump symbol"
+    },
+    {
+      "name": "PIS 901",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Bubble 'PIS 901' above-left of P1"
     },
     {
       "name": "PIS 1001",
       "kind": "instrument",
-      "aliases": [
-        "PIS1001"
-      ],
+      "aliases": [],
       "values": [],
-      "ref": "1001",
+      "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "PIS 1001 instrument bubble above P2"
+      "quote": "Bubble 'PIS 1001' above-left of P2"
+    },
+    {
+      "name": "V1",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V1' on upper-left vertical line"
+    },
+    {
+      "name": "V2",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V2' above V1 on upper-left line"
+    },
+    {
+      "name": "V3",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V3' on branch into top of B1"
+    },
+    {
+      "name": "V4",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V4' on far upper-right vertical line"
+    },
+    {
+      "name": "V5",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V5' below V4 on far upper-right vertical line"
+    },
+    {
+      "name": "V6",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V6' on branch toward B2"
+    },
+    {
+      "name": "V7",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V7' below B2 on vertical outlet"
+    },
+    {
+      "name": "V8",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V8' on line from B1 to B3"
+    },
+    {
+      "name": "V9",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V9' on line from B2 to B3"
+    },
+    {
+      "name": "V11",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V11' on line from B4 to central header above B5"
+    },
+    {
+      "name": "V12",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V12' below B4 leading to B5"
+    },
+    {
+      "name": "V13",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V13' on cooling water line at K1"
+    },
+    {
+      "name": "V14",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V14' on right-side vertical return near B6"
+    },
+    {
+      "name": "V15",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V15' on line into top of B7"
+    },
+    {
+      "name": "V16",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V16' below B5 on downward outlet"
+    },
+    {
+      "name": "V17",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V17' on cooling water line at B7"
+    },
+    {
+      "name": "V18",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V18' on branch from B7 lower right"
+    },
+    {
+      "name": "V19",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V19' on lower center horizontal line"
+    },
+    {
+      "name": "V20",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V20' on lower-right vertical near B6 outlet line"
+    },
+    {
+      "name": "V21",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V21' on bottom horizontal line center"
+    },
+    {
+      "name": "V22",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V22' on left lower vertical near P1"
+    },
+    {
+      "name": "V23",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V23' on bottom horizontal left of center"
+    },
+    {
+      "name": "V24",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V24' on bottom horizontal left of P2"
+    },
+    {
+      "name": "V25",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V25' on right lower vertical near P2"
+    },
+    {
+      "name": "V26",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V26' on far right lower vertical"
+    },
+    {
+      "name": "V27",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V27' on short vertical branch from lower center horizontal"
+    },
+    {
+      "name": "V28",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V28' on far left lower vertical"
+    },
+    {
+      "name": "V29",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Label 'V29' on cooling water line at B6"
+    },
+    {
+      "name": "salt",
+      "kind": "material",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Text 'salt' on line entering B3 from right"
+    },
+    {
+      "name": "H2O",
+      "kind": "material",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Text 'H2O' on vertical line below B2"
+    },
+    {
+      "name": "cooling water",
+      "kind": "material",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Text 'cooling water' on service lines at K1, B6, and B7"
     }
   ],
   "relationships": [
@@ -633,197 +599,188 @@
       "subject": "B1",
       "predicate": "connected_to",
       "object": "B3",
-      "detail": "line from bottom of B1 through V8 to B3",
+      "detail": "via V8",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V8 on line from B1 bottom toward B3"
+      "quote": "Line from B1 bottom outlet through valve 'V8' to B3"
     },
     {
       "subject": "B2",
       "predicate": "connected_to",
       "object": "B3",
-      "detail": "line from B2 through V9 to B3",
+      "detail": "via V9",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V9 on line from B2 toward B3"
+      "quote": "Line from B2 bottom outlet through valve 'V9' to B3"
     },
     {
       "subject": "salt",
       "predicate": "flows_to",
       "object": "B3",
-      "detail": "inlet arrow points into B3",
+      "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "salt label on inlet arrow to B3"
+      "quote": "Arrow labeled 'salt' points into B3 from right"
     },
     {
       "subject": "M",
-      "predicate": "drives",
+      "predicate": "associated_with",
       "object": "B3",
-      "detail": "motor symbol above vessel with shaft/arrow into top",
+      "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "M above B3"
+      "quote": "Circle labeled 'M' directly above B3 with arrow into top of B3"
     },
     {
       "subject": "B3",
       "predicate": "connected_to",
       "object": "B4",
-      "detail": "line from B3 lower side through V11 branch to B4 top",
+      "detail": "via central vertical header and V11 branch",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V11 on line from B3/B4 connection"
+      "quote": "B3 bottom connects to vertical header; branch with valve 'V11' leads left into B4 top"
     },
     {
       "subject": "B4",
       "predicate": "connected_to",
       "object": "B5",
-      "detail": "line from bottom of B4 through V12 to top of B5",
+      "detail": "via V12",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V12 below B4"
+      "quote": "Line from B4 bottom through valve 'V12' into top of B5"
     },
     {
       "subject": "B4",
       "predicate": "connected_to",
       "object": "K1",
-      "detail": "line from side of B4 to left side of K1",
+      "detail": "via right-hand line from header",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "K1 slanted exchanger in center-right"
+      "quote": "Header from B4/B3 area continues right then down into left side of K1"
     },
     {
       "subject": "K1",
       "predicate": "connected_to",
       "object": "B6",
-      "detail": "line from right/lower side of K1 to top of B6",
+      "detail": "process outlet from K1 drops into B6 top",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "K1 slanted exchanger in center-right"
+      "quote": "Right side of K1 connects downward into top of B6"
     },
     {
       "subject": "cooling water",
       "predicate": "flows_to",
       "object": "K1",
-      "detail": "arrowed line through V13 enters K1",
+      "detail": "via V13",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V13 on cooling water line entering K1"
+      "quote": "Text 'cooling water' with arrow on line through valve 'V13' at K1"
     },
     {
       "subject": "cooling water",
       "predicate": "flows_to",
       "object": "B6",
-      "detail": "arrowed line through V29 enters B6 coil",
+      "detail": "via V29",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V29 on cooling water line at B6"
-    },
-    {
-      "subject": "cooling water",
-      "predicate": "flows_to",
-      "object": "B7",
-      "detail": "arrowed line through V17/V15 enters B7 coil circuit",
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V17 on cooling water line at B5 lower left"
+      "quote": "Text 'cooling water' with arrow on line through valve 'V29' into B6"
     },
     {
       "subject": "B5",
       "predicate": "connected_to",
       "object": "B7",
-      "detail": "bottom outlet from B5 joins line through V15 to B7 top and through lower branch near V16/V17",
+      "detail": "via lower header and V15",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V15 on line above B7"
+      "quote": "Line from below B5 joins header; branch with valve 'V15' enters top of B7"
+    },
+    {
+      "subject": "cooling water",
+      "predicate": "flows_to",
+      "object": "B7",
+      "detail": "via V17",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "Text 'cooling water' with arrow on line through valve 'V17' into B7"
+    },
+    {
+      "subject": "B7",
+      "predicate": "connected_to",
+      "object": "bottom header",
+      "detail": "via V18 and V19 branchwork",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "B7 lower right line passes valve 'V18' to vertical header joining line with valve 'V19'"
     },
     {
       "subject": "B6",
       "predicate": "connected_to",
-      "object": "lower manifold",
-      "detail": "bottom outlet drops to lower horizontal network",
+      "object": "bottom header",
+      "detail": "via vertical outlet and V20",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "B6 right-middle vessel label"
+      "quote": "B6 bottom outlet drops to lower line with valve 'V20'"
     },
     {
       "subject": "P1",
       "predicate": "connected_to",
-      "object": "bottom manifold",
-      "detail": "pump installed in bottom-left horizontal line",
+      "object": "bottom header",
+      "detail": "on left side via V23",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "P1 bottom-left pump label"
+      "quote": "Pump 'P1' sits on bottom line left of valve 'V23'"
     },
     {
       "subject": "P2",
       "predicate": "connected_to",
-      "object": "bottom manifold",
-      "detail": "pump installed in bottom-right horizontal line",
+      "object": "bottom header",
+      "detail": "on right side via V24",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "P2 bottom-right pump label"
+      "quote": "Pump 'P2' sits on bottom line right of valve 'V24'"
     },
     {
-      "subject": "left vertical header",
-      "predicate": "connected_to",
-      "object": "top header",
-      "detail": "outer piping loop around drawing perimeter",
+      "subject": "H2O",
+      "predicate": "associated_with",
+      "object": "B2",
+      "detail": "on outlet line below B2 through V7",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V1 on left vertical header near top"
+      "quote": "Text 'H2O' on vertical line below B2 and valve 'V7'"
     },
     {
-      "subject": "top header",
-      "predicate": "connected_to",
-      "object": "right vertical header",
-      "detail": "outer piping loop around drawing perimeter",
+      "subject": "H2O",
+      "predicate": "associated_with",
+      "object": "B6",
+      "detail": "on right-side return line with V14",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "V4 on far-right upper vertical header"
-    },
-    {
-      "subject": "right vertical header",
-      "predicate": "connected_to",
-      "object": "bottom manifold",
-      "detail": "outer piping loop around drawing perimeter",
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V25 on lower right vertical header"
-    },
-    {
-      "subject": "bottom manifold",
-      "predicate": "connected_to",
-      "object": "left vertical header",
-      "detail": "outer piping loop around drawing perimeter",
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "V22 on lower left vertical header"
+      "quote": "Text 'H2O' beside right-side vertical line with valve 'V14' connected from B6 top loop"
     }
   ],
   "facts": [],
   "unreadable": [
-    "Some pipe arrow directions and unlabeled junction purposes are ambiguous from the image alone.",
-    "No legend is visible to define instrument code meanings beyond the tag letters and numbers."
+    "Flow directions on some outer boundary lines are ambiguous from the image alone.",
+    "The exact function of instrument tags (for example LIS, QI, QIS, TIS, PIS, FIS) is not expanded in the diagram.",
+    "Some bottom and side boundary arrows are unlabeled, so connected destination/source outside the drawing is unclear."
   ],
   "unverified_quotes": []
 }

@@ -79,76 +79,33 @@
       "name": "mean_flux_line",
       "kind": "mean flux line",
       "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "\"mean_flux_line\": {"
-    },
-    {
-      "name": "left_leg",
-      "kind": "mean flux line segment",
-      "aliases": [],
       "values": [
         {
-          "quantity": "length",
+          "quantity": "left_leg",
           "value": "0.125",
           "unit": "m",
           "status": "nominal",
           "supersedes": "",
           "quote": "\"left_leg\": 0.125"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "\"left_leg\": 0.125"
-    },
-    {
-      "name": "upper_yoke",
-      "kind": "mean flux line segment",
-      "aliases": [],
-      "values": [
+        },
         {
-          "quantity": "length",
+          "quantity": "upper_yoke",
           "value": "0.125",
           "unit": "m",
           "status": "nominal",
           "supersedes": "",
           "quote": "\"upper_yoke\": 0.125"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "\"upper_yoke\": 0.125"
-    },
-    {
-      "name": "right_leg_iron",
-      "kind": "mean flux line segment",
-      "aliases": [],
-      "values": [
+        },
         {
-          "quantity": "length",
+          "quantity": "right_leg_iron",
           "value": "0.1235",
           "unit": "m",
           "status": "nominal",
           "supersedes": "",
           "quote": "\"right_leg_iron\": 0.1235"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "\"right_leg_iron\": 0.1235"
-    },
-    {
-      "name": "lower_yoke",
-      "kind": "mean flux line segment",
-      "aliases": [],
-      "values": [
+        },
         {
-          "quantity": "length",
+          "quantity": "lower_yoke",
           "value": "0.125",
           "unit": "m",
           "status": "nominal",
@@ -159,7 +116,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "\"lower_yoke\": 0.125"
+      "quote": "\"mean_flux_line\": {"
     },
     {
       "name": "as_built_prototype_MCB_02",
@@ -170,8 +127,8 @@
           "quantity": "air_gap_measured",
           "value": "0.00158",
           "unit": "m",
-          "status": "measured",
-          "supersedes": "",
+          "status": "as-built",
+          "supersedes": "0.0015",
           "quote": "\"air_gap_measured\": 0.00158"
         },
         {
@@ -196,10 +153,40 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "\"AV-11 uses nominal geometry. As-built data is retained for a separate prototype validation configuration.\""
+      "quote": "\"configuration_note\": \"AV-11 uses nominal geometry. As-built data is retained for a separate prototype validation configuration.\""
+    },
+    {
+      "name": "square",
+      "kind": "shape",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"shape\": \"square\""
+    },
+    {
+      "name": "shim stack + feeler gauge cross-check",
+      "kind": "measurement method",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"measurement_method\": \"shim stack + feeler gauge cross-check\""
     }
   ],
   "relationships": [
+    {
+      "subject": "cross_section",
+      "predicate": "has shape",
+      "object": "square",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"shape\": \"square\""
+    },
     {
       "subject": "AV-11",
       "predicate": "uses",
@@ -208,47 +195,27 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "\"AV-11 uses nominal geometry. As-built data is retained for a separate prototype validation configuration.\""
+      "quote": "\"configuration_note\": \"AV-11 uses nominal geometry. As-built data is retained for a separate prototype validation configuration.\""
     },
     {
-      "subject": "mean_flux_line",
-      "predicate": "includes",
-      "object": "left_leg",
+      "subject": "as_built_prototype_MCB_02",
+      "predicate": "retained for",
+      "object": "AV-11",
+      "detail": "separate prototype validation configuration is distinct from AV-11 nominal geometry usage",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "\"configuration_note\": \"AV-11 uses nominal geometry. As-built data is retained for a separate prototype validation configuration.\""
+    },
+    {
+      "subject": "as_built_prototype_MCB_02",
+      "predicate": "measured by",
+      "object": "shim stack + feeler gauge cross-check",
       "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "\"left_leg\": 0.125"
-    },
-    {
-      "subject": "mean_flux_line",
-      "predicate": "includes",
-      "object": "upper_yoke",
-      "detail": "",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "\"upper_yoke\": 0.125"
-    },
-    {
-      "subject": "mean_flux_line",
-      "predicate": "includes",
-      "object": "right_leg_iron",
-      "detail": "",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "\"right_leg_iron\": 0.1235"
-    },
-    {
-      "subject": "mean_flux_line",
-      "predicate": "includes",
-      "object": "lower_yoke",
-      "detail": "",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "\"lower_yoke\": 0.125"
+      "quote": "\"measurement_method\": \"shim stack + feeler gauge cross-check\""
     }
   ],
   "facts": [],

@@ -25,27 +25,11 @@
     },
     {
       "name": "B7",
-      "kind": "branch/header",
+      "kind": "branch",
       "aliases": [],
       "values": [
         {
-          "quantity": "cooling setpoint",
-          "value": "20",
-          "unit": "C",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "both coolers go to 20 C"
-        },
-        {
-          "quantity": "cooling setpoint",
-          "value": "25",
-          "unit": "C",
-          "status": "proposed",
-          "supersedes": "",
-          "quote": "Marco thinks B7 only needs 25 C."
-        },
-        {
-          "quantity": "cooling completion",
+          "quantity": "cooling completion temperature limit",
           "value": "25",
           "unit": "C",
           "status": "proposed",
@@ -53,12 +37,28 @@
           "quote": "B7 <= 25 C"
         },
         {
-          "quantity": "cooling completion",
+          "quantity": "cooling completion temperature limit",
           "value": "25",
           "unit": "C",
           "status": "approved",
-          "supersedes": "The legacy StateGraph routing text is superseded.",
+          "supersedes": "",
           "quote": "3) B7 cooling completion is <=25 C."
+        },
+        {
+          "quantity": "cooler setpoint",
+          "value": "20",
+          "unit": "C",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "my handwritten commissioning sheet says both coolers go to 20 C"
+        },
+        {
+          "quantity": "cooler setpoint",
+          "value": "25",
+          "unit": "C",
+          "status": "proposed",
+          "supersedes": "",
+          "quote": "Marco thinks B7 only needs 25 C"
         }
       ],
       "ref": "",
@@ -118,7 +118,7 @@
     },
     {
       "name": "B1",
-      "kind": "branch/header",
+      "kind": "header",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -138,19 +138,11 @@
     },
     {
       "name": "B6",
-      "kind": "branch/header",
+      "kind": "branch",
       "aliases": [],
       "values": [
         {
-          "quantity": "cooling setpoint",
-          "value": "20",
-          "unit": "C",
-          "status": "observed",
-          "supersedes": "",
-          "quote": "both coolers go to 20 C"
-        },
-        {
-          "quantity": "cooling completion",
+          "quantity": "cooling completion temperature limit",
           "value": "20",
           "unit": "C",
           "status": "proposed",
@@ -215,7 +207,7 @@
     },
     {
       "name": "B2",
-      "kind": "branch/header",
+      "kind": "header",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -225,23 +217,13 @@
     },
     {
       "name": "URS",
-      "kind": "requirement source",
+      "kind": "requirement specification",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "the stream identities stated in the URS"
-    },
-    {
-      "name": "Process",
-      "kind": "actor",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "Process wants recovered condensate back to B1 and cooled concentrate back to B2."
     },
     {
       "name": "CR-017",
@@ -296,40 +278,10 @@
       "quote": "P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2"
     },
     {
-      "subject": "recovered condensate",
-      "predicate": "returns to",
-      "object": "B1",
-      "detail": "",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "recovered condensate back to B1"
-    },
-    {
-      "subject": "cooled concentrate",
-      "predicate": "returns to",
-      "object": "B2",
-      "detail": "",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "cooled concentrate back to B2"
-    },
-    {
-      "subject": "bottom headers",
-      "predicate": "are cross-connected",
-      "object": "pump physical location",
-      "detail": "is not the destination",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "The bottom headers are cross-connected, so pump physical location is not the destination."
-    },
-    {
       "subject": "B6 condensate",
       "predicate": "returns to",
       "object": "B1",
-      "detail": "",
+      "detail": "approved by CR-017",
       "ref": "CR-017",
       "anchor": "",
       "from_image": false,
@@ -339,11 +291,21 @@
       "subject": "B7 concentrate",
       "predicate": "returns to",
       "object": "B2",
-      "detail": "",
+      "detail": "approved by CR-017",
       "ref": "CR-017",
       "anchor": "",
       "from_image": false,
       "quote": "2) B7 concentrate returns to B2."
+    },
+    {
+      "subject": "bottom headers",
+      "predicate": "are cross-connected",
+      "object": "bottom headers",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The bottom headers are cross-connected, so pump physical location is not the destination."
     }
   ],
   "facts": [
@@ -375,6 +337,15 @@
       "quote": "B7 <= 25 C"
     },
     {
+      "category": "constraint",
+      "statement": "B7 cooling completion is <=25 C.",
+      "ref": "CR-017",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "3) B7 cooling completion is <=25 C."
+    },
+    {
       "category": "requirement",
       "statement": "B6 condensate returns to B1.",
       "ref": "CR-017",
@@ -393,13 +364,13 @@
       "quote": "2) B7 concentrate returns to B2."
     },
     {
-      "category": "constraint",
-      "statement": "B7 cooling completion is <=25 C.",
-      "ref": "CR-017",
+      "category": "requirement",
+      "statement": "The legacy StateGraph routing text is superseded.",
+      "ref": "",
       "anchor": "",
       "status": "approved",
       "from_image": false,
-      "quote": "3) B7 cooling completion is <=25 C."
+      "quote": "The legacy StateGraph routing text is superseded."
     }
   ],
   "unreadable": [],

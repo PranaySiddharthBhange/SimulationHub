@@ -5,7 +5,7 @@
   "entities": [
     {
       "name": "core",
-      "kind": "component",
+      "kind": "core",
       "aliases": [],
       "values": [
         {
@@ -20,7 +20,7 @@
           "quantity": "effective mu_r",
           "value": "1000",
           "unit": "",
-          "status": "archived",
+          "status": "legacy",
           "supersedes": "1200",
           "quote": "1000 in catalog Rev A"
         },
@@ -55,6 +55,16 @@
       "quote": "1. Core and geometry"
     },
     {
+      "name": "Linear benchmark iron",
+      "kind": "material",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Core material                                 Linear benchmark iron"
+    },
+    {
       "name": "exciting coil",
       "kind": "coil",
       "aliases": [],
@@ -79,7 +89,7 @@
           "quantity": "final benchmark current",
           "value": "2.0",
           "unit": "A RMS",
-          "status": "approved",
+          "status": "current",
           "supersedes": "",
           "quote": "Final benchmark current                          2.0 A RMS"
         }
@@ -106,7 +116,7 @@
           "quantity": "turns",
           "value": "40",
           "unit": "",
-          "status": "archived",
+          "status": "old prototype",
           "supersedes": "",
           "quote": "40"
         }
@@ -117,26 +127,6 @@
       "quote": "3. Measuring coil"
     },
     {
-      "name": "positive current",
-      "kind": "control element",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "Positive current -> positive mmf"
-    },
-    {
-      "name": "positive mmf",
-      "kind": "control element",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "Positive current -> positive mmf"
-    },
-    {
       "name": "useful flux arrow",
       "kind": "reference direction",
       "aliases": [],
@@ -144,15 +134,35 @@
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
-      "quote": "Negative relative to useful flux arrow"
+      "quote": "useful flux arrow"
     }
   ],
   "relationships": [
     {
-      "subject": "positive current",
-      "predicate": "corresponds to",
+      "subject": "core",
+      "predicate": "has_material",
+      "object": "Linear benchmark iron",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Core material                                 Linear benchmark iron"
+    },
+    {
+      "subject": "measuring coil",
+      "predicate": "located_in",
+      "object": "Air-gap region",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Location                                      Air-gap region                           same"
+    },
+    {
+      "subject": "Positive current",
+      "predicate": "produces",
       "object": "positive mmf",
-      "detail": "polarity",
+      "detail": "",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -160,24 +170,24 @@
     },
     {
       "subject": "measuring coil",
-      "predicate": "located in",
-      "object": "core",
-      "detail": "Air-gap region",
+      "predicate": "orientation_relative_to",
+      "object": "useful flux arrow",
+      "detail": "Negative relative",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
-      "quote": "Location                                      Air-gap region"
+      "quote": "Negative relative to useful flux arrow"
     }
   ],
   "facts": [
     {
-      "category": "physical_relationship",
-      "statement": "Positive current -> positive mmf",
+      "category": "constraint",
+      "statement": "Approved project change records may supersede catalog values.",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "unknown",
+      "status": "approved",
       "from_image": false,
-      "quote": "Positive current -> positive mmf"
+      "quote": "Approved project change records may supersede catalog values."
     }
   ],
   "unreadable": [],

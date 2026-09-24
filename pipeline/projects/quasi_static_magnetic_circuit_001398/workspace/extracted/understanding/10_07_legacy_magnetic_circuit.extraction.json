@@ -14,22 +14,12 @@
       "quote": "model MagneticCircuit_v1"
     },
     {
-      "name": "Modelica.Magnetic.QuasiStatic.FluxTubes",
-      "kind": "import",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "import Modelica.Magnetic.QuasiStatic.FluxTubes;"
-    },
-    {
       "name": "a",
       "kind": "parameter",
       "aliases": [],
       "values": [
         {
-          "quantity": "length",
+          "quantity": "Length",
           "value": "0.025",
           "unit": "",
           "status": "unknown",
@@ -48,7 +38,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "length",
+          "quantity": "Length",
           "value": "0.150",
           "unit": "",
           "status": "unknown",
@@ -67,7 +57,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "length",
+          "quantity": "Length",
           "value": "0.0015",
           "unit": "",
           "status": "unknown",
@@ -86,7 +76,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "relative permeability",
+          "quantity": "Real",
           "value": "1000",
           "unit": "",
           "status": "superseded",
@@ -94,7 +84,7 @@
           "quote": "parameter Real mu_r = 1000;       // STALE: CR-MAG-004 -> 1200"
         }
       ],
-      "ref": "CR-MAG-004",
+      "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "parameter Real mu_r = 1000;       // STALE: CR-MAG-004 -> 1200"
@@ -105,7 +95,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "sigma",
+          "quantity": "Real",
           "value": "0.05",
           "unit": "",
           "status": "superseded",
@@ -113,7 +103,7 @@
           "quote": "parameter Real sigma = 0.05;      // STALE: CR-MAG-006 -> 0.08"
         }
       ],
-      "ref": "CR-MAG-006",
+      "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "parameter Real sigma = 0.05;      // STALE: CR-MAG-006 -> 0.08"
@@ -124,7 +114,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "turns",
+          "quantity": "Integer",
           "value": "600",
           "unit": "",
           "status": "unknown",
@@ -143,7 +133,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "turns",
+          "quantity": "Integer",
           "value": "40",
           "unit": "",
           "status": "superseded",
@@ -162,7 +152,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "frequency",
+          "quantity": "Frequency",
           "value": "50",
           "unit": "",
           "status": "unknown",
@@ -177,7 +167,7 @@
     },
     {
       "name": "leftLeg",
-      "kind": "component",
+      "kind": "magnetic circuit element",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -187,7 +177,7 @@
     },
     {
       "name": "upperYoke",
-      "kind": "component",
+      "kind": "magnetic circuit element",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -197,7 +187,7 @@
     },
     {
       "name": "rightLeg",
-      "kind": "component",
+      "kind": "magnetic circuit element",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -207,7 +197,7 @@
     },
     {
       "name": "airGap",
-      "kind": "component",
+      "kind": "magnetic circuit element",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -217,7 +207,7 @@
     },
     {
       "name": "leakage",
-      "kind": "component",
+      "kind": "magnetic circuit element",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -227,7 +217,7 @@
     },
     {
       "name": "lowerYoke",
-      "kind": "component",
+      "kind": "magnetic circuit element",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -236,8 +226,18 @@
       "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
     },
     {
+      "name": "Electric and magnetic grounds",
+      "kind": "grounds",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Electric and magnetic grounds are instantiated in the complete example."
+    },
+    {
       "name": "Phi_gap",
-      "kind": "variable",
+      "kind": "magnetic flux quantity",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -247,7 +247,7 @@
     },
     {
       "name": "Phi_core",
-      "kind": "variable",
+      "kind": "magnetic flux quantity",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -256,24 +256,31 @@
       "quote": "Phi_gap = (1-sigma)*Phi_core"
     },
     {
-      "name": "Electric and magnetic grounds",
-      "kind": "ground",
+      "name": "benchmark current",
+      "kind": "current quantity",
       "aliases": [],
-      "values": [],
+      "values": [
+        {
+          "quantity": "current",
+          "value": "2",
+          "unit": "A",
+          "status": "legacy",
+          "supersedes": "",
+          "quote": "some notes call 2 A \"amplitude\"; released EP-03 defines 2 A RMS phasor magnitude."
+        },
+        {
+          "quantity": "current",
+          "value": "2",
+          "unit": "A",
+          "status": "released",
+          "supersedes": "",
+          "quote": "some notes call 2 A \"amplitude\"; released EP-03 defines 2 A RMS phasor magnitude."
+        }
+      ],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Electric and magnetic grounds are instantiated in the complete example."
-    },
-    {
-      "name": "EP-03",
-      "kind": "document",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "released EP-03 defines 2 A RMS phasor magnitude."
+      "quote": "some notes call 2 A \"amplitude\"; released EP-03 defines 2 A RMS phasor magnitude."
     }
   ],
   "relationships": [
@@ -281,7 +288,7 @@
       "subject": "leftLeg",
       "predicate": "connects_to",
       "object": "upperYoke",
-      "detail": "series topology note",
+      "detail": "topology note",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -291,7 +298,7 @@
       "subject": "upperYoke",
       "predicate": "connects_to",
       "object": "rightLeg",
-      "detail": "series topology note",
+      "detail": "topology note",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -299,9 +306,9 @@
     },
     {
       "subject": "rightLeg",
-      "predicate": "connects_to",
+      "predicate": "branches_to_parallel",
       "object": "airGap",
-      "detail": "parallel branch after rightLeg",
+      "detail": "(airGap || leakage)",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -309,9 +316,9 @@
     },
     {
       "subject": "rightLeg",
-      "predicate": "connects_to",
+      "predicate": "branches_to_parallel",
       "object": "leakage",
-      "detail": "parallel branch after rightLeg",
+      "detail": "(airGap || leakage)",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -319,9 +326,9 @@
     },
     {
       "subject": "airGap",
-      "predicate": "connects_to",
+      "predicate": "rejoins_at",
       "object": "lowerYoke",
-      "detail": "parallel path to lowerYoke",
+      "detail": "parallel branch to lowerYoke",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -329,19 +336,9 @@
     },
     {
       "subject": "leakage",
-      "predicate": "connects_to",
+      "predicate": "rejoins_at",
       "object": "lowerYoke",
-      "detail": "parallel path to lowerYoke",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "leftLeg -> upperYoke -> rightLeg -> (airGap || leakage) -> lowerYoke"
-    },
-    {
-      "subject": "airGap",
-      "predicate": "in_parallel_with",
-      "object": "leakage",
-      "detail": "",
+      "detail": "parallel branch to lowerYoke",
       "ref": "",
       "anchor": "",
       "from_image": false,

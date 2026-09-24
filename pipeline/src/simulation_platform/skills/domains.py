@@ -252,6 +252,27 @@ Mechanical dynamics (masses, springs, dampers, rotating/translating bodies):
 }
 
 
+def domain_catalogue() -> str:
+    """One line per domain: its key and what it actually covers.
+
+    Merge chooses `Understanding.domains` from this list, and it used to see
+    only the bare keys. A key is not self-describing -- confirmed live: an
+    evaporation plant that boils water out of a brine was classified into the
+    level, thermal, species and batch domains but NOT the phase-change one,
+    whose key reads as an abstract category while its text describes exactly
+    that plant. Choosing physics from identifiers alone loses whichever domain
+    happens to be named least literally, so the description travels with the
+    key instead of being duplicated in the prompt.
+    """
+
+    lines = []
+    for key, text in DOMAIN_SKILLS.items():
+        # Every skill opens with a one-sentence scope ending in a colon.
+        lead = text.split(":\n", 1)[0].replace("\n", " ")
+        lines.append(f"- {key}: {' '.join(lead.split())}")
+    return "\n".join(lines)
+
+
 def domain_skill_block(domains: list[str]) -> str:
     """Concatenates the known skills among `domains`, in a section clearly
     marked as general knowledge (never problem-specific instruction) so it

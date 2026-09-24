@@ -1,38 +1,8 @@
 {
-  "document": "[page 1]\n        Batch Acceptance Test BAT-09 - Rev B\n\n1. Objective\nVerify a complete automatic batch cycle using the effective setpoints and approved return routing. The test is\nprimarily a controller/architecture acceptance test; the WaterNaCl property package may be replaced by\nStandardWater for topology debugging, but final composition-based acceptance uses the composition-capable\nconfiguration.\n\n2. Initial conditions\n\n Item                                                         Initial condition\n Simulation time                              0 s\n B1 composition                            w_NaCl = 0.000\n B2 composition                            w_NaCl = 0.250\n B3-B7                                      Near empty; level <=0.01 m except unavoidable residual volume\n Ambient pressure                            101325 Pa\n Ambient temperature                           293.15 K\n All automated valves                           Closed\n P1, P2                                              Off\n B5 heater / B6 cooler / B7 cooler                    Off\n K1 cooling-water flow proof                          Available, >=0.10 kg/s when heater demanded\n\n3. Acceptance sequence\n\n Check                                 Acceptance criterion\n B3 water prefill                            Step1 exits at LIS-301 >=0.13 m\n B3 recipe                                 Step2 exits at QI-302 >=0.080 kg/kg\n B3 empty                                 Step3 exits below 0.01 m\n B5 charge                                Step5 exits at LIS-501 >=0.18 m\n Evaporation                               Step6 exits at QIS-502 >=0.180 kg/kg\n B6 cooling                                 TIS-602 <=20 degC before P2 return\n B7 cooling                                 TIS-702 <=25 degC before P1 return\n Routing                             B6 condensate returns to B1; B7 concentrate returns to B2\n Parallel join                                Cycle reset cannot occur until both branches complete\n Cycle restart                                               Initial becomes active only after process time >2500 s\n\n4. Logging\nLog at 5 s or faster: state/region, all tank levels, QI-302, QIS-502, TI-503, TIS-602, TIS-702, FIS-801, P1/P2,\nheater/cooler commands and all 15 automated valve commands.\n[page 1 also supplied as visual image 1]",
+  "document": "Batch Acceptance Test BAT-09 - Rev B\n\n1. Objective\nVerify a complete automatic batch cycle using the effective setpoints and approved return routing. The test is\nprimarily a controller/architecture acceptance test; the WaterNaCl property package may be replaced by\nStandardWater for topology debugging, but final composition-based acceptance uses the composition-capable\nconfiguration.\n\n2. Initial conditions\n\n Item                                                         Initial condition\n Simulation time                              0 s\n B1 composition                            w_NaCl = 0.000\n B2 composition                            w_NaCl = 0.250\n B3-B7                                      Near empty; level <=0.01 m except unavoidable residual volume\n Ambient pressure                            101325 Pa\n Ambient temperature                           293.15 K\n All automated valves                           Closed\n P1, P2                                              Off\n B5 heater / B6 cooler / B7 cooler                    Off\n K1 cooling-water flow proof                          Available, >=0.10 kg/s when heater demanded\n\n3. Acceptance sequence\n\n Check                                 Acceptance criterion\n B3 water prefill                            Step1 exits at LIS-301 >=0.13 m\n B3 recipe                                 Step2 exits at QI-302 >=0.080 kg/kg\n B3 empty                                 Step3 exits below 0.01 m\n B5 charge                                Step5 exits at LIS-501 >=0.18 m\n Evaporation                               Step6 exits at QIS-502 >=0.180 kg/kg\n B6 cooling                                 TIS-602 <=20 degC before P2 return\n B7 cooling                                 TIS-702 <=25 degC before P1 return\n Routing                             B6 condensate returns to B1; B7 concentrate returns to B2\n Parallel join                                Cycle reset cannot occur until both branches complete\n Cycle restart                                               Initial becomes active only after process time >2500 s\n\n4. Logging\nLog at 5 s or faster: state/region, all tank levels, QI-302, QIS-502, TI-503, TIS-602, TIS-702, FIS-801, P1/P2,\nheater/cooler commands and all 15 automated valve commands.",
   "subject": "Batch Acceptance Test BAT-09 - Rev B",
   "kind": "test procedure",
   "entities": [
-    {
-      "name": "BAT-09",
-      "kind": "test",
-      "aliases": [],
-      "values": [],
-      "ref": "BAT-09",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "Batch Acceptance Test BAT-09 - Rev B"
-    },
-    {
-      "name": "WaterNaCl property package",
-      "kind": "property package",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "the WaterNaCl property package may be replaced by\nStandardWater for topology debugging"
-    },
-    {
-      "name": "StandardWater",
-      "kind": "property package",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "StandardWater for topology debugging"
-    },
     {
       "name": "B1",
       "kind": "tank",
@@ -72,8 +42,8 @@
       "quote": "B2 composition                            w_NaCl = 0.250"
     },
     {
-      "name": "B3-B7",
-      "kind": "tanks",
+      "name": "B3",
+      "kind": "tank",
       "aliases": [],
       "values": [
         {
@@ -91,8 +61,84 @@
       "quote": "B3-B7                                      Near empty; level <=0.01 m except unavoidable residual volume"
     },
     {
-      "name": "Ambient pressure",
-      "kind": "environment condition",
+      "name": "B4",
+      "kind": "tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "<=0.01",
+          "unit": "m",
+          "status": "initial",
+          "supersedes": "",
+          "quote": "B3-B7                                      Near empty; level <=0.01 m except unavoidable residual volume"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B3-B7                                      Near empty; level <=0.01 m except unavoidable residual volume"
+    },
+    {
+      "name": "B5",
+      "kind": "tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "<=0.01",
+          "unit": "m",
+          "status": "initial",
+          "supersedes": "",
+          "quote": "B3-B7                                      Near empty; level <=0.01 m except unavoidable residual volume"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B3-B7                                      Near empty; level <=0.01 m except unavoidable residual volume"
+    },
+    {
+      "name": "B6",
+      "kind": "tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "<=0.01",
+          "unit": "m",
+          "status": "initial",
+          "supersedes": "",
+          "quote": "B3-B7                                      Near empty; level <=0.01 m except unavoidable residual volume"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B3-B7                                      Near empty; level <=0.01 m except unavoidable residual volume"
+    },
+    {
+      "name": "B7",
+      "kind": "tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "<=0.01",
+          "unit": "m",
+          "status": "initial",
+          "supersedes": "",
+          "quote": "B3-B7                                      Near empty; level <=0.01 m except unavoidable residual volume"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B3-B7                                      Near empty; level <=0.01 m except unavoidable residual volume"
+    },
+    {
+      "name": "Ambient",
+      "kind": "environment",
       "aliases": [],
       "values": [
         {
@@ -102,18 +148,7 @@
           "status": "initial",
           "supersedes": "",
           "quote": "Ambient pressure                            101325 Pa"
-        }
-      ],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "Ambient pressure                            101325 Pa"
-    },
-    {
-      "name": "Ambient temperature",
-      "kind": "environment condition",
-      "aliases": [],
-      "values": [
+        },
         {
           "quantity": "temperature",
           "value": "293.15",
@@ -126,7 +161,7 @@
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
-      "quote": "Ambient temperature                           293.15 K"
+      "quote": "Ambient pressure                            101325 Pa"
     },
     {
       "name": "automated valves",
@@ -211,7 +246,16 @@
       "name": "LIS-301",
       "kind": "level indicator switch",
       "aliases": [],
-      "values": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": ">=0.13",
+          "unit": "m",
+          "status": "required",
+          "supersedes": "",
+          "quote": "Step1 exits at LIS-301 >=0.13 m"
+        }
+      ],
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -221,7 +265,16 @@
       "name": "QI-302",
       "kind": "quality indicator",
       "aliases": [],
-      "values": [],
+      "values": [
+        {
+          "quantity": "composition",
+          "value": ">=0.080",
+          "unit": "kg/kg",
+          "status": "required",
+          "supersedes": "",
+          "quote": "Step2 exits at QI-302 >=0.080 kg/kg"
+        }
+      ],
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -231,7 +284,16 @@
       "name": "LIS-501",
       "kind": "level indicator switch",
       "aliases": [],
-      "values": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": ">=0.18",
+          "unit": "m",
+          "status": "required",
+          "supersedes": "",
+          "quote": "Step5 exits at LIS-501 >=0.18 m"
+        }
+      ],
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -241,7 +303,16 @@
       "name": "QIS-502",
       "kind": "quality indicator switch",
       "aliases": [],
-      "values": [],
+      "values": [
+        {
+          "quantity": "composition",
+          "value": ">=0.180",
+          "unit": "kg/kg",
+          "status": "required",
+          "supersedes": "",
+          "quote": "Step6 exits at QIS-502 >=0.180 kg/kg"
+        }
+      ],
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -251,7 +322,16 @@
       "name": "TIS-602",
       "kind": "temperature indicator switch",
       "aliases": [],
-      "values": [],
+      "values": [
+        {
+          "quantity": "temperature",
+          "value": "<=20",
+          "unit": "degC",
+          "status": "required",
+          "supersedes": "",
+          "quote": "TIS-602 <=20 degC before P2 return"
+        }
+      ],
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -261,7 +341,16 @@
       "name": "TIS-702",
       "kind": "temperature indicator switch",
       "aliases": [],
-      "values": [],
+      "values": [
+        {
+          "quantity": "temperature",
+          "value": "<=25",
+          "unit": "degC",
+          "status": "required",
+          "supersedes": "",
+          "quote": "TIS-702 <=25 degC before P1 return"
+        }
+      ],
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -275,7 +364,7 @@
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
-      "quote": "QI-302, QIS-502, TI-503, TIS-602, TIS-702, FIS-801, P1/P2,"
+      "quote": "TI-503"
     },
     {
       "name": "FIS-801",
@@ -285,35 +374,25 @@
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
-      "quote": "QI-302, QIS-502, TI-503, TIS-602, TIS-702, FIS-801, P1/P2,"
+      "quote": "FIS-801"
     }
   ],
   "relationships": [
     {
-      "subject": "WaterNaCl property package",
-      "predicate": "may be replaced by",
-      "object": "StandardWater",
-      "detail": "for topology debugging",
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "the WaterNaCl property package may be replaced by\nStandardWater for topology debugging"
-    },
-    {
-      "subject": "B6 condensate",
+      "subject": "B6",
       "predicate": "returns to",
       "object": "B1",
-      "detail": "",
+      "detail": "condensate",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "B6 condensate returns to B1; B7 concentrate returns to B2"
     },
     {
-      "subject": "B7 concentrate",
+      "subject": "B7",
       "predicate": "returns to",
       "object": "B2",
-      "detail": "",
+      "detail": "concentrate",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -332,19 +411,28 @@
     },
     {
       "category": "requirement",
-      "statement": "final composition-based acceptance uses the composition-capable configuration.",
+      "statement": "The test is primarily a controller/architecture acceptance test.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "primarily a controller/architecture acceptance test"
+    },
+    {
+      "category": "requirement",
+      "statement": "The WaterNaCl property package may be replaced by StandardWater for topology debugging, but final composition-based acceptance uses the composition-capable configuration.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "approved",
       "from_image": false,
-      "quote": "final composition-based acceptance uses the composition-capable\nconfiguration."
+      "quote": "the WaterNaCl property package may be replaced by\nStandardWater for topology debugging, but final composition-based acceptance uses the composition-capable\nconfiguration."
     },
     {
       "category": "constraint",
       "statement": "Step1 exits at LIS-301 >=0.13 m",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "approved",
+      "status": "required",
       "from_image": false,
       "quote": "Step1 exits at LIS-301 >=0.13 m"
     },
@@ -353,7 +441,7 @@
       "statement": "Step2 exits at QI-302 >=0.080 kg/kg",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "approved",
+      "status": "required",
       "from_image": false,
       "quote": "Step2 exits at QI-302 >=0.080 kg/kg"
     },
@@ -362,7 +450,7 @@
       "statement": "Step3 exits below 0.01 m",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "approved",
+      "status": "required",
       "from_image": false,
       "quote": "Step3 exits below 0.01 m"
     },
@@ -371,7 +459,7 @@
       "statement": "Step5 exits at LIS-501 >=0.18 m",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "approved",
+      "status": "required",
       "from_image": false,
       "quote": "Step5 exits at LIS-501 >=0.18 m"
     },
@@ -380,7 +468,7 @@
       "statement": "Step6 exits at QIS-502 >=0.180 kg/kg",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "approved",
+      "status": "required",
       "from_image": false,
       "quote": "Step6 exits at QIS-502 >=0.180 kg/kg"
     },
@@ -389,7 +477,7 @@
       "statement": "TIS-602 <=20 degC before P2 return",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "approved",
+      "status": "required",
       "from_image": false,
       "quote": "TIS-602 <=20 degC before P2 return"
     },
@@ -398,25 +486,25 @@
       "statement": "TIS-702 <=25 degC before P1 return",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "approved",
+      "status": "required",
       "from_image": false,
       "quote": "TIS-702 <=25 degC before P1 return"
     },
     {
-      "category": "behavior",
+      "category": "requirement",
       "statement": "Cycle reset cannot occur until both branches complete",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "approved",
+      "status": "required",
       "from_image": false,
       "quote": "Cycle reset cannot occur until both branches complete"
     },
     {
-      "category": "behavior",
+      "category": "requirement",
       "statement": "Initial becomes active only after process time >2500 s",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "approved",
+      "status": "required",
       "from_image": false,
       "quote": "Initial becomes active only after process time >2500 s"
     },
@@ -425,7 +513,7 @@
       "statement": "Log at 5 s or faster: state/region, all tank levels, QI-302, QIS-502, TI-503, TIS-602, TIS-702, FIS-801, P1/P2,\nheater/cooler commands and all 15 automated valve commands.",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "approved",
+      "status": "required",
       "from_image": false,
       "quote": "Log at 5 s or faster: state/region, all tank levels, QI-302, QIS-502, TI-503, TIS-602, TIS-702, FIS-801, P1/P2,\nheater/cooler commands and all 15 automated valve commands."
     }

@@ -1,0 +1,257 @@
+{
+  "title": "Resolved understanding brief - NaCl evaporation plant batch process",
+  "narrative": "The system is a laboratory NaCl batch evaporation plant with staged charging, mixing, buffering, evaporation, condensation, cooling, and return pumping. Canonical physical entities are B1 and B2 charging tanks, B3 mixing tank, B4 buffer tank, B5 evaporator vessel, K1 condenser, B6 condensate cooling tank, B7 concentrate cooling tank, return pumps P2 from B6 and P1 from B7, automated valves V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25, manual valves including V17 and V29, and cooling-water valves including V13, V17, and V29. The controller is the central controller, also named Central controller or Controller, implemented as a sequential StateGraph with a parallel split after evaporation and a join before cycle reset per 06_06_design_review_minutes.txt and 05_04_control_sequence_design.txt.\n\nAliases consolidated from the notes are: B1 Charging tank, B2 Charging tank, B3 Mixing tank, B4 Buffer tank, B5 Evaporator vessel, B6 Cooling tank, B7 Cooling tank, P1 Return pump, P2 Return pump, WaterNaCl custom water-NaCl medium, central controller/Central controller/Controller, and B1 return valve group and B2 return valve group as corrected routing groups governed by CR-017. K1 remains a physically identifiable condenser even if the simulation combines evaporator and condenser equations in one component. The requirement notes explicitly permit an evaporator/condenser combined simulation component provided K1 remains identifiable in the architecture.\n\nTopology resolved from the requirement specification, engineering register, and supporting diagrams is: B1 bottom port -> V8 inlet -> V8 outlet -> B3 top port; B2 bottom port -> V9 inlet -> V9 outlet -> B3 top port; B3 bottom port -> V11 inlet -> V11 outlet -> B4 top port; B4 bottom port -> V12 inlet -> V12 outlet -> B5 feed port; B5 vapor/condensate port -> K1 process side; K1 condensate outlet -> B6 top port; B5 concentrate outlet -> V15 inlet -> V15 outlet -> B7 top port; B6 bottom port -> P2 suction -> return to B1 through the B1 return valve group; B7 bottom port -> P1 suction -> return to B2 through the B2 return valve group. The engineering register gives the authoritative interface identifiers IF-PROC-01 through IF-PROC-12 and IF-RET-01 through IF-RET-04 for these connections. The P&ID and correspondence mention cross-connected bottom headers and valve groups. The exact internal composition of the two return valve groups is not fully established in the highest-authority notes, but the listed automated valves V18, V20, V22, V23, V24, V25, V1, V3, V5, and V6 belong to the return network. Manual/isolation valves are explicitly excluded from the StateGraph actuator bundle unless specifically stated in the ICD; no ICD note is provided here.\n\nGeometric and vessel data from 02_02_process_data_register.txt are current as follows. B1: area 0.07 m^2, height 0.6 m, max level 0.5 m, port elevation note 0.12 m, initial w_NaCl 0.000. B2: area 0.07 m^2, height 0.6 m, max level 0.5 m, port elevation note 0.12 m, initial w_NaCl 0.250. B3: area 0.05 m^2, height 0.45 m, max level 0.38 m, port elevation note 0.1 m, water prefill level 0.13 m, NaCl target after mixing 0.08 kg/kg, nearly-empty threshold 0.01 m. B4: area 0.055 m^2, height 0.45 m, max level 0.4 m, port elevation note 0.1 m. B5: area 0.06 m^2, height 0.45 m, max level 0.4 m, port elevation note 0.12 m, idle level threshold 0.01 m, batch fill level 0.18 m, NaCl target after evaporation 0.18 kg/kg, heater duty 20000 W. B6: area 0.05 m^2, height 0.4 m, max level 0.35 m, port elevation note 0.1 m, cooling complete temperature 20 degC, nominal cooling duty -6500 W. B7: area 0.05 m^2, height 0.4 m, max level 0.35 m, port elevation note 0.1 m, cooling complete temperature 25 degC current with earlier 20 degC superseded, nominal cooling duty -4500 W. K1 minimum cooling-water flow for heater permissive is 0.1 kg/s current. P1 and P2 nominal pump data from the datasheet are 0.30 kg/s nominal mass flow and 1.8 bar nominal differential pressure. Automated valves V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, and V25 are Boolean open/closed actuators and fail closed on loss of power. The automated valve family nominal opening and closing times are 0.7 s and 0.5 s, respectively; these are nominal datasheet values, not stated controller requirements.\n\nInstrument and signal mapping consolidated from the engineering register, control sequence design, legacy model notes, and test procedure is: LIS-301 measures B3 level, with range 0..0.45 m; QI-302 measures B3 NaCl mass fraction, with range 0..0.30 kg/kg; LIS-501 measures B5 level, with range 0..0.45 m; QIS-502 measures B5 NaCl mass fraction, with range 0..0.30 kg/kg; TIS-602 measures B6 temperature, with range 0..120 degC; TIS-702 measures B7 temperature, with range 0..120 degC; FIS-801 measures condenser cooling-water flow, with range 0..0.50 kg/s; LIS-701 measures B7 level; LIS-601 measures B6 level; PIS-901 and PIS-1001 are low discharge pressure alarm signals for P1 and P2, respectively. Explicit signal equalities in the notes are controller.sensors.LIS_301 = B3.level, controller.sensors.QIS_502 = B5.medium.Xi[NaCl] or Xi[1] depending on notation, V9.open = controller.actuators.V9, and HeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0. Legacy notes also map controller.sensors.QI_302 = B3.medium.Xi[1], controller.sensors.LIS_501 = B5.level, controller.sensors.TIS_602 = B6.medium.T, and controller.sensors.TIS_702 = B7.medium.T.\n\nThe controller is discrete and sequential. Reported model variables shall be exactly these names for acceptance and later stages: time_s [s], controller_state [-] as encoded state indicator or state label in outputs, region [-] as encoded operating region or label, B3_level_m [m] meaning B3 liquid level, B4_level_m [m] meaning B4 liquid level, B5_level_m [m] meaning B5 liquid level, B6_level_m [m] meaning B6 liquid level, B7_level_m [m] meaning B7 liquid level, B3_w_NaCl [kg/kg] meaning NaCl mass fraction in B3, B5_w_NaCl [kg/kg] meaning NaCl mass fraction in B5, B5_temp_C [degC] meaning B5 temperature, B6_temp_C [degC] meaning B6 temperature, B7_temp_C [degC] meaning B7 temperature, FIS801_kg_s [kg/s] meaning condenser cooling-water flow proof signal value, P1_cmd [-] meaning P1 command 0/1, P2_cmd [-] meaning P2 command 0/1, B5_heater_cmd [-] meaning B5 heater command 0/1, B6_cooler_cmd [-] meaning B6 cooler command 0/1, B7_cooler_cmd [-] meaning B7 cooler command 0/1, and V1_open, V3_open, V5_open, V6_open, V8_open, V9_open, V11_open, V12_open, V15_open, V18_open, V20_open, V22_open, V23_open, V24_open, V25_open [-] as automated valve command outputs 0/1. Later stages must ensure state and region are reportable in a machine-comparable form if checks are desired against them; these notes establish they must be logged, but they do not define a numeric encoding.\n\nThe required automatic sequence, preserving the note order and conditions, is as follows. Initial state: if startEnable and B3 available, transition into the sequence with all automated valves closed and pumps, heater, and coolers off. Step1 Charge water: open V8 to transfer liquid from B1 to B3 until LIS-301 >= 0.13 m. Step2 Charge brine/mix: after the B1 fill portion, open V9 and continue charging B3 until QI-302 >= 0.080 kg/kg. B3 is the mixed water/NaCl batch vessel; M-301 agitator exists in the equipment register and the P&ID associates a motor M with B3, but no note states a required agitator command behavior, so none is imposed in the executable behavior. Step3 Buffer transfer: open V11 to transfer the mixed batch from B3 to B4 until LIS-301 < 0.01 m. Step4 B5 idle check: B5 may be charged only when B5 is idle, defined by LIS-501 < 0.01 m and V15 closed. The control sequence note says Step4 has no transfer actuator under this idle condition. Step5 Evaporator charge: open V12 to transfer B4 contents to B5 until LIS-501 >= 0.18 m. Step6 Evaporation: enable the B5 heater until QIS-502 >= 0.180 kg/kg. Heater permissive is LIS-501 >= 0.05 m and FIS-801 >= 0.10 kg/s; the heater is inhibited when LIS-501 < 0.05 m or when condenser cooling-water flow proof is below 0.10 kg/s. After Step6 completes, the controller splits into parallel Branch A and Branch B.\n\nParallel Branch A is the condensate branch. Branch A cools condensate collected in B6, commanding B6_Cooler on until TIS-602 <= 20 degC. After B6 return is complete, Step13 commands P2 on together with the corrected B1 return valve group. The requirement and routing evidence say recovered condensate from B6 returns to B1 using P2 and the B1 return valve group. P2 has a dry-run permissive/inhibit from LIS-601; P2 is inhibited when LIS-601 <= 0.02 m and permissive requires LIS-601 > 0.02 m. P2 also has a low discharge pressure alarm if PIS-1001 < 0.8 bar while running.\n\nParallel Branch B is the concentrate branch. Step7 is an availability/empty check in B7; the control sequence design note states that if LIS-701 < 0.01 m, Step7 has no transfer actuator. Step8 transfers concentrate from B5 to B7 by opening V15; the note records the trigger as if LIS-501 < 0.01 m, Step8 action is V15=OPEN, which is behaviorally unusual because the transfer action would normally occur before B5 becomes empty. This is preserved as written as evidence; the surrounding requirement specifications more generally state that after evaporation the concentrate branch transfers B5 to B7, then cools B7, then returns concentrate. Step9 commands B7_Cooler on until TIS-702 <= 25 degC. Step10/11 command P1 on together with the corrected B2 return valve group after B7 return is complete. The requirement and routing evidence say the cooled concentrated stream from B7 returns to B2 using P1 and the B2 return valve group. P1 is inhibited when LIS-701 <= 0.02 m and permissive requires LIS-701 > 0.02 m. P1 also has a low discharge pressure alarm if PIS-901 < 0.8 bar while running.\n\nThe join and reset behavior is explicitly established. A join is satisfied only when both branches report completion. Cycle reset or restart cannot occur until both parallel return branches are complete and time exceeds 2500 s. The requirement specification states completion is both complete and time > 2500 s, and the acceptance test states Initial becomes active only after process time >2500 s. The recorded 3000 s dataset is consistent with a re-entry into the next cycle after 2505 s.\n\nThe required physical medium for the final composition-based model is WaterNaCl, a custom water-NaCl mixture medium. StandardWater is allowed only as a topology/control integration baseline and not as the final composition-based acceptance medium. Required WaterNaCl properties are density rho(T,p,w), enthalpy h(T,p,w), cp(T,w), saturation pressure p_sat(T,w), and viscosity eta(T,w). The design note provides the viscosity correlation eta(T,w) = exp(c1*T^3 + c2*T^2 + c3*T + c4 + c5*w + c6*w^2 + c7*w^3) with coefficients c1=-6.83241E-07, c2=0.000765676, c3=-0.297018665, c4=-0.299730079, c5=2.065267182, c6=1.546491257, c7=31.57571595. The note says some source correlations omit numeric coefficients and those omitted coefficients are intentionally absent from the evidence; no additional correlations are invented here.\n\nTank and medium balance relationships explicitly supported by 07_13_water_nacl_medium_notes.txt are: V = area*level + V0; m = V*medium.d; mXi = m*medium.Xi; U = m*medium.u; der(m) = sum(topPorts.m_flow) + sum(ports.m_flow); der(U) = sum(H_flow) - p_ambient*der(V). A stated requirement says that for an incompressible formulation, the p_ambient*der(V) contribution may be omitted to avoid small artificial temperature changes. That omission is permitted, not mandatory, and is therefore a modeling choice if used. HeatB5 is controlled by controller.actuators.T5_Heater with Q_flow = 20000 when true and 0 when false. The evaporator note further gives an explicit condensate generation relationship: if Q_up > heatPort.Q_flow then m_con = 0; else m_con = -(heatPort.Q_flow - Q_up) / (hv - hl + Xi[1]*(cp*dT_dX + dhl_dX)); end if. Derived unit consistency is not fully verifiable from the notes because units for hv, hl, cp, dT_dX, and dhl_dX are not all supplied, so the relationship is preserved as evidence-grounded but not expanded.\n\nFor ports that can cross the liquid level, the default implementation shall use asymmetric loss factors with a regularized quadratic flow law and hysteresis around level crossing. Explicit behavior in the design note is: when a port is above liquid level, use a very large outflow loss factor, default 1e5, and small inflow factor, default 0.01. Requirement notes require small junction volumes wherever multiple pressure-drop-only valve or pipe elements can be isolated simultaneously, and require non-horizontal pipes to include gravity pressure drop based on relative elevation. The layout dataset gives z_base coordinates for B1 4.8 m, B2 4.8 m, B3 3.5 m, B4 2.6 m, B5 1.5 m, K1 2.8 m, B6 1.5 m, B7 0.7 m, P1 0.0 m, P2 0.0 m; these support relative elevation calculations. The process requirement also states tank connections can pass above or below the liquid level.\n\nInitial and acceptance-test conditions explicitly stated by BAT-09 are: B1 initial composition w_NaCl=0.000, B2 initial composition w_NaCl=0.250, B3/B4/B5/B6/B7 initial levels <=0.01 m, ambient pressure 101325 Pa, ambient temperature 293.15 K, and K1 cooling-water flow proof initially >=0.10 kg/s. The test is primarily a controller/architecture acceptance test. Required logging is at 5 s or faster for state/region, all tank levels, QI-302, QIS-502, TI-503, TIS-602, TIS-702, FIS-801, P1/P2, heater/cooler commands, and all 15 automated valve commands.\n\nThe recorded dataset 14_10_batch_run_3000s.txt is reference evidence about one run, not an input schedule. It shows an observed time range 0..3000 s, observed state progression Initial at 0 s, Step1 at 20 s, Step2 at 180 s, Step3 at 340 s, Step4 at 500 s, Step5 at 560 s, Step6 at 720 s, parallel A+B at 1600 s, JoinWait at 2250 s, and Step1_cycle2 at 2505 s. Observed value ranges are consistent with the approved targets: B3_w_NaCl reaches 0.08, B5_w_NaCl reaches 0.18, B6_temp_C reaches below 20 C, B7_temp_C reaches 20..76 C with minimum 20 C, and FIS801_kg_s remains 0.12..0.16 kg/s. These observations support that the effective routing and B7 cooling target are the approved current values rather than the archived legacy ones, but the trajectory itself is not a required command schedule.\n\nMaterial resolutions from conflicting notes are as follows. Return routing is resolved to B6 condensate -> B1 via P2 and B7 concentrate -> B2 via P1 by CR-017 and current requirements, rejecting the archived legacy model routing Branch B B7/P1 -> B1 and Branch A B6/P2 -> B2. B7 cooling completion temperature is resolved to <=25 degC current/approved, rejecting older 20 degC archived/superseded values from the register, lab notebook archive, and stale legacy controller target. Vessel dimensions are taken from the engineering register rather than the legacy model where levelMax values differ, because the engineering register is higher-authority current data and the legacy model is explicitly superseded for released benchmark use.\n\nOpen ambiguities that materially affect an executable model remain limited. The exact membership of the corrected B1 and B2 return valve groups after CR-017 is not fully specified in a current authoritative note: older superseded requirement text and an email thread list specific valve groups but disagree with corrected routing labels. The behavior statement wording in 05_04_control_sequence_design.txt for Step1 through Step6 uses conditions phrased as 'If threshold reached, Step action is actuator open/on', which reads like an inversion of guard and action compared with the other requirement specifications. The higher-authority and more complete requirement specifications and test procedure establish the intended stage exits and actuator usage, so the model should implement the stage actions and exit guards according to those requirements while preserving the sequence design note as supporting evidence. Also, no note states the commanded values or detailed dynamics for B6_Cooler and B7_Cooler beyond on/off commands and nominal duties in the equipment register; later modeling may need an explicit implementation choice for how those duties apply when commanded.\n",
+  "simulation": {
+    "start_time": 0.0,
+    "stop_time": 3000.0,
+    "intervals": 600,
+    "tolerance": 1e-6
+  },
+  "checks": [
+    {
+      "name": "REQ-FUN-002 B3 water prefill reached",
+      "expression": "B3_level_m >= 0.13",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-FUN-002"
+    },
+    {
+      "name": "REQ-FUN-003 B3 concentration target reached",
+      "expression": "B3_w_NaCl >= 0.080",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-FUN-003"
+    },
+    {
+      "name": "REQ-FUN-004 B3 emptied below threshold",
+      "expression": "B3_level_m < 0.01",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-FUN-004"
+    },
+    {
+      "name": "REQ-FUN-006 B5 batch fill reached",
+      "expression": "B5_level_m >= 0.18",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-FUN-006"
+    },
+    {
+      "name": "REQ-FUN-007 B5 evaporation concentration target reached",
+      "expression": "B5_w_NaCl >= 0.180",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-FUN-007"
+    },
+    {
+      "name": "REQ-FUN-009 B6 cooled before return",
+      "expression": "B6_temp_C <= 20",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-FUN-009"
+    },
+    {
+      "name": "REQ-FUN-010 B7 cooled before return",
+      "expression": "B7_temp_C <= 25",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-FUN-010"
+    },
+    {
+      "name": "REQ-SAF-001 heater only with condenser flow proof",
+      "expression": "not (B5_heater_cmd > 0.5 and FIS801_kg_s < 0.10)",
+      "kind": "always",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-SAF-001"
+    },
+    {
+      "name": "REQ-SAF-005 heater only above low-level inhibit",
+      "expression": "not (B5_heater_cmd > 0.5 and B5_level_m < 0.05)",
+      "kind": "always",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-SAF-005"
+    },
+    {
+      "name": "REQ-SAF-003 P1 only above source level permissive",
+      "expression": "not (P1_cmd > 0.5 and B7_level_m <= 0.02)",
+      "kind": "always",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-SAF-003"
+    },
+    {
+      "name": "REQ-SAF-004 P2 only above source level permissive",
+      "expression": "not (P2_cmd > 0.5 and B6_level_m <= 0.02)",
+      "kind": "always",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-SAF-004"
+    },
+    {
+      "name": "REQ-VV-001 parallel branch commands occur",
+      "expression": "(B6_cooler_cmd > 0.5) and (B7_cooler_cmd > 0.5)",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-VV-001"
+    },
+    {
+      "name": "REQ-VV-002 condensate return routing actuated",
+      "expression": "(P2_cmd > 0.5) and ((V5_open > 0.5) or (V6_open > 0.5) or (V20_open > 0.5) or (V24_open > 0.5) or (V25_open > 0.5))",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-VV-002"
+    },
+    {
+      "name": "REQ-VV-002 concentrate return routing actuated",
+      "expression": "(P1_cmd > 0.5) and ((V1_open > 0.5) or (V3_open > 0.5) or (V18_open > 0.5) or (V22_open > 0.5) or (V23_open > 0.5))",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-VV-002"
+    },
+    {
+      "name": "REQ-CTL-001 run continues beyond reset time",
+      "expression": "time_s >= 2500",
+      "kind": "final",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "02_02_process_data_register.txt REQ-CTL-001"
+    }
+  ],
+  "tables": [
+    {
+      "path": "14_10_batch_run_3000s.txt",
+      "role": "reference",
+      "reason": "Recorded observed run with state changes and measured ranges; notes explicitly classify datasets with observed values as evidence about one run, not model input."
+    },
+    {
+      "path": "15_12_layout_coordinates.txt",
+      "role": "supporting",
+      "reason": "Provides current equipment coordinates and elevations to support gravity pressure-drop implementation, not a run input trajectory."
+    }
+  ],
+  "assumptions": [
+    "Simulation stop time is set to 3000 s so the required behavior beyond 2500 s and the observed second-cycle restart can be represented; this extends the minimum requirement of 'beyond 2500 s' using the provided reference dataset horizon.",
+    "Checks use reported continuous variables and command outputs only. Controller state and region are required reports, but no machine-numeric encoding is specified in the notes, so no direct state-name check is written over them.",
+    "For executable routing checks, evidence-supported valve-group membership is treated at a grouped level: a condensate return event is evidenced by P2 command together with at least one valve from the B1-side listed return network; a concentrate return event is evidenced by P1 command together with at least one valve from the B2-side listed return network. Exact mandatory simultaneous valve combinations remain unresolved.",
+    "If an incompressible formulation is chosen, omission of the p_ambient*der(V) term is an allowed modeling choice from 07_13_water_nacl_medium_notes.txt rather than an established fact.",
+    "Cooler implementation beyond on/off command and nominal duty values is not specified in the notes; later stages may need to choose how B6 and B7 cooling duties are applied when commanded."
+  ],
+  "questions": [
+    "What are the exact corrected automated-valve memberships and required simultaneous openings for the B1 return valve group and B2 return valve group after CR-017?",
+    "Should the executable sequence use the stage actions and exit guards from the requirement specifications and BAT-09 where they conflict in wording with the Step1-Step9 behavior phrasing in the control sequence design note?"
+  ],
+  "clarifications": [
+    {
+      "id": "clarify_return_valve_groups",
+      "question": "What are the exact corrected automated-valve memberships and required simultaneous openings for the B1 return valve group and B2 return valve group after CR-017?",
+      "reasoning": "09_05_process_controls_email_thread.txt states CR-017 approves B6 condensate return to B1 and B7 concentrate return to B2, and says legacy StateGraph routing text is superseded. 02_02_process_data_register.txt current requirements name B1 return valve group for B6/P2 and B2 return valve group for B7/P1, but do not enumerate the corrected valve members. Older superseded requirements and correspondence list valve sets V18,V23,V22,V1,V3 and V20,V24,V25,V5,V6, but those labels were tied to superseded routing text.",
+      "suggested_value": "Use CR-017 routing: B6/P2 returns to B1 and B7/P1 returns to B2; preserve the listed five-valve sets as candidate members pending confirmation of which set belongs to which destination.",
+      "options": [
+        "B6/P2 -> B1 with one return valve group, B7/P1 -> B2 with the other return valve group; valve-member assignment to destinations to be confirmed from CR-017.",
+        "Use the superseded legacy text assigning V18,V23,V22,V1,V3 to B7/P1 branch and V20,V24,V25,V5,V6 to B6/P2 branch exactly as written, despite routing-label conflict.",
+        "Model only grouped return routing to B1 and B2 without explicit individual return-valve membership until CR-017 detail is supplied."
+      ]
+    },
+    {
+      "id": "clarify_sequence_wording_conflict",
+      "question": "Should the executable sequence use the stage actions and exit guards from the requirement specifications and BAT-09 where they conflict in wording with the Step1-Step9 behavior phrasing in the control sequence design note?",
+      "reasoning": "01_01_process_requirement_specification.txt, 02_02_process_data_register.txt, and 12_09_batch_acceptance_test.txt consistently state actions such as open V8 until LIS-301 >=0.13 m and open V12 until LIS-501 >=0.18 m. 05_04_control_sequence_design.txt behavior bullets phrase several steps as 'If threshold reached, Step action is actuator open/on', which reads like guard/action inversion or shorthand. This affects executable sequencing if taken literally.",
+      "suggested_value": "Use the requirement-specification and BAT-09 interpretation: actuate each device during its stage and use the stated threshold as the stage exit condition.",
+      "options": [
+        "Use requirement and BAT interpretation: open/on during stage, threshold defines exit.",
+        "Use the control-sequence note literally as written, with threshold condition triggering the actuator action.",
+        "Treat the control-sequence note wording as shorthand and preserve only its state structure, not literal trigger phrasing."
+      ]
+    }
+  ],
+  "resolutions": [
+    {
+      "id": "resolve_return_routing",
+      "topic": "Return routing after CR-017",
+      "chosen": "Recovered condensate returns B6 -> P2 -> B1; cooled concentrate returns B7 -> P1 -> B2.",
+      "rejected": [
+        "Archived legacy model routing 'Branch B: B7/P1 to B1; Branch A: B6/P2 to B2' lost because 10_07_legacy_evaporation_plant.txt marks it archived/superseded by CR-017.",
+        "Superseded requirement text assigning branch valve groups under old labels lost because 02_02_process_data_register.txt marks REQ-ROU-001 and REQ-ROU-002 superseded, and 09_05_process_controls_email_thread.txt says the legacy StateGraph routing text is superseded."
+      ],
+      "reasoning": "Current requirements REQ-ROU-003 and REQ-ROU-004 in 02_02_process_data_register.txt and approved CR-017 statements in 09_05_process_controls_email_thread.txt explicitly set the routing. 12_09_batch_acceptance_test.txt agrees that B6 returns to B1 and B7 returns to B2."
+    },
+    {
+      "id": "resolve_B7_cooling_target",
+      "topic": "B7 cooling completion temperature",
+      "chosen": "B7 cooling completion is <=25 degC.",
+      "rejected": [
+        "20 degC in 02_02_process_data_register.txt lost because it is tagged superseded and replaced by 25 degC current.",
+        "20 C archived/current-history note in 08_15_lab_notebook.txt lost because the notebook records 25 C as current and the note is an operator log, lower authority than current requirements.",
+        "293.15 K / 20 degC stale legacy controller target in 10_07_legacy_evaporation_plant.txt lost because that legacy model is superseded and specifically marks the B7 target stale under CR-017."
+      ],
+      "reasoning": "Current requirement REQ-FUN-010 in 02_02_process_data_register.txt, approved CR-017 correspondence in 09_05_process_controls_email_thread.txt, and BAT-09 in 12_09_batch_acceptance_test.txt all support 25 degC."
+    },
+    {
+      "id": "resolve_medium_for_final_acceptance",
+      "topic": "Physical medium for final acceptance",
+      "chosen": "Final composition-based acceptance uses the WaterNaCl medium; StandardWater is baseline-only for topology/control integration.",
+      "rejected": [
+        "Using StandardWater as the acceptance medium lost because REQ-MOD-001 and BAT-09 limit StandardWater to baseline/topology debugging, while REQ-MOD-002 requires a composition-dependent water-NaCl medium for intended physical behavior."
+      ],
+      "reasoning": "02_02_process_data_register.txt requirements REQ-MOD-001 and REQ-MOD-002, 06_06_design_review_minutes.txt approved review statement, and 12_09_batch_acceptance_test.txt approved requirement all agree on this split of applicability."
+    },
+    {
+      "id": "resolve_vessel_dimensions",
+      "topic": "Current vessel geometric data when legacy model differs",
+      "chosen": "Use equipment-register geometry and levels as current values.",
+      "rejected": [
+        "Legacy model levelMax values B1/B2 0.60 m, B3/B4/B5 0.45 m, B6/B7 0.40 m lost as final adopted geometry because 10_07_legacy_evaporation_plant.txt is a legacy model and 02_02_process_data_register.txt provides current engineering-register values including both height and max level."
+      ],
+      "reasoning": "The engineering register is higher authority than a legacy model for component data, and the legacy model note is explicitly superseded for the released benchmark."
+    }
+  ],
+  "domains": [
+    "fluid_level_and_flow",
+    "thermal",
+    "species_concentration_balance",
+    "multiphase_mixture_process",
+    "batch_sequential_process"
+  ]
+}

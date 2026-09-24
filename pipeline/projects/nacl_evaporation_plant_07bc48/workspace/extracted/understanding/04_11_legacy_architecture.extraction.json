@@ -1,7 +1,7 @@
 {
   "document": "@startuml\ntitle Legacy Evaporation Plant Architecture - Draft\ncomponent B1\ncomponent B2\ncomponent B3\ncomponent B4\ncomponent B5\ncomponent B6\ncomponent B7\ncomponent K1\ncomponent P1\ncomponent P2\ncomponent Controller\nB1 --> B3 : V8\nB2 --> B3 : V9\nB3 --> B4 : V11\nB4 --> B5 : V12\nB5 --> K1 : vapor\nK1 --> B6 : condensate\nB5 --> B7 : V15\nB7 --> P1\nB6 --> P2\nController ..> B3 : LIS301/QI302\nController ..> B5 : LIS501/QIS502\nnote right of Controller\n  Junction volumes omitted.\n  Cooling-water interfaces omitted.\n  Return-header destinations unresolved.\nend note\n@enduml\n",
-  "subject": "Legacy Evaporation Plant Architecture - Draft",
-  "kind": "legacy model",
+  "subject": "Legacy Evaporation Plant Architecture",
+  "kind": "architecture diagram",
   "entities": [
     {
       "name": "B1",
@@ -226,7 +226,26 @@
       "quote": "Controller ..> B5 : LIS501/QIS502"
     }
   ],
-  "facts": [],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "Junction volumes omitted.",
+      "ref": "",
+      "anchor": "",
+      "status": "draft",
+      "from_image": false,
+      "quote": "Junction volumes omitted."
+    },
+    {
+      "category": "requirement",
+      "statement": "Cooling-water interfaces omitted.",
+      "ref": "",
+      "anchor": "",
+      "status": "draft",
+      "from_image": false,
+      "quote": "Cooling-water interfaces omitted."
+    }
+  ],
   "unreadable": [
     "Return-header destinations unresolved."
   ],

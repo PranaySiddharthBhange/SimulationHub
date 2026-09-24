@@ -1,6 +1,6 @@
 {
   "document": "@startuml\ntitle Partial Magnetic Architecture - Draft\ncomponent CurrentRamp\ncomponent ExcitingCoil\ncomponent IronCore\ncomponent AirGap\ncomponent FluxSensor\ncomponent MeasuringCoil\n\nCurrentRamp --> ExcitingCoil : current phasor\nExcitingCoil --> IronCore : mmf / flux\nIronCore --> AirGap : flux\nAirGap --> FluxSensor : Phi\nAirGap --> MeasuringCoil : induction\n\nnote right of IronCore\n  Draft model does not expose:\n  - leakage branch\n  - element-wise core segmentation\n  - electric ground\n  - magnetic ground\n  - revision/configuration values\nend note\n@enduml\n",
-  "subject": "Partial Magnetic Architecture - Draft",
+  "subject": "Partial Magnetic Architecture",
   "kind": "architecture diagram",
   "entities": [
     {
@@ -116,17 +116,7 @@
       "quote": "AirGap --> MeasuringCoil : induction"
     }
   ],
-  "facts": [
-    {
-      "category": "constraint",
-      "statement": "Draft model does not expose leakage branch, element-wise core segmentation, electric ground, magnetic ground, and revision/configuration values.",
-      "ref": "",
-      "anchor": "",
-      "status": "draft",
-      "from_image": false,
-      "quote": "Draft model does not expose:\n  - leakage branch\n  - element-wise core segmentation\n  - electric ground\n  - magnetic ground\n  - revision/configuration values"
-    }
-  ],
+  "facts": [],
   "unreadable": [],
   "unverified_quotes": []
 }

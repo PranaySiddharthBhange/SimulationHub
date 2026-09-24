@@ -1,11 +1,6 @@
 {
-  "project_id": "two_tank_control_system_93d247",
   "name": "Two Tank Control System",
-  "mode": "cloud",
   "stage1_backend": "openai",
-  "source_path": "C:\\Users\\Pranay Bhange\\Desktop\\Hackathon\\pipeline\\test_cases\\tank_sysmlv2_full_dataset",
-  "status": "stage1_ready",
   "extraction_status": "completed",
-  "document_count": 12,
-  "documents_understood": 12
+  "status": "stage1_ready"
 }

@@ -6,36 +6,30 @@ Document kind: correspondence
 * DR-02 -- design reference  <DR-02>
 * T1 -- tank
     - high limit: 0.80 m [approved] (supersedes/superseded: 0.78 m)
-    - high: 0.80 m [proposed]
+    - high: 0.80 m [accepted]
+    - high: 0.78 m [archived] (supersedes/superseded: 0.80 m)
     - high: 0.78 m [current]
-    - high: 0.78 m [archived]
+* drain valve -- valve
 * T2 -- tank
-* V2 -- valve
-* V3 -- valve
+    - wait after reaches low before next fill starts: 8 s [approved] (supersedes/superseded: 10 s)
+    - dead time after tank 2 is empty: 8 s [acceptable]
 * SHUT -- state
 * STOP -- state
+* V2 -- valve
+* V3 -- valve
 * START -- command
-* drain valve -- valve
-    - delay after T1 reaches low level before opening: 12 s [approved] (supersedes/superseded: 10 s)
-    - delay after T1 reaches low level before opening: 12 s [proposed]
-    - wait: 10 s [current]
-    - wait: 10 s [archived]
-* next fill -- process step
-    - delay after T2 reaches low before start: 8 s [approved] (supersedes/superseded: 10 s)
-    - delay after tank 2 is empty: 8 s [proposed]
-    - wait: 10 s [current]
-    - wait: 10 s [archived]
-* Modelica demo -- model
-* hackathon test log -- test log
 
 ## Relationships
 * SHUT higher priority than STOP (state logic)  <DR-02>
 * V2 commanded open during SHUT (until both low-level conditions are satisfied)
 * V3 commanded open during SHUT (until both low-level conditions are satisfied)
 
+## Requirements
+* Treat 0.80 m as the effective T1 high limit. [approved]  <CR-004>
+
 ## Behaviors
-* After T1 reaches low level, open the drain valve after 12 s. [approved]
-* After T2 reaches low, the next fill starts after 8 s. [approved]
-* During SHUT, V2 and V3 stay commanded open until both low-level conditions are satisfied. [approved]  <DR-02>
-* START during SHUT is ignored. [approved]  <DR-02>
+* After T1 reaches low level, wait 12 s before opening the drain valve. [approved]
+* After T2 reaches low, wait 8 s before the next fill starts. [approved]
+* During SHUT, V2 and V3 stay commanded open until both low-level conditions are satisfied. [current]  <DR-02>
+* START during SHUT is ignored. [current]  <DR-02>
 * STOP is implemented as a latch that forces all valves closed; START clears it. [current]

@@ -1,0 +1,53 @@
+{
+  "questions": [
+    "Released leakage coefficient sigma: Merge resolved this to sigma = 0.08 for the released nominal benchmark. Confirm, or choose a different value.",
+    "Effective relative permeability for linear benchmark: Merge resolved this to mu_r = 1200. Confirm, or choose a different value.",
+    "Measuring-coil turn count: Merge resolved this to N_meas = 50 turns. Confirm, or choose a different value.",
+    "Gap length for released nominal benchmark versus as-built prototype: Merge resolved this to Use nominal delta = 1.50 mm for the released nominal benchmark and AV-11; retain measured/as-built delta = 1.58 mm as a separate prototype configuration. Confirm, or choose a different value.",
+    "Meaning of the commanded current values: Merge resolved this to Current schedule values are RMS current phasor magnitudes, not peak values and not an instantaneous waveform. Confirm, or choose a different value."
+  ],
+  "answers": {
+    "resolve_sigma": "sigma = 0.08 for the released nominal benchmark",
+    "resolve_mu_r": "mu_r = 1200",
+    "resolve_measuring_coil_turns": "N_meas = 50 turns",
+    "resolve_gap_configuration": "Use nominal delta = 1.50 mm for the released nominal benchmark and AV-11; retain measured/as-built delta = 1.58 mm as a separate prototype configuration",
+    "resolve_current_representation": "Current schedule values are RMS current phasor magnitudes, not peak values and not an instantaneous waveform"
+  },
+  "decisions": [
+    {
+      "id": "resolve_sigma",
+      "question": "Released leakage coefficient sigma: Merge resolved this to sigma = 0.08 for the released nominal benchmark. Confirm, or choose a different value.",
+      "merge_suggested": "sigma = 0.08 for the released nominal benchmark",
+      "answer": "sigma = 0.08 for the released nominal benchmark",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_mu_r",
+      "question": "Effective relative permeability for linear benchmark: Merge resolved this to mu_r = 1200. Confirm, or choose a different value.",
+      "merge_suggested": "mu_r = 1200",
+      "answer": "mu_r = 1200",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_measuring_coil_turns",
+      "question": "Measuring-coil turn count: Merge resolved this to N_meas = 50 turns. Confirm, or choose a different value.",
+      "merge_suggested": "N_meas = 50 turns",
+      "answer": "N_meas = 50 turns",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_gap_configuration",
+      "question": "Gap length for released nominal benchmark versus as-built prototype: Merge resolved this to Use nominal delta = 1.50 mm for the released nominal benchmark and AV-11; retain measured/as-built delta = 1.58 mm as a separate prototype configuration. Confirm, or choose a different value.",
+      "merge_suggested": "Use nominal delta = 1.50 mm for the released nominal benchmark and AV-11; retain measured/as-built delta = 1.58 mm as a separate prototype configuration",
+      "answer": "Use nominal delta = 1.50 mm for the released nominal benchmark and AV-11; retain measured/as-built delta = 1.58 mm as a separate prototype configuration",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_current_representation",
+      "question": "Meaning of the commanded current values: Merge resolved this to Current schedule values are RMS current phasor magnitudes, not peak values and not an instantaneous waveform. Confirm, or choose a different value.",
+      "merge_suggested": "Current schedule values are RMS current phasor magnitudes, not peak values and not an instantaneous waveform",
+      "answer": "Current schedule values are RMS current phasor magnitudes, not peak values and not an instantaneous waveform",
+      "outcome": "confirmed"
+    }
+  ]
+}

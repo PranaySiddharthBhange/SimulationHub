@@ -1,0 +1,1189 @@
+{
+  "modelica_standard_library": "4.1.0",
+  "verified": "Every class named here was confirmed present by querying the installed library with omc. Nothing in this file is written from memory.",
+  "how_to_search": "Match the task against `keywords` and `use_for`, then narrow by `domains`, which use the Understanding's own domain keys. `reference_models` gives a whole-system pattern from the MSL for a system of that shape; start there when one matches. `rules` applies in every domain.",
+  "reference_models": [
+    {
+      "case": "two-vessel sequenced transfer with operator commands",
+      "msl_model": "Modelica.Fluid.Examples.ControlledTankSystem.ControlledTanks",
+      "shape": "Two vessels, three discrete valves, a supply boundary and a drain boundary, operator buttons, one controller.",
+      "verified_uses": [
+        "Modelica.Fluid.System",
+        "Modelica.Fluid.Vessels.OpenTank",
+        "Modelica.Fluid.Valves.ValveDiscrete",
+        "Modelica.Fluid.Sources.Boundary_pT",
+        "Modelica.Blocks.Sources.RadioButtonSource",
+        "Modelica.Blocks.Sources.RealExpression"
+      ],
+      "verified_skeleton": "model <SystemName>\n  package Medium = Modelica.Media.Water.ConstantPropertyLiquidWater;\n  inner Modelica.Fluid.System system(energyDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial);\n\n  Modelica.Fluid.Sources.Boundary_pT source(\n    redeclare package Medium = Medium, p = 2.5e6, nPorts = 1, T = system.T_ambient);\n  Modelica.Fluid.Valves.ValveDiscrete valve1(\n    redeclare package Medium = Medium, m_flow_nominal = 40, dp_nominal = 100000);\n  Modelica.Fluid.Vessels.OpenTank tank1(\n    redeclare package Medium = Medium,\n    crossArea = 6, height = 4, level_start = 0.05, nPorts = 2,\n    portsData = {Modelica.Fluid.Vessels.BaseClasses.VesselPortsData(diameter = 0.2, height = 4, zeta_out = 0, zeta_in = 1),\n                 Modelica.Fluid.Vessels.BaseClasses.VesselPortsData(diameter = 0.2, height = 0, zeta_out = 0, zeta_in = 1)});\n  Modelica.Fluid.Valves.ValveDiscrete valve2(\n    redeclare package Medium = Medium, m_flow_nominal = 100, dp_nominal = 1);\n  Modelica.Fluid.Sources.Boundary_pT ambient1(\n    redeclare package Medium = Medium, nPorts = 1, p = system.p_ambient, T = system.T_ambient);\n\n  Modelica.Blocks.Sources.RealExpression level1(y = tank1.level);\nequation\n  connect(source.ports[1], valve1.port_a);\n  connect(valve1.port_b, tank1.ports[1]);\n  connect(tank1.ports[2], valve2.port_a);\n  connect(valve2.port_b, tank2.ports[1]);\n  connect(valve3.port_b, ambient1.ports[1]);\n  connect(level1.y, controller.level1);\n  connect(controller.valve1, valve1.open);\nend <SystemName>;",
+      "parameterisation": [
+        "Declare `package Medium = ...` ONCE at model level and put `redeclare package Medium = Medium` on every fluid component. A component left on the default medium will not connect to one that was redeclared.",
+        "dp_nominal must be NON-ZERO. Verified by simulation: dp_nominal = 0 fails to build, while omitting portsData or the dynamics setting still simulates. The MSL uses dp_nominal = 1 Pa for a gravity-driven valve between two vessels, and 1e5 Pa for a valve fed from a pressurised supply. Size m_flow_nominal so the open flow matches the rate the brief states.",
+        "Give each OpenTank nPorts and one portsData entry per port: the inlet at `height = <tank height>`, the outlet at `height = 0`, each with diameter, zeta_out = 0 and zeta_in = 1. Connect them by index -- tank.ports[1] is the inlet, tank.ports[2] the outlet.",
+        "Drive the network with a pressure difference: a supply Boundary_pT well above ambient, and a drain Boundary_pT at `p = system.p_ambient, T = system.T_ambient`.",
+        "Read a vessel's level into the controller with `Modelica.Blocks.Sources.RealExpression level1(y = tank1.level)` and connect its `y`. Do not reach into the tank from the controller's own equations.",
+        "Set `inner Modelica.Fluid.System system(energyDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial)`, as the MSL example does."
+      ]
+    },
+    {
+      "case": "staged multi-vessel batch plant with evaporation and recycle returns",
+      "msl_model": "Modelica.Fluid.Examples.AST_BatchPlant.BatchPlant_StandardWater",
+      "shape": "Tanks with top ports, an evaporator/condenser vessel, discrete valves, two return pumps, junction volumes, a sequencing controller.",
+      "verified_uses": [
+        "Modelica.Fluid.System",
+        "Modelica.Fluid.Valves.ValveDiscreteRamp",
+        "Modelica.Fluid.Machines.PrescribedPump",
+        "Modelica.Fluid.Pipes.StaticPipe",
+        "Modelica.Fluid.Pipes.DynamicPipe",
+        "Modelica.Fluid.Fittings.TeeJunctionVolume",
+        "Modelica.Fluid.Fittings.MultiPort",
+        "Modelica.Blocks.Logical.TriggeredTrapezoid"
+      ]
+    },
+    {
+      "case": "quasi-static magnetic circuit with a leakage branch",
+      "msl_model": "Modelica.Magnetic.FluxTubes.Examples",
+      "shape": "Series iron segments, a split into a useful air gap and a parallel leakage branch, a rejoin, a magnetic ground, and a winding with its own electrical ground and prescribed current.",
+      "verified_uses": [
+        "Modelica.Magnetic.FluxTubes.Basic.Ground",
+        "Modelica.Magnetic.FluxTubes.Basic.ElectroMagneticConverter",
+        "Modelica.Magnetic.FluxTubes.Shapes.FixedShape.Cuboid",
+        "Modelica.Magnetic.FluxTubes.Basic.LeakageWithCoefficient",
+        "Modelica.Electrical.Analog.Basic.Ground",
+        "Modelica.Electrical.Analog.Sources.SignalCurrent"
+      ]
+    }
+  ],
+  "components": [
+    {
+      "class": "Modelica.Blocks.Continuous.Integrator",
+      "use_for": "Integrates a rate into an inventory: total mass, energy, or a species mass.",
+      "domains": [
+        "species_concentration_balance",
+        "multiphase_mixture_process",
+        "thermal"
+      ],
+      "keywords": [
+        "integrator",
+        "inventory",
+        "accumulate",
+        "balance",
+        "conserved"
+      ],
+      "key_parameters": [
+        "k",
+        "y_start"
+      ]
+    },
+    {
+      "class": "Modelica.Blocks.Continuous.PI",
+      "use_for": "A PI controller, where the brief states a continuous control law.",
+      "domains": [
+        "thermal",
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "controller",
+        "pi",
+        "feedback",
+        "regulator"
+      ],
+      "key_parameters": [
+        "k",
+        "T"
+      ],
+      "note": "Only when the brief gives the control law and its gains. Do not introduce feedback control a sequenced plant does not have."
+    },
+    {
+      "class": "Modelica.Blocks.Interfaces.BooleanInput",
+      "use_for": "A command or permissive arriving at a custom block.",
+      "domains": [
+        "batch_sequential_process"
+      ],
+      "keywords": [
+        "connector",
+        "input",
+        "command",
+        "boolean",
+        "permissive"
+      ]
+    },
+    {
+      "class": "Modelica.Blocks.Interfaces.RealInput",
+      "use_for": "A measurement or setpoint arriving at a custom block.",
+      "domains": [
+        "batch_sequential_process",
+        "fluid_level_and_flow",
+        "thermal",
+        "species_concentration_balance",
+        "multiphase_mixture_process"
+      ],
+      "keywords": [
+        "connector",
+        "input",
+        "signal",
+        "measurement",
+        "real"
+      ]
+    },
+    {
+      "class": "Modelica.Blocks.Logical.Hysteresis",
+      "use_for": "A threshold with a deadband, where the brief approves one.",
+      "domains": [
+        "batch_sequential_process"
+      ],
+      "keywords": [
+        "hysteresis",
+        "deadband",
+        "threshold",
+        "chatter"
+      ],
+      "key_parameters": [
+        "uLow",
+        "uHigh"
+      ],
+      "note": "Only when the brief states or approves a deadband. Adding one to settle a threshold silently changes the criterion."
+    },
+    {
+      "class": "Modelica.Blocks.Logical.TriggeredTrapezoid",
+      "use_for": "Ramps a Boolean command into a finite-rate signal, such as a pump starting.",
+      "domains": [
+        "batch_sequential_process",
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "ramp",
+        "pump start",
+        "soft start",
+        "trapezoid",
+        "rate limit"
+      ],
+      "key_parameters": [
+        "amplitude",
+        "rising",
+        "falling",
+        "offset"
+      ]
+    },
+    {
+      "class": "Modelica.Blocks.Math.Add",
+      "use_for": "Sums two signals, e.g. inflow minus outflow.",
+      "domains": [
+        "fluid_level_and_flow",
+        "species_concentration_balance",
+        "multiphase_mixture_process"
+      ],
+      "keywords": [
+        "add",
+        "sum",
+        "difference",
+        "balance"
+      ],
+      "key_parameters": [
+        "k1",
+        "k2"
+      ]
+    },
+    {
+      "class": "Modelica.Blocks.Math.BooleanToReal",
+      "use_for": "Converts a Boolean command into a reportable Real, for the results file.",
+      "domains": [
+        "batch_sequential_process"
+      ],
+      "keywords": [
+        "convert",
+        "report",
+        "boolean",
+        "real",
+        "logging"
+      ],
+      "key_parameters": [
+        "realTrue",
+        "realFalse"
+      ]
+    },
+    {
+      "class": "Modelica.Blocks.Math.Gain",
+      "use_for": "Scales a signal by a constant, e.g. a net flow into a level rate.",
+      "domains": [
+        "fluid_level_and_flow",
+        "species_concentration_balance",
+        "multiphase_mixture_process"
+      ],
+      "keywords": [
+        "gain",
+        "scale",
+        "multiply",
+        "constant"
+      ],
+      "key_parameters": [
+        "k"
+      ]
+    },
+    {
+      "class": "Modelica.Blocks.Math.Product",
+      "use_for": "Multiplies two signals, e.g. a mass times a mass fraction.",
+      "domains": [
+        "species_concentration_balance",
+        "multiphase_mixture_process"
+      ],
+      "keywords": [
+        "product",
+        "multiply",
+        "composition"
+      ]
+    },
+    {
+      "class": "Modelica.Blocks.Nonlinear.Limiter",
+      "use_for": "Clamps a signal to a stated bound.",
+      "domains": [
+        "batch_sequential_process",
+        "fluid_level_and_flow",
+        "multiphase_mixture_process"
+      ],
+      "keywords": [
+        "limit",
+        "clamp",
+        "bound",
+        "saturate"
+      ],
+      "key_parameters": [
+        "uMax",
+        "uMin"
+      ],
+      "note": "Only for a bound the brief states. A limiter added to keep a value plausible hides the discrepancy instead of reporting it."
+    },
+    {
+      "class": "Modelica.Blocks.Sources.BooleanTable",
+      "use_for": "An operator or command schedule that TOGGLES its output at each listed time.",
+      "domains": [
+        "batch_sequential_process"
+      ],
+      "keywords": [
+        "command",
+        "schedule",
+        "button",
+        "operator",
+        "pulse",
+        "momentary"
+      ],
+      "key_parameters": [
+        "table",
+        "startValue"
+      ],
+      "note": "It toggles, it does not pulse. Give each momentary command a PAIR of entries {t, t+w}, and make w at least twice the controller scan period or a sampled scan can miss the press entirely."
+    },
+    {
+      "class": "Modelica.Blocks.Sources.CombiTimeTable",
+      "use_for": "A multi-column schedule of setpoints or commands over time.",
+      "domains": [
+        "batch_sequential_process"
+      ],
+      "keywords": [
+        "schedule",
+        "table",
+        "setpoint",
+        "multi-column",
+        "profile"
+      ],
+      "key_parameters": [
+        "table",
+        "smoothness",
+        "extrapolation"
+      ]
+    },
+    {
+      "class": "Modelica.Blocks.Sources.RadioButtonSource",
+      "use_for": "A mutually-exclusive operator button, as the MSL controlled-tank example uses.",
+      "domains": [
+        "batch_sequential_process"
+      ],
+      "keywords": [
+        "button",
+        "operator",
+        "radio",
+        "start",
+        "stop",
+        "shutdown"
+      ],
+      "key_parameters": [
+        "buttonTimeTable",
+        "reset"
+      ]
+    },
+    {
+      "class": "Modelica.Blocks.Sources.Ramp",
+      "use_for": "A signal that holds, ramps, and holds again.",
+      "domains": [
+        "electrical_circuit",
+        "magnetic_circuit",
+        "thermal",
+        "species_concentration_balance"
+      ],
+      "keywords": [
+        "ramp",
+        "profile",
+        "prescribed",
+        "hold",
+        "setpoint"
+      ],
+      "key_parameters": [
+        "height",
+        "duration",
+        "offset",
+        "startTime"
+      ]
+    },
+    {
+      "class": "Modelica.Blocks.Sources.RealExpression",
+      "use_for": "Exposes an internal value, such as a vessel's level, as a signal for the controller or the results file.",
+      "domains": [
+        "fluid_level_and_flow",
+        "batch_sequential_process",
+        "magnetic_circuit",
+        "thermal"
+      ],
+      "keywords": [
+        "expression",
+        "report",
+        "expose",
+        "probe",
+        "signal"
+      ],
+      "note": "This is how a controller reads a plant value: RealExpression(y = tank1.level) and connect its y to the controller input, rather than referring to the vessel from the controller's own equations."
+    },
+    {
+      "class": "Modelica.Blocks.Sources.TimeTable",
+      "use_for": "A single-column time series of a Real setpoint.",
+      "domains": [
+        "batch_sequential_process",
+        "thermal"
+      ],
+      "keywords": [
+        "table",
+        "setpoint",
+        "profile",
+        "schedule"
+      ],
+      "key_parameters": [
+        "table"
+      ]
+    },
+    {
+      "class": "Modelica.Electrical.Analog.Basic.Ground",
+      "use_for": "Electrical ground for the winding circuit.",
+      "domains": [
+        "electrical_circuit",
+        "magnetic_circuit"
+      ],
+      "keywords": [
+        "ground",
+        "reference",
+        "electrical"
+      ]
+    },
+    {
+      "class": "Modelica.Electrical.Analog.Basic.Resistor",
+      "use_for": "Winding resistance, where the brief gives one.",
+      "domains": [
+        "electrical_circuit",
+        "magnetic_circuit"
+      ],
+      "keywords": [
+        "resistance",
+        "winding",
+        "copper",
+        "ohmic"
+      ],
+      "key_parameters": [
+        "R"
+      ]
+    },
+    {
+      "class": "Modelica.Electrical.Analog.Sensors.VoltageSensor",
+      "use_for": "Reads an induced or terminal voltage.",
+      "domains": [
+        "electrical_circuit",
+        "magnetic_circuit"
+      ],
+      "keywords": [
+        "sensor",
+        "voltage",
+        "induced",
+        "measurement"
+      ],
+      "ports": [
+        "p, n (pins)",
+        "v (RealOutput)"
+      ]
+    },
+    {
+      "class": "Modelica.Electrical.Analog.Sources.RampCurrent",
+      "use_for": "A current that holds, ramps to a final value over a stated duration, then holds.",
+      "domains": [
+        "electrical_circuit",
+        "magnetic_circuit"
+      ],
+      "keywords": [
+        "ramp",
+        "current",
+        "excitation",
+        "quasi-static",
+        "hold"
+      ],
+      "key_parameters": [
+        "I",
+        "duration",
+        "offset",
+        "startTime"
+      ],
+      "note": "A prescribed excitation profile is a SOURCE, not a state machine: hold-ramp-hold is offset, startTime and duration on one block."
+    },
+    {
+      "class": "Modelica.Electrical.Analog.Sources.SignalCurrent",
+      "use_for": "A current source driven by a signal, for an arbitrary prescribed excitation.",
+      "domains": [
+        "electrical_circuit",
+        "magnetic_circuit"
+      ],
+      "keywords": [
+        "current",
+        "excitation",
+        "drive",
+        "source",
+        "prescribed"
+      ],
+      "ports": [
+        "p, n (pins)",
+        "i (RealInput)"
+      ]
+    },
+    {
+      "class": "Modelica.Fluid.Fittings.MultiPort",
+      "use_for": "A multi-way junction gathering several branches onto one port.",
+      "domains": [
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "junction",
+        "multiport",
+        "header",
+        "gather",
+        "collect"
+      ],
+      "key_parameters": [
+        "nPorts_b"
+      ]
+    },
+    {
+      "class": "Modelica.Fluid.Fittings.TeeJunctionVolume",
+      "use_for": "A junction carrying a small volume where several branches meet.",
+      "domains": [
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "junction",
+        "tee",
+        "header",
+        "manifold",
+        "branch",
+        "split"
+      ],
+      "key_parameters": [
+        "V"
+      ],
+      "note": "Required wherever branches meet or can be isolated together: two pressure-drop-only elements connected directly leave the pressure between them undetermined."
+    },
+    {
+      "class": "Modelica.Fluid.Machines.PrescribedPump",
+      "use_for": "A pump whose speed or head is commanded from a signal.",
+      "domains": [
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "pump",
+        "return",
+        "transfer",
+        "discharge",
+        "suction"
+      ],
+      "key_parameters": [
+        "N_nominal",
+        "use_N_in",
+        "redeclare function flowCharacteristic"
+      ]
+    },
+    {
+      "class": "Modelica.Fluid.Pipes.DynamicPipe",
+      "use_for": "Routing that stores mass and energy, for a line whose own inventory matters.",
+      "domains": [
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "pipe",
+        "dynamic",
+        "holdup",
+        "inventory"
+      ],
+      "key_parameters": [
+        "length",
+        "diameter",
+        "height_ab",
+        "nNodes"
+      ]
+    },
+    {
+      "class": "Modelica.Fluid.Pipes.StaticPipe",
+      "use_for": "Routing between units with friction and static head, storing no mass.",
+      "domains": [
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "pipe",
+        "line",
+        "routing",
+        "head",
+        "elevation",
+        "gravity"
+      ],
+      "key_parameters": [
+        "length",
+        "diameter",
+        "height_ab"
+      ],
+      "note": "height_ab carries the static head between two elevations; a non-horizontal run without it loses gravity entirely."
+    },
+    {
+      "class": "Modelica.Fluid.Sensors.MassFlowRate",
+      "use_for": "Reads mass flow through a two-port sensor.",
+      "domains": [
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "sensor",
+        "flow",
+        "measurement",
+        "flow switch"
+      ],
+      "ports": [
+        "port_a, port_b (fluid)",
+        "m_flow (RealOutput)"
+      ]
+    },
+    {
+      "class": "Modelica.Fluid.Sensors.Pressure",
+      "use_for": "Reads pressure at a point.",
+      "domains": [
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "sensor",
+        "pressure",
+        "measurement",
+        "alarm"
+      ],
+      "ports": [
+        "port (fluid)",
+        "p (RealOutput)"
+      ]
+    },
+    {
+      "class": "Modelica.Fluid.Sensors.Temperature",
+      "use_for": "Reads temperature at a point without affecting the flow.",
+      "domains": [
+        "fluid_level_and_flow",
+        "thermal"
+      ],
+      "keywords": [
+        "sensor",
+        "temperature",
+        "measurement",
+        "indicator"
+      ],
+      "ports": [
+        "port (fluid)",
+        "T (RealOutput)"
+      ]
+    },
+    {
+      "class": "Modelica.Fluid.Sources.Boundary_pT",
+      "use_for": "A supply source or receiving drain at fixed pressure and temperature.",
+      "domains": [
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "source",
+        "drain",
+        "boundary",
+        "ambient",
+        "supply",
+        "sink"
+      ],
+      "key_parameters": [
+        "p",
+        "T",
+        "nPorts",
+        "use_p_in"
+      ]
+    },
+    {
+      "class": "Modelica.Fluid.Sources.MassFlowSource_T",
+      "use_for": "A prescribed mass flow into the system.",
+      "domains": [
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "feed",
+        "prescribed flow",
+        "injection",
+        "makeup"
+      ],
+      "key_parameters": [
+        "m_flow",
+        "T",
+        "use_m_flow_in"
+      ]
+    },
+    {
+      "class": "Modelica.Fluid.System",
+      "use_for": "Global fluid settings. Exactly one `inner Modelica.Fluid.System system;` in the top-level model.",
+      "domains": [
+        "fluid_level_and_flow",
+        "multiphase_mixture_process"
+      ],
+      "keywords": [
+        "system",
+        "inner",
+        "global",
+        "required",
+        "settings"
+      ],
+      "key_parameters": [
+        "energyDynamics",
+        "massDynamics",
+        "p_ambient",
+        "T_ambient",
+        "g"
+      ],
+      "note": "REQUIRED by every Modelica.Fluid component; each resolves it by name. Without it the model does not elaborate."
+    },
+    {
+      "class": "Modelica.Fluid.Valves.ValveDiscrete",
+      "use_for": "A commanded on/off valve taking a Boolean `open` input.",
+      "domains": [
+        "fluid_level_and_flow",
+        "batch_sequential_process"
+      ],
+      "keywords": [
+        "valve",
+        "on off",
+        "discrete",
+        "binary",
+        "commanded",
+        "isolation"
+      ],
+      "key_parameters": [
+        "m_flow_nominal",
+        "dp_nominal",
+        "opening_min"
+      ],
+      "ports": [
+        "port_a, port_b (fluid)",
+        "open (BooleanInput)"
+      ],
+      "note": "dp_nominal must be NON-ZERO or the model fails to build -- verified by simulation. The MSL uses 1 Pa for a gravity-driven valve between two vessels and 1e5 Pa for a valve fed from a pressurised supply. Size m_flow_nominal so the flow while open matches the rate the brief states, and record that sizing as an assumption."
+    },
+    {
+      "class": "Modelica.Fluid.Valves.ValveDiscreteRamp",
+      "use_for": "An on/off valve that ramps over a finite stroke time instead of switching instantly.",
+      "domains": [
+        "fluid_level_and_flow",
+        "batch_sequential_process"
+      ],
+      "keywords": [
+        "valve",
+        "stroke",
+        "ramp",
+        "opening time",
+        "closing time"
+      ],
+      "key_parameters": [
+        "m_flow_nominal",
+        "dp_nominal",
+        "T_open",
+        "T_close"
+      ],
+      "note": "Use when a datasheet gives stroke times AND the brief requires them modelled; otherwise ValveDiscrete."
+    },
+    {
+      "class": "Modelica.Fluid.Valves.ValveLinear",
+      "use_for": "A continuously modulated valve with a Real 0..1 opening.",
+      "domains": [
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "valve",
+        "modulating",
+        "control valve",
+        "analog",
+        "throttle"
+      ],
+      "key_parameters": [
+        "m_flow_nominal",
+        "dp_nominal"
+      ]
+    },
+    {
+      "class": "Modelica.Fluid.Vessels.ClosedVolume",
+      "use_for": "A closed vessel with no free surface.",
+      "domains": [
+        "fluid_level_and_flow",
+        "thermal"
+      ],
+      "keywords": [
+        "volume",
+        "closed",
+        "vessel",
+        "pressurised"
+      ],
+      "key_parameters": [
+        "V",
+        "nPorts"
+      ],
+      "ports": [
+        "ports[n] (fluid)"
+      ]
+    },
+    {
+      "class": "Modelica.Fluid.Vessels.OpenTank",
+      "use_for": "A vented vessel with a free surface. Renders as a tank with a live level.",
+      "domains": [
+        "fluid_level_and_flow",
+        "multiphase_mixture_process"
+      ],
+      "keywords": [
+        "tank",
+        "vessel",
+        "level",
+        "open",
+        "charging",
+        "buffer",
+        "cooling"
+      ],
+      "key_parameters": [
+        "crossArea",
+        "height",
+        "level_start",
+        "portsData",
+        "use_portsData"
+      ],
+      "ports": [
+        "ports[n] (fluid)"
+      ],
+      "note": "nPorts must equal the number of connections this vessel actually has, with one portsData entry per port, and EACH ports[i] takes exactly ONE connect. A vessel fed from two sources and drained to one needs nPorts = 3. Connecting two components to the same ports[i] is rejected during translation with 'each ports[i] of volume can at most be connected to one component'. Give each entry its diameter and height -- an inlet at height = <tank height>, an outlet at height = 0 -- with zeta_out = 0 and zeta_in = 1. A port above the liquid surface restricts outflow, so port height is hydraulics rather than sizing."
+    },
+    {
+      "class": "Modelica.Icons.Example",
+      "use_for": "Icon base for the top-level runnable experiment.",
+      "domains": [
+        "fluid_level_and_flow",
+        "magnetic_circuit",
+        "batch_sequential_process",
+        "thermal"
+      ],
+      "keywords": [
+        "icon",
+        "example",
+        "top level",
+        "experiment"
+      ]
+    },
+    {
+      "class": "Modelica.Magnetic.FluxTubes.Basic.ConstantReluctance",
+      "use_for": "A fixed magnetic reluctance, for a gap or segment given directly as R_m.",
+      "domains": [
+        "magnetic_circuit"
+      ],
+      "keywords": [
+        "reluctance",
+        "gap",
+        "air gap",
+        "segment"
+      ],
+      "key_parameters": [
+        "R_m"
+      ]
+    },
+    {
+      "class": "Modelica.Magnetic.FluxTubes.Basic.ElectroMagneticConverter",
+      "use_for": "Couples an electrical winding to the magnetic circuit; the turns count sets the mmf.",
+      "domains": [
+        "magnetic_circuit",
+        "electrical_circuit"
+      ],
+      "keywords": [
+        "coil",
+        "winding",
+        "turns",
+        "mmf",
+        "exciting",
+        "measuring",
+        "converter"
+      ],
+      "key_parameters": [
+        "N"
+      ],
+      "ports": [
+        "p, n (electrical pins)",
+        "port_p, port_n (magnetic)"
+      ]
+    },
+    {
+      "class": "Modelica.Magnetic.FluxTubes.Basic.Ground",
+      "use_for": "Magnetic ground; the reference node of the magnetic circuit.",
+      "domains": [
+        "magnetic_circuit"
+      ],
+      "keywords": [
+        "ground",
+        "reference",
+        "magnetic"
+      ],
+      "ports": [
+        "port (magnetic)"
+      ],
+      "note": "A magnetic circuit needs this AND an electrical ground. Omitting either leaves the system structurally singular."
+    },
+    {
+      "class": "Modelica.Magnetic.FluxTubes.Basic.LeakageWithCoefficient",
+      "use_for": "A leakage branch sized by a coefficient relative to the useful flux path.",
+      "domains": [
+        "magnetic_circuit"
+      ],
+      "keywords": [
+        "leakage",
+        "stray",
+        "bypass",
+        "useful flux",
+        "coefficient"
+      ],
+      "key_parameters": [
+        "c_usefulFlux"
+      ],
+      "note": "Sits in parallel between the split and rejoin nodes so total flux equals useful plus leakage. Series iron must sit BEFORE the split."
+    },
+    {
+      "class": "Modelica.Magnetic.FluxTubes.Sensors.MagneticFluxSensor",
+      "use_for": "Reads the flux in a branch.",
+      "domains": [
+        "magnetic_circuit"
+      ],
+      "keywords": [
+        "sensor",
+        "flux",
+        "measurement"
+      ],
+      "ports": [
+        "port_p, port_n (magnetic)",
+        "Phi (RealOutput)"
+      ]
+    },
+    {
+      "class": "Modelica.Magnetic.FluxTubes.Shapes.FixedShape.Cuboid",
+      "use_for": "An iron segment whose reluctance follows from its geometry and relative permeability.",
+      "domains": [
+        "magnetic_circuit"
+      ],
+      "keywords": [
+        "core",
+        "yoke",
+        "leg",
+        "iron",
+        "segment",
+        "geometry",
+        "permeability"
+      ],
+      "key_parameters": [
+        "l",
+        "a",
+        "b",
+        "mu_rConst"
+      ]
+    },
+    {
+      "class": "Modelica.Magnetic.FluxTubes.Sources.SignalMagneticPotentialDifference",
+      "use_for": "A commanded mmf source, when the brief drives the circuit magnetically rather than through a winding.",
+      "domains": [
+        "magnetic_circuit"
+      ],
+      "keywords": [
+        "mmf",
+        "source",
+        "potential",
+        "magnetomotive"
+      ],
+      "ports": [
+        "port_p, port_n (magnetic)",
+        "V_m (RealInput)"
+      ],
+      "note": "Prefer the ElectroMagneticConverter when the brief gives a real winding and its turns, since the turns count is then evidence rather than an assumption."
+    },
+    {
+      "class": "Modelica.Media.Water.ConstantPropertyLiquidWater",
+      "use_for": "Constant-property liquid water; cheapest choice when no phase change is modelled.",
+      "domains": [
+        "fluid_level_and_flow"
+      ],
+      "keywords": [
+        "medium",
+        "water",
+        "incompressible",
+        "constant property"
+      ]
+    },
+    {
+      "class": "Modelica.Media.Water.StandardWater",
+      "use_for": "Pure-water medium for a baseline or a topology/control integration check.",
+      "domains": [
+        "fluid_level_and_flow",
+        "multiphase_mixture_process"
+      ],
+      "keywords": [
+        "medium",
+        "water",
+        "baseline",
+        "two phase"
+      ],
+      "note": "Cannot carry a species mass fraction at all, so it can never satisfy composition-based acceptance."
+    },
+    {
+      "class": "Modelica.StateGraph.InitialStep",
+      "use_for": "Entry step of a graphical sequential function chart.",
+      "domains": [
+        "batch_sequential_process"
+      ],
+      "keywords": [
+        "stategraph",
+        "sfc",
+        "sequence",
+        "step",
+        "initial"
+      ],
+      "note": "Graphical sequencing is optional. A custom controller with an enumeration mode is usually safer where freeze/resume or command priority applies."
+    },
+    {
+      "class": "Modelica.StateGraph.TransitionWithSignal",
+      "use_for": "A StateGraph transition fired by a Boolean signal.",
+      "domains": [
+        "batch_sequential_process"
+      ],
+      "keywords": [
+        "stategraph",
+        "transition",
+        "guard",
+        "condition"
+      ]
+    },
+    {
+      "class": "Modelica.Thermal.HeatTransfer.Components.Convection",
+      "use_for": "Convective heat transfer, e.g. a cooling coil to a vessel.",
+      "domains": [
+        "thermal",
+        "multiphase_mixture_process"
+      ],
+      "keywords": [
+        "convection",
+        "coil",
+        "cooling",
+        "heat transfer"
+      ],
+      "ports": [
+        "solid, fluid (heat)",
+        "Gc (RealInput)"
+      ]
+    },
+    {
+      "class": "Modelica.Thermal.HeatTransfer.Components.HeatCapacitor",
+      "use_for": "Thermal inertia of a mass being heated or cooled.",
+      "domains": [
+        "thermal"
+      ],
+      "keywords": [
+        "thermal mass",
+        "inertia",
+        "capacity",
+        "cooling"
+      ],
+      "key_parameters": [
+        "C",
+        "T(start=...)"
+      ]
+    },
+    {
+      "class": "Modelica.Thermal.HeatTransfer.Components.ThermalConductor",
+      "use_for": "Conductive heat transfer between two thermal nodes.",
+      "domains": [
+        "thermal"
+      ],
+      "keywords": [
+        "conduction",
+        "heat transfer",
+        "cooling",
+        "wall"
+      ],
+      "key_parameters": [
+        "G"
+      ]
+    },
+    {
+      "class": "Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor",
+      "use_for": "Reads the temperature of a thermal node.",
+      "domains": [
+        "thermal"
+      ],
+      "keywords": [
+        "sensor",
+        "temperature",
+        "measurement"
+      ],
+      "ports": [
+        "port (heat)",
+        "T (RealOutput)"
+      ]
+    },
+    {
+      "class": "Modelica.Thermal.HeatTransfer.Sources.FixedTemperature",
+      "use_for": "A constant-temperature boundary, e.g. cooling water or ambient.",
+      "domains": [
+        "thermal"
+      ],
+      "keywords": [
+        "ambient",
+        "boundary",
+        "cooling water",
+        "fixed temperature"
+      ],
+      "key_parameters": [
+        "T"
+      ]
+    },
+    {
+      "class": "Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow",
+      "use_for": "A commanded heat input, such as an electric heater duty.",
+      "domains": [
+        "thermal",
+        "multiphase_mixture_process"
+      ],
+      "keywords": [
+        "heater",
+        "duty",
+        "heat input",
+        "boiler",
+        "evaporator"
+      ],
+      "ports": [
+        "port (heat)",
+        "Q_flow (RealInput)"
+      ]
+    }
+  ],
+  "rules": {
+    "do": [
+      {
+        "rule": "Put exactly one `inner Modelica.Fluid.System system;` in the top-level model whenever any Modelica.Fluid component is used.",
+        "why": "Every Fluid component resolves it by name; without it the model does not elaborate."
+      },
+      {
+        "rule": "Declare the medium once at model level and redeclare it on every fluid component.",
+        "why": "A component left on the default medium will not connect to one that was redeclared."
+      },
+      {
+        "rule": "Give every valve a non-zero dp_nominal.",
+        "why": "A valve with dp_nominal = 0 fails to build. The MSL uses 1 Pa where flow is gravity-driven between vessels, and 1e5 Pa where the valve is fed from a pressurised supply.",
+        "evidence": "Verified by simulating the same network three ways: dp_nominal = 0 fails, while omitting portsData or the dynamics setting still simulates."
+      },
+      {
+        "rule": "Give a vessel one port per connection and connect each port index exactly once.",
+        "why": "A ports[i] carrying two connections is rejected during translation with 'each ports[i] of volume can at most be connected to one component'; the message names no file or line, so it is not repairable by reading it.",
+        "evidence": "The NaCl plant reached the compiler for the first time and failed on exactly this, having reused a port index instead of raising nPorts."
+      },
+      {
+        "rule": "Build a plant of named vessels, valves, pumps and boundaries from the acausal library components.",
+        "why": "They carry their own icons, ports and hydraulics, so the diagram, the level dynamics and the port behaviour come for free, and the topology is a connect() graph a reviewer can read.",
+        "evidence": "A two-vessel plant written with a custom tank class per vessel and Real signals compiled and simulated, but rendered as unlabelled rectangles and duplicated the vessel as two near-identical classes."
+      },
+      {
+        "rule": "Give every vessel port its elevation through portsData.",
+        "why": "A port above the liquid surface must restrict outflow, so port height changes the hydraulics rather than only the sizing."
+      },
+      {
+        "rule": "Put a junction volume wherever branches meet or can be isolated together.",
+        "why": "Two pressure-drop-only elements connected directly leave the pressure between them undetermined."
+      },
+      {
+        "rule": "Derive a momentary command's width from the scan period: cmdWidth = 2 * scanPeriod.",
+        "why": "A sampled scan cannot see a press shorter than one scan, and nothing reports the miss.",
+        "evidence": "scanPeriod 0.1 s with 0.05 s presses: a STOP at 220 s was never seen, the controller stayed in its transfer state for 200 s, and the run still looked plausible because a later command happened to land on a scan boundary and did fire."
+      },
+      {
+        "rule": "Give each momentary command a PAIR of BooleanTable entries per occurrence.",
+        "why": "BooleanTable toggles at every listed time rather than pulsing, so {t1, t2} yields a single rising edge and silently loses the second command."
+      },
+      {
+        "rule": "Model a prescribed input profile as a source block carrying its times and values.",
+        "why": "Hold, ramp, hold is offset, startTime and duration on one Ramp block. It is a signal, not a sequence of states.",
+        "evidence": "A quasi-static magnetic benchmark was given a five-state machine whose guards tested only elapsed time, for a system with no actuators and no operator commands at all."
+      },
+      {
+        "rule": "Use a composition-dependent medium when the acceptance criteria are about composition.",
+        "why": "A pure-water medium cannot carry a species mass fraction at all, so it can never satisfy such a check."
+      },
+      {
+        "rule": "Place every component and give every connect() a graphical Line annotation.",
+        "why": "The bundle is inspected in OMEdit, and a connection with no annotation cannot be drawn."
+      },
+      {
+        "rule": "Report a missing parameter, correlation coefficient or medium property as a gap.",
+        "why": "An invented value is indistinguishable from an evidenced one once it is in the model."
+      }
+    ],
+    "dont": [
+      {
+        "rule": "Do not hand-write a tank, valve or pump class when the library has one.",
+        "why": "A custom class has no icon, no fluid ports and no hydraulics; and a Real signal is not a flow, so nothing enforces mass continuity across the connection."
+      },
+      {
+        "rule": "Do not fall back to the signal-flow form for a plant because it feels more controllable.",
+        "why": "The warnings attached to that form are the hazards of using it, not evidence that it is the safer choice."
+      },
+      {
+        "rule": "Do not feed a vessel's resulting outflow back into the valve that sets it.",
+        "why": "That closes an algebraic loop which the solver satisfies with every flow at zero, and the run still reports success."
+      },
+      {
+        "rule": "Do not write a state machine for a system whose only time-varying input is prescribed.",
+        "why": "A guard testing only elapsed time, with no measured quantity and no command in it, is the signature of a waveform being modelled as a sequence."
+      },
+      {
+        "rule": "Do not write a transition whose source and target are the same state in order to recompute a value.",
+        "why": "A quantity that varies continuously belongs in an equation, not in a self-transition."
+      },
+      {
+        "rule": "Do not place a series element between the two branch nodes of a parallel magnetic path.",
+        "why": "Series iron must sit BEFORE the split, or a spurious third parallel path appears and total flux no longer equals useful plus leakage."
+      },
+      {
+        "rule": "Do not omit either ground from a magnetic circuit.",
+        "why": "Both a magnetic ground and an electrical ground are required; omitting either leaves the system structurally singular."
+      },
+      {
+        "rule": "Do not add epsilon margins, change StopTime, or tune against a reference trajectory.",
+        "why": "The brief's thresholds and horizon are authoritative, and a recorded run is evidence about the past, never a forcing function."
+      },
+      {
+        "rule": "Do not treat a clean compile as evidence of correctness.",
+        "why": "A stub with no equation section, a physically wrong parameter, a pulse that fires once and a process stuck in one phase have all compiled and simulated cleanly here."
+      }
+    ]
+  }
+}

@@ -1,36 +1,17 @@
 {
-  "document": "Image evidence: 03_reference_control_diagram.png",
-  "subject": "tankController1",
+  "document": "Image evidence is attached; read labels, values, arrows and topology.",
+  "subject": "reference control diagram",
   "kind": "engineering diagram",
   "entities": [
     {
       "name": "system",
-      "kind": "configuration element",
+      "kind": "system",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "top left block labeled 'system' with text 'defaults' and value 'g' beneath it"
-    },
-    {
-      "name": "g",
-      "kind": "parameter",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "value",
-          "value": "9.8",
-          "unit": "",
-          "status": "unknown",
-          "supersedes": "",
-          "quote": "value '9.8' shown next to 'g' in the top left system defaults block"
-        }
-      ],
-      "ref": "",
-      "anchor": "",
-      "from_image": true,
-      "quote": "top left block labeled 'system' with text 'defaults' and value 'g' beneath it"
+      "quote": "label \"system\" at top left"
     },
     {
       "name": "source",
@@ -40,7 +21,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "blue circular element near upper middle labeled 'source'"
+      "quote": "label \"source\" above blue source symbol near top center-left"
     },
     {
       "name": "valve1",
@@ -50,7 +31,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "valve symbol near top center labeled 'valve1'"
+      "quote": "label \"valve1\" above top valve symbol"
     },
     {
       "name": "tank1",
@@ -63,13 +44,13 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "inside tank1, text 'level =' and value '0.05'"
+          "quote": "\"0.05\" shown inside tank1"
         }
       ],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "upper right tank labeled 'tank1'"
+      "quote": "label \"tank1\" above upper right tank"
     },
     {
       "name": "start",
@@ -79,7 +60,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "left side gray block labeled 'start'"
+      "quote": "label \"start\" inside grey box on left"
     },
     {
       "name": "stop",
@@ -89,7 +70,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "left side gray block labeled 'stop'"
+      "quote": "label \"stop\" inside grey box on left middle"
     },
     {
       "name": "shut",
@@ -99,7 +80,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "left side gray block labeled 'shut'"
+      "quote": "label \"shut\" inside grey box on left lower"
     },
     {
       "name": "tankController1",
@@ -109,7 +90,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "central control block labeled 'tankController1'"
+      "quote": "label \"tankController1\" above controller block"
     },
     {
       "name": "level1",
@@ -119,17 +100,17 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "label 'level1' next to lower left signal leading from 'tank1.level' to the controller"
+      "quote": "label \"level1\" near lower left signal source"
     },
     {
       "name": "tank1.level",
-      "kind": "measurement signal",
+      "kind": "signal",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "lower left small block labeled 'tank1.level'"
+      "quote": "label \"tank1.level\" inside small box below left"
     },
     {
       "name": "level2",
@@ -139,17 +120,17 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "label 'level2' next to lower middle signal leading from 'tank2.level' to the controller"
+      "quote": "label \"level2\" near lower middle signal source"
     },
     {
       "name": "tank2.level",
-      "kind": "measurement signal",
+      "kind": "signal",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "lower middle small block labeled 'tank2.level'"
+      "quote": "label \"tank2.level\" inside small box below middle"
     },
     {
       "name": "valve2",
@@ -159,7 +140,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "vertical valve symbol near center-right labeled 'valve2'"
+      "quote": "label \"valve2\" beside vertical valve between tanks"
     },
     {
       "name": "tank2",
@@ -172,23 +153,23 @@
           "unit": "",
           "status": "unknown",
           "supersedes": "",
-          "quote": "inside tank2, text 'level =' and value '0.05'"
+          "quote": "\"0.05\" shown inside tank2"
         }
       ],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "lower right tank labeled 'tank2'"
+      "quote": "label \"tank2\" above lower right tank"
     },
     {
       "name": "ambient1",
-      "kind": "ambient source",
+      "kind": "ambient",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "blue circular element near lower middle labeled 'ambient1'"
+      "quote": "label \"ambient1\" above blue source symbol near bottom center"
     },
     {
       "name": "valve3",
@@ -198,119 +179,138 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "valve symbol near bottom center-right labeled 'valve3'"
+      "quote": "label \"valve3\" below bottom valve symbol"
+    },
+    {
+      "name": "defaults",
+      "kind": "defaults block",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "g",
+          "value": "9",
+          "unit": "",
+          "status": "default",
+          "supersedes": "",
+          "quote": "\"g\" and \"9\" shown inside defaults block"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label \"defaults\" inside top-left block"
     }
   ],
   "relationships": [
     {
       "subject": "source",
-      "predicate": "connects_to",
+      "predicate": "connects to",
       "object": "valve1",
       "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "blue line from 'source' to 'valve1'"
+      "quote": "blue line from source to valve1"
     },
     {
       "subject": "valve1",
-      "predicate": "connects_to",
+      "predicate": "feeds",
       "object": "tank1",
       "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "blue line from 'valve1' to 'tank1'"
+      "quote": "blue line from valve1 to tank1"
     },
     {
       "subject": "tank1",
-      "predicate": "connects_to",
+      "predicate": "feeds",
       "object": "valve2",
       "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "blue line from bottom of 'tank1' to 'valve2'"
+      "quote": "blue line from tank1 bottom to valve2"
     },
     {
       "subject": "valve2",
-      "predicate": "connects_to",
+      "predicate": "feeds",
       "object": "tank2",
       "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "blue line from 'valve2' down to and right into 'tank2'"
+      "quote": "blue line from valve2 downward then right to tank2"
     },
     {
       "subject": "ambient1",
-      "predicate": "connects_to",
+      "predicate": "connects to",
       "object": "valve3",
       "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "blue line from 'ambient1' to 'valve3'"
+      "quote": "blue line from ambient1 to valve3"
     },
     {
       "subject": "valve3",
-      "predicate": "connects_to",
+      "predicate": "feeds",
       "object": "tank2",
       "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "blue line from 'valve3' to bottom of 'tank2'"
+      "quote": "blue line from valve3 rightward then up to tank2"
     },
     {
       "subject": "start",
-      "predicate": "feeds",
+      "predicate": "inputs to",
       "object": "tankController1",
       "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "magenta arrow from 'start' into 'tankController1' input 'start'"
+      "quote": "magenta signal line from start box to tankController1 input labeled start"
     },
     {
       "subject": "stop",
-      "predicate": "feeds",
+      "predicate": "inputs to",
       "object": "tankController1",
       "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "magenta arrow from 'stop' into 'tankController1' input 'stop'"
+      "quote": "magenta signal line from stop box to tankController1 input labeled stop"
     },
     {
       "subject": "shut",
-      "predicate": "feeds",
+      "predicate": "inputs to",
       "object": "tankController1",
       "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "magenta arrow from 'shut' into 'tankController1' input 'shut'"
+      "quote": "magenta signal line from shut box to tankController1 input labeled shut"
     },
     {
       "subject": "tank1.level",
-      "predicate": "feeds",
+      "predicate": "inputs to",
       "object": "tankController1",
-      "detail": "via level1",
+      "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "signal from 'tank1.level' up to controller input labeled 'level1'"
+      "quote": "signal from box labeled tank1.level to controller input labeled level1"
     },
     {
       "subject": "tank2.level",
-      "predicate": "feeds",
+      "predicate": "inputs to",
       "object": "tankController1",
-      "detail": "via level2",
+      "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "signal from 'tank2.level' up to controller input labeled 'level2'"
+      "quote": "signal from box labeled tank2.level to controller input labeled level2"
     },
     {
       "subject": "tankController1",
@@ -320,7 +320,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "magenta output from 'tankController1' port 'valve1' to 'valve1'"
+      "quote": "magenta control line from tankController1 output labeled valve1 to valve1"
     },
     {
       "subject": "tankController1",
@@ -330,7 +330,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "magenta output from 'tankController1' port 'valve2' to 'valve2'"
+      "quote": "magenta control line from tankController1 output labeled valve2 to valve2"
     },
     {
       "subject": "tankController1",
@@ -340,7 +340,7 @@
       "ref": "",
       "anchor": "",
       "from_image": true,
-      "quote": "magenta output from 'tankController1' port 'valve3' to 'valve3'"
+      "quote": "magenta control line from tankController1 output labeled valve3 to valve3"
     }
   ],
   "facts": [],

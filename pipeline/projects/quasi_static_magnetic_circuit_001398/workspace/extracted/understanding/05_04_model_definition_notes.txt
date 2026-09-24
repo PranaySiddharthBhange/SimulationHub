@@ -3,66 +3,58 @@ Document kind: engineering note
 
 ## Entities
 * left leg -- flux-tube reluctance element
-    - Area: a*a
-    - Mean length: l-a
-    - Relative permeability: mu_r
+    - area: a*a
+    - mean length: l-a
 * upper yoke -- flux-tube reluctance element
-    - Area: a*a
-    - Mean length: l-a
-    - Relative permeability: mu_r
+    - area: a*a
+    - mean length: l-a
 * right leg iron -- flux-tube reluctance element
-    - Area: a*a
-    - Mean length: l-a-delta
-    - Relative permeability: mu_r
+    - area: a*a
+    - mean length: l-a-delta
 * lower yoke -- flux-tube reluctance element
-    - Area: a*a
-    - Mean length: l-a
-    - Relative permeability: mu_r
-* GAP-1 -- parallel branch element
-* LEAK-1 -- parallel branch element
+    - area: a*a
+    - mean length: l-a
+* GAP-1 -- branch element
+* LEAK-1 -- branch element
 * exciting coil -- coil
-* Air gap -- flux-tube reluctance element  <Drawing MC-101 / Metrology note>
-    - Area: a*a
-    - Mean length: delta
-    - Relative permeability: 1
-    - Gap: 1.50 mm [archived/legacy]
-    - Gap: 1.50 mm [approved/released]
-    - Gap: 1.58 mm [as_built/as-built]
-* EP-03 -- reference
-* Rm -- magnetic quantity
-* Vm -- magnetic quantity
-* Phi -- magnetic quantity
-* measuring coil -- coil  <Coil Data Rev B>
+* Air gap -- flux-tube reluctance element
+    - area: a*a
+    - mean length: delta
+    - relative permeability: 1
+    - gap: 1.50 mm [archived/legacy]
+    - gap: 1.50 mm [approved/released]
+    - gap: 1.58 mm [as_built/as-built]
+* mu_r -- parameter  <CR-MAG-004>
+    - relative permeability: 1000 [archived/legacy]
+    - relative permeability: 1200 [approved/released]
+* sigma -- parameter  <CR-MAG-006>
+    - coefficient: 0.05 [archived/legacy]
+    - coefficient: 0.08 [approved/released]
+* measuring coil -- coil
     - turns: 40 [archived/legacy]
     - turns: 50 [approved/released]
 * ElectricGround -- reference potential
 * MagneticGround -- reference potential
-* mu_r -- quantity  <CR-MAG-004>
-    - mu_r: 1000 [archived/legacy]
-    - mu_r: 1200 [approved/released]
-* sigma -- quantity  <CR-MAG-006>
-    - sigma: 0.05 [archived/legacy]
-    - sigma: 0.08 [approved/released]
+* EP-03 -- input reference
 
 ## Relationships
-* left leg in series with upper yoke (series linear flux-tube reluctances)
-* upper yoke in series with right leg iron (series linear flux-tube reluctances)
-* right leg iron in series with lower yoke (series linear flux-tube reluctances)
-* right leg iron branches to parallel elements GAP-1 (branch after the right-leg iron)
-* right leg iron branches to parallel elements LEAK-1 (branch after the right-leg iron)
+* left leg in series with upper yoke
+* upper yoke in series with right leg iron
+* right leg iron in series with lower yoke
 * GAP-1 in parallel with LEAK-1
-* GAP-1 rejoins before lower yoke (The two branches rejoin before the lower yoke.)
-* LEAK-1 rejoins before lower yoke (The two branches rejoin before the lower yoke.)
+* GAP-1 branches after right leg iron
+* LEAK-1 branches after right leg iron
+* GAP-1 rejoins before lower yoke
+* LEAK-1 rejoins before lower yoke
 * exciting coil provides N*I (magnetic potential source)
 * ElectricGround included in exciting coil (electrical coil circuit)
 * MagneticGround included in left leg (magnetic flux-tube network)
 
 ## Requirements
-* Do not convert them to peak values in the SysML parameter model unless an explicit representation conversion is modeled.
-* Both the electrical and magnetic domains require a reference potential.
-* Include ElectricGround in the electrical coil circuit and MagneticGround in the magnetic flux-tube network.
+* Input current values in EP-03 are RMS phasor magnitudes and are not to be converted to peak values in the SysML parameter model unless an explicit representation conversion is modeled. [current]
+* Both the electrical and magnetic domains require a reference potential. [current]
+* Include ElectricGround in the electrical coil circuit and MagneticGround in the magnetic flux-tube network. [current]
 
 ## Physical relationships
-* Phi_gap/Phi_core = 1-sigma
-* R_leak = R_gap*(1-sigma)/sigma
-* Rm is real and Vm is in phase with Phi.
+* Phi_gap/Phi_core = 1-sigma [current]
+* R_leak = R_gap*(1-sigma)/sigma [current]

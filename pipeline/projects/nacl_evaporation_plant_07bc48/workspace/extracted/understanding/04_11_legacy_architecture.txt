@@ -1,5 +1,5 @@
-Subject: Legacy Evaporation Plant Architecture - Draft
-Document kind: legacy model
+Subject: Legacy Evaporation Plant Architecture
+Document kind: architecture diagram
 
 ## Entities
 * B1 -- component
@@ -26,6 +26,10 @@ Document kind: legacy model
 * B6 connects to P2
 * Controller signals to B3 (LIS301/QI302)
 * Controller signals to B5 (LIS501/QIS502)
+
+## Requirements
+* Junction volumes omitted. [proposed]
+* Cooling-water interfaces omitted. [proposed]
 
 ## Unreadable
 * Return-header destinations unresolved.

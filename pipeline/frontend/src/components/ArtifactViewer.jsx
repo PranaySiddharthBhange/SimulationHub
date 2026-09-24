@@ -200,6 +200,48 @@ function PlotModal({ projectId, plot, onClose }) {
   )
 }
 
+const CHECK_STYLE = {
+  pass: { fg: 'var(--green)', label: 'pass' },
+  fail: { fg: '#ef4444', label: 'fail' },
+  not_evaluable: { fg: '#eab308', label: 'not evaluable' },
+}
+
+// Every acceptance check, passes included: a run is easy to read as broadly
+// working when only its failures are listed, and the count is what says how
+// much of the brief the trajectory actually demonstrated.
+function CheckResults({ items }) {
+  if (!items || items.length === 0) return null
+  const passed = items.filter((i) => i.outcome === 'pass').length
+  return (
+    <div className="mt-4">
+      <div className="text-[11px] font-semibold uppercase tracking-wide text-[var(--text-dim)]">
+        Acceptance checks — {passed}/{items.length} passed
+      </div>
+      <ul className="mt-1.5 space-y-1.5">
+        {items.map((item, i) => {
+          const style = CHECK_STYLE[item.outcome] || CHECK_STYLE.not_evaluable
+          return (
+            <li key={i} className="text-[13px] leading-relaxed text-[var(--text)]">
+              <span className="font-semibold" style={{ color: style.fg }}>
+                {style.label}
+              </span>
+              <span className="ml-2">{item.name}</span>
+              {item.expression && (
+                <code className="ml-2 rounded bg-[var(--surface-2,rgba(127,127,127,0.12))] px-1 py-0.5 text-[12px]">
+                  {item.expression}
+                </code>
+              )}
+              {item.observed && (
+                <div className="mt-0.5 pl-1 text-[12.5px] text-[var(--text-dim)]">{item.observed}</div>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
 function ValidationView({ data }) {
   const report = data?.report
   if (!report) return null
@@ -213,6 +255,7 @@ function ValidationView({ data }) {
         {style.label}
       </span>
       <p className="mt-3 text-[13.5px] leading-relaxed text-[var(--text)]">{report.summary}</p>
+      <CheckResults items={report.check_results} />
       <ReportSection title="Issues" items={report.issues} />
       <ReportSection title="Assumptions" items={report.assumptions} />
       <ReportSection title="Root causes" items={report.root_causes} />

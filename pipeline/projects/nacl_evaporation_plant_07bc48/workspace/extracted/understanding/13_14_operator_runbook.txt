@@ -1,4 +1,4 @@
-Subject: Operator Runbook - Bench Evaporation Plant
+Subject: Operator Runbook - Bench Evaporation Plant, Rev A
 Document kind: operator runbook
 
 ## Entities
@@ -9,7 +9,7 @@ Document kind: operator runbook
 * V13 -- cooling-water valve
 * V17 -- cooling-water valve
 * V29 -- cooling-water valve
-* FIS-801 -- flow indication
+* FIS-801 -- condenser cooling-water flow indication
 * B6 -- tank
 * B7 -- tank
 * B3 -- tank
@@ -18,28 +18,24 @@ Document kind: operator runbook
 * controller -- controller
 * V11 -- valve
 * V9 -- valve
+* V15 -- valve
 * WaterNaCl -- simulation
 * StandardWater -- topology validation medium
 * pump -- pump
-* Q_up -- logic
 
 ## Relationships
-* B3 feeds B4 (fill/mix to buffer)
-* B4 feeds B5 (buffer to charge)
-* B5 undergoes heating/evaporation
-* heating/evaporation branches into simultaneous condensate/concentrate finishing branches
-* simultaneous condensate/concentrate finishing branches followed by return pumping
-* V11 transfers from B3 (to B4)
+* B3 feeds B4 (Normal operator observation sequence)
+* B4 feeds B5 (Normal operator observation sequence)
+* B3 transfers to B4 (via V11)
 * V9 adds brine to B3
 * V15 transfers concentrate to B7
+* FIS-801 indicates flow for condenser (cooling-water flow indication)
 
 ## Requirements
 * Confirm B1 contains the water-rich initial charge and B2 contains the concentrated NaCl initial charge. [current]
 * Confirm manual drain valves V26 and V27 are closed and cooling-water valves V13, V17 and V29 are aligned for service. [current]
 * Confirm condenser cooling-water flow indication FIS-801 is available before heating. [current]
 * Verify B6 and B7 are sufficiently empty for the next batch. [current]
-* The controller owns the automated valve set; do not manually override an automated valve during an acceptance run. [current]
-
-## Unreadable
-* Entity V15 appears in expected qualitative trends but is not introduced elsewhere in the document.
-* The phrase "approved routing change record" is referenced but not identified further.
+* Do not manually override an automated valve during an acceptance run. [current]
+* First validate the same topology with StandardWater. [current]
+* Do not resolve return-routing questions from pump location alone; check the approved routing change record. [current]

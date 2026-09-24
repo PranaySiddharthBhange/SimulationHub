@@ -2,35 +2,37 @@ Subject: User Requirement Specification - Two-Tank Sequence Controller
 Document kind: requirement specification
 
 ## Entities
-* TK-101 -- tank  <[page 1]>; aliases: tank1, T1, Tank 1
-* TK-102 -- tank  <[page 1]>; aliases: tank2, T2, Tank 2
-* XV-101 -- actuated isolation valve  <[page 1]>; aliases: valve1, V1
-* XV-102 -- actuated isolation valve  <[page 1]>; aliases: valve2, V2
-* XV-103 -- actuated isolation valve  <[page 1]>; aliases: valve3, V3
-* PLC-101 -- sequence controller  <[page 1]>; aliases: tankController
-* LT-101 -- level measurement  <[page 2]>
-* LT-102 -- level measurement  <[page 2]>
-* START -- operator pushbutton command  <[page 2]>
-* STOP -- operator pushbutton command  <[page 2]>
-* SHUT -- operator pushbutton command  <[page 2]>
-* TK-101 -- tank  <Rev A [page 2]>; aliases: Tank 1
+* TK-101 -- tank  <TK-101 [page 1]>; aliases: tank1, T1
+* TK-102 -- tank  <TK-102 [page 1]>; aliases: tank2, T2
+* XV-101 -- actuated isolation valve  <XV-101 [page 1]>; aliases: valve1, V1
+* XV-102 -- actuated isolation valve  <XV-102 [page 1]>; aliases: valve2, V2
+* XV-103 -- actuated isolation valve  <XV-103 [page 1]>; aliases: valve3, V3
+* PLC-101 -- sequence controller  <PLC-101 [page 1]>; aliases: tankController
+* LT-101 -- level measurement  <LT-101 [page 2]>
+* LT-102 -- level measurement  <LT-102 [page 2]>
+* START -- operator command  <[page 1]>
+* STOP -- operator command  <[page 1]>
+* SHUT -- operator command  <[page 1]>
+* Tank 1 high limit -- setpoint  <[page 2]>
+    - level: 0.78 m [approved]
+* Tank 1 low limit -- setpoint  <[page 2]>
+    - level: 0.05 m [approved]
+* Tank 2 low limit -- setpoint  <[page 2]>
+    - level: 0.05 m [approved]
+* Tank 1 -- tank  <[page 2]>
     - initial level: 0.05 m [approved]
-    - high limit: 0.78 m [approved]
-    - low limit: 0.05 m [approved]
-* TK-102 -- tank  <Rev A [page 2]>; aliases: Tank 2
+* Tank 2 -- tank  <[page 2]>
     - initial level: 0.05 m [approved]
-    - low limit: 0.05 m [approved]
-* T1 high wait -- wait period  <Rev A [page 2]>
-    - wait after high: 10 s [approved]
-* T1 low wait -- wait period  <Rev A [page 2]>
-    - wait after low: 10 s [approved]
-* T2 low wait -- wait period  <Rev A [page 2]>
-    - wait after low: 10 s [approved]
+* Wait after T1 high -- setpoint  <[page 2]>
+    - waiting period: 10 s [approved]
+* Wait after T1 low -- setpoint  <[page 2]>
+    - waiting period: 10 s [approved]
+* Wait after T2 low -- setpoint  <[page 2]>
+    - waiting period: 10 s [approved]
 
 ## Relationships
 * XV-101 inlet valve to TK-101  <[page 1]>
 * XV-102 transfer valve from TK-101 (to TK-102)  <[page 1]>
-* XV-102 transfer valve to TK-102 (from TK-101)  <[page 1]>
 * XV-103 drain valve for TK-102  <[page 1]>
 * LT-101 available to PLC-101  <[page 2]>
 * LT-102 available to PLC-101  <[page 2]>
@@ -49,5 +51,6 @@ Document kind: requirement specification
 * SHUT shall empty both tanks by opening V2 and V3 and shall inhibit V1. [released_baseline]  <URS-M-003 [page 1]>
 * When shutdown emptying is achieved, V2 and V3 shall close and the controller shall return to the start configuration. [released_baseline]  <URS-M-004 [page 1]>
 * Level measurements LT-101 and LT-102 shall be available to PLC-101. [released_baseline]  <[page 2]>
+* START, STOP and SHUT are momentary commands. [released_baseline]  <[page 2]>
 * The supplier shall provide actuators that fail closed on loss of power. [released_baseline]  <[page 2]>
 * Sequence operation, stop/resume behavior and controlled shutdown shall be demonstrated in simulation. [released_baseline]  <[page 2]>

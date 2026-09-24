@@ -1,90 +1,86 @@
-Subject: Control Sequence Design - NaCl Evaporation Plant, Rev B
-Document kind: engineering design note
+Subject: Control Sequence Design - NaCl Evaporation Plant
+Document kind: requirement specification
 
 ## Entities
 * central controller -- controller
-* StateGraph-style sequential function chart -- control architecture
-* sensors connector -- connector
-* actuators connector -- connector
-* Manual/isolation valves -- valves
-* StateGraph actuator bundle -- actuator bundle
+* sensors connector -- connector; aliases: controller.sensors
+* actuators connector -- connector; aliases: controller.actuators
+* StateGraph actuator bundle -- connector
+* manual/isolation valves -- valve
 * V8 -- automated valve
-* LIS-301 -- instrument
+* LIS-301 -- level instrument
     - level threshold: 0.13 m
     - level threshold: 0.01 m
+* B3 -- vessel
 * V9 -- automated valve
-* QI-302 -- instrument
+* QI-302 -- quality instrument
     - concentration threshold: 0.080 kg/kg
 * V11 -- automated valve
-* LIS-501 -- instrument
+* LIS-501 -- level instrument
     - level threshold: 0.01 m
     - level threshold: 0.18 m
     - level threshold: 0.05 m
 * V15 -- automated valve
 * V12 -- automated valve
 * B5_Heater -- heater command
-* QIS-502 -- instrument; aliases: controller.sensors.QIS_502
+* QIS-502 -- quality instrument
     - concentration threshold: 0.180 kg/kg
 * B6_Cooler -- cooler command
-* TIS-602 -- instrument
+* TIS-602 -- temperature instrument
     - temperature threshold: 20 degC
 * P2 -- pump
-    - permissive level threshold: 0.02 m
-* B1 return valve group -- valve group; aliases: corrected B1 return valve group
-* LIS-701 -- instrument
+    - level permissive: 0.02 m
+    - low discharge pressure alarm threshold: 0.8 bar(g)
+* B1 return valve group -- valve group; aliases: B1 valve group
+* LIS-701 -- level instrument
     - level threshold: 0.01 m
-    - permissive level threshold: 0.02 m
-* V15 -- automated valve
+    - level permissive: 0.02 m
+* B7 -- vessel
 * B7_Cooler -- cooler command
-* TIS-702 -- instrument
+* TIS-702 -- temperature instrument
     - temperature threshold: 25 degC
 * P1 -- pump
-    - permissive level threshold: 0.02 m
-* B2 return valve group -- valve group; aliases: corrected B2 return valve group
+    - level permissive: 0.02 m
+    - low discharge pressure alarm threshold: 0.8 bar(g)
+* B2 return valve group -- valve group; aliases: B2 valve group
 * B6 -- vessel
-* B7 -- vessel
 * B5 -- vessel
-* FIS-801 -- instrument
-    - flow threshold: 0.10 kg/s
-* PIS-901 -- instrument
-    - low discharge pressure alarm threshold: 0.8 bar(g)
-* LIS-601 -- instrument
-    - permissive level threshold: 0.02 m
-* PIS-1001 -- instrument
-    - low discharge pressure alarm threshold: 0.8 bar(g)
-* B1 valve group -- valve group
-* B2 valve group -- valve group
-* CR-017 -- change request
-* controller.sensors.LIS_301 -- signal
-* B3 -- vessel
+* FIS-801 -- flow instrument
+    - flow permissive threshold: 0.10 kg/s
+* PIS-901 -- pressure instrument
+    - alarm threshold: 0.8 bar(g)
+* LIS-601 -- level instrument
+    - level permissive: 0.02 m
+* PIS-1001 -- pressure instrument
+    - alarm threshold: 0.8 bar(g)
+* CR-017 -- change request  <CR-017>
+* controller.sensors.LIS_301 -- signal assignment
 * B3.level -- signal
-* controller.sensors.QIS_502 -- signal
+* controller.sensors.QIS_502 -- signal assignment
 * B5.medium.Xi[NaCl] -- signal
-* V9.open -- signal
-* controller.actuators.V9 -- signal
-* HeatB5.Q_flow -- signal
-    - heater heat flow when on: 20000
+* V9.open -- signal assignment
+* HeatB5.Q_flow -- signal assignment
+    - heat flow command: 20000
 * controller.actuators.T5_Heater -- signal
 
 ## Relationships
-* central controller implemented as StateGraph-style sequential function chart
 * sensors connector bundles measured process values
 * actuators connector bundles automated valve, pump and thermal commands
-* Manual/isolation valves excluded from StateGraph actuator bundle (unless specifically stated in the ICD)
+* manual/isolation valves excluded from StateGraph actuator bundle (unless specifically stated in the ICD)
 * Step6 creates concurrent branches Branch A and Branch B
 * Branch A cools condensate in B6
-* Branch B waits for availability of B7
 * Branch B transfers concentrate from B5 (to B7)
-* B5 concentrate transferred to B7
-* B6 returns to B1 (recovered condensate)
-* B7 returns to B2 (cooled concentrate)
+* recovered condensate from B6 returns to B1
+* cooled concentrate from B7 returns to B2
 * controller.sensors.LIS_301 assigned from B3.level
 * controller.sensors.QIS_502 assigned from B5.medium.Xi[NaCl]
 * V9.open assigned from controller.actuators.V9
 * HeatB5.Q_flow assigned from controller.actuators.T5_Heater (if true then 20000 else 0)
 
 ## Requirements
-* Controller valve-group assignments shall follow CR-017.  <CR-017>
+* Controller valve-group assignments shall follow CR-017. [current]  <CR-017>
+* A join is satisfied only when both branches report completion.
+* Automated valves fail closed and are not treated as modulating valves.
 
 ## Constraints
 * B5 heater permissive: LIS-501 >= 0.05 m AND FIS-801 >= 0.10 kg/s.
@@ -92,24 +88,27 @@ Document kind: engineering design note
 * P2 permissive: LIS-601 > 0.02 m.
 
 ## Behaviors
-* If startEnable AND B3 available, then transition from Initial with all automated valves closed and pumps/heaters/coolers off.
-* If LIS-301 >= 0.13 m, then Step1 action is V8=OPEN.
-* If QI-302 >= 0.080 kg/kg, then Step2 action is V9=OPEN.
-* If LIS-301 < 0.01 m, then Step3 action is V11=OPEN.
-* If LIS-501 <0.01 m AND NOT V15, then Step4 has no transfer actuator.
-* If LIS-501 >=0.18 m, then Step5 action is V12=OPEN.
-* If QIS-502 >=0.180 kg/kg, then Step6 action is B5_Heater=ON.
-* If TIS-602 <=20 degC, then Step12 action is B6_Cooler=ON.
-* If B6 return complete, then Step13 action is P2=ON + corrected B1 return valve group.
-* If LIS-701 <0.01 m, then Step7 has no transfer actuator.
-* If LIS-501 <0.01 m, then Step8 action is V15=OPEN.
-* If TIS-702 <=25 degC, then Step9 action is B7_Cooler=ON.
-* If B7 return complete, then Step10/11 action is P1=ON + corrected B2 return valve group.
-* If A complete AND B complete AND time>2500 s, then Join has no transfer actuator.
-* A join is satisfied only when both branches report completion.
+* If startEnable AND B3 available, the Initial state transitions with all automated valves closed and pumps/heaters/coolers off.
+* If LIS-301 >= 0.13 m, Step1 action is V8=OPEN.
+* If QI-302 >= 0.080 kg/kg, Step2 action is V9=OPEN.
+* If LIS-301 < 0.01 m, Step3 action is V11=OPEN.
+* If LIS-501 <0.01 m AND NOT V15, Step4 has no transfer actuator.
+* If LIS-501 >=0.18 m, Step5 action is V12=OPEN.
+* If QIS-502 >=0.180 kg/kg, Step6 action is B5_Heater=ON.
+* If TIS-602 <=20 degC, Step12 action is B6_Cooler=ON.
+* If B6 return complete, Step13 action is P2=ON + corrected B1 return valve group.
+* If LIS-701 <0.01 m, Step7 has no transfer actuator.
+* If LIS-501 <0.01 m, Step8 action is V15=OPEN.
+* If TIS-702 <=25 degC, Step9 action is B7_Cooler=ON.
+* If B7 return complete, Step10/11 action is P1=ON + corrected B2 return valve group.
+* If A complete AND B complete AND time>2500 s, Join has no transfer actuator.
 * Low discharge pressure alarm if PIS-901 < 0.8 bar(g) while running.
 * Low discharge pressure alarm if PIS-1001 < 0.8 bar(g) while running.
-* Automated valves fail closed and are not treated as modulating valves.
 
 ## Physical relationships
+* controller.sensors.LIS_301 = B3.level;
+* controller.sensors.QIS_502 = B5.medium.Xi[NaCl];
+* V9.open = controller.actuators.V9;
+
+## Control laws
 * HeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;

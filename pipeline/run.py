@@ -251,9 +251,17 @@ def start_backend() -> tuple[subprocess.Popen | None, int]:
     backend_env = os.environ.copy()
     src_path = str(ROOT / "src")
     backend_env["PYTHONPATH"] = src_path + os.pathsep + backend_env.get("PYTHONPATH", "")
+    # --reload watches src/ so an edit to a prompt, a contract or the pipeline
+    # takes effect on the next stage run. Without it uvicorn imports everything
+    # once at startup and holds it: edits to the Stage 3 and Stage 4 prompts
+    # made while the UI was up were silently ignored, and the run that followed
+    # looked like the prompt fix had failed rather than like stale code. The
+    # watcher is scoped to src/ so a written artifact under projects/ -- every
+    # stage writes several -- cannot restart the backend mid-run.
     return subprocess.Popen(
         [sys.executable, "-m", "uvicorn", "simulation_platform.api:app",
-         "--host", BACKEND_HOST, "--port", str(port)],
+         "--host", BACKEND_HOST, "--port", str(port),
+         "--reload", "--reload-dir", src_path],
         cwd=ROOT, env=backend_env, creationflags=NEW_GROUP_FLAGS,
     ), port
 

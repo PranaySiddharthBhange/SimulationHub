@@ -1,0 +1,54 @@
+flowchart TD
+    A["Simulation start<br/>t=0 s"] --> B["IDLE<br/>controller_state_id=0<br/>V1=0 V2=0 V3=0<br/>tank1_level_m=0.05 m<br/>tank2_level_m=0.05 m"]
+    B -->|"START at 20 s"| C{"SHUT edge?"}
+    B -->|"No START yet"| B
+    C -->|"Yes"| N1["SHUTDOWN<br/>controller_state_id=8<br/>V1=0 V2=1 V3=1<br/>abandon stored resume context"]
+    C -->|"No"| D["FILL_T1<br/>controller_state_id=1<br/>V1=1 V2=0 V3=0"]
+    D -->|"SHUT"| N1
+    D -->|"STOP"| P1["PAUSED<br/>controller_state_id=7<br/>V1=0 V2=0 V3=0<br/>store interrupted state FILL_T1"]
+    D -->|"LT-101 >= 0.80 m"| E["WAIT_AFTER_FILL<br/>controller_state_id=2<br/>V1=0 V2=0 V3=0<br/>start 10 s timer"]
+    D -->|"No"| D
+    E -->|"SHUT"| N1
+    E -->|"STOP"| P2["PAUSED<br/>controller_state_id=7<br/>V1=0 V2=0 V3=0<br/>store WAIT_AFTER_FILL<br/>preserve remaining timer"]
+    E -->|"10 s expired"| F["TRANSFER_T1_T2<br/>controller_state_id=3<br/>V1=0 V2=1 V3=0"]
+    E -->|"No"| E
+    F -->|"SHUT"| N1
+    F -->|"STOP at 220 s"| P3["PAUSED<br/>controller_state_id=7<br/>V1=0 V2=0 V3=0<br/>store interrupted state TRANSFER_T1_T2"]
+    F -->|"LT-101 <= 0.05 m"| G["WAIT_AFTER_TRANSFER<br/>controller_state_id=4<br/>V1=0 V2=0 V3=0<br/>start 12 s timer"]
+    F -->|"No"| F
+    G -->|"SHUT"| N1
+    G -->|"STOP"| P4["PAUSED<br/>controller_state_id=7<br/>V1=0 V2=0 V3=0<br/>store WAIT_AFTER_TRANSFER<br/>preserve remaining timer"]
+    G -->|"12 s expired"| H["DRAIN_T2<br/>controller_state_id=5<br/>V1=0 V2=0 V3=1"]
+    G -->|"No"| G
+    H -->|"SHUT"| N1
+    H -->|"STOP at 650 s"| P5["PAUSED<br/>controller_state_id=7<br/>V1=0 V2=0 V3=0<br/>store interrupted state DRAIN_T2"]
+    H -->|"LT-102 <= 0.05 m"| I["WAIT_AFTER_DRAIN<br/>controller_state_id=6<br/>V1=0 V2=0 V3=0<br/>start 8 s timer"]
+    H -->|"No"| H
+    I -->|"SHUT"| N1
+    I -->|"STOP"| P6["PAUSED<br/>controller_state_id=7<br/>V1=0 V2=0 V3=0<br/>store WAIT_AFTER_DRAIN<br/>preserve remaining timer"]
+    I -->|"8 s expired"| D
+    I -->|"No"| I
+    P1 -->|"START"| D
+    P2 -->|"START"| E
+    P3 -->|"START at 280 s"| F
+    P4 -->|"START"| G
+    P5 -->|"START"| H
+    P6 -->|"START"| I
+    P1 -->|"SHUT"| N1
+    P2 -->|"SHUT"| N1
+    P3 -->|"SHUT"| N1
+    P4 -->|"SHUT"| N1
+    P5 -->|"SHUT at 700 s"| N1
+    P6 -->|"SHUT"| N1
+    P1 -->|"STOP ignored"| P1
+    P2 -->|"STOP ignored"| P2
+    P3 -->|"STOP ignored"| P3
+    P4 -->|"STOP ignored"| P4
+    P5 -->|"STOP ignored"| P5
+    P6 -->|"STOP ignored"| P6
+    N1 -->|"LT-101 <= 0.05 m and LT-102 <= 0.05 m"| N2["IDLE<br/>controller_state_id=0<br/>V1=0 V2=0 V3=0"]
+    N1 -->|"No"| N1
+    N2 -->|"START later"| D
+    N2 -->|"No START"| J["End of requested run<br/>t=900 s"]
+    N1 -->|"START ignored"| N1
+    N1 -->|"STOP ignored"| N1

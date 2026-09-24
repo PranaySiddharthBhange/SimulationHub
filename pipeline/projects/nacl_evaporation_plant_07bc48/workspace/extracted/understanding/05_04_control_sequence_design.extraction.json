@@ -1,7 +1,7 @@
 {
   "document": "Control Sequence Design - NaCl Evaporation Plant, Rev B\nSynthetic hackathon engineering evidence\n1. Controller architecture\nThe central controller is implemented as a StateGraph-style sequential function chart. A single sensors connector bundles measured process values and a single actuators connector bundles automated valve, pump and thermal commands. Plant-level equations assign individual instrument values into the sensor bundle and actuator values to component commands.\nManual/isolation valves shown on the P&ID are intentionally excluded from the normal StateGraph actuator bundle unless specifically stated in the ICD.\n2. State sequence\nState | Action | Guard/transition | Region\nInitial | All automated valves closed; pumps/heaters/coolers off | startEnable AND B3 available | Single\nStep1 | V8=OPEN | LIS-301 >= 0.13 m | Single\nStep2 | V9=OPEN | QI-302 >= 0.080 kg/kg | Single\nStep3 | V11=OPEN | LIS-301 < 0.01 m | Single\nStep4 | No transfer actuator | LIS-501 <0.01 m AND NOT V15 | Single\nStep5 | V12=OPEN | LIS-501 >=0.18 m | Single\nStep6 | B5_Heater=ON | QIS-502 >=0.180 kg/kg | Single\nStep12 | B6_Cooler=ON | TIS-602 <=20 degC | Parallel A\nStep13 | P2=ON + corrected B1 return valve group | B6 return complete | Parallel A\nStep7 | No transfer actuator | LIS-701 <0.01 m | Parallel B\nStep8 | V15=OPEN | LIS-501 <0.01 m | Parallel B\nStep9 | B7_Cooler=ON | TIS-702 <=25 degC | Parallel B\nStep10/11 | P1=ON + corrected B2 return valve group | B7 return complete | Parallel B\nJoin | No transfer actuator | A complete AND B complete AND time>2500 s | Join\n3. Parallel branch behavior\nStep6 completion creates two concurrent branches. Branch A cools the condensate in B6 and then returns it. Branch B waits for B7 availability, transfers B5 concentrate to B7, cools it, then returns it. A join is satisfied only when both branches report completion.\n4. Heater and pump interlocks\nB5 heater permissive: LIS-501 >= 0.05 m AND FIS-801 >= 0.10 kg/s.\nP1 permissive: LIS-701 > 0.02 m. Low discharge pressure alarm if PIS-901 < 0.8 bar(g) while running.\nP2 permissive: LIS-601 > 0.02 m. Low discharge pressure alarm if PIS-1001 < 0.8 bar(g) while running.\nAutomated valves fail closed and are not treated as modulating valves.\n5. Return-routing revision note\nIMPORTANT: The archived StateGraph extract paired the B7/P1 branch with the B1 valve group and the B6/P2 branch with the B2 valve group. CR-017 subsequently corrected the destination semantics: recovered condensate from B6 returns to B1, and cooled concentrate from B7 returns to B2. Controller valve-group assignments shall follow CR-017.\n6. Example textual signal assignments\ncontroller.sensors.LIS_301 = B3.level;\ncontroller.sensors.QIS_502 = B5.medium.Xi[NaCl];\nV9.open = controller.actuators.V9;\nHeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;",
-  "subject": "Control Sequence Design - NaCl Evaporation Plant, Rev B",
-  "kind": "engineering design note",
+  "subject": "Control Sequence Design - NaCl Evaporation Plant",
+  "kind": "requirement specification",
   "entities": [
     {
       "name": "central controller",
@@ -14,19 +14,11 @@
       "quote": "The central controller is implemented as a StateGraph-style sequential function chart."
     },
     {
-      "name": "StateGraph-style sequential function chart",
-      "kind": "control architecture",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "StateGraph-style sequential function chart"
-    },
-    {
       "name": "sensors connector",
       "kind": "connector",
-      "aliases": [],
+      "aliases": [
+        "controller.sensors"
+      ],
       "values": [],
       "ref": "",
       "anchor": "",
@@ -36,7 +28,9 @@
     {
       "name": "actuators connector",
       "kind": "connector",
-      "aliases": [],
+      "aliases": [
+        "controller.actuators"
+      ],
       "values": [],
       "ref": "",
       "anchor": "",
@@ -44,24 +38,24 @@
       "quote": "a single actuators connector bundles automated valve, pump and thermal commands"
     },
     {
-      "name": "Manual/isolation valves",
-      "kind": "valves",
+      "name": "StateGraph actuator bundle",
+      "kind": "connector",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the normal StateGraph actuator bundle"
+    },
+    {
+      "name": "manual/isolation valves",
+      "kind": "valve",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "Manual/isolation valves shown on the P&ID are intentionally excluded from the normal StateGraph actuator bundle unless specifically stated in the ICD."
-    },
-    {
-      "name": "StateGraph actuator bundle",
-      "kind": "actuator bundle",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "StateGraph actuator bundle"
     },
     {
       "name": "V8",
@@ -75,7 +69,7 @@
     },
     {
       "name": "LIS-301",
-      "kind": "instrument",
+      "kind": "level instrument",
       "aliases": [],
       "values": [
         {
@@ -101,6 +95,16 @@
       "quote": "LIS-301 >= 0.13 m"
     },
     {
+      "name": "B3",
+      "kind": "vessel",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "startEnable AND B3 available"
+    },
+    {
       "name": "V9",
       "kind": "automated valve",
       "aliases": [],
@@ -112,7 +116,7 @@
     },
     {
       "name": "QI-302",
-      "kind": "instrument",
+      "kind": "quality instrument",
       "aliases": [],
       "values": [
         {
@@ -141,7 +145,7 @@
     },
     {
       "name": "LIS-501",
-      "kind": "instrument",
+      "kind": "level instrument",
       "aliases": [],
       "values": [
         {
@@ -172,7 +176,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "LIS-501 <0.01 m"
+      "quote": "LIS-501 <0.01 m AND NOT V15"
     },
     {
       "name": "V15",
@@ -182,7 +186,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "NOT V15"
+      "quote": "Step8 | V15=OPEN | LIS-501 <0.01 m | Parallel B"
     },
     {
       "name": "V12",
@@ -206,10 +210,8 @@
     },
     {
       "name": "QIS-502",
-      "kind": "instrument",
-      "aliases": [
-        "controller.sensors.QIS_502"
-      ],
+      "kind": "quality instrument",
+      "aliases": [],
       "values": [
         {
           "quantity": "concentration threshold",
@@ -223,7 +225,7 @@
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "controller.sensors.QIS_502 = B5.medium.Xi[NaCl];"
+      "quote": "QIS-502 >=0.180 kg/kg"
     },
     {
       "name": "B6_Cooler",
@@ -237,7 +239,7 @@
     },
     {
       "name": "TIS-602",
-      "kind": "instrument",
+      "kind": "temperature instrument",
       "aliases": [],
       "values": [
         {
@@ -260,12 +262,20 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "permissive level threshold",
+          "quantity": "level permissive",
           "value": "0.02",
           "unit": "m",
           "status": "unknown",
           "supersedes": "",
           "quote": "P2 permissive: LIS-601 > 0.02 m."
+        },
+        {
+          "quantity": "low discharge pressure alarm threshold",
+          "value": "0.8",
+          "unit": "bar(g)",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "P2 permissive: LIS-601 > 0.02 m. Low discharge pressure alarm if PIS-1001 < 0.8 bar(g) while running."
         }
       ],
       "ref": "",
@@ -277,17 +287,17 @@
       "name": "B1 return valve group",
       "kind": "valve group",
       "aliases": [
-        "corrected B1 return valve group"
+        "B1 valve group"
       ],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "P2=ON + corrected B1 return valve group"
+      "quote": "Step13 | P2=ON + corrected B1 return valve group | B6 return complete | Parallel A"
     },
     {
       "name": "LIS-701",
-      "kind": "instrument",
+      "kind": "level instrument",
       "aliases": [],
       "values": [
         {
@@ -299,12 +309,12 @@
           "quote": "LIS-701 <0.01 m"
         },
         {
-          "quantity": "permissive level threshold",
+          "quantity": "level permissive",
           "value": "0.02",
           "unit": "m",
           "status": "unknown",
           "supersedes": "",
-          "quote": "LIS-701 > 0.02 m."
+          "quote": "P1 permissive: LIS-701 > 0.02 m."
         }
       ],
       "ref": "",
@@ -313,14 +323,14 @@
       "quote": "LIS-701 <0.01 m"
     },
     {
-      "name": "V15",
-      "kind": "automated valve",
+      "name": "B7",
+      "kind": "vessel",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "Step8 | V15=OPEN | LIS-501 <0.01 m | Parallel B"
+      "quote": "Branch B waits for B7 availability, transfers B5 concentrate to B7, cools it, then returns it."
     },
     {
       "name": "B7_Cooler",
@@ -334,7 +344,7 @@
     },
     {
       "name": "TIS-702",
-      "kind": "instrument",
+      "kind": "temperature instrument",
       "aliases": [],
       "values": [
         {
@@ -357,12 +367,20 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "permissive level threshold",
+          "quantity": "level permissive",
           "value": "0.02",
           "unit": "m",
           "status": "unknown",
           "supersedes": "",
           "quote": "P1 permissive: LIS-701 > 0.02 m."
+        },
+        {
+          "quantity": "low discharge pressure alarm threshold",
+          "value": "0.8",
+          "unit": "bar(g)",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "P1 permissive: LIS-701 > 0.02 m. Low discharge pressure alarm if PIS-901 < 0.8 bar(g) while running."
         }
       ],
       "ref": "",
@@ -374,13 +392,13 @@
       "name": "B2 return valve group",
       "kind": "valve group",
       "aliases": [
-        "corrected B2 return valve group"
+        "B2 valve group"
       ],
       "values": [],
       "ref": "",
       "anchor": "",
       "from_image": false,
-      "quote": "P1=ON + corrected B2 return valve group"
+      "quote": "Step10/11 | P1=ON + corrected B2 return valve group | B7 return complete | Parallel B"
     },
     {
       "name": "B6",
@@ -391,16 +409,6 @@
       "anchor": "",
       "from_image": false,
       "quote": "Branch A cools the condensate in B6 and then returns it."
-    },
-    {
-      "name": "B7",
-      "kind": "vessel",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "Branch B waits for B7 availability, transfers B5 concentrate to B7, cools it, then returns it."
     },
     {
       "name": "B5",
@@ -414,11 +422,11 @@
     },
     {
       "name": "FIS-801",
-      "kind": "instrument",
+      "kind": "flow instrument",
       "aliases": [],
       "values": [
         {
-          "quantity": "flow threshold",
+          "quantity": "flow permissive threshold",
           "value": "0.10",
           "unit": "kg/s",
           "status": "unknown",
@@ -433,11 +441,11 @@
     },
     {
       "name": "PIS-901",
-      "kind": "instrument",
+      "kind": "pressure instrument",
       "aliases": [],
       "values": [
         {
-          "quantity": "low discharge pressure alarm threshold",
+          "quantity": "alarm threshold",
           "value": "0.8",
           "unit": "bar(g)",
           "status": "unknown",
@@ -452,11 +460,11 @@
     },
     {
       "name": "LIS-601",
-      "kind": "instrument",
+      "kind": "level instrument",
       "aliases": [],
       "values": [
         {
-          "quantity": "permissive level threshold",
+          "quantity": "level permissive",
           "value": "0.02",
           "unit": "m",
           "status": "unknown",
@@ -471,11 +479,11 @@
     },
     {
       "name": "PIS-1001",
-      "kind": "instrument",
+      "kind": "pressure instrument",
       "aliases": [],
       "values": [
         {
-          "quantity": "low discharge pressure alarm threshold",
+          "quantity": "alarm threshold",
           "value": "0.8",
           "unit": "bar(g)",
           "status": "unknown",
@@ -489,48 +497,18 @@
       "quote": "PIS-1001 < 0.8 bar(g)"
     },
     {
-      "name": "B1 valve group",
-      "kind": "valve group",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "the B1 valve group"
-    },
-    {
-      "name": "B2 valve group",
-      "kind": "valve group",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "the B2 valve group"
-    },
-    {
       "name": "CR-017",
       "kind": "change request",
       "aliases": [],
       "values": [],
-      "ref": "",
+      "ref": "CR-017",
       "anchor": "",
       "from_image": false,
       "quote": "CR-017 subsequently corrected the destination semantics"
     },
     {
       "name": "controller.sensors.LIS_301",
-      "kind": "signal",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "controller.sensors.LIS_301 = B3.level;"
-    },
-    {
-      "name": "B3",
-      "kind": "vessel",
+      "kind": "signal assignment",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -550,7 +528,7 @@
     },
     {
       "name": "controller.sensors.QIS_502",
-      "kind": "signal",
+      "kind": "signal assignment",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -570,17 +548,7 @@
     },
     {
       "name": "V9.open",
-      "kind": "signal",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "V9.open = controller.actuators.V9;"
-    },
-    {
-      "name": "controller.actuators.V9",
-      "kind": "signal",
+      "kind": "signal assignment",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -590,11 +558,11 @@
     },
     {
       "name": "HeatB5.Q_flow",
-      "kind": "signal",
+      "kind": "signal assignment",
       "aliases": [],
       "values": [
         {
-          "quantity": "heater heat flow when on",
+          "quantity": "heat flow command",
           "value": "20000",
           "unit": "",
           "status": "unknown",
@@ -620,16 +588,6 @@
   ],
   "relationships": [
     {
-      "subject": "central controller",
-      "predicate": "implemented as",
-      "object": "StateGraph-style sequential function chart",
-      "detail": "",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "The central controller is implemented as a StateGraph-style sequential function chart."
-    },
-    {
       "subject": "sensors connector",
       "predicate": "bundles",
       "object": "measured process values",
@@ -650,7 +608,7 @@
       "quote": "a single actuators connector bundles automated valve, pump and thermal commands"
     },
     {
-      "subject": "Manual/isolation valves",
+      "subject": "manual/isolation valves",
       "predicate": "excluded from",
       "object": "StateGraph actuator bundle",
       "detail": "unless specifically stated in the ICD",
@@ -681,16 +639,6 @@
     },
     {
       "subject": "Branch B",
-      "predicate": "waits for availability of",
-      "object": "B7",
-      "detail": "",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "Branch B waits for B7 availability, transfers B5 concentrate to B7, cools it, then returns it."
-    },
-    {
-      "subject": "Branch B",
       "predicate": "transfers concentrate from",
       "object": "B5",
       "detail": "to B7",
@@ -700,30 +648,20 @@
       "quote": "Branch B waits for B7 availability, transfers B5 concentrate to B7, cools it, then returns it."
     },
     {
-      "subject": "B5",
-      "predicate": "concentrate transferred to",
-      "object": "B7",
-      "detail": "",
-      "ref": "",
-      "anchor": "",
-      "from_image": false,
-      "quote": "Branch B waits for B7 availability, transfers B5 concentrate to B7, cools it, then returns it."
-    },
-    {
-      "subject": "B6",
+      "subject": "recovered condensate from B6",
       "predicate": "returns to",
       "object": "B1",
-      "detail": "recovered condensate",
+      "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": false,
       "quote": "recovered condensate from B6 returns to B1"
     },
     {
-      "subject": "B7",
+      "subject": "cooled concentrate from B7",
       "predicate": "returns to",
       "object": "B2",
-      "detail": "cooled concentrate",
+      "detail": "",
       "ref": "",
       "anchor": "",
       "from_image": false,
@@ -772,8 +710,17 @@
   ],
   "facts": [
     {
+      "category": "requirement",
+      "statement": "Controller valve-group assignments shall follow CR-017.",
+      "ref": "CR-017",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Controller valve-group assignments shall follow CR-017."
+    },
+    {
       "category": "behavior",
-      "statement": "If startEnable AND B3 available, then transition from Initial with all automated valves closed and pumps/heaters/coolers off.",
+      "statement": "If startEnable AND B3 available, the Initial state transitions with all automated valves closed and pumps/heaters/coolers off.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -782,7 +729,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If LIS-301 >= 0.13 m, then Step1 action is V8=OPEN.",
+      "statement": "If LIS-301 >= 0.13 m, Step1 action is V8=OPEN.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -791,7 +738,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If QI-302 >= 0.080 kg/kg, then Step2 action is V9=OPEN.",
+      "statement": "If QI-302 >= 0.080 kg/kg, Step2 action is V9=OPEN.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -800,7 +747,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If LIS-301 < 0.01 m, then Step3 action is V11=OPEN.",
+      "statement": "If LIS-301 < 0.01 m, Step3 action is V11=OPEN.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -809,7 +756,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If LIS-501 <0.01 m AND NOT V15, then Step4 has no transfer actuator.",
+      "statement": "If LIS-501 <0.01 m AND NOT V15, Step4 has no transfer actuator.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -818,7 +765,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If LIS-501 >=0.18 m, then Step5 action is V12=OPEN.",
+      "statement": "If LIS-501 >=0.18 m, Step5 action is V12=OPEN.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -827,7 +774,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If QIS-502 >=0.180 kg/kg, then Step6 action is B5_Heater=ON.",
+      "statement": "If QIS-502 >=0.180 kg/kg, Step6 action is B5_Heater=ON.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -836,7 +783,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If TIS-602 <=20 degC, then Step12 action is B6_Cooler=ON.",
+      "statement": "If TIS-602 <=20 degC, Step12 action is B6_Cooler=ON.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -845,7 +792,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If B6 return complete, then Step13 action is P2=ON + corrected B1 return valve group.",
+      "statement": "If B6 return complete, Step13 action is P2=ON + corrected B1 return valve group.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -854,7 +801,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If LIS-701 <0.01 m, then Step7 has no transfer actuator.",
+      "statement": "If LIS-701 <0.01 m, Step7 has no transfer actuator.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -863,7 +810,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If LIS-501 <0.01 m, then Step8 action is V15=OPEN.",
+      "statement": "If LIS-501 <0.01 m, Step8 action is V15=OPEN.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -872,7 +819,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If TIS-702 <=25 degC, then Step9 action is B7_Cooler=ON.",
+      "statement": "If TIS-702 <=25 degC, Step9 action is B7_Cooler=ON.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -881,7 +828,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If B7 return complete, then Step10/11 action is P1=ON + corrected B2 return valve group.",
+      "statement": "If B7 return complete, Step10/11 action is P1=ON + corrected B2 return valve group.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -890,7 +837,7 @@
     },
     {
       "category": "behavior",
-      "statement": "If A complete AND B complete AND time>2500 s, then Join has no transfer actuator.",
+      "statement": "If A complete AND B complete AND time>2500 s, Join has no transfer actuator.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
@@ -898,7 +845,7 @@
       "quote": "Join | No transfer actuator | A complete AND B complete AND time>2500 s | Join"
     },
     {
-      "category": "behavior",
+      "category": "requirement",
       "statement": "A join is satisfied only when both branches report completion.",
       "ref": "",
       "anchor": "",
@@ -916,15 +863,6 @@
       "quote": "B5 heater permissive: LIS-501 >= 0.05 m AND FIS-801 >= 0.10 kg/s."
     },
     {
-      "category": "behavior",
-      "statement": "Low discharge pressure alarm if PIS-901 < 0.8 bar(g) while running.",
-      "ref": "",
-      "anchor": "",
-      "status": "unknown",
-      "from_image": false,
-      "quote": "Low discharge pressure alarm if PIS-901 < 0.8 bar(g) while running."
-    },
-    {
       "category": "constraint",
       "statement": "P1 permissive: LIS-701 > 0.02 m.",
       "ref": "",
@@ -935,12 +873,12 @@
     },
     {
       "category": "behavior",
-      "statement": "Low discharge pressure alarm if PIS-1001 < 0.8 bar(g) while running.",
+      "statement": "Low discharge pressure alarm if PIS-901 < 0.8 bar(g) while running.",
       "ref": "",
       "anchor": "",
       "status": "unknown",
       "from_image": false,
-      "quote": "Low discharge pressure alarm if PIS-1001 < 0.8 bar(g) while running."
+      "quote": "Low discharge pressure alarm if PIS-901 < 0.8 bar(g) while running."
     },
     {
       "category": "constraint",
@@ -953,6 +891,15 @@
     },
     {
       "category": "behavior",
+      "statement": "Low discharge pressure alarm if PIS-1001 < 0.8 bar(g) while running.",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Low discharge pressure alarm if PIS-1001 < 0.8 bar(g) while running."
+    },
+    {
+      "category": "requirement",
       "statement": "Automated valves fail closed and are not treated as modulating valves.",
       "ref": "",
       "anchor": "",
@@ -962,21 +909,39 @@
     },
     {
       "category": "physical_relationship",
+      "statement": "controller.sensors.LIS_301 = B3.level;",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "controller.sensors.LIS_301 = B3.level;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "controller.sensors.QIS_502 = B5.medium.Xi[NaCl];",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "controller.sensors.QIS_502 = B5.medium.Xi[NaCl];"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "V9.open = controller.actuators.V9;",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "V9.open = controller.actuators.V9;"
+    },
+    {
+      "category": "control_law",
       "statement": "HeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;",
       "ref": "",
       "anchor": "",
       "status": "unknown",
       "from_image": false,
       "quote": "HeatB5.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;"
-    },
-    {
-      "category": "requirement",
-      "statement": "Controller valve-group assignments shall follow CR-017.",
-      "ref": "CR-017",
-      "anchor": "",
-      "status": "unknown",
-      "from_image": false,
-      "quote": "Controller valve-group assignments shall follow CR-017."
     }
   ],
   "unreadable": [],

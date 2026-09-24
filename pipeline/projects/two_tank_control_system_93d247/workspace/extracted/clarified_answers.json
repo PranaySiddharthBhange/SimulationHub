@@ -1,0 +1,71 @@
+{
+  "questions": [
+    "Tank 1 high-level setpoint: Merge resolved this to 0.80 m effective/current high-level limit. Confirm, or choose a different value.",
+    "Delay after Tank 1 reaches low before opening V3: Merge resolved this to 12 s. Confirm, or choose a different value.",
+    "Delay after Tank 2 reaches low before next fill: Merge resolved this to 8 s. Confirm, or choose a different value.",
+    "Whether V2 and V3 may be open simultaneously: Merge resolved this to V2 and V3 are not simultaneous in normal automatic operation but are commanded open together in SHUTDOWN. Confirm, or choose a different value.",
+    "Behavior of START after STOP: Merge resolved this to START after STOP resumes the interrupted state and any remaining wait time, rather than restarting from IDLE/FILL. Confirm, or choose a different value.",
+    "Tank areas and nominal valve flows for simulation: Merge resolved this to A1=1.2 m^2, A2=1.4 m^2, qFill=0.006 m^3/s, qTransfer=0.0045 m^3/s, qDrain=0.0050 m^3/s. Confirm, or choose a different value.",
+    "Direction of valve3 connection: Merge resolved this to Tank 2 discharges to V3 and V3 drains to DRN-101/ambient1. Confirm, or choose a different value."
+  ],
+  "answers": {
+    "resolve_t1_high_limit": "0.80 m effective/current high-level limit",
+    "resolve_post_transfer_delay": "12 s",
+    "resolve_intercycle_delay": "8 s",
+    "resolve_shutdown_concurrency": "V2 and V3 are not simultaneous in normal automatic operation but are commanded open together in SHUTDOWN",
+    "resolve_pause_resume_behavior": "START after STOP resumes the interrupted state and any remaining wait time, rather than restarting from IDLE/FILL",
+    "resolve_flows_and_geometry": "A1=1.2 m^2, A2=1.4 m^2, qFill=0.006 m^3/s, qTransfer=0.0045 m^3/s, qDrain=0.0050 m^3/s",
+    "resolve_topology_valve3_direction": "Tank 2 discharges to V3 and V3 drains to DRN-101/ambient1"
+  },
+  "decisions": [
+    {
+      "id": "resolve_t1_high_limit",
+      "question": "Tank 1 high-level setpoint: Merge resolved this to 0.80 m effective/current high-level limit. Confirm, or choose a different value.",
+      "merge_suggested": "0.80 m effective/current high-level limit",
+      "answer": "0.80 m effective/current high-level limit",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_post_transfer_delay",
+      "question": "Delay after Tank 1 reaches low before opening V3: Merge resolved this to 12 s. Confirm, or choose a different value.",
+      "merge_suggested": "12 s",
+      "answer": "12 s",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_intercycle_delay",
+      "question": "Delay after Tank 2 reaches low before next fill: Merge resolved this to 8 s. Confirm, or choose a different value.",
+      "merge_suggested": "8 s",
+      "answer": "8 s",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_shutdown_concurrency",
+      "question": "Whether V2 and V3 may be open simultaneously: Merge resolved this to V2 and V3 are not simultaneous in normal automatic operation but are commanded open together in SHUTDOWN. Confirm, or choose a different value.",
+      "merge_suggested": "V2 and V3 are not simultaneous in normal automatic operation but are commanded open together in SHUTDOWN",
+      "answer": "V2 and V3 are not simultaneous in normal automatic operation but are commanded open together in SHUTDOWN",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_pause_resume_behavior",
+      "question": "Behavior of START after STOP: Merge resolved this to START after STOP resumes the interrupted state and any remaining wait time, rather than restarting from IDLE/FILL. Confirm, or choose a different value.",
+      "merge_suggested": "START after STOP resumes the interrupted state and any remaining wait time, rather than restarting from IDLE/FILL",
+      "answer": "START after STOP resumes the interrupted state and any remaining wait time, rather than restarting from IDLE/FILL",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_flows_and_geometry",
+      "question": "Tank areas and nominal valve flows for simulation: Merge resolved this to A1=1.2 m^2, A2=1.4 m^2, qFill=0.006 m^3/s, qTransfer=0.0045 m^3/s, qDrain=0.0050 m^3/s. Confirm, or choose a different value.",
+      "merge_suggested": "A1=1.2 m^2, A2=1.4 m^2, qFill=0.006 m^3/s, qTransfer=0.0045 m^3/s, qDrain=0.0050 m^3/s",
+      "answer": "A1=1.2 m^2, A2=1.4 m^2, qFill=0.006 m^3/s, qTransfer=0.0045 m^3/s, qDrain=0.0050 m^3/s",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_topology_valve3_direction",
+      "question": "Direction of valve3 connection: Merge resolved this to Tank 2 discharges to V3 and V3 drains to DRN-101/ambient1. Confirm, or choose a different value.",
+      "merge_suggested": "Tank 2 discharges to V3 and V3 drains to DRN-101/ambient1",
+      "answer": "Tank 2 discharges to V3 and V3 drains to DRN-101/ambient1",
+      "outcome": "confirmed"
+    }
+  ]
+}

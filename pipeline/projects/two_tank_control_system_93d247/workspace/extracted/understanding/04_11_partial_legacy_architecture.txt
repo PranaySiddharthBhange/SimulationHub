@@ -1,17 +1,17 @@
-Subject: Synthetic legacy architecture draft
+Subject: Synthetic legacy architecture draft - intentionally incomplete
 Document kind: legacy model
 
 ## Entities
-* tankController -- component; aliases: PLC-101, PLC
-* tank1 -- component; aliases: TK-101, T1
-* tank2 -- component; aliases: TK-102, T2
-* valve1 -- component; aliases: XV-101, V1
-* valve2 -- component; aliases: XV-102, V2
-* valve3 -- component; aliases: XV-103, V3
-* source -- component; aliases: SRC-101, SRC
-* ambient1 -- component; aliases: DRN-101, DRN
-* LT-101 -- component
-* LT-102 -- component
+* tankController -- component; aliases: PLC-101
+* tank1 -- component; aliases: TK-101
+* tank2 -- component; aliases: TK-102
+* valve1 -- component; aliases: XV-101
+* valve2 -- component; aliases: XV-102
+* valve3 -- component; aliases: XV-103
+* source -- component; aliases: SRC-101
+* ambient1 -- component; aliases: DRN-101
+* LT-101 -- control element
+* LT-102 -- control element
 * START -- input
 * STOP -- input
 * SHUT -- input
@@ -28,6 +28,3 @@ Document kind: legacy model
 * tankController controls valve1 (valve1)
 * tankController controls valve2 (valve2)
 * tankController controls valve3 (valve3)
-
-## Unreadable
-* The note states omitted items but does not define their connections or behavior beyond: "Legacy draft does not show:".

@@ -2,7 +2,7 @@ Subject: Synthetic Supplier Datasheet - VXS-24 On/Off Valve
 Document kind: datasheet
 
 ## Entities
-* VXS-24 -- valve family  <VD-VXS24 [page 1]>
+* VXS-24 -- valve family  <VD-VXS24 [page 1]>; aliases: Synthetic VXS-24 On/Off Valve
     - actuator voltage: 24 VDC [current]
 * XV-101 -- valve  <[page 1]>
     - nominal demo flow coefficient equivalent: 0.0060 m^3/s [current]
@@ -24,6 +24,15 @@ Document kind: datasheet
 * XV-101 uses family VXS-24  <[page 1]>
 * XV-102 uses family VXS-24  <[page 1]>
 * XV-103 uses family VXS-24  <[page 1]>
+* XV-101 project service Feed to Tank 1  <[page 1]>
+* XV-102 project service Tank 1 transfer  <[page 1]>
+* XV-103 project service Tank 2 drain  <[page 1]>
+
+## Constraints
+* This datasheet does not define process sequencing or whether two valves may be open concurrently; that is a system-controls decision. [current]  <[page 1]>
 
 ## Behaviors
 * Loss of electrical power removes actuator energy and the spring returns the valve to the closed position. [current]  <[page 1]>
+
+## Physical relationships
+* For the hackathon simulation the dynamic valve stroke is neglected and each valve is treated as an ideal Boolean flow switch. [current]  <[page 1]>

@@ -1,0 +1,40 @@
+model EvaporatorVessel
+  parameter Modelica.Units.SI.Area crossArea;
+  parameter Modelica.Units.SI.Height initialLevel;
+  parameter Real initialWNaCl(unit="kg/kg") = 0;
+  parameter Modelica.Units.SI.Temperature initialTemperature = 293.15;
+  parameter Modelica.Units.SI.MassFlowRate inflow_nominal;
+  parameter Modelica.Units.SI.MassFlowRate concentrateOut_nominal;
+  parameter Modelica.Units.SI.HeatFlowRate heaterDuty = 20000;
+  parameter Modelica.Units.SI.MassFlowRate vaporNominal = 0.02;
+  Modelica.Blocks.Interfaces.BooleanInput inflowOn annotation(Placement(transformation(extent={{-120,60},{-100,80}})));
+  Modelica.Blocks.Interfaces.BooleanInput heaterOn annotation(Placement(transformation(extent={{-120,20},{-100,40}})));
+  Modelica.Blocks.Interfaces.BooleanInput concentrateOutOn annotation(Placement(transformation(extent={{-120,-20},{-100,0}})));
+  Modelica.Blocks.Interfaces.RealInput inflowW annotation(Placement(transformation(extent={{-120,-60},{-100,-40}})));
+  Modelica.Blocks.Interfaces.RealOutput level_m annotation(Placement(transformation(extent={{100,60},{120,80}})));
+  Modelica.Blocks.Interfaces.RealOutput w_NaCl annotation(Placement(transformation(extent={{100,20},{120,40}})));
+  Modelica.Blocks.Interfaces.RealOutput temperature_C annotation(Placement(transformation(extent={{100,-20},{120,0}})));
+  Modelica.Blocks.Interfaces.RealOutput condensateMassFlow annotation(Placement(transformation(extent={{100,-60},{120,-40}})));
+protected 
+  constant Modelica.Units.SI.Density rho = 1000;
+  Modelica.Units.SI.Mass m(start=crossArea*initialLevel*rho, fixed=true);
+  Modelica.Units.SI.Mass mSalt(start=crossArea*initialLevel*rho*initialWNaCl, fixed=true);
+  Modelica.Units.SI.Temperature T(start=initialTemperature, fixed=true);
+  Modelica.Units.SI.MassFlowRate mIn;
+  Modelica.Units.SI.MassFlowRate mConcOut;
+  Modelica.Units.SI.MassFlowRate mVap;
+  Real cpMix;
+equation
+  cpMix = WaterNaClMedium.cp(T, if m > 1e-9 then mSalt/m else initialWNaCl);
+  mIn = if inflowOn then inflow_nominal else 0;
+  mConcOut = if concentrateOutOn and level_m > 0 then min(concentrateOut_nominal, m) else 0;
+  mVap = if heaterOn and level_m >= 0.05 then vaporNominal*max(0, 1 - (if m > 1e-9 then mSalt/m else 0)/0.18) else 0;
+  der(m) = mIn - mConcOut - mVap;
+  der(mSalt) = mIn*inflowW - mConcOut*(if m > 1e-9 then mSalt/m else 0);
+  der(T) = if m > 1e-6 then ((if heaterOn then heaterDuty else 0) - mVap*2.2e6)/(m*cpMix) else 0;
+  level_m = m/(rho*crossArea);
+  w_NaCl = if m > 1e-9 then mSalt/m else initialWNaCl;
+  temperature_C = T - 273.15;
+  condensateMassFlow = mVap;
+  annotation(Icon(graphics={Rectangle(extent={{-80,-80},{80,80}}, lineColor={255,0,0}),Ellipse(extent={{-50,20},{50,80}}, lineColor={255,0,0}),Text(extent={{-100,100},{100,140}}, textString="%name")}));
+end EvaporatorVessel;

@@ -1,0 +1,130 @@
+{
+  "verdict": "invalid",
+  "check_results": [
+    {
+      "name": "REQ-FUN-002 B3 water prefill reached",
+      "expression": "B3_level_m >= 0.13 == 1.0",
+      "outcome": "fail",
+      "observed": "B3_level_m range is min=0.01, max=0.01, final=0.01 over 0..3000 s; it never reaches the expected threshold 0.13 m."
+    },
+    {
+      "name": "REQ-FUN-003 B3 concentration target reached",
+      "expression": "B3_w_NaCl >= 0.080 == 1.0",
+      "outcome": "fail",
+      "observed": "B3_w_NaCl range is min=0, max=0, final=0 over 0..3000 s; it never reaches the expected threshold 0.080 kg/kg."
+    },
+    {
+      "name": "REQ-FUN-004 B3 emptied below threshold",
+      "expression": "B3_level_m < 0.01 == 1.0",
+      "outcome": "fail",
+      "observed": "B3_level_m range is min=0.01, max=0.01, final=0.01 over 0..3000 s; it never becomes strictly less than the expected threshold 0.01 m."
+    },
+    {
+      "name": "REQ-FUN-006 B5 batch fill reached",
+      "expression": "B5_level_m >= 0.18 == 1.0",
+      "outcome": "fail",
+      "observed": "B5_level_m range is min=0.01, max=0.01, final=0.01 over 0..3000 s; it never reaches the expected threshold 0.18 m."
+    },
+    {
+      "name": "REQ-FUN-007 B5 evaporation concentration target reached",
+      "expression": "B5_w_NaCl >= 0.180 == 1.0",
+      "outcome": "fail",
+      "observed": "B5_w_NaCl range is min=0, max=0, final=0 over 0..3000 s; it never reaches the expected threshold 0.180 kg/kg."
+    },
+    {
+      "name": "REQ-FUN-009 B6 cooled before return",
+      "expression": "B6_temp_C <= 20 == 1.0",
+      "outcome": "fail",
+      "observed": "B6_temp_C range is min=77, max=77, final=77 over 0..3000 s; it never reaches the expected at-or-below 20 C condition."
+    },
+    {
+      "name": "REQ-FUN-010 B7 cooled before return",
+      "expression": "B7_temp_C <= 25 == 1.0",
+      "outcome": "fail",
+      "observed": "B7_temp_C range is min=87, max=87, final=87 over 0..3000 s; it never reaches the expected at-or-below 25 C condition."
+    },
+    {
+      "name": "REQ-SAF-001 heater only with condenser flow proof",
+      "expression": "not (B5_heater_cmd > 0.5 and FIS801_kg_s < 0.10) == 1.0",
+      "outcome": "not_evaluable",
+      "observed": "B5_heater_cmd is present and remains 0 throughout 0..3000 s, but the required reported variable FIS801_kg_s is absent from the result summary, so the always-condition cannot be evaluated from the provided result data."
+    },
+    {
+      "name": "REQ-SAF-005 heater only above low-level inhibit",
+      "expression": "not (B5_heater_cmd > 0.5 and B5_level_m < 0.05) == 1.0",
+      "outcome": "pass",
+      "observed": "B5_heater_cmd range is min=0, max=0, final=0 while B5_level_m range is min=0.01, max=0.01, final=0.01 over 0..3000 s; the forbidden combination never occurs, satisfying the always-condition."
+    },
+    {
+      "name": "REQ-SAF-003 P1 only above source level permissive",
+      "expression": "not (P1_cmd > 0.5 and B7_level_m <= 0.02) == 1.0",
+      "outcome": "pass",
+      "observed": "P1_cmd range is min=0, max=0, final=0 while B7_level_m range is min=0.01, max=0.01, final=0.01 over 0..3000 s; the forbidden combination never occurs, satisfying the always-condition."
+    },
+    {
+      "name": "REQ-SAF-004 P2 only above source level permissive",
+      "expression": "not (P2_cmd > 0.5 and B6_level_m <= 0.02) == 1.0",
+      "outcome": "pass",
+      "observed": "P2_cmd range is min=0, max=0, final=0 while B6_level_m range is min=0.01, max=0.01, final=0.01 over 0..3000 s; the forbidden combination never occurs, satisfying the always-condition."
+    },
+    {
+      "name": "REQ-VV-001 parallel branch commands occur",
+      "expression": "(B6_cooler_cmd > 0.5) and (B7_cooler_cmd > 0.5) == 1.0",
+      "outcome": "fail",
+      "observed": "B6_cooler_cmd range is min=0, max=0, final=0 and B7_cooler_cmd range is min=0, max=0, final=0 over 0..3000 s; the required event where both commands are on never occurs."
+    },
+    {
+      "name": "REQ-VV-002 condensate return routing actuated",
+      "expression": "(P2_cmd > 0.5) and ((V5_open > 0.5) or (V6_open > 0.5) or (V20_open > 0.5) or (V24_open > 0.5) or (V25_open > 0.5)) == 1.0",
+      "outcome": "fail",
+      "observed": "P2_cmd range is min=0, max=0, final=0; V5_open, V6_open, V20_open, V24_open, and V25_open each have min=0, max=0, final=0 over 0..3000 s. No condensate return routing actuation occurs."
+    },
+    {
+      "name": "REQ-VV-002 concentrate return routing actuated",
+      "expression": "(P1_cmd > 0.5) and ((V1_open > 0.5) or (V3_open > 0.5) or (V18_open > 0.5) or (V22_open > 0.5) or (V23_open > 0.5)) == 1.0",
+      "outcome": "fail",
+      "observed": "P1_cmd range is min=0, max=0, final=0; V1_open, V3_open, V18_open, V22_open, and V23_open each have min=0, max=0, final=0 over 0..3000 s. No concentrate return routing actuation occurs."
+    },
+    {
+      "name": "REQ-CTL-001 run continues beyond reset time",
+      "expression": "time_s >= 2500 == 1.0",
+      "outcome": "pass",
+      "observed": "time_s final value is 3000 s, which satisfies the expected final condition time_s >= 2500 s."
+    }
+  ],
+  "summary": "This run is invalid for the batch-process acceptance brief. The simulation did run to 3000 s, but the plant never left its initial condition in any meaningful process sense: every actuator command stayed at 0, every automated valve command stayed closed, both pumps, heater, and both coolers stayed off, controller_state stayed fixed at 1 with region fixed at 1, and all material-flow variables stayed at 0. Because of that, none of the required process milestones occurred: B3 never filled above 0.01 m instead of reaching 0.13 m, B3 NaCl mass fraction stayed 0 instead of reaching 0.080 kg/kg, B5 never filled above 0.01 m instead of 0.18 m, B5 NaCl mass fraction stayed 0 instead of 0.180 kg/kg, B6 stayed at 77 C instead of cooling to 20 C, and B7 stayed at 87 C instead of cooling to 25 C. Three permissive safety checks pass only vacuously because the heater and pumps never turned on. One required check, heater-with-flow-proof, is not evaluable from the provided result variables because the required reported variable FIS801_kg_s is missing from the result summary.",
+  "issues": [
+    "No charging, transfer, evaporation, cooling, or return action occurred: V8_open, V9_open, V11_open, V12_open, V15_open, V1_open, V3_open, V5_open, V6_open, V18_open, V20_open, V22_open, V23_open, V24_open, and V25_open each remained 0 for the full 0..3000 s run; P1_cmd, P2_cmd, B5_heater_cmd, B6_cooler_cmd, and B7_cooler_cmd each remained 0 throughout.",
+    "The controller did not progress through the required sequence: controller_state min=max=final=1, controller.mode min=max=final=1, controller.region min=max=final=1, controller.branchADone min=max=final=0, and controller.branchBDone min=max=final=0 for the full run.",
+    "REQ-FUN-002 failed: B3_level_m never exceeded 0.01 m and never reached the required 0.13 m prefill target.",
+    "REQ-FUN-003 failed: B3_w_NaCl stayed at 0 and never reached the required 0.080 kg/kg concentration target.",
+    "REQ-FUN-004 failed: B3_level_m stayed exactly 0.01 m and never became strictly less than the required empty threshold 0.01 m.",
+    "REQ-FUN-006 failed: B5_level_m stayed at 0.01 m and never reached the required 0.18 m batch fill level.",
+    "REQ-FUN-007 failed: B5_w_NaCl stayed at 0 and never reached the required 0.180 kg/kg evaporation concentration target.",
+    "REQ-FUN-009 failed: B6_temp_C stayed at 77 C and never cooled to the required 20 C or below.",
+    "REQ-FUN-010 failed: B7_temp_C stayed at 87 C and never cooled to the required 25 C or below.",
+    "REQ-VV-001 failed: the required parallel branch cooling commands never occurred because B6_cooler_cmd and B7_cooler_cmd both remained 0 throughout.",
+    "REQ-VV-002 condensate return routing failed: P2_cmd and all candidate B1-side return valves V5_open, V6_open, V20_open, V24_open, V25_open remained 0 throughout.",
+    "REQ-VV-002 concentrate return routing failed: P1_cmd and all candidate B2-side return valves V1_open, V3_open, V18_open, V22_open, V23_open remained 0 throughout.",
+    "REQ-SAF-001 is not evaluable from the provided reported variables because FIS801_kg_s, which the brief requires by that exact name, does not appear in the result summary."
+  ],
+  "assumptions": [
+    "Model-generation explicit assumption: the previous over-determined connector equations were revised so each connector input has exactly one definition, including replacement of two B3 outlet connections by one summed scalar flow equation and one mixed-composition equation.",
+    "Model-generation explicit assumption retained from the brief: simulation StopTime is 3000 s so behavior beyond 2500 s can be represented.",
+    "Model-generation explicit assumption: despite the brief requiring WaterNaCl for final acceptance, the model kept a simplified lumped mass-fraction formulation rather than a final WaterNaCl-compliant fluid-library implementation because a complete executable medium package was not provided.",
+    "Model-generation explicit assumption: B1 initial level was set to 0.5 m and B2 initial level was set to 0.35 m following the SysML draft rather than a direct BAT-09 statement.",
+    "Model-generation explicit assumption: B6 and B7 cooling were represented as direct applied heat flows of -6500 W and -4500 W when commanded.",
+    "Model-generation explicit assumption: controller_state was reported as Integer(mode) and region as 1 before the post-evaporation parallel region and 2 during/after it.",
+    "Model-generation explicit assumption: FIS801_kg_s was represented as a constant 0.12 kg/s proof signal, but that variable is not present in the reported result summary under the required name.",
+    "Model-generation explicit derived assumption: mMin_kg was set to 0.001 kg so level could cross the 0.01 m and 0.02 m guards rather than being clamped on them.",
+    "Derived from the result values: the model behavior effectively assumes zero commanded inflow/outflow and zero state transitions for the entire run, because every command variable and every qIn/qOut-related variable reported min=max=final=0."
+  ],
+  "root_causes": [
+    "The central failure is that the controller never issued any command beyond its initial state. This is evidenced directly by controller_state=1 for the entire run, controller.mode=1 throughout, all controller valve outputs controller.V8/controller.V9/controller.V11/controller.V12/controller.V15/controller.V1/controller.V3/controller.V5/controller.V6/controller.V18/controller.V20/controller.V22/controller.V23/controller.V24/controller.V25 staying at 0, controller.HeaterB5=0, controller.CoolerB6=0, controller.CoolerB7=0, controller.P1=0, and controller.P2=0. With no discrete-state progression, the process sequence never starts.",
+    "Because the actuator commands stayed at 0, every physical flow path remained shut. This is evidenced by all valve command outputs remaining 0 and by B1.qOutCmd_kg_s, B1.qOutLimited_kg_s, B1.qOut_kg_s, B2.qOutCmd_kg_s, B2.qOutLimited_kg_s, B2.qOut_kg_s, B3.qIn_kg_s, B3.qOut_kg_s, B4.qIn_kg_s, B4.qOut_kg_s, B5K1.feed_kg_s, B5K1.toB7_kg_s, B5K1.condensateToB6_kg_s, B6.qIn_kg_s, B6.qOut_kg_s, B7.qIn_kg_s, and B7.qOut_kg_s all remaining 0. With zero mass transfer, all tank levels and compositions stay frozen at their initial values, which directly causes the failures of the B3 and B5 fill/composition acceptance checks.",
+    "The cooling-related acceptance failures are a direct consequence of the controller never reaching the post-evaporation parallel branches. B6_cooler_cmd and B7_cooler_cmd each remained 0 for the full run, so the modeled cooling duties were never applied. Accordingly B6.temp_C remained 77 C and B7.temp_C remained 87 C throughout, causing REQ-FUN-009, REQ-FUN-010, and REQ-VV-001 to fail.",
+    "The return-routing acceptance failures follow from the same stalled control logic. Since branch completion flags controller.branchADone and controller.branchBDone remained 0 and both pumps stayed off, neither return branch actuated. P2_cmd stayed 0 with all candidate B1-side return valves at 0, and P1_cmd stayed 0 with all candidate B2-side return valves at 0, so neither routing check could pass.",
+    "REQ-FUN-004 fails specifically because the reported B3 level is pinned exactly at 0.01 m, not below it. The model-generation stage explicitly said it set a small inventory floor mMin_kg=0.001 kg so level could cross the guard, but the actual trajectory shows B3_level_m min=max=final=0.01, so in this run the effective initialization or floor behavior leaves B3 exactly on the threshold. Since the requirement is a strict inequality B3_level_m < 0.01, a level fixed at 0.01 cannot satisfy it.",
+    "REQ-SAF-001 cannot be evaluated from the provided results because the required acceptance variable FIS801_kg_s is absent under that exact reported name. Although the model-generation stage said it represented FIS801_kg_s as a constant 0.12 kg/s proof signal, the actual result summary provided here does not include FIS801_kg_s, so the acceptance evidence required by the brief is missing from the reported outputs."
+  ]
+}

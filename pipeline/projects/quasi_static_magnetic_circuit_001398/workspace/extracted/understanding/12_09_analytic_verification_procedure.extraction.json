@@ -7,113 +7,65 @@
       "name": "magnetic circuit",
       "kind": "system",
       "aliases": [],
-      "values": [],
-      "ref": "AV-11",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "released nominal magnetic circuit"
-    },
-    {
-      "name": "a",
-      "kind": "parameter",
-      "aliases": [],
       "values": [
         {
-          "quantity": "value",
+          "quantity": "a",
           "value": "0.025",
           "unit": "m",
           "status": "current",
           "supersedes": "",
           "quote": "a                                                 0.025 m"
-        }
-      ],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "a                                                 0.025 m"
-    },
-    {
-      "name": "l",
-      "kind": "parameter",
-      "aliases": [],
-      "values": [
+        },
         {
-          "quantity": "value",
+          "quantity": "l",
           "value": "0.150",
           "unit": "m",
           "status": "current",
           "supersedes": "",
           "quote": "l                                                 0.150 m"
-        }
-      ],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "l                                                 0.150 m"
-    },
-    {
-      "name": "delta",
-      "kind": "parameter",
-      "aliases": [],
-      "values": [
+        },
         {
-          "quantity": "value",
+          "quantity": "delta",
           "value": "0.00150",
           "unit": "m",
           "status": "nominal",
           "supersedes": "",
           "quote": "delta                                            0.00150 m nominal"
-        }
-      ],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "delta                                            0.00150 m nominal"
-    },
-    {
-      "name": "mu_r",
-      "kind": "parameter",
-      "aliases": [],
-      "values": [
+        },
         {
-          "quantity": "value",
+          "quantity": "mu_r",
           "value": "1200",
           "unit": "",
           "status": "current",
           "supersedes": "",
           "quote": "mu_r                                         1200"
-        }
-      ],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "mu_r                                         1200"
-    },
-    {
-      "name": "sigma",
-      "kind": "parameter",
-      "aliases": [],
-      "values": [
+        },
         {
-          "quantity": "value",
+          "quantity": "sigma",
           "value": "0.08",
           "unit": "",
           "status": "current",
           "supersedes": "",
           "quote": "sigma                                              0.08"
+        },
+        {
+          "quantity": "frequency",
+          "value": "50",
+          "unit": "Hz",
+          "status": "current",
+          "supersedes": "",
+          "quote": "Frequency                                    50 Hz"
         }
       ],
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
-      "quote": "sigma                                              0.08"
+      "quote": "released nominal magnetic circuit"
     },
     {
       "name": "N_exc",
       "kind": "winding",
-      "aliases": [
-        "exciting"
-      ],
+      "aliases": [],
       "values": [
         {
           "quantity": "turns",
@@ -132,9 +84,7 @@
     {
       "name": "N_meas",
       "kind": "winding",
-      "aliases": [
-        "measuring"
-      ],
+      "aliases": [],
       "values": [
         {
           "quantity": "turns",
@@ -149,25 +99,6 @@
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "N_exc / N_meas                               600 / 50 turns"
-    },
-    {
-      "name": "Frequency",
-      "kind": "parameter",
-      "aliases": [],
-      "values": [
-        {
-          "quantity": "frequency",
-          "value": "50",
-          "unit": "Hz",
-          "status": "current",
-          "supersedes": "",
-          "quote": "Frequency                                    50 Hz"
-        }
-      ],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "Frequency                                    50 Hz"
     },
     {
       "name": "Current ramp",
@@ -226,7 +157,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected reluctance",
+          "quantity": "reluctance",
           "value": "5.289249e+05",
           "unit": "A/Wb",
           "status": "expected",
@@ -245,7 +176,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected reluctance",
+          "quantity": "reluctance",
           "value": "1.909859e+06",
           "unit": "A/Wb",
           "status": "expected",
@@ -264,7 +195,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected reluctance",
+          "quantity": "reluctance",
           "value": "1.757071e+06",
           "unit": "A/Wb",
           "status": "expected",
@@ -283,7 +214,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected flux",
+          "quantity": "flux",
           "value": "5.249354e-04",
           "unit": "Wb",
           "status": "expected",
@@ -302,7 +233,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected flux",
+          "quantity": "flux",
           "value": "4.829406e-04",
           "unit": "Wb",
           "status": "expected",
@@ -321,7 +252,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected flux",
+          "quantity": "flux",
           "value": "4.199483e-05",
           "unit": "Wb",
           "status": "expected",
@@ -340,7 +271,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected flux density",
+          "quantity": "B",
           "value": "0.839897",
           "unit": "T",
           "status": "expected",
@@ -359,7 +290,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected flux density",
+          "quantity": "B",
           "value": "0.772705",
           "unit": "T",
           "status": "expected",
@@ -378,7 +309,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected magnetic drop",
+          "quantity": "magnetic drop",
           "value": "277.651",
           "unit": "A-turn",
           "status": "expected",
@@ -397,7 +328,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected magnetic drop",
+          "quantity": "magnetic drop",
           "value": "922.349",
           "unit": "A-turn",
           "status": "expected",
@@ -416,7 +347,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected induced voltage magnitude",
+          "quantity": "induced voltage magnitude",
           "value": "98.948",
           "unit": "V RMS",
           "status": "expected",
@@ -435,7 +366,7 @@
       "aliases": [],
       "values": [
         {
-          "quantity": "expected induced voltage magnitude",
+          "quantity": "induced voltage magnitude",
           "value": "7.586",
           "unit": "V RMS",
           "status": "expected",
@@ -454,7 +385,7 @@
     {
       "category": "requirement",
       "statement": "Verify the released nominal magnetic circuit against closed-form analytic calculations under the linear quasi-static assumptions.",
-      "ref": "AV-11",
+      "ref": "",
       "anchor": "[page 1]",
       "status": "current",
       "from_image": false,

@@ -341,16 +341,31 @@ def _instance_count(draft: ModelicaDraft, class_code: str) -> int:
 def _connector_members(draft: ModelicaDraft) -> dict[str, list[str]]:
     """Map each class this bundle defines to the connector members it declares."""
 
-    # Inputs AND outputs. An unconnected output means the component computes a
-    # result the system throws away -- an actuator wired around, for instance.
-    # An unconnected INPUT is worse: Modelica silently defaults it to zero, so
-    # the model compiles, simulates and reports success while that signal path
-    # carries nothing. Found live, twice: a vessel's `requestedOutflow` input was
-    # never driven, so every transfer flow in the process was zero for the whole
-    # run and only the trajectory revealed it.
+    # INPUTS only. An unconnected input is the real hazard: Modelica silently
+    # defaults it to zero, so the model compiles, simulates and reports success
+    # while that signal path carries nothing. Found live, twice: a vessel's
+    # `requestedOutflow` input was never driven, so every transfer flow in the
+    # process was zero for the whole run and only the trajectory revealed it.
+    #
+    # An unread OUTPUT cannot do that, and demanding a consumer for every one
+    # asks for instruments the brief does not have. The NaCl plant has level
+    # instruments on four of its seven vessels, so the outputs reporting the
+    # other three genuinely have no reader; that check failed six attempts
+    # across two runs without the compiler ever being reached. A component
+    # nothing connects AT ALL is still caught, by the floating-component check
+    # below.
+    # A CONDITIONAL connector -- `RealInput Qcmd if use_heater;` -- does not
+    # exist on an instance whose guard is false, so there is nothing there to
+    # wire and demanding it is a false positive. This matters because the
+    # prompt also asks for ONE reusable class instantiated per unit, and a
+    # reusable vessel class carries the union of every role's ports: only the
+    # evaporator has a heater command, only some vessels report composition.
+    # Without this exemption those two rules cannot both be satisfied, and the
+    # NaCl case failed every attempt on it without ever reaching the compiler.
+    # An UNguarded connector must still be wired, which is the real check.
     members: dict[str, list[str]] = {}
     declaration = re.compile(
-        r"(?m)^\s*Modelica\.[\w.]*Interfaces\.\w+\s+([A-Za-z_]\w*)"
+        r"(?m)^\s*Modelica\.[\w.]*Interfaces\.\w*Input\s+([A-Za-z_]\w*)(?![^;\n]*\bif\b)"
     )
     for file in draft.files:
         if file.role == "system":
@@ -400,13 +415,25 @@ def _diagram_issues(draft: ModelicaDraft) -> list[str]:
                 r"(?m)^\s*(?:[A-Za-z_]\w*\.)*[A-Za-z_]\w*\s+([A-Za-z_]\w*)\s*(?:\([^;]*\))?\s*annotation\s*\(\s*Placement",
                 file.code,
             )
-            floating = [name for name in placed if name not in connected]
+            # A component coupled through EQUATIONS rather than connectors is
+            # not floating -- it is a different modelling style, and rejecting
+            # it is a false positive that cannot be repaired away. Seen live: a
+            # plant written with signal equations (`q = if cmd then ... B1.level
+            # ...`) had three vessels reported as floating on every attempt, so
+            # all five repairs were spent on a non-defect and the compiler never
+            # ran once. Only a component nothing references at all is dead.
+            body = "\n".join(
+                line for line in file.code.splitlines() if not re.match(r"\s*connect\s*\(", line)
+            )
+            referenced = set(re.findall(r"\b([A-Za-z_]\w*)\s*\.", body))
+            floating = [name for name in placed if name not in connected and name not in referenced]
             if floating:
                 issues.append(
                     f"- {file.filename}: component(s) {', '.join(floating)} are placed in the diagram but "
-                    "never appear in any connect(). Every component shown must be wired into the system -- "
-                    "a boundary source or sink is connected to the first/last element of the material path, "
-                    "not left floating. Either connect it or remove it."
+                    "never appear in any connect() and are never referenced in an equation. Every component "
+                    "shown must take part in the system -- a boundary source or sink is connected to the "
+                    "first/last element of the material path, not left floating. Either wire it, use it, or "
+                    "remove it."
                 )
 
             # Component-level wiring is not enough: an actuator whose OUTPUT port
@@ -593,7 +620,7 @@ def _when_block_issues(filename: str, code: str) -> list[str]:
     return issues
 
 
-def _modelica_static_issues(draft: ModelicaDraft) -> list[str]:
+def _modelica_static_issues(draft: ModelicaDraft, checked_variables: set[str] | None = None) -> list[str]:
     """Catch deterministic Modelica mistakes before spending an omc run.
 
     Each check here exists because the real compiler's own message for that
@@ -670,7 +697,109 @@ def _modelica_static_issues(draft: ModelicaDraft) -> list[str]:
                     )
 
     issues.extend(_diagram_issues(draft))
+    issues.extend(_frozen_state_issues(draft, checked_variables or set()))
     return issues
+
+
+def _inert_variables(
+    result_summary: dict[str, dict[str, float]], checked_variables: set[str]
+) -> list[str]:
+    """Checked quantities that never move across the whole simulated run.
+
+    A command that is deliberately never issued is not evidence of a dead
+    model -- the brief may not exercise it -- so only quantities that CHANGE
+    as the process runs are judged: levels, compositions, temperatures. A
+    genuinely constant one among those means the process did not happen.
+
+    Requires the summary to carry at least a few of them, so a model whose
+    result file names its variables differently degrades to no finding rather
+    than to a false accusation.
+    """
+
+    continuous = [
+        name for name in checked_variables
+        if any(token in name.lower() for token in ("level", "_w_", "w_nacl", "temp", "_t", "conc", "mass", "flow"))
+        and not name.lower().endswith("_cmd")
+    ]
+    observed = {name: result_summary[name] for name in continuous if name in result_summary}
+    if len(observed) < 2:
+        return []
+    return sorted(
+        name for name, stats in observed.items()
+        if stats.get("min") is not None and stats.get("min") == stats.get("max")
+    )
+
+
+def _checked_variable_names(understanding: Understanding) -> set[str]:
+    """Identifiers appearing in the brief's acceptance-check expressions."""
+
+    names: set[str] = set()
+    for check in understanding.checks:
+        names.update(re.findall(r"[A-Za-z_]\w*", check.expression))
+    # Operators and numeric helpers that the tokeniser also picks up.
+    return names - {"and", "or", "not", "abs", "max", "min", "sqrt", "der", "time", "if", "then", "else"}
+
+
+def _frozen_state_issues(draft: ModelicaDraft, checked_variables: set[str]) -> list[str]:
+    """A quantity the acceptance checks read must be computed, not asserted.
+
+    The worst outcome this pipeline can produce is not a model that fails to
+    compile; it is one that compiles, simulates to completion and reports
+    numbers that were typed in. Found live on the evaporation plant: the bundle
+    contained no `der()` anywhere and pinned eleven reported quantities to
+    literals, including `B6_temp_C = 20.0` and `B7_temp_C = 25.0` -- which are
+    exactly the values their two acceptance checks compare against. Those two
+    checks passed. Every structural check passed, the compiler passed, and the
+    result file was constants.
+
+    Only variables the checks actually read are examined. A genuine constant
+    elsewhere -- an ambient pressure, a fixed setpoint -- is normal modelling.
+    """
+
+    if not checked_variables:
+        return []
+    issues: list[str] = []
+    literal = re.compile(r"(?m)^\s*([A-Za-z_]\w*)\s*=\s*[-+]?[0-9][0-9_.eE+-]*\s*;")
+    for file in draft.files:
+        equations = _equation_section(file.code)
+        frozen = sorted({
+            name for name in literal.findall(equations) if name in checked_variables
+        })
+        if frozen:
+            issues.append(
+                f"- {file.filename}: {', '.join(frozen)} are read by the acceptance checks but are "
+                "assigned a literal constant, so the simulation reports a number that was typed in "
+                "rather than computed. Every quantity a check reads must follow from the model: a "
+                "state from its own `der(...)` balance, a composition from the species balance, a "
+                "measurement from the component it measures. If the value genuinely cannot be "
+                "derived from the brief, say so in `corrections` -- never stand a literal in for it."
+            )
+    return issues
+
+
+# Presentation defects. Real, worth telling the model about, and NOT worth one
+# of three repair attempts: a class with no icon still simulates correctly, and
+# a helper source left unwired is a loose end rather than a wrong model.
+#
+# They were costing more than they were worth. Across two NaCl runs an icon
+# complaint and an unwired tie-off constant took the first two attempts of
+# each, leaving one attempt for the real problem. A rewrite forced by a
+# cosmetic rejection also takes the simplest path available, and on the run
+# where that happened the model abandoned a Modelica.Fluid network it had
+# already built and finished with a hand-written one.
+_ADVISORY_MARKERS = (
+    "has no Icon annotation",
+    "has no Placement annotation",
+    "are placed in the diagram but never appear in any connect() and are never referenced",
+)
+
+
+def _split_blocking(issues: list[str]) -> tuple[list[str], list[str]]:
+    """Separate issues that make the model WRONG from ones that make it untidy."""
+
+    advisory = [i for i in issues if any(marker in i for marker in _ADVISORY_MARKERS)]
+    blocking = [i for i in issues if i not in advisory]
+    return blocking, advisory
 
 
 def _force_split(piece: str) -> list[str]:
@@ -1157,7 +1286,75 @@ def _merged_understanding_path(ws: Workspace, project_id: str) -> Path:
 
 
 def _merged_narrative_path(ws: Workspace, project_id: str) -> Path:
-    return ws.extracted_dir(project_id) / "merged_understanding.txt"
+    return ws.extracted_dir(project_id) / "merged_understanding.md"
+
+
+def _render_understanding_markdown(understanding: Understanding) -> str:
+    """The merged brief as a document a person can actually read.
+
+    The narrative alone used to be written out as plain text, which left the
+    parts a reviewer most needs to check -- the acceptance criteria, what was
+    resolved against what evidence, what is still open -- visible only inside
+    the JSON. They are the reviewable substance of this stage, so they belong
+    in the readable artifact next to the prose.
+    """
+
+    simulation = understanding.simulation
+    out: list[str] = [
+        f"# {understanding.title}",
+        "",
+        "## Simulation",
+        "",
+        "| setting | value |",
+        "| --- | --- |",
+        f"| start time | {simulation.start_time} s |",
+        f"| stop time | {simulation.stop_time} s |",
+        f"| output samples | {simulation.intervals} |",
+        f"| solver tolerance | {simulation.tolerance} |",
+        "",
+    ]
+    if understanding.domains:
+        out += ["**Domains:** " + ", ".join(f"`{d}`" for d in understanding.domains), ""]
+
+    out += ["## Engineering brief", "", understanding.narrative.strip(), ""]
+
+    if understanding.checks:
+        out += [
+            f"## Acceptance checks ({len(understanding.checks)})",
+            "",
+            "| # | when | expression | expected | tolerance | source |",
+            "| --- | --- | --- | --- | --- | --- |",
+        ]
+        for number, check in enumerate(understanding.checks, 1):
+            when = check.kind if check.at_time is None else f"at {check.at_time:g} s"
+            expression = check.expression.replace("|", "\\|")
+            out.append(
+                f"| {number} | {when} | `{expression}` | {check.expected:g} | "
+                f"{check.absolute_tolerance:g} | {check.source} |"
+            )
+        out.append("")
+
+    if understanding.resolutions:
+        out += [f"## Conflicts resolved ({len(understanding.resolutions)})", ""]
+        for item in understanding.resolutions:
+            out += [f"### {item.topic}", "", f"**Adopted:** {item.chosen}", ""]
+            if item.rejected:
+                out += ["**Not adopted:**", ""] + [f"- {r}" for r in item.rejected] + [""]
+            out += [f"**Evidence:** {item.reasoning}", ""]
+
+    if understanding.questions:
+        out += [f"## Open questions ({len(understanding.questions)})", ""]
+        out += [f"{i}. {q}" for i, q in enumerate(understanding.questions, 1)] + [""]
+
+    if understanding.assumptions:
+        out += [f"## Assumptions ({len(understanding.assumptions)})", ""]
+        out += [f"- {a}" for a in understanding.assumptions] + [""]
+
+    if understanding.tables:
+        out += ["## Source tables", "", "| document | role | why |", "| --- | --- | --- |"]
+        out += [f"| {t.path} | `{t.role}` | {t.reason} |" for t in understanding.tables] + [""]
+
+    return "\n".join(out).rstrip() + "\n"
 
 
 def _clarified_answers_path(ws: Workspace, project_id: str) -> Path:
@@ -1180,19 +1377,91 @@ def _load_clarified_answers(ws: Workspace, project_id: str) -> dict[str, str]:
     return {str(key): str(value) for key, value in answers.items() if str(value).strip()}
 
 
+def _answers_record(
+    clarifications: list[Clarification], answers: dict[str, str], *, from_file: bool = False,
+) -> dict:
+    """What was asked, what was answered, and where the answer came from.
+
+    The distinction matters for review: an engineer accepting a resolution and
+    an engineer overturning one look identical in a plain id-to-value map.
+
+    `from_file` says the answers were already on disk rather than given this
+    run, which keeps the record honest about who decided. Re-running Merge can
+    reword a resolution it still reaches the same way, and comparing a stored
+    answer against the new wording then reports a change nobody made -- seen
+    live, where two carried-over answers that meant exactly what Merge now
+    suggested were both recorded as human overrides.
+    """
+
+    decisions = []
+    for item in clarifications:
+        given = (answers.get(item.id) or "").strip()
+        suggested = (item.suggested_value or "").strip()
+        if not given:
+            outcome = "unanswered"
+        elif not suggested:
+            outcome = "answered"
+        elif given == suggested:
+            outcome = "confirmed"
+        else:
+            outcome = "carried_over" if from_file else "changed_by_human"
+        decisions.append({
+            "id": item.id,
+            "question": item.question,
+            "merge_suggested": item.suggested_value,
+            "answer": given,
+            "outcome": outcome,
+        })
+    return {
+        "questions": [c.question for c in clarifications],
+        "answers": answers,
+        "decisions": decisions,
+    }
+
+
 def _merge_clarifications(understanding: Understanding) -> list[Clarification]:
+    """Everything a person should sign off: what Merge could not settle, and what it did.
+
+    A resolved conflict is still a decision. Merge used to surface only its open
+    questions, so as extraction improved and it began settling conflicts from
+    the evidence, a reviewer saw fewer and fewer of them -- three to zero on one
+    benchmark in a single run -- while the decisions themselves stayed just as
+    consequential. Each resolution is therefore presented already answered with
+    Merge's choice as the default, so confirming is one click and overriding is
+    possible, but neither happens silently.
+    """
+
     if understanding.clarifications:
-        return [Clarification(**item.model_dump()) for item in understanding.clarifications]
-    return [
+        open_items = [Clarification(**item.model_dump()) for item in understanding.clarifications]
+    else:
+        open_items = [
+            Clarification(
+                id=f"merge_question_{index}",
+                question=question,
+                reasoning="Merge marked this decision as unresolved. Choose the governing value or explain the approved resolution before SysML generation.",
+                suggested_value="",
+                options=[],
+            )
+            for index, question in enumerate(understanding.questions, 1)
+        ]
+
+    confirmations = [
         Clarification(
-            id=f"merge_question_{index}",
-            question=question,
-            reasoning="Merge marked this decision as unresolved. Choose the governing value or explain the approved resolution before SysML generation.",
-            suggested_value="",
-            options=[],
+            id=item.id,
+            question=f"{item.topic}: Merge resolved this to {item.chosen}. Confirm, or choose a different value.",
+            reasoning=(
+                f"{item.reasoning}"
+                + (f" Not adopted: {'; '.join(item.rejected)}." if item.rejected else "")
+                + " This was decided from the evidence rather than left open, so it is"
+                " already answered -- change it only if you disagree with that reading."
+            ),
+            suggested_value=item.chosen,
+            options=[item.chosen, *item.rejected],
+            resolved=True,
         )
-        for index, question in enumerate(understanding.questions, 1)
+        for item in understanding.resolutions
     ]
+    return open_items + confirmations
 
 
 def _load_merged_understanding(ws: Workspace, project_id: str) -> Understanding:
@@ -1270,7 +1539,7 @@ def execute_merge(project_id: str, projects_root: Path | None = None) -> StageRe
         ).ask(MERGE_PROMPT, context, Understanding, Packet([]))
 
     _merged_understanding_path(ws, project_id).write_text(understanding.model_dump_json(indent=2), encoding="utf-8")
-    _merged_narrative_path(ws, project_id).write_text(understanding.narrative, encoding="utf-8")
+    _merged_narrative_path(ws, project_id).write_text(_render_understanding_markdown(understanding), encoding="utf-8")
 
     return StageResult(
         stage="merge", project_id=project_id, status="READY",
@@ -1300,12 +1569,28 @@ def execute_clarify(
     answers_path = _clarified_answers_path(ws, project_id)
     existing = _load_clarified_answers(ws, project_id)
     clarifications = _merge_clarifications(understanding)
-    if existing or not clarifications:
-        if not answers_path.exists():
-            answers_path.write_text(
-                json.dumps({"questions": [c.question for c in clarifications], "answers": existing}, indent=2) + "\n",
-                encoding="utf-8",
-            )
+    # Prior answers only count when they actually cover what is being asked NOW.
+    # Re-running Merge can change the question set -- resolving something that
+    # used to be open, or raising a new conflict -- and this used to short
+    # circuit on the mere existence of an answers file. Found live: after a
+    # re-merge, four new clarifications went unanswered while six answers from
+    # the previous question set were kept, and `_understanding_context` passes
+    # whatever is in that file to Stage 2 and Stage 3 as authoritative.
+    stale = {key: value for key, value in existing.items() if key not in {c.id for c in clarifications}}
+    if stale:
+        print(f"    [Clarify] discarding {len(stale)} answer(s) from a previous question set: "
+              f"{', '.join(sorted(stale))}", flush=True)
+        existing = {key: value for key, value in existing.items() if key not in stale}
+    covered = bool(existing) and all(c.id in existing for c in clarifications)
+    if covered or not clarifications:
+        # Always rewrite, not only when the file is absent: the recorded
+        # question set has to match the clarifications actually in force, and
+        # skipping the write left a discarded question sitting in the file as
+        # though it had been answered for this run.
+        answers_path.write_text(
+            json.dumps(_answers_record(clarifications, existing, from_file=True), indent=2) + "\n",
+            encoding="utf-8",
+        )
         diagram = execute_flow_diagram(project_id, projects_root=projects_root)
         return StageResult(
             stage="clarify", project_id=project_id, status="READY",
@@ -1321,7 +1606,7 @@ def execute_clarify(
     if missing:
         raise ValueError(f"Clarify requires an answer for every Merge question: {', '.join(missing)}")
     answers_path.write_text(
-        json.dumps({"questions": [c.question for c in clarifications], "answers": answers}, indent=2) + "\n",
+        json.dumps(_answers_record(clarifications, answers), indent=2) + "\n",
         encoding="utf-8",
     )
     diagram = execute_flow_diagram(project_id, projects_root=projects_root)
@@ -1603,17 +1888,30 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
             history.append(f"Attempt {attempt + 1} rejected (returned a stub with no equation section).")
             continue
 
-        static_issues = _modelica_static_issues(draft)
-        if static_issues:
-            errors_summary = "\n".join(static_issues)
+        static_issues = _modelica_static_issues(draft, _checked_variable_names(understanding))
+        blocking, advisory = _split_blocking(static_issues)
+        if advisory:
+            # Carried into the next attempt's context if there is one, so they
+            # still get fixed, but never on their own account.
             print(
-                f"    [Stage 3] Modelica preflight found {len(static_issues)} issue(s), "
-                f"attempt {attempt + 1}:\n{errors_summary}", flush=True,
+                f"    [Stage 3] preflight advisories (not blocking), attempt {attempt + 1}:\n"
+                + "\n".join(advisory), flush=True,
+            )
+            run_log.event(
+                "validation_attempt", stage=3, attempt=attempt + 1,
+                tool="modelica_preflight", status="ADVISORY",
+                error_count=len(advisory), errors="\n".join(advisory),
+            )
+        if blocking:
+            errors_summary = "\n".join(blocking + advisory)
+            print(
+                f"    [Stage 3] Modelica preflight found {len(blocking)} blocking issue(s), "
+                f"attempt {attempt + 1}:\n" + "\n".join(blocking), flush=True,
             )
             run_log.event(
                 "validation_attempt", stage=3, attempt=attempt + 1,
                 tool="modelica_preflight", status="FAILED",
-                error_count=len(static_issues), errors=errors_summary,
+                error_count=len(blocking), errors=errors_summary,
             )
             history.append(f"Attempt {attempt + 1} rejected by preflight:\n{errors_summary}")
             continue
@@ -1641,9 +1939,48 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
             run_log.event("validation_attempt", stage=3, attempt=attempt + 1, tool="omc", status="UNAVAILABLE", detail=str(exc))
             break
         if result.status.value == "PASSED":
-            print(f"    [Stage 3] real omc: PASSED ({attempt + 1} attempt(s))", flush=True)
+            # Compiling has never been the thing being judged. Stage 3 already
+            # simulates the brief's real window here, so the trajectory is in
+            # hand -- use it. A bundle whose reported quantities never move is
+            # dead, and accepting it spends the remaining attempts on nothing
+            # while Stage 4 discovers it later. Twice on this plant a model
+            # compiled, ran the full 3000 s and left every level and
+            # composition at its initial value; the second time two
+            # temperatures sat at physically meaningless constants. Both were
+            # accepted here and only caught downstream.
+            dead = _inert_variables(result.result_summary, _checked_variable_names(understanding))
+            if dead and attempt < settings.max_repair_attempts:
+                errors_summary = (
+                    f"The bundle compiles and simulates the full {understanding.simulation.stop_time:.0f}s "
+                    f"window, but {', '.join(dead)} never change value for the entire run. A quantity an "
+                    "acceptance check reads must actually move: the sequence has to start, the transfers "
+                    "have to happen, and the states have to respond. Find what stops it -- a guard that can "
+                    "never become true, a permissive wired to a constant, a flow that is never driven, a "
+                    "stage whose exit condition is unreachable -- and fix that. Do not satisfy this by "
+                    "forcing the values; the physics has to produce them."
+                )
+                print(
+                    f"    [Stage 3] simulated but inert, attempt {attempt + 1}: "
+                    f"{len(dead)} checked variable(s) never changed", flush=True,
+                )
+                run_log.event(
+                    "validation_attempt", stage=3, attempt=attempt + 1, tool="omc",
+                    status="INERT", error_count=len(dead), errors=errors_summary,
+                )
+                history.append(f"Attempt {attempt + 1} compiled but did nothing:\n{errors_summary}")
+                continue
+            if dead:
+                print(
+                    f"    [Stage 3] real omc: PASSED ({attempt + 1} attempt(s)) -- but "
+                    f"{len(dead)} checked variable(s) never changed; no attempts left to fix it", flush=True,
+                )
+            else:
+                print(f"    [Stage 3] real omc: PASSED ({attempt + 1} attempt(s))", flush=True)
             errors_summary = ""  # otherwise StageResult.remaining_errors would show a stale prior error
-            run_log.event("validation_attempt", stage=3, attempt=attempt + 1, tool="omc", status="PASSED")
+            run_log.event(
+                "validation_attempt", stage=3, attempt=attempt + 1, tool="omc", status="PASSED",
+                inert=sorted(dead) or None,
+            )
             break
         errors_summary = "\n".join(f"- {e.file}:{e.line}: {e.message}" for e in result.errors)
         print(f"    [Stage 3] real omc found {len(result.errors)} error(s), attempt {attempt + 1}:\n{errors_summary}", flush=True)
@@ -1651,6 +1988,13 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
             "validation_attempt", stage=3, attempt=attempt + 1, tool="omc", status="FAILED",
             error_count=len(result.errors), errors=errors_summary,
         )
+        # Advisories ride along with a real rejection so they still get fixed,
+        # marked as secondary so the attempt is spent on the compiler error.
+        if advisory:
+            errors_summary += (
+                "\n\nAlso worth fixing while you are here, but none of these is why the attempt "
+                "failed -- do not let them change the model's structure:\n" + "\n".join(advisory)
+            )
         history.append(f"Attempt {attempt + 1} rejected by the real OpenModelica compiler:\n{errors_summary}")
 
     generated_dir = _modelica_generated_dir(ws, project_id)

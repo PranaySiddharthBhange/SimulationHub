@@ -5,7 +5,7 @@
   "entities": [
     {
       "name": "flux tube",
-      "kind": "magnetic element",
+      "kind": "magnetic element concept",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -25,35 +25,13 @@
     },
     {
       "name": "linear reluctance",
-      "kind": "magnetic element",
+      "kind": "reluctance",
       "aliases": [],
       "values": [],
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "a linear reluctance remains real."
-    },
-    {
-      "name": "released leakage model",
-      "kind": "model",
-      "aliases": [
-        "leakage model"
-      ],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "The released leakage model is parameterized by sigma"
-    },
-    {
-      "name": "sigma",
-      "kind": "parameter",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "parameterized by sigma"
     },
     {
       "name": "GAP-1",
@@ -76,76 +54,6 @@
       "quote": "Because GAP-1 and LEAK-1 are in parallel"
     },
     {
-      "name": "R_leak",
-      "kind": "reluctance",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "R_leak = R_gap*(1-sigma)/sigma"
-    },
-    {
-      "name": "R_gap",
-      "kind": "reluctance",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "R_leak = R_gap*(1-sigma)/sigma"
-    },
-    {
-      "name": "R_parallel",
-      "kind": "reluctance",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "R_parallel = 1/(1/R_gap + 1/R_leak)"
-    },
-    {
-      "name": "Phi_core",
-      "kind": "flux",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "Phi_core = N*I / (R_core + R_parallel)"
-    },
-    {
-      "name": "Phi_gap",
-      "kind": "flux",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "Phi_gap/Phi_core = 1-sigma"
-    },
-    {
-      "name": "Phi_leak",
-      "kind": "flux",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "Phi_leak/Phi_core = sigma"
-    },
-    {
-      "name": "R_core",
-      "kind": "reluctance",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "Phi_core = N*I / (R_core + R_parallel)"
-    },
-    {
       "name": "exciting coils",
       "kind": "coil",
       "aliases": [],
@@ -164,56 +72,6 @@
       "anchor": "[page 1]",
       "from_image": false,
       "quote": "The exciting and measuring coils are intentionally defined with opposite\ninduced-voltage orientation in the benchmark."
-    },
-    {
-      "name": "nonlinear B-H curve",
-      "kind": "magnetic characteristic",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "The baseline benchmark does not use a nonlinear B-H curve"
-    },
-    {
-      "name": "hysteresis",
-      "kind": "phenomenon",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "The baseline benchmark does not use a nonlinear B-H curve, hysteresis,"
-    },
-    {
-      "name": "eddy-current loss",
-      "kind": "loss mechanism",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "eddy-current loss, or frequency-dependent permeability."
-    },
-    {
-      "name": "frequency-dependent permeability",
-      "kind": "material property",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "eddy-current loss, or frequency-dependent permeability."
-    },
-    {
-      "name": "nonlinear inductor example",
-      "kind": "example",
-      "aliases": [],
-      "values": [],
-      "ref": "",
-      "anchor": "[page 1]",
-      "from_image": false,
-      "quote": "A nonlinear inductor example may exist elsewhere"
     }
   ],
   "relationships": [
@@ -221,7 +79,7 @@
       "subject": "GAP-1",
       "predicate": "in parallel with",
       "object": "LEAK-1",
-      "detail": "they have equal magnetic potential difference",
+      "detail": "equal magnetic potential difference",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -231,7 +89,7 @@
       "subject": "exciting coils",
       "predicate": "opposite induced-voltage orientation to",
       "object": "measuring coils",
-      "detail": "",
+      "detail": "in the benchmark",
       "ref": "",
       "anchor": "[page 1]",
       "from_image": false,
@@ -307,18 +165,18 @@
       "statement": "Phi_gap/Phi_core = 1-sigma",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "unknown",
+      "status": "released",
       "from_image": false,
-      "quote": "Phi_gap/Phi_core = 1-sigma"
+      "quote": "The released leakage model is parameterized by sigma such that Phi_gap/Phi_core = 1-sigma"
     },
     {
       "category": "physical_relationship",
       "statement": "Phi_leak/Phi_core = sigma",
       "ref": "",
       "anchor": "[page 1]",
-      "status": "unknown",
+      "status": "released",
       "from_image": false,
-      "quote": "Phi_leak/Phi_core = sigma"
+      "quote": "Phi_leak/Phi_core = sigma."
     },
     {
       "category": "physical_relationship",
@@ -349,12 +207,39 @@
     },
     {
       "category": "physical_relationship",
-      "statement": "induced-voltage magnitude is 2*pi*f*N*|Phi|",
+      "statement": "For a sinusoidal flux phasor at frequency f, induced-voltage magnitude is 2*pi*f*N*|Phi|.",
       "ref": "",
       "anchor": "[page 1]",
       "status": "unknown",
       "from_image": false,
-      "quote": "induced-voltage magnitude is 2*pi*f*N*|Phi|."
+      "quote": "For a sinusoidal flux phasor at frequency f, induced-voltage magnitude is 2*pi*f*N*|Phi|."
+    },
+    {
+      "category": "constraint",
+      "statement": "Force interaction is excluded.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "Force interaction is excluded."
+    },
+    {
+      "category": "constraint",
+      "statement": "The baseline benchmark does not use a nonlinear B-H curve, hysteresis, eddy-current loss, or frequency-dependent permeability.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "The baseline benchmark does not use a nonlinear B-H curve, hysteresis,\neddy-current loss, or frequency-dependent permeability."
+    },
+    {
+      "category": "constraint",
+      "statement": "A nonlinear inductor example may exist elsewhere but it is not authority for this case.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "current",
+      "from_image": false,
+      "quote": "A nonlinear inductor example may exist elsewhere but\nit is not authority for this case."
     }
   ],
   "unreadable": [],

@@ -1,0 +1,43 @@
+{
+  "attempt": 3,
+  "entry_class": "TwoTankSequenceSystem",
+  "files": [
+    {
+      "filename": "IdealOnOffValve.mo",
+      "role": "component"
+    },
+    {
+      "filename": "Tank1Inventory.mo",
+      "role": "component"
+    },
+    {
+      "filename": "Tank2Inventory.mo",
+      "role": "component"
+    },
+    {
+      "filename": "PLC101.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "TwoTankSequenceSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Sources.BooleanTable"
+  ],
+  "corrections": [
+    "Root-cause correction for the reported over-determined system: the previous bundle connected TK_102.outflowActual_m3s to zeroFlow.y, which equated two RealOutput connectors. In Modelica block connectors, connecting two output connectors creates an extra equality and over-constrains the signal network instead of representing a sink. That connection was removed by making outflowActual_m3s internal in the tank component and not exposing or connecting it where no downstream consumer exists.",
+    "Root-cause correction for the same connector misuse class: Tank1Inventory and Tank2Inventory now expose only the connectors that are actually consumed by the system model. This avoids both the earlier rejected unused-output structure and the later over-determined output-to-output connection workaround.",
+    "Assumption preserved from the brief: ideal Boolean valve commands are used directly as flow switches and dynamic valve stroke is neglected for the hackathon simulation, although 0.8 s opening and 0.6 s closing stroke times remain sourced but are not modeled dynamically.",
+    "Assumption preserved from the brief: exact checks at 280 s and 700 s are modeled using the stated 0.1 s PLC scan with command pulses scheduled on sample-aligned times and with pulse width 2*scanPeriod so each press is seen by the controller.",
+    "Modeling choice required because no MSL acausal fluid component directly matches the brief's explicit legacy signal-balance equations without introducing unstated hydraulic parameters: the plant is modeled as signal-flow inventory balances using the explicit note evidence d(tank1_level_m)/dt = (valve1_cmd*qFill - valve2_cmd*qTransfer)/A1 and d(tank2_level_m)/dt = (valve2_cmd*qTransfer - valve3_cmd*qDrain)/A2, with physical inventory cutoffs enforced inside the tank balance.",
+    "Assumption for physical plausibility, since the brief says no additional saturation law beyond the stated valid measurement range was introduced in Merge but also instructs later stages to preserve physical plausibility: each tank prevents net depletion below 0 m and prevents net filling above 1 m by limiting the actual outgoing request used in its own balance when empty/full. No separate clipping of the reported level state is applied."
+  ],
+  "references": []
+}

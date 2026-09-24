@@ -1,0 +1,1112 @@
+{
+  "B1.T_K": {
+    "min": 293.15,
+    "max": 293.15,
+    "final": 293.15
+  },
+  "B1.m": {
+    "min": 35.0,
+    "max": 35.0,
+    "final": 35.0
+  },
+  "B1.mSalt": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.T_K": {
+    "min": 293.15,
+    "max": 293.15,
+    "final": 293.15
+  },
+  "B2.m": {
+    "min": 24.5,
+    "max": 24.5,
+    "final": 24.5
+  },
+  "B2.mSalt": {
+    "min": 6.125,
+    "max": 6.125,
+    "final": 6.125
+  },
+  "B3.T_K": {
+    "min": 293.15,
+    "max": 293.15,
+    "final": 293.15
+  },
+  "B3.m": {
+    "min": 0.5,
+    "max": 0.5,
+    "final": 0.5
+  },
+  "B3.mSalt": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4.T_K": {
+    "min": 293.15,
+    "max": 293.15,
+    "final": 293.15
+  },
+  "B4.m": {
+    "min": 0.55,
+    "max": 0.55,
+    "final": 0.55
+  },
+  "B4.mSalt": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5K1.T_K": {
+    "min": 293.15,
+    "max": 293.15,
+    "final": 293.15
+  },
+  "B5K1.m": {
+    "min": 0.6,
+    "max": 0.6,
+    "final": 0.6
+  },
+  "B5K1.mSalt": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.T_K": {
+    "min": 350.15,
+    "max": 350.15,
+    "final": 350.15
+  },
+  "B6.m": {
+    "min": 0.5,
+    "max": 0.5,
+    "final": 0.5
+  },
+  "B6.mSalt": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7.T_K": {
+    "min": 360.15,
+    "max": 360.15,
+    "final": 360.15
+  },
+  "B7.m": {
+    "min": 0.5,
+    "max": 0.5,
+    "final": 0.5
+  },
+  "B7.mSalt": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B1.T_K)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B1.m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B1.mSalt)": {
+    "min": -0.0,
+    "max": -0.0,
+    "final": -0.0
+  },
+  "der(B2.T_K)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B2.m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B2.mSalt)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B3.T_K)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B3.m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B3.mSalt)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B4.T_K)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B4.m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B4.mSalt)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B5K1.T_K)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B5K1.m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B5K1.mSalt)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B6.T_K)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B6.m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B6.mSalt)": {
+    "min": -0.0,
+    "max": -0.0,
+    "final": -0.0
+  },
+  "der(B7.T_K)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B7.m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B7.mSalt)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.heatFlow_W": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.level_m": {
+    "min": 0.5,
+    "max": 0.5,
+    "final": 0.5
+  },
+  "B1.qOutCmd_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.qOutLimited_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.temp_C": {
+    "min": 20.0,
+    "max": 20.0,
+    "final": 20.0
+  },
+  "B1.w": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.wIn_kg_kg": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.heatFlow_W": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.level_m": {
+    "min": 0.35,
+    "max": 0.35,
+    "final": 0.35
+  },
+  "B2.qOutCmd_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.qOutLimited_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.temp_C": {
+    "min": 20.0,
+    "max": 20.0,
+    "final": 20.0
+  },
+  "B2.w": {
+    "min": 0.25,
+    "max": 0.25,
+    "final": 0.25
+  },
+  "B3.heatFlow_W": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B3.qIn_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B3.qOutCmd_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B3.qOutLimited_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B3.temp_C": {
+    "min": 20.0,
+    "max": 20.0,
+    "final": 20.0
+  },
+  "B3.wIn_kg_kg": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B3_level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B3_w_NaCl": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4.heatFlow_W": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4.qOutCmd_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4.qOutLimited_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4.temp_C": {
+    "min": 20.0,
+    "max": 20.0,
+    "final": 20.0
+  },
+  "B4.w": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4_level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B5K1.appliedHeat_W": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5K1.evap_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5K1.toB7_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5K1.transferToB7Cmd_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5_heater_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5_level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B5_temp_C": {
+    "min": 20.0,
+    "max": 20.0,
+    "final": 20.0
+  },
+  "B5_w_NaCl": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.heatFlow_W": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.qOutCmd_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.qOutLimited_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.w": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.wIn_kg_kg": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6_cooler_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6_level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B6_temp_C": {
+    "min": 77.0,
+    "max": 77.0,
+    "final": 77.0
+  },
+  "B7.heatFlow_W": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7.qOutCmd_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7.qOutLimited_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7.w": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7_cooler_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7_level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B7_temp_C": {
+    "min": 87.0,
+    "max": 87.0,
+    "final": 87.0
+  },
+  "P1_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "P2_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V11_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V12_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V15_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V18_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V1_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V20_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V22_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V23_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V24_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V25_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V3_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V5_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V6_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V8_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V9_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller_state": {
+    "min": 1.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "region": {
+    "min": 1.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "time_s": {
+    "min": 0.0,
+    "max": 3000.0,
+    "final": 3000.0
+  },
+  "controller.mode": {
+    "min": 1.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "B5K1.heaterCmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5K1.heaterPermissive": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.CoolerB6": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.CoolerB7": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V11": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V12": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V15": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V23": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V25": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V8": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V9": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.branchADone": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.branchBDone": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.qIn_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.qOut_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.w_NaCl": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.qIn_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.qOut_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.wIn_kg_kg": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.w_NaCl": {
+    "min": 0.25,
+    "max": 0.25,
+    "final": 0.25
+  },
+  "B3.level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B3.qOut_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B3.w": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B3.w_NaCl": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4.level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B4.qIn_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4.qOut_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4.wIn_kg_kg": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4.w_NaCl": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5K1.concentrateToB7_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5K1.condensateToB6_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5K1.feed_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5K1.feed_w_kg_kg": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5K1.level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B5K1.temp_C": {
+    "min": 20.0,
+    "max": 20.0,
+    "final": 20.0
+  },
+  "B5K1.w": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5K1.w_NaCl": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B6.qIn_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.qOut_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.temp_C": {
+    "min": 77.0,
+    "max": 77.0,
+    "final": 77.0
+  },
+  "B6.w_NaCl": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7.level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B7.qIn_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7.qOut_kg_s": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7.temp_C": {
+    "min": 87.0,
+    "max": 87.0,
+    "final": 87.0
+  },
+  "B7.wIn_kg_kg": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7.w_NaCl": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "C6r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "C7r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "Htr.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "P1r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "P2r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V11r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V12r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V15r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V18r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V1r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V20r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V22r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V23r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V24r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V25r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V3r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V5r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V6r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V8r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V9r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.LIS_301": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "controller.LIS_501": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "controller.LIS_601": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "controller.LIS_701": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "controller.QIS_502": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.QI_302": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.TIS_602": {
+    "min": 77.0,
+    "max": 77.0,
+    "final": 77.0
+  },
+  "controller.TIS_702": {
+    "min": 87.0,
+    "max": 87.0,
+    "final": 87.0
+  },
+  "controller.controller_state": {
+    "min": 1.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "controller.region": {
+    "min": 1.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "C6r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "C7r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "Htr.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "P1r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "P2r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V11r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V12r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V15r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V18r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V1r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V20r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V22r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V23r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V24r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V25r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V3r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V5r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V6r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V8r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V9r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.HeaterB5": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.P1": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.P2": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V1": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V18": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V20": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V22": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V24": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V3": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V5": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V6": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  }
+}

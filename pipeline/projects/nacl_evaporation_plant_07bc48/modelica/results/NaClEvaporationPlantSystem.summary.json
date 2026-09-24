@@ -1,0 +1,427 @@
+{
+  "B1_level_m": {
+    "min": 0.4142142857143132,
+    "max": 0.5,
+    "final": 0.4142142857143132
+  },
+  "B2_level_m": {
+    "min": 0.3062142857143327,
+    "max": 0.35,
+    "final": 0.3062142857143327
+  },
+  "B3_level_m": {
+    "min": 0.009999999898996848,
+    "max": 0.1913999999999233,
+    "final": 0.009999999898996848
+  },
+  "B4_level_m": {
+    "min": 0.01,
+    "max": 0.1749090910008288,
+    "final": 0.1749090910008288
+  },
+  "B5_level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B5_temp_K": {
+    "min": 293.15,
+    "max": 293.15,
+    "final": 293.15
+  },
+  "B6_level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B6_temp_K": {
+    "min": 293.15,
+    "max": 293.15,
+    "final": 293.15
+  },
+  "B7_level_m": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "B7_temp_K": {
+    "min": 293.15,
+    "max": 293.15,
+    "final": 293.15
+  },
+  "mB3_salt": {
+    "min": 0.0,
+    "max": 0.7662499999991607,
+    "final": 0.04003395988819909
+  },
+  "mB4_salt": {
+    "min": 0.0,
+    "max": 0.7262160401109825,
+    "final": 0.7262160401109825
+  },
+  "mB5_salt": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B1_level_m)": {
+    "min": -0.0007142857142857143,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B2_level_m)": {
+    "min": -0.0007142857142857143,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B3_level_m)": {
+    "min": -0.001,
+    "max": 0.001,
+    "final": 0.0
+  },
+  "der(B4_level_m)": {
+    "min": 0.0,
+    "max": 0.0009090909090909091,
+    "final": 0.0
+  },
+  "der(B5_level_m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B5_temp_K)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B6_level_m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B6_temp_K)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B7_level_m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(B7_temp_K)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(mB3_salt)": {
+    "min": -0.004003396029255746,
+    "max": 0.0125,
+    "final": 0.0
+  },
+  "der(mB4_salt)": {
+    "min": 0.0,
+    "max": 0.004003396029255746,
+    "final": 0.0
+  },
+  "der(mB5_salt)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B3_w_NaCl": {
+    "min": 0.0,
+    "max": 0.0800679205851149,
+    "final": 0.08006792058510942
+  },
+  "B4_w_NaCl": {
+    "min": 0.0,
+    "max": 0.07549023282017571,
+    "final": 0.07549023282017571
+  },
+  "B5_heater_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B5_temp_C": {
+    "min": 20.0,
+    "max": 20.0,
+    "final": 20.0
+  },
+  "B5_w_NaCl": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6_cooler_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6_temp_C": {
+    "min": 20.0,
+    "max": 20.0,
+    "final": 20.0
+  },
+  "B7_cooler_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7_temp_C": {
+    "min": 20.0,
+    "max": 20.0,
+    "final": 20.0
+  },
+  "P1_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "P2_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V11_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "V12_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V15_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V18_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V1_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V20_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V22_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V23_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V24_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V25_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V3_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V5_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V6_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V8_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "V9_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "time_s": {
+    "min": 0.0,
+    "max": 3000.0,
+    "final": 3000.0
+  },
+  "controller_state": {
+    "min": 1.0,
+    "max": 5.0,
+    "final": 5.0
+  },
+  "region": {
+    "min": 1.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "controller.P1": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.P2": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V11": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.V12": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V15": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V8": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.V9": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.coolerB6": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.coolerB7": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.heaterB5": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.LIS_301": {
+    "min": 0.009999999898996848,
+    "max": 0.1913999999999233,
+    "final": 0.009999999898996848
+  },
+  "controller.LIS_501": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "controller.LIS_601": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "controller.LIS_701": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "controller.QIS_502": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.QI_302": {
+    "min": 0.0,
+    "max": 0.0800679205851149,
+    "final": 0.08006792058510942
+  },
+  "controller.TIS_602": {
+    "min": 20.0,
+    "max": 20.0,
+    "final": 20.0
+  },
+  "controller.TIS_702": {
+    "min": 20.0,
+    "max": 20.0,
+    "final": 20.0
+  },
+  "controller.controller_state": {
+    "min": 1.0,
+    "max": 5.0,
+    "final": 5.0
+  },
+  "controller.region": {
+    "min": 1.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "controller.V1": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V18": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V20": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V22": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V23": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V24": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V25": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V3": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V5": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V6": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  }
+}

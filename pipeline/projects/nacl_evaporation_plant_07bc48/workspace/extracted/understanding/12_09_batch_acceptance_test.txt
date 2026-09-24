@@ -2,18 +2,22 @@ Subject: Batch Acceptance Test BAT-09 - Rev B
 Document kind: test procedure
 
 ## Entities
-* BAT-09 -- test  <BAT-09 [page 1]>
-* WaterNaCl property package -- property package  <[page 1]>
-* StandardWater -- property package  <[page 1]>
 * B1 -- tank  <[page 1]>
     - composition w_NaCl: 0.000 [initial]
 * B2 -- tank  <[page 1]>
     - composition w_NaCl: 0.250 [initial]
-* B3-B7 -- tanks  <[page 1]>
+* B3 -- tank  <[page 1]>
     - level: <=0.01 m [initial]
-* Ambient pressure -- environment condition  <[page 1]>
+* B4 -- tank  <[page 1]>
+    - level: <=0.01 m [initial]
+* B5 -- tank  <[page 1]>
+    - level: <=0.01 m [initial]
+* B6 -- tank  <[page 1]>
+    - level: <=0.01 m [initial]
+* B7 -- tank  <[page 1]>
+    - level: <=0.01 m [initial]
+* Ambient -- environment  <[page 1]>
     - pressure: 101325 Pa [initial]
-* Ambient temperature -- environment condition  <[page 1]>
     - temperature: 293.15 K [initial]
 * automated valves -- valves  <[page 1]>
 * P1 -- pump  <[page 1]>
@@ -24,34 +28,38 @@ Document kind: test procedure
 * K1 cooling-water flow proof -- flow proof  <[page 1]>
     - flow: >=0.10 kg/s [initial]
 * LIS-301 -- level indicator switch  <[page 1]>
+    - level: >=0.13 m [required]
 * QI-302 -- quality indicator  <[page 1]>
+    - composition: >=0.080 kg/kg [required]
 * LIS-501 -- level indicator switch  <[page 1]>
+    - level: >=0.18 m [required]
 * QIS-502 -- quality indicator switch  <[page 1]>
+    - composition: >=0.180 kg/kg [required]
 * TIS-602 -- temperature indicator switch  <[page 1]>
+    - temperature: <=20 degC [required]
 * TIS-702 -- temperature indicator switch  <[page 1]>
+    - temperature: <=25 degC [required]
 * TI-503 -- temperature indicator  <[page 1]>
 * FIS-801 -- flow indicator switch  <[page 1]>
 
 ## Relationships
-* WaterNaCl property package may be replaced by StandardWater (for topology debugging)  <[page 1]>
-* B6 condensate returns to B1  <[page 1]>
-* B7 concentrate returns to B2  <[page 1]>
+* B6 returns to B1 (condensate)  <[page 1]>
+* B7 returns to B2 (concentrate)  <[page 1]>
 
 ## Requirements
 * Verify a complete automatic batch cycle using the effective setpoints and approved return routing. [approved]  <[page 1]>
-* final composition-based acceptance uses the composition-capable configuration. [approved]  <[page 1]>
+* The test is primarily a controller/architecture acceptance test.  <[page 1]>
+* The WaterNaCl property package may be replaced by StandardWater for topology debugging, but final composition-based acceptance uses the composition-capable configuration. [approved]  <[page 1]>
+* Cycle reset cannot occur until both branches complete [required]  <[page 1]>
+* Initial becomes active only after process time >2500 s [required]  <[page 1]>
 * Log at 5 s or faster: state/region, all tank levels, QI-302, QIS-502, TI-503, TIS-602, TIS-702, FIS-801, P1/P2,
-heater/cooler commands and all 15 automated valve commands. [approved]  <[page 1]>
+heater/cooler commands and all 15 automated valve commands. [required]  <[page 1]>
 
 ## Constraints
-* Step1 exits at LIS-301 >=0.13 m [approved]  <[page 1]>
-* Step2 exits at QI-302 >=0.080 kg/kg [approved]  <[page 1]>
-* Step3 exits below 0.01 m [approved]  <[page 1]>
-* Step5 exits at LIS-501 >=0.18 m [approved]  <[page 1]>
-* Step6 exits at QIS-502 >=0.180 kg/kg [approved]  <[page 1]>
-* TIS-602 <=20 degC before P2 return [approved]  <[page 1]>
-* TIS-702 <=25 degC before P1 return [approved]  <[page 1]>
-
-## Behaviors
-* Cycle reset cannot occur until both branches complete [approved]  <[page 1]>
-* Initial becomes active only after process time >2500 s [approved]  <[page 1]>
+* Step1 exits at LIS-301 >=0.13 m [required]  <[page 1]>
+* Step2 exits at QI-302 >=0.080 kg/kg [required]  <[page 1]>
+* Step3 exits below 0.01 m [required]  <[page 1]>
+* Step5 exits at LIS-501 >=0.18 m [required]  <[page 1]>
+* Step6 exits at QIS-502 >=0.180 kg/kg [required]  <[page 1]>
+* TIS-602 <=20 degC before P2 return [required]  <[page 1]>
+* TIS-702 <=25 degC before P1 return [required]  <[page 1]>

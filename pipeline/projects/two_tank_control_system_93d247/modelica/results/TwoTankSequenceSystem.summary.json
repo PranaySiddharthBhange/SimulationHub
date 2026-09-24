@@ -1,0 +1,232 @@
+{
+  "TK_101.level": {
+    "min": -1.000195420193181e-10,
+    "max": 0.8000000001800085,
+    "final": -1.000195420193181e-10
+  },
+  "TK_102.level": {
+    "min": 0.05,
+    "max": 149.3410710643716,
+    "final": 148.672023428601
+  },
+  "PB_SHUT.combiTimeTable.y[1]": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PB_START.combiTimeTable.y[1]": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PB_STOP.combiTimeTable.y[1]": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "XV_101.flow_m3s": {
+    "min": 0.0,
+    "max": 0.006,
+    "final": 0.0
+  },
+  "drainRequest_m3s": {
+    "min": 0.0,
+    "max": 0.005,
+    "final": 0.005
+  },
+  "time_s": {
+    "min": 0.0,
+    "max": 900.0,
+    "final": 900.0
+  },
+  "transferRequest_m3s": {
+    "min": 0.0,
+    "max": 0.0045,
+    "final": 0.0045
+  },
+  "wait_remaining_s": {
+    "min": 0.0,
+    "max": 12.0,
+    "final": 0.0
+  },
+  "controller_state_id": {
+    "min": 0.0,
+    "max": 8.0,
+    "final": 8.0
+  },
+  "PB_SHUT.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PB_START.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PB_STOP.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "valve1_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "valve2_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "valve3_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "PB_SHUT.realToBoolean.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PB_START.realToBoolean.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PB_STOP.realToBoolean.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.LT101_level_m": {
+    "min": -1.000195420193181e-10,
+    "max": 0.8000000001800085,
+    "final": -1.000195420193181e-10
+  },
+  "PLC_101.LT102_level_m": {
+    "min": 0.05,
+    "max": 149.3410710643716,
+    "final": 148.672023428601
+  },
+  "PLC_101.wait_remaining_s": {
+    "min": 0.0,
+    "max": 12.0,
+    "final": 0.0
+  },
+  "TK_101.inflow_m3s": {
+    "min": 0.0,
+    "max": 0.006,
+    "final": 0.0
+  },
+  "TK_101.level_m": {
+    "min": -1.000195420193181e-10,
+    "max": 0.8000000001800085,
+    "final": -1.000195420193181e-10
+  },
+  "TK_101.outflowRequest_m3s": {
+    "min": 0.0,
+    "max": 0.0045,
+    "final": 0.0045
+  },
+  "TK_102.inflow_m3s": {
+    "min": -1.000195420193181e-10,
+    "max": 0.8000000001800085,
+    "final": -1.000195420193181e-10
+  },
+  "TK_102.level_m": {
+    "min": 0.05,
+    "max": 149.3410710643716,
+    "final": 148.672023428601
+  },
+  "TK_102.outflowRequest_m3s": {
+    "min": 0.0,
+    "max": 0.005,
+    "final": 0.005
+  },
+  "XV_102.flow_m3s": {
+    "min": 0.0,
+    "max": 0.0045,
+    "final": 0.0045
+  },
+  "XV_103.flow_m3s": {
+    "min": 0.0,
+    "max": 0.005,
+    "final": 0.005
+  },
+  "tank1_level_m": {
+    "min": -1.000195420193181e-10,
+    "max": 0.8000000001800085,
+    "final": -1.000195420193181e-10
+  },
+  "tank2_level_m": {
+    "min": 0.05,
+    "max": 149.3410710643716,
+    "final": 148.672023428601
+  },
+  "PLC_101.controller_state_id": {
+    "min": 0.0,
+    "max": 8.0,
+    "final": 8.0
+  },
+  "PB_SHUT.realToBoolean.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PB_START.realToBoolean.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PB_STOP.realToBoolean.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.shutButton": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.startButton": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.stopButton": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.valve1_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.valve2_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "PLC_101.valve3_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "XV_101.openCmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "XV_102.openCmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "XV_103.openCmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  }
+}

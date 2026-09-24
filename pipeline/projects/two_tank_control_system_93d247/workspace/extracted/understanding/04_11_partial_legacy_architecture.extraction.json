@@ -1,14 +1,13 @@
 {
   "document": "@startuml\n' Synthetic legacy architecture draft - intentionally incomplete\nskinparam componentStyle rectangle\ncomponent \"tankController\n(PLC-101)\" as PLC\ncomponent \"tank1\n(TK-101)\" as T1\ncomponent \"tank2\n(TK-102)\" as T2\ncomponent \"valve1\n(XV-101)\" as V1\ncomponent \"valve2\n(XV-102)\" as V2\ncomponent \"valve3\n(XV-103)\" as V3\ncomponent \"source\n(SRC-101)\" as SRC\ncomponent \"ambient1\n(DRN-101)\" as DRN\n\nSRC --> V1 : liquid\nV1 --> T1 : liquid\nT1 --> V2 : liquid\nV2 --> T2 : liquid\nT2 --> V3 : liquid\nV3 --> DRN : liquid\nPLC ..> V1 : valve1\nPLC ..> V2 : valve2\nPLC ..> V3 : valve3\n\nnote right of PLC\nLegacy draft does not show:\n- LT-101 / LT-102\n- START / STOP / SHUT inputs\n- pause state\n- controlled shutdown concurrency\nend note\n@enduml\n",
-  "subject": "Synthetic legacy architecture draft",
+  "subject": "Synthetic legacy architecture draft - intentionally incomplete",
   "kind": "legacy model",
   "entities": [
     {
       "name": "tankController",
       "kind": "component",
       "aliases": [
-        "PLC-101",
-        "PLC"
+        "PLC-101"
       ],
       "values": [],
       "ref": "",
@@ -20,8 +19,7 @@
       "name": "tank1",
       "kind": "component",
       "aliases": [
-        "TK-101",
-        "T1"
+        "TK-101"
       ],
       "values": [],
       "ref": "",
@@ -33,8 +31,7 @@
       "name": "tank2",
       "kind": "component",
       "aliases": [
-        "TK-102",
-        "T2"
+        "TK-102"
       ],
       "values": [],
       "ref": "",
@@ -46,8 +43,7 @@
       "name": "valve1",
       "kind": "component",
       "aliases": [
-        "XV-101",
-        "V1"
+        "XV-101"
       ],
       "values": [],
       "ref": "",
@@ -59,8 +55,7 @@
       "name": "valve2",
       "kind": "component",
       "aliases": [
-        "XV-102",
-        "V2"
+        "XV-102"
       ],
       "values": [],
       "ref": "",
@@ -72,8 +67,7 @@
       "name": "valve3",
       "kind": "component",
       "aliases": [
-        "XV-103",
-        "V3"
+        "XV-103"
       ],
       "values": [],
       "ref": "",
@@ -85,8 +79,7 @@
       "name": "source",
       "kind": "component",
       "aliases": [
-        "SRC-101",
-        "SRC"
+        "SRC-101"
       ],
       "values": [],
       "ref": "",
@@ -98,8 +91,7 @@
       "name": "ambient1",
       "kind": "component",
       "aliases": [
-        "DRN-101",
-        "DRN"
+        "DRN-101"
       ],
       "values": [],
       "ref": "",
@@ -109,7 +101,7 @@
     },
     {
       "name": "LT-101",
-      "kind": "component",
+      "kind": "control element",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -119,7 +111,7 @@
     },
     {
       "name": "LT-102",
-      "kind": "component",
+      "kind": "control element",
       "aliases": [],
       "values": [],
       "ref": "",
@@ -271,8 +263,6 @@
     }
   ],
   "facts": [],
-  "unreadable": [
-    "The note states omitted items but does not define their connections or behavior beyond: \"Legacy draft does not show:\"."
-  ],
+  "unreadable": [],
   "unverified_quotes": []
 }

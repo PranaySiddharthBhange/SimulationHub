@@ -185,7 +185,7 @@ def _artifacts(project_id: str) -> dict:
     modelica_dir = _ws.modelica_dir(project_id) / "generated"
     validation_dir = _ws.validation_dir(project_id)
     results_dir = _ws.modelica_dir(project_id) / "results"
-    understanding_path = _ws.extracted_dir(project_id) / "merged_understanding.txt"
+    understanding_path = _ws.extracted_dir(project_id) / "merged_understanding.md"
     clarified_path = _ws.extracted_dir(project_id) / "clarified_answers.json"
     diagram_path = _ws.extracted_dir(project_id) / "system_flow.mmd"
     notes_dir = _ws.extracted_dir(project_id) / "understanding"
@@ -410,7 +410,7 @@ def _prepare_stage_rerun(project_id: str, stage: str) -> None:
     if stage == "stage_1":
         _remove(extracted / "understanding")
         _remove(extracted / "merged_understanding.json")
-        _remove(extracted / "merged_understanding.txt")
+        _remove(extracted / "merged_understanding.md")
         _remove(extracted / "clarified_answers.json")
         _remove(extracted / "system_flow.mmd")
         _remove(project_root / "sysml")
@@ -418,7 +418,7 @@ def _prepare_stage_rerun(project_id: str, stage: str) -> None:
         _remove(project_root / "validation")
     elif stage == "merge":
         _remove(extracted / "merged_understanding.json")
-        _remove(extracted / "merged_understanding.txt")
+        _remove(extracted / "merged_understanding.md")
         _remove(extracted / "clarified_answers.json")
         _remove(extracted / "system_flow.mmd")
         _remove(project_root / "sysml")
@@ -558,7 +558,7 @@ def stream_logs(project_id: str):
 
 @app.get("/api/projects/{project_id}/artifacts/understanding")
 def get_understanding(project_id: str):
-    path = _ws.extracted_dir(project_id) / "merged_understanding.txt"
+    path = _ws.extracted_dir(project_id) / "merged_understanding.md"
     if path.exists():
         return {"content": path.read_text(encoding="utf-8")}
     notes_dir = _ws.extracted_dir(project_id) / "understanding"

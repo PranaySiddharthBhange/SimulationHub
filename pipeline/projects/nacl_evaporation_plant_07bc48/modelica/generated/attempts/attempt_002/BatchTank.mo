@@ -1,0 +1,33 @@
+model BatchTank
+  Modelica.Blocks.Interfaces.RealInput qIn_kg_s annotation(Placement(transformation(extent={{-120,60},{-100,80}})));
+  Modelica.Blocks.Interfaces.RealInput wIn_kg_kg annotation(Placement(transformation(extent={{-120,20},{-100,40}})));
+  Modelica.Blocks.Interfaces.RealInput qOutCmd_kg_s annotation(Placement(transformation(extent={{-120,-20},{-100,0}})));
+  Modelica.Blocks.Interfaces.RealInput heatFlow_W annotation(Placement(transformation(extent={{-120,-60},{-100,-40}})));
+  Modelica.Blocks.Interfaces.RealOutput level_m annotation(Placement(transformation(extent={{100,60},{120,80}})));
+  Modelica.Blocks.Interfaces.RealOutput w_NaCl annotation(Placement(transformation(extent={{100,20},{120,40}})));
+  Modelica.Blocks.Interfaces.RealOutput temp_C annotation(Placement(transformation(extent={{100,-20},{120,0}})));
+  Modelica.Blocks.Interfaces.RealOutput qOut_kg_s annotation(Placement(transformation(extent={{100,-60},{120,-40}})));
+  parameter Modelica.Units.SI.Area area_m2;
+  parameter Modelica.Units.SI.Height levelStart_m;
+  parameter Real wStart;
+  parameter Modelica.Units.SI.Temperature Tstart_K = 293.15;
+  parameter Modelica.Units.SI.Density rho_kg_m3 = 1000;
+  parameter Modelica.Units.SI.SpecificHeatCapacity cp_J_kgK = 4180;
+  parameter Modelica.Units.SI.Mass mMin_kg = 0.001;
+  Modelica.Units.SI.Mass m(start=area_m2*levelStart_m*rho_kg_m3, fixed=true);
+  Modelica.Units.SI.Mass mSalt(start=area_m2*levelStart_m*rho_kg_m3*wStart, fixed=true);
+  Modelica.Units.SI.Temperature T_K(start=Tstart_K, fixed=true);
+  Real w;
+  Modelica.Units.SI.MassFlowRate qOutLimited_kg_s;
+ equation
+  w = mSalt/max(m, mMin_kg);
+  qOutLimited_kg_s = if level_m <= 0 then 0 else min(qOutCmd_kg_s, max(0, m - mMin_kg));
+  der(m) = qIn_kg_s - qOutLimited_kg_s;
+  der(mSalt) = qIn_kg_s*wIn_kg_kg - qOutLimited_kg_s*w;
+  der(T_K) = heatFlow_W/(max(m, mMin_kg)*cp_J_kgK);
+  level_m = m/(rho_kg_m3*area_m2);
+  w_NaCl = w;
+  temp_C = T_K - 273.15;
+  qOut_kg_s = qOutLimited_kg_s;
+  annotation(Icon(graphics={Rectangle(extent={{-60,-80},{60,60}}, lineColor={0,0,255}, fillColor={230,230,255}, fillPattern=FillPattern.Solid),Rectangle(extent={{-50,-80},{50,-10}}, lineColor={0,0,255}, fillColor={0,127,255}, fillPattern=FillPattern.Solid),Text(extent={{-100,100},{100,140}}, textString="%name"),Text(extent={{-40,-4},{40,36}}, textString="Tank")}));
+end BatchTank;
