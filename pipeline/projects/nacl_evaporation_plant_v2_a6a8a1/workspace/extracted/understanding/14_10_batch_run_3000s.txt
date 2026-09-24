@@ -1,0 +1,83 @@
+Subject: batch run 3000s
+Document kind: dataset
+
+## Entities
+* time_s -- recorded quantity
+    - time: 0 .. 3000 [observed]
+* controller_state -- controller state
+* region -- region
+* B3 -- tank
+    - level: 0.005 .. 0.22 m [observed]
+    - NaCl mass fraction: 0 .. 0.08 [observed]
+* B4 -- tank
+    - level: 0.005 .. 0.195 m [observed]
+* B5 -- tank
+    - level: 0.005 .. 0.18 m [observed]
+    - NaCl mass fraction: 0.08 .. 0.18 [observed]
+    - temperature: 20 .. 108 C [observed]
+* B6 -- tank
+    - level: 0.005 .. 0.09 m [observed]
+    - temperature: 19 .. 80 C [observed]
+* B7 -- tank
+    - level: 0.005 .. 0.105 m [observed]
+    - temperature: 20 .. 76 C [observed]
+* FIS801 -- flow indicator
+    - mass flow: 0.12 .. 0.16 kg_s [observed]
+* P1 -- pump command
+    - command: 0 .. 1 [observed]
+* P2 -- pump command
+    - command: 0 .. 1 [observed]
+* B5_heater -- heater command
+    - command: 0 .. 1 [observed]
+* B6_cooler -- cooler command
+    - command: 0 .. 1 [observed]
+* B7_cooler -- cooler command
+    - command: 0 .. 1 [observed]
+* V1 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V3 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V5 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V6 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V8 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V9 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V11 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V12 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V15 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V18 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V20 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V22 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V23 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V24 -- valve open signal
+    - open: 0 .. 1 [observed]
+* V25 -- valve open signal
+    - open: 0 .. 1 [observed]
+
+## Behaviors
+* At time_s=20, controller_state changes to Step1 and V8_open=1 in region Single. [observed]
+* At time_s=180, controller_state changes to Step2 and V9_open=1 in region Single. [observed]
+* At time_s=340, controller_state changes to Step3 and V11_open=1 in region Single. [observed]
+* At time_s=560, controller_state changes to Step5 and V12_open=1 in region Single. [observed]
+* At time_s=720, controller_state changes to Step6, FIS801_kg_s=0.16, and B5_heater_cmd=1 in region Single. [observed]
+* At time_s=1600, controller_state changes to Parallel:Step12+Step8, region changes to A+B, V15_open=1, and B6_cooler_cmd=1. [observed]
+* At time_s=1770, controller_state changes to Parallel:Step12+Step9 and B7_cooler_cmd=1 while B6_cooler_cmd=1 remains in region A+B. [observed]
+* At time_s=1900, controller_state changes to Parallel:Step13+Step9, P2_cmd=1, V1_open=1, V3_open=1, V20_open=1, V24_open=1, and V25_open=1 in region A+B. [observed]
+* At time_s=2050, controller_state changes to Parallel:Step13+Step10, P1_cmd=1, P2_cmd=1, V5_open=1, V6_open=1, V18_open=1, V20_open=1, V22_open=1, V23_open=1, V24_open=1, and V25_open=1 in region A+B. [observed]
+* At time_s=2200, controller_state changes to Parallel:DoneA+Step10 and P1_cmd=1 with V5_open=1, V6_open=1, V18_open=1, V22_open=1, and V23_open=1 in region A+B. [observed]
+* At time_s=2250, controller_state changes to JoinWait and region changes to Join with all listed commands and valve open signals at 0. [observed]
+* At time_s=2505, controller_state changes to Step1_cycle2 and V8_open=1 in region Single. [observed]
+* At time_s=2665, controller_state changes to Step2_cycle2 and V9_open=1 in region Single. [observed]
+* At time_s=2825, controller_state changes to Step3_cycle2 and V11_open=1 in region Single. [observed]
+* The run starts at time_s=0 in controller_state=Initial and region=Single. [observed]
+* The run ends at time_s=3000 in controller_state=Step4_cycle2 and region=Single. [observed]

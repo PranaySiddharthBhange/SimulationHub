@@ -1,0 +1,36 @@
+Subject: Engineer scratchpad - uncontrolled
+Document kind: engineering notes
+
+## Entities
+* EP-03 current -- current
+    - current: 2 Arms
+    - current: 2.828 A peak
+* scope screenshot from bench -- measurement record
+* Old v1 model -- model
+    - sigma: 0.05 [archived]
+* sigma -- parameter
+    - sigma: .08
+    - useful/core: .92
+* Gap -- magnetic path element
+* leakage -- magnetic path element
+* Phi_core -- magnetic flux
+* gap B calculation -- calculation
+* Physical prototype -- prototype
+    - gap: ~1.58 mm [measured]
+    - gap: 1.50 mm [current]
+* analytic case -- analysis case
+    - gap: 1.50 mm [nominal]
+* Excitation induced U -- voltage
+* measurement coil -- coil
+* Linear benchmark -- benchmark case
+* separate nonlinear inductor case -- analysis case
+
+## Relationships
+* Gap in parallel with leakage (same magnetic voltage, different flux)
+* Excitation induced U has positive orientation relative to measurement coil (measurement coil negative)
+* Linear benchmark separate from separate nonlinear inductor case (Saturation discussion belongs to separate case)
+
+## Physical relationships
+* Useful/core = 1 - sigma.
+* With sigma=.08 -> .92.
+* Magnitudes are both proportional to ramp.

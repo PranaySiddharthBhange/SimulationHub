@@ -1,0 +1,6 @@
+{
+  "name": "Quasi-Static Magnetic Circuit v2",
+  "stage1_backend": "openai",
+  "extraction_status": "completed",
+  "status": "stage1_ready"
+}

@@ -1,0 +1,36 @@
+Subject: simulation bench notes
+Document kind: engineering notes
+
+## Entities
+* StandardWater -- topology
+* WaterNaCl -- simulation/system
+* pump transition -- transition
+* pump states -- states
+* solver steps -- solver setting/behavior
+* port-level crossing -- crossing/event
+* hysteresis -- method/setting
+* Q_up fix -- fix/change
+* B5 -- component/state element
+* B7 -- component
+    - temperature: 20 C [archived]
+    - temperature: 25 C [current] (supersedes/superseded: 20 C)
+* CR-017 -- change request
+* K1 -- physical component
+* combined B5/K1 -- simulation abstraction
+* P&ID -- diagram/document
+* StateGraph -- graph/model
+* controller ports -- ports
+
+## Relationships
+* combined B5/K1 is abstraction of B5 (combined with K1 in simulation only)
+* combined B5/K1 is abstraction of K1 (combined with B5 in simulation only)
+* P&ID shows more valves than StateGraph
+
+## Requirements
+* Do NOT delete pump states.
+* Determine ownership before generating controller ports.
+
+## Behaviors
+* WaterNaCl still gets ugly when a pump transition becomes active. [observed]
+* Tiny solver steps around port-level crossing disappeared with hysteresis. [observed]
+* Q_up fix stopped B5 boil/no-boil switching. [observed]

@@ -1,0 +1,43 @@
+Subject: return headers and B7 cooling setpoint
+Document kind: correspondence
+
+## Entities
+* StateGraph note -- document note
+* P1 -- pump
+* B7 -- branch
+    - cooling completion: 25 C [proposed]
+    - cooling completion: 25 C [approved] (supersedes/superseded: 20 C)
+* V18 -- valve
+* V23 -- valve
+* V22 -- valve
+* V1 -- valve
+* V3 -- valve
+* B1 -- header
+* P2 -- pump
+* B6 -- branch
+    - cooling completion: 20 C [observed]
+    - cooling completion: 20 C [proposed]
+* V20 -- valve
+* V24 -- valve
+* V25 -- valve
+* V5 -- valve
+* V6 -- valve
+* B2 -- header
+* CR-017 -- change request
+* P1/P2 -- pump pair
+* WaterNaCl -- medium variant
+* StandardWater -- medium variant
+* legacy StateGraph routing text -- routing text
+
+## Relationships
+* P1 routes branch B1 (old StateGraph note maps branch B7 through V18/V23/V22 + V1/V3 to B1)
+* P2 routes branch B2 (old StateGraph note maps branch B6 through V20/V24/V25 + V5/V6 to B2)
+* bottom headers are cross-connected bottom headers
+* B6 condensate returns to B1 (approved by CR-017)  <CR-017>
+* B7 concentrate returns to B2 (approved by CR-017)  <CR-017>
+* legacy StateGraph routing text is superseded by CR-017  <CR-017>
+
+## Constraints
+* B6 cooling completion is <= 20 C. [proposed]
+* B7 cooling completion is <= 25 C. [proposed]
+* B7 cooling completion is <=25 C. [approved]  <CR-017>

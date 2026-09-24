@@ -1,0 +1,346 @@
+{
+  "document": "# Gapped Core Magnetic Circuit — Ramped Excitation\n\n## System\n\nA 500-turn excitation coil drives magnetic flux around a closed iron core\ninterrupted by a single air gap in series with the iron. The coil current\nstarts at 0 A and ramps linearly up to 2 A over the first 0.1 s of the run,\nthen holds steady at 2 A for the remainder of the run. There is no operator\ncommand and no switching -- the excitation is a simple, one-shot startup\nramp followed by a hold.\n\n- Excitation coil: N = 500 turns. Current I(t): 0 A at t = 0 s, ramping\n  linearly to 2 A by t = 0.1 s, then held constant at 2 A from t = 0.1 s to\n  the end of the run.\n- Core (iron path): mean path length 0.4 m, cross-section 4 cm^2 (0.0004 m^2),\n  relative permeability 2000.\n- Air gap: length 2 mm (0.002 m), same cross-section as the core (4 cm^2,\n  0.0004 m^2), in series with the core, no fringing.\n- Magnetic reference: the circuit has exactly one magnetic ground.\n\n## Requirements\n\n- REQ-SIM-001: Simulate for 1 second and report the coil mmf, the core flux,\n  the core flux density, the air-gap flux density, the magnetic potential\n  drop across the iron core, and the magnetic potential drop across the air\n  gap for the whole run, not only at the end.\n- REQ-FUN-001: Starting from zero, every reported quantity shall rise with\n  the coil current during the 0-0.1 s ramp and then hold steady at its final\n  value for the rest of the run.\n\n## Acceptance checks\n\n- AC-00 zero before the ramp: `mmf_At <= 1e-06` at t = 0.0 s.\n- AC-01 full mmf reached: `mmf_At >= 999.0` becomes true at some point during\n  the run (ever value == 1.0) -- the ramp must actually reach full current.\n- AC-02 final mmf: `mmf_At == 1000.0` A-turn at t = 1.0 s (N * I = 500 * 2,\n  absolute tolerance 1.0 A-turn).\n- AC-03 final core flux: `Phi_core_Wb == 0.00022848` Wb at t = 1.0 s\n  (absolute tolerance 1% of expected).\n- AC-04 final core flux density: `B_core_T == 0.571199` T at t = 1.0 s\n  (absolute tolerance 1% of expected).\n- AC-05 final air-gap flux density: `B_gap_T == 0.571199` T at t = 1.0 s\n  (absolute tolerance 1% of expected) -- same flux, same cross-section as\n  the core, so the same flux density.\n- AC-06 final core magnetic potential drop: `Vm_core_At == 90.9091` A-turn\n  at t = 1.0 s (absolute tolerance 1% of expected).\n- AC-07 final air-gap magnetic potential drop: `Vm_gap_At == 909.091`\n  A-turn at t = 1.0 s (absolute tolerance 1% of expected).\n- AC-08 mmf balance: `abs((mmf_At - Vm_core_At - Vm_gap_At) / mmf_At) <= 0.005`\n  at t = 1.0 s (the core drop plus the gap drop must equal the applied mmf).\n\n## Notes\n\n- This is a linear, quasi-static circuit: no saturation, no hysteresis, no\n  eddy currents, no frequency-dependent effects, and no leakage flux path\n  (the core and gap carry the same flux in series).\n- Every reported quantity is a direct algebraic function of the coil current\n  at each instant (there is no accumulating/stored state), so each one is\n  expected to trace the same 0-0.1 s ramp shape as the current itself, scaled\n  by a constant factor, then hold flat afterward.\n",
+  "subject": "Gapped Core Magnetic Circuit — Ramped Excitation",
+  "kind": "requirement specification",
+  "entities": [
+    {
+      "name": "Excitation coil",
+      "kind": "coil",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "500",
+          "unit": "turns",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "Excitation coil: N = 500 turns."
+        },
+        {
+          "quantity": "current",
+          "value": "0",
+          "unit": "A",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "0 A at t = 0 s"
+        },
+        {
+          "quantity": "current",
+          "value": "2",
+          "unit": "A",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "linearly to 2 A by t = 0.1 s"
+        },
+        {
+          "quantity": "time",
+          "value": "0",
+          "unit": "s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "0 A at t = 0 s"
+        },
+        {
+          "quantity": "time",
+          "value": "0.1",
+          "unit": "s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "2 A by t = 0.1 s"
+        },
+        {
+          "quantity": "current",
+          "value": "2",
+          "unit": "A",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "held constant at 2 A from t = 0.1 s to\n  the end of the run"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Excitation coil: N = 500 turns. Current I(t): 0 A at t = 0 s, ramping\n  linearly to 2 A by t = 0.1 s, then held constant at 2 A from t = 0.1 s to\n  the end of the run."
+    },
+    {
+      "name": "Core (iron path)",
+      "kind": "core",
+      "aliases": [
+        "iron core"
+      ],
+      "values": [
+        {
+          "quantity": "mean path length",
+          "value": "0.4",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "mean path length 0.4 m"
+        },
+        {
+          "quantity": "cross-section",
+          "value": "4",
+          "unit": "cm^2",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "cross-section 4 cm^2"
+        },
+        {
+          "quantity": "cross-section",
+          "value": "0.0004",
+          "unit": "m^2",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "(0.0004 m^2)"
+        },
+        {
+          "quantity": "relative permeability",
+          "value": "2000",
+          "unit": "",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "relative permeability 2000"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Core (iron path): mean path length 0.4 m, cross-section 4 cm^2 (0.0004 m^2),\n  relative permeability 2000."
+    },
+    {
+      "name": "Air gap",
+      "kind": "air gap",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "2",
+          "unit": "mm",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "length 2 mm"
+        },
+        {
+          "quantity": "length",
+          "value": "0.002",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "(0.002 m)"
+        },
+        {
+          "quantity": "cross-section",
+          "value": "4",
+          "unit": "cm^2",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "same cross-section as the core (4 cm^2,"
+        },
+        {
+          "quantity": "cross-section",
+          "value": "0.0004",
+          "unit": "m^2",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "0.0004 m^2)"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Air gap: length 2 mm (0.002 m), same cross-section as the core (4 cm^2,\n  0.0004 m^2), in series with the core, no fringing."
+    },
+    {
+      "name": "Magnetic reference",
+      "kind": "reference",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "count",
+          "value": "one",
+          "unit": "",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "exactly one magnetic ground"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- Magnetic reference: the circuit has exactly one magnetic ground."
+    },
+    {
+      "name": "magnetic ground",
+      "kind": "ground",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "exactly one magnetic ground"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "Air gap",
+      "predicate": "in series with",
+      "object": "Core (iron path)",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "in series with the core"
+    },
+    {
+      "subject": "Excitation coil",
+      "predicate": "drives magnetic flux around",
+      "object": "Core (iron path)",
+      "detail": "closed iron core",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "A 500-turn excitation coil drives magnetic flux around a closed iron core"
+    },
+    {
+      "subject": "Magnetic reference",
+      "predicate": "has",
+      "object": "magnetic ground",
+      "detail": "exactly one",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the circuit has exactly one magnetic ground"
+    },
+    {
+      "subject": "Core (iron path)",
+      "predicate": "carries same flux in series with",
+      "object": "Air gap",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the core and gap carry the same flux in series"
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "Simulate for 1 second and report the coil mmf, the core flux, the core flux density, the air-gap flux density, the magnetic potential drop across the iron core, and the magnetic potential drop across the air gap for the whole run, not only at the end.",
+      "ref": "REQ-SIM-001",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "REQ-SIM-001: Simulate for 1 second and report the coil mmf, the core flux,\n  the core flux density, the air-gap flux density, the magnetic potential\n  drop across the iron core, and the magnetic potential drop across the air\n  gap for the whole run, not only at the end."
+    },
+    {
+      "category": "requirement",
+      "statement": "Starting from zero, every reported quantity shall rise with the coil current during the 0-0.1 s ramp and then hold steady at its final value for the rest of the run.",
+      "ref": "REQ-FUN-001",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "REQ-FUN-001: Starting from zero, every reported quantity shall rise with\n  the coil current during the 0-0.1 s ramp and then hold steady at its final\n  value for the rest of the run."
+    },
+    {
+      "category": "requirement",
+      "statement": "`mmf_At <= 1e-06` at t = 0.0 s.",
+      "ref": "AC-00",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "AC-00 zero before the ramp: `mmf_At <= 1e-06` at t = 0.0 s."
+    },
+    {
+      "category": "requirement",
+      "statement": "`mmf_At >= 999.0` becomes true at some point during the run (ever value == 1.0) -- the ramp must actually reach full current.",
+      "ref": "AC-01",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "AC-01 full mmf reached: `mmf_At >= 999.0` becomes true at some point during\n  the run (ever value == 1.0) -- the ramp must actually reach full current."
+    },
+    {
+      "category": "requirement",
+      "statement": "`mmf_At == 1000.0` A-turn at t = 1.0 s (N * I = 500 * 2, absolute tolerance 1.0 A-turn).",
+      "ref": "AC-02",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "AC-02 final mmf: `mmf_At == 1000.0` A-turn at t = 1.0 s (N * I = 500 * 2,\n  absolute tolerance 1.0 A-turn)."
+    },
+    {
+      "category": "requirement",
+      "statement": "`Phi_core_Wb == 0.00022848` Wb at t = 1.0 s (absolute tolerance 1% of expected).",
+      "ref": "AC-03",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "AC-03 final core flux: `Phi_core_Wb == 0.00022848` Wb at t = 1.0 s\n  (absolute tolerance 1% of expected)."
+    },
+    {
+      "category": "requirement",
+      "statement": "`B_core_T == 0.571199` T at t = 1.0 s (absolute tolerance 1% of expected).",
+      "ref": "AC-04",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "AC-04 final core flux density: `B_core_T == 0.571199` T at t = 1.0 s\n  (absolute tolerance 1% of expected)."
+    },
+    {
+      "category": "requirement",
+      "statement": "`B_gap_T == 0.571199` T at t = 1.0 s (absolute tolerance 1% of expected) -- same flux, same cross-section as the core, so the same flux density.",
+      "ref": "AC-05",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "AC-05 final air-gap flux density: `B_gap_T == 0.571199` T at t = 1.0 s\n  (absolute tolerance 1% of expected) -- same flux, same cross-section as\n  the core, so the same flux density."
+    },
+    {
+      "category": "requirement",
+      "statement": "`Vm_core_At == 90.9091` A-turn at t = 1.0 s (absolute tolerance 1% of expected).",
+      "ref": "AC-06",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "AC-06 final core magnetic potential drop: `Vm_core_At == 90.9091` A-turn\n  at t = 1.0 s (absolute tolerance 1% of expected)."
+    },
+    {
+      "category": "requirement",
+      "statement": "`Vm_gap_At == 909.091` A-turn at t = 1.0 s (absolute tolerance 1% of expected).",
+      "ref": "AC-07",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "AC-07 final air-gap magnetic potential drop: `Vm_gap_At == 909.091`\n  A-turn at t = 1.0 s (absolute tolerance 1% of expected)."
+    },
+    {
+      "category": "requirement",
+      "statement": "`abs((mmf_At - Vm_core_At - Vm_gap_At) / mmf_At) <= 0.005` at t = 1.0 s (the core drop plus the gap drop must equal the applied mmf).",
+      "ref": "AC-08",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "AC-08 mmf balance: `abs((mmf_At - Vm_core_At - Vm_gap_At) / mmf_At) <= 0.005`\n  at t = 1.0 s (the core drop plus the gap drop must equal the applied mmf)."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "N * I = 500 * 2",
+      "ref": "AC-02",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "N * I = 500 * 2"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "same flux, same cross-section as the core, so the same flux density.",
+      "ref": "AC-05",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "same flux, same cross-section as\n  the core, so the same flux density."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

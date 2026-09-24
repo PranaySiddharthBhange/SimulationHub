@@ -1,0 +1,22 @@
+Subject: reference magnetic circuit
+Document kind: engineering diagram
+
+## Entities
+* leg -- magnetic circuit element
+* yoke -- magnetic circuit element; aliases: yoke, yoke
+* coil -- coil
+* N.I -- magnetomotive force
+* cross section -- cross section
+    - side length: a
+* Φδ -- magnetic flux
+* air gap -- gap
+* magnetic circuit -- assembly
+    - overall horizontal length: 1
+    - overall vertical length: l
+
+## Relationships
+* coil is wound on leg
+* N.I is associated with coil
+* Φδ passes through air gap
+* yoke connects to leg (topology shown as a rectangular magnetic core)
+* cross section has dimension air gap (cross-sectional side length a; gap length δ shown separately on main view)

@@ -1,0 +1,54 @@
+Subject: Operator Runbook - Bench Evaporation Plant
+Document kind: test procedure
+
+## Entities
+* B1 -- tank
+* B2 -- tank
+* V26 -- manual drain valve
+* V27 -- manual drain valve
+* V13 -- cooling-water valve
+* V17 -- cooling-water valve
+* V29 -- cooling-water valve
+* FIS-801 -- flow indication
+* B6 -- tank
+* B7 -- tank
+* B3 -- tank
+* B4 -- buffer
+* B5 -- tank
+* controller -- controller
+* V11 -- valve
+* V9 -- valve
+* WaterNaCl -- simulation
+* StandardWater -- topology validation medium
+* Q_up -- logic
+* pump -- pump
+* automated valve set -- valve set
+
+## Relationships
+* B3 feeds B4 (fill/mix to buffer)
+* B4 feeds B5 (buffer to charge)
+* B5 precedes B6 (simultaneous condensate finishing branch)
+* B5 precedes B7 (simultaneous concentrate finishing branch)
+* controller owns automated valve set
+* V11 transfers from B3 (to B4)
+* V11 transfers to B4 (from B3)
+* V9 adds brine to B3
+* V15 transfers concentrate to B7
+
+## Requirements
+* Confirm B1 contains the water-rich initial charge and B2 contains the concentrated NaCl initial charge. [current]
+* Confirm manual drain valves V26 and V27 are closed and cooling-water valves V13, V17 and V29 are aligned for service. [current]
+* Confirm condenser cooling-water flow indication FIS-801 is available before heating. [current]
+* Verify B6 and B7 are sufficiently empty for the next batch. [current]
+* do not manually override an automated valve during an acceptance run. [current]
+
+## Behaviors
+* B3 level rises during water and brine charge, then falls while V11 transfers to B4. [current]
+* B3 concentration changes primarily while V9 adds brine; then remains approximately constant until discharge. [current]
+* B5 temperature rises during heating, then plateaus near composition-dependent boiling temperature. [current]
+* B5 concentration rises during evaporation until target is reached. [current]
+* B6 level rises as condensate is produced; later falls during return pumping. [current]
+* B7 level rises when V15 transfers concentrate; later falls during return pumping. [current]
+
+## Unreadable
+* V15 is referenced in 'B7 level | Rises when V15 transfers concentrate; later falls during return pumping.' but not otherwise identified in the document.

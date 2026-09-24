@@ -1,0 +1,414 @@
+{
+  "document": "Operator Runbook - Bench Evaporation Plant, Rev A\nSynthetic hackathon engineering evidence\n1. Pre-start\nConfirm B1 contains the water-rich initial charge and B2 contains the concentrated NaCl initial charge.\nConfirm manual drain valves V26 and V27 are closed and cooling-water valves V13, V17 and V29 are aligned for service.\nConfirm condenser cooling-water flow indication FIS-801 is available before heating.\nVerify B6 and B7 are sufficiently empty for the next batch.\n2. Automatic batch observation\nNormal operator observation is B3 fill/mix -> B4 buffer -> B5 charge -> heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping. The controller owns the automated valve set; do not manually override an automated valve during an acceptance run.\n3. Expected qualitative trends\nVariable | Expected trend\nB3 level | Rises during water and brine charge, then falls while V11 transfers to B4.\nB3 concentration | Changes primarily while V9 adds brine; then remains approximately constant until discharge.\nB5 temperature | Rises during heating, then plateaus near composition-dependent boiling temperature.\nB5 concentration | Rises during evaporation until target is reached.\nB6 level | Rises as condensate is produced; later falls during return pumping.\nB7 level | Rises when V15 transfers concentrate; later falls during return pumping.\n4. Abnormal indications\nRepeated tiny integration steps near a tank port level may indicate missing hysteresis or non-regularized port loss equations.\nOscillation at the B5 boiling transition may indicate missing Q_up anti-chattering logic.\nA WaterNaCl simulation that stalls at pump start is a known legacy numerical issue; first validate the same topology with StandardWater.\nDo not resolve return-routing questions from pump location alone; check the approved routing change record.",
+  "subject": "Operator Runbook - Bench Evaporation Plant",
+  "kind": "test procedure",
+  "entities": [
+    {
+      "name": "B1",
+      "kind": "tank",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B1 contains the water-rich initial charge"
+    },
+    {
+      "name": "B2",
+      "kind": "tank",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B2 contains the concentrated NaCl initial charge"
+    },
+    {
+      "name": "V26",
+      "kind": "manual drain valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "manual drain valves V26 and V27 are closed"
+    },
+    {
+      "name": "V27",
+      "kind": "manual drain valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "manual drain valves V26 and V27 are closed"
+    },
+    {
+      "name": "V13",
+      "kind": "cooling-water valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "cooling-water valves V13, V17 and V29 are aligned for service"
+    },
+    {
+      "name": "V17",
+      "kind": "cooling-water valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "cooling-water valves V13, V17 and V29 are aligned for service"
+    },
+    {
+      "name": "V29",
+      "kind": "cooling-water valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "cooling-water valves V13, V17 and V29 are aligned for service"
+    },
+    {
+      "name": "FIS-801",
+      "kind": "flow indication",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "flow indication FIS-801 is available before heating"
+    },
+    {
+      "name": "B6",
+      "kind": "tank",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Verify B6 and B7 are sufficiently empty for the next batch."
+    },
+    {
+      "name": "B7",
+      "kind": "tank",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Verify B6 and B7 are sufficiently empty for the next batch."
+    },
+    {
+      "name": "B3",
+      "kind": "tank",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B3 fill/mix -> B4 buffer -> B5 charge"
+    },
+    {
+      "name": "B4",
+      "kind": "buffer",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B3 fill/mix -> B4 buffer -> B5 charge"
+    },
+    {
+      "name": "B5",
+      "kind": "tank",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B3 fill/mix -> B4 buffer -> B5 charge"
+    },
+    {
+      "name": "controller",
+      "kind": "controller",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The controller owns the automated valve set"
+    },
+    {
+      "name": "V11",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "then falls while V11 transfers to B4."
+    },
+    {
+      "name": "V9",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Changes primarily while V9 adds brine"
+    },
+    {
+      "name": "WaterNaCl",
+      "kind": "simulation",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "A WaterNaCl simulation that stalls at pump start"
+    },
+    {
+      "name": "StandardWater",
+      "kind": "topology validation medium",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "first validate the same topology with StandardWater."
+    },
+    {
+      "name": "Q_up",
+      "kind": "logic",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "missing Q_up anti-chattering logic."
+    },
+    {
+      "name": "pump",
+      "kind": "pump",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "pump start"
+    },
+    {
+      "name": "automated valve set",
+      "kind": "valve set",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The controller owns the automated valve set"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "B3",
+      "predicate": "feeds",
+      "object": "B4",
+      "detail": "fill/mix to buffer",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B3 fill/mix -> B4 buffer"
+    },
+    {
+      "subject": "B4",
+      "predicate": "feeds",
+      "object": "B5",
+      "detail": "buffer to charge",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B4 buffer -> B5 charge"
+    },
+    {
+      "subject": "B5",
+      "predicate": "precedes",
+      "object": "B6",
+      "detail": "simultaneous condensate finishing branch",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping"
+    },
+    {
+      "subject": "B5",
+      "predicate": "precedes",
+      "object": "B7",
+      "detail": "simultaneous concentrate finishing branch",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "heating/evaporation -> simultaneous condensate/concentrate finishing branches -> return pumping"
+    },
+    {
+      "subject": "controller",
+      "predicate": "owns",
+      "object": "automated valve set",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The controller owns the automated valve set"
+    },
+    {
+      "subject": "V11",
+      "predicate": "transfers from",
+      "object": "B3",
+      "detail": "to B4",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "falls while V11 transfers to B4."
+    },
+    {
+      "subject": "V11",
+      "predicate": "transfers to",
+      "object": "B4",
+      "detail": "from B3",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "falls while V11 transfers to B4."
+    },
+    {
+      "subject": "V9",
+      "predicate": "adds brine to",
+      "object": "B3",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B3 concentration | Changes primarily while V9 adds brine"
+    },
+    {
+      "subject": "V15",
+      "predicate": "transfers concentrate to",
+      "object": "B7",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B7 level | Rises when V15 transfers concentrate; later falls during return pumping."
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "Confirm B1 contains the water-rich initial charge and B2 contains the concentrated NaCl initial charge.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Confirm B1 contains the water-rich initial charge and B2 contains the concentrated NaCl initial charge."
+    },
+    {
+      "category": "requirement",
+      "statement": "Confirm manual drain valves V26 and V27 are closed and cooling-water valves V13, V17 and V29 are aligned for service.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Confirm manual drain valves V26 and V27 are closed and cooling-water valves V13, V17 and V29 are aligned for service."
+    },
+    {
+      "category": "requirement",
+      "statement": "Confirm condenser cooling-water flow indication FIS-801 is available before heating.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Confirm condenser cooling-water flow indication FIS-801 is available before heating."
+    },
+    {
+      "category": "requirement",
+      "statement": "Verify B6 and B7 are sufficiently empty for the next batch.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Verify B6 and B7 are sufficiently empty for the next batch."
+    },
+    {
+      "category": "requirement",
+      "statement": "do not manually override an automated valve during an acceptance run.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "do not manually override an automated valve during an acceptance run."
+    },
+    {
+      "category": "behavior",
+      "statement": "B3 level rises during water and brine charge, then falls while V11 transfers to B4.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "B3 level | Rises during water and brine charge, then falls while V11 transfers to B4."
+    },
+    {
+      "category": "behavior",
+      "statement": "B3 concentration changes primarily while V9 adds brine; then remains approximately constant until discharge.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "B3 concentration | Changes primarily while V9 adds brine; then remains approximately constant until discharge."
+    },
+    {
+      "category": "behavior",
+      "statement": "B5 temperature rises during heating, then plateaus near composition-dependent boiling temperature.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "B5 temperature | Rises during heating, then plateaus near composition-dependent boiling temperature."
+    },
+    {
+      "category": "behavior",
+      "statement": "B5 concentration rises during evaporation until target is reached.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "B5 concentration | Rises during evaporation until target is reached."
+    },
+    {
+      "category": "behavior",
+      "statement": "B6 level rises as condensate is produced; later falls during return pumping.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "B6 level | Rises as condensate is produced; later falls during return pumping."
+    },
+    {
+      "category": "behavior",
+      "statement": "B7 level rises when V15 transfers concentrate; later falls during return pumping.",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "B7 level | Rises when V15 transfers concentrate; later falls during return pumping."
+    }
+  ],
+  "unreadable": [
+    "V15 is referenced in 'B7 level | Rises when V15 transfers concentrate; later falls during return pumping.' but not otherwise identified in the document."
+  ],
+  "unverified_quotes": []
+}

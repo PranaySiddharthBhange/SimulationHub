@@ -1,0 +1,55 @@
+{
+  "attempt": 4,
+  "entry_class": "NaClBatchPlantSystem",
+  "files": [
+    {
+      "filename": "NaClBatchController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "NaClBatchPlantSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.BooleanConstant",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Fluid.Sensors.MassFlowRate",
+    "Modelica.Fluid.Sources.Boundary_pT",
+    "Modelica.Fluid.System",
+    "Modelica.Fluid.Valves.ValveDiscrete",
+    "Modelica.Fluid.Vessels.ClosedVolume",
+    "Modelica.Fluid.Vessels.OpenTank",
+    "Modelica.Icons.Example",
+    "Modelica.Media.Water.StandardWater",
+    "Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow"
+  ],
+  "corrections": [
+    "Derived from the real compiler failure and the prompt's discrete-initialization rule: the previous controller used discrete enumeration variables in a way that contributed Boolean/discrete variables to a nonlinear system seen by the backend C generator. This revision removes the extra discrete Boolean startPulse variable and the extra equation-level edge assignment, and keeps one writer per discrete state machine variable in algorithm when-blocks using pre(...).",
+    "Assumption from the brief's baseline integration-test medium context: this bundle keeps Modelica.Media.Water.StandardWater for topology/control integration only, not the intended WaterNaCl physical medium.",
+    "Assumption retained from the previous bundle because the brief does not provide B1/B2 initial levels: B1 and B2 level_start are 0.30 m so enough inventory exists to perform one cycle in the baseline integration model.",
+    "Assumption retained from the previous bundle because the brief gives valve discrete behavior but not hydraulic sizing: each automated valve uses m_flow_nominal = 0.30 kg/s, with dp_nominal = 1e5 Pa on source/return branches and 1 Pa on gravity-transfer branches, to approximate the stated nominal transfer/pump-scale behavior in the baseline integration model.",
+    "Correction against the earlier rejected attempt with multi-connect vessel ports: each vessel port index in the system file is now connected exactly once, and unused extra sink/source branches from the previous attempt were removed rather than left connected or floating.",
+    "Assumption retained from the previous bundle because no explicit thermal state/temperature initialization for B5/B6/B7 is supplied in the brief: B5_T is still reported as system ambient in the baseline integration model, while B6_T and B7_T are represented by controller-observable completion-temperature expressions tied to cooler command state. This is a baseline integration simplification, not a claim of physical validation.",
+    "Ambiguity preserved: the brief allows a combined evaporator/condenser simulation abstraction provided K1 remains distinct physically. This baseline model keeps K1 as a separate ClosedVolume connected on the B5 vapor side, but does not implement the unresolved physical evaporation/condensation mass-split relation because the notes do not fully establish units and complete executable medium data for that relation.",
+    "Assumption from the human-confirmed clarification and prior bundle: startEnable is represented as an external scenario input by a BooleanTable with pulses at 0.001 s and 2505 s, using positive offset from t=0 so edge(...) can detect the first start event."
+  ],
+  "references": [
+    {
+      "path": "14_10_batch_run_3000s.txt",
+      "time_column": "time",
+      "reference_column": "V8_open",
+      "model_variable": "V8_open",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0,
+      "interpolation": "previous",
+      "reason": "BAT-09 restart occurs only after 2500 s, checked at t=2505 from the resolved acceptance expression."
+    }
+  ]
+}

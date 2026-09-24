@@ -1,0 +1,507 @@
+{
+  "document": "[page 1]\n Process Requirement Specification - NaCl Evaporation\n                         Plant\n\n\nDocument status: Released Rev A. Later approved change records may override individual values or routing statements in\nthis document.\n\n1. Purpose and process intent\nThe laboratory plant shall concentrate a water/sodium-chloride batch using staged charging, mixing, buffering,\nevaporation, condensation, cooling and return pumping. B1 is initially charged with water and B2 with\nconcentrated brine. B3 prepares the batch, B4 buffers it, B5 evaporates water, K1 condenses the vapor, B6\ncools condensate and B7 cools concentrate.\n\n2. High-level process sequence\n\n Phase                Required action                                           Completion condition\n Charge water         Open V8, B1 to B3                                             LIS-301 >= 0.13 m\n Charge brine / mix      Open V9, B2 to B3                                             QI-302 reaches recipe target\n Buffer transfer         Open V11, B3 to B4                                            LIS-301 < 0.01 m\n Evaporator charge     When B5 is idle, open V12, B4 to B5                              LIS-501 reaches batch level\n Evaporation            Enable B5 heater                                            QIS-502 reaches evaporation target\n Condensate branch      Cool B6, then return condensate                                  Cooling complete and B6 returned\n Concentrate branch      Transfer B5 to B7, cool B7, return concentrate                      Cooling complete and B7 returned\n Cycle reset             Wait for both branches                                         Both complete and time > 2500 s\n\n3. Equipment and control requirements\nThe central controller shall command discrete on/off valves. The P&ID; includes both controller-operated and\nmanual/local valves. Automated valves shall fail closed. Pumps P1 and P2 return cooled process streams to the\ncharging-vessel header system.\n\nThe intended physical simulation medium is a water-NaCl mixture. A StandardWater configuration may be used\nas an integration baseline to verify topology and sequence behavior before enabling composition-dependent\nproperty functions.\n\n4. Modeling constraints\nTank connections can pass above or below the liquid level. The preferred numerical treatment is a regularized\nasymmetric loss-factor formulation with hysteresis around the port elevation. Small junction volumes shall be\nused where multiple isolating pressure-drop components could otherwise leave undefined pressure, enthalpy or\ncomposition states.\n\nAll non-horizontal pipes shall include static head in their pressure-drop relationship. The evaporator/condenser\nmay be represented as a combined simulation component provided the physical condenser K1 remains\nidentifiable in the system architecture.\n\n5. Verification\nThe acceptance simulation shall demonstrate a full charge-mix-buffer-evaporate-cool-return cycle, including the\ncontroller parallel split and join after evaporation. It shall continue beyond 2500 s to demonstrate cycle reset.\n[page 1 also supplied as visual image 1]",
+  "subject": "Process Requirement Specification - NaCl Evaporation Plant",
+  "kind": "requirement specification",
+  "entities": [
+    {
+      "name": "B1",
+      "kind": "vessel",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B1 is initially charged with water"
+    },
+    {
+      "name": "B2",
+      "kind": "vessel",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B2 with\nconcentrated brine"
+    },
+    {
+      "name": "B3",
+      "kind": "vessel",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B3 prepares the batch"
+    },
+    {
+      "name": "B4",
+      "kind": "vessel",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B4 buffers it"
+    },
+    {
+      "name": "B5",
+      "kind": "evaporator",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "time",
+          "value": "2500",
+          "unit": "s",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "time > 2500 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B5 evaporates water"
+    },
+    {
+      "name": "K1",
+      "kind": "condenser",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "K1 condenses the vapor"
+    },
+    {
+      "name": "B6",
+      "kind": "cooler",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B6\ncools condensate"
+    },
+    {
+      "name": "B7",
+      "kind": "cooler",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "B7 cools concentrate"
+    },
+    {
+      "name": "V8",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Open V8, B1 to B3"
+    },
+    {
+      "name": "V9",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Open V9, B2 to B3"
+    },
+    {
+      "name": "V11",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Open V11, B3 to B4"
+    },
+    {
+      "name": "V12",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "open V12, B4 to B5"
+    },
+    {
+      "name": "LIS-301",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "0.13",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "LIS-301 >= 0.13 m"
+        },
+        {
+          "quantity": "level",
+          "value": "0.01",
+          "unit": "m",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "LIS-301 < 0.01 m"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "LIS-301 >= 0.13 m"
+    },
+    {
+      "name": "QI-302",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "QI-302 reaches recipe target"
+    },
+    {
+      "name": "LIS-501",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "LIS-501 reaches batch level"
+    },
+    {
+      "name": "QIS-502",
+      "kind": "instrument",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "QIS-502 reaches evaporation target"
+    },
+    {
+      "name": "central controller",
+      "kind": "controller",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The central controller shall command discrete on/off valves."
+    },
+    {
+      "name": "P1",
+      "kind": "pump",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Pumps P1 and P2 return cooled process streams to the\ncharging-vessel header system."
+    },
+    {
+      "name": "P2",
+      "kind": "pump",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Pumps P1 and P2 return cooled process streams to the\ncharging-vessel header system."
+    },
+    {
+      "name": "charging-vessel header system",
+      "kind": "header system",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "charging-vessel header system"
+    },
+    {
+      "name": "P&ID",
+      "kind": "diagram",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The P&ID; includes both controller-operated and\nmanual/local valves."
+    },
+    {
+      "name": "Automated valves",
+      "kind": "valves",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Automated valves shall fail closed."
+    },
+    {
+      "name": "StandardWater configuration",
+      "kind": "configuration",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "A StandardWater configuration may be used\nas an integration baseline"
+    },
+    {
+      "name": "water-NaCl mixture",
+      "kind": "simulation medium",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The intended physical simulation medium is a water-NaCl mixture."
+    },
+    {
+      "name": "Tank connections",
+      "kind": "connections",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Tank connections can pass above or below the liquid level."
+    },
+    {
+      "name": "Small junction volumes",
+      "kind": "junction volumes",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Small junction volumes shall be\nused"
+    },
+    {
+      "name": "All non-horizontal pipes",
+      "kind": "pipes",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "All non-horizontal pipes shall include static head in their pressure-drop relationship."
+    },
+    {
+      "name": "evaporator/condenser",
+      "kind": "combined simulation component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The evaporator/condenser\nmay be represented as a combined simulation component"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "B1",
+      "predicate": "charged to",
+      "object": "B3",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Open V8, B1 to B3"
+    },
+    {
+      "subject": "B2",
+      "predicate": "charged to",
+      "object": "B3",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Open V9, B2 to B3"
+    },
+    {
+      "subject": "B3",
+      "predicate": "transfers to",
+      "object": "B4",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Open V11, B3 to B4"
+    },
+    {
+      "subject": "B4",
+      "predicate": "charges",
+      "object": "B5",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "open V12, B4 to B5"
+    },
+    {
+      "subject": "K1",
+      "predicate": "condenses",
+      "object": "vapor",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "K1 condenses the vapor"
+    },
+    {
+      "subject": "P1",
+      "predicate": "returns cooled process streams to",
+      "object": "charging-vessel header system",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Pumps P1 and P2 return cooled process streams to the\ncharging-vessel header system."
+    },
+    {
+      "subject": "P2",
+      "predicate": "returns cooled process streams to",
+      "object": "charging-vessel header system",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Pumps P1 and P2 return cooled process streams to the\ncharging-vessel header system."
+    },
+    {
+      "subject": "evaporator/condenser",
+      "predicate": "represented as",
+      "object": "combined simulation component",
+      "detail": "provided the physical condenser K1 remains identifiable in the system architecture",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The evaporator/condenser\nmay be represented as a combined simulation component provided the physical condenser K1 remains\nidentifiable in the system architecture."
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "The laboratory plant shall concentrate a water/sodium-chloride batch using staged charging, mixing, buffering, evaporation, condensation, cooling and return pumping.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "The laboratory plant shall concentrate a water/sodium-chloride batch using staged charging, mixing, buffering,\nevaporation, condensation, cooling and return pumping."
+    },
+    {
+      "category": "requirement",
+      "statement": "The central controller shall command discrete on/off valves.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "The central controller shall command discrete on/off valves."
+    },
+    {
+      "category": "requirement",
+      "statement": "Automated valves shall fail closed.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Automated valves shall fail closed."
+    },
+    {
+      "category": "requirement",
+      "statement": "Small junction volumes shall be used where multiple isolating pressure-drop components could otherwise leave undefined pressure, enthalpy or composition states.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Small junction volumes shall be\nused where multiple isolating pressure-drop components could otherwise leave undefined pressure, enthalpy or\ncomposition states."
+    },
+    {
+      "category": "requirement",
+      "statement": "All non-horizontal pipes shall include static head in their pressure-drop relationship.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "All non-horizontal pipes shall include static head in their pressure-drop relationship."
+    },
+    {
+      "category": "requirement",
+      "statement": "The acceptance simulation shall demonstrate a full charge-mix-buffer-evaporate-cool-return cycle, including the controller parallel split and join after evaporation.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "The acceptance simulation shall demonstrate a full charge-mix-buffer-evaporate-cool-return cycle, including the\ncontroller parallel split and join after evaporation."
+    },
+    {
+      "category": "requirement",
+      "statement": "It shall continue beyond 2500 s to demonstrate cycle reset.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "It shall continue beyond 2500 s to demonstrate cycle reset."
+    },
+    {
+      "category": "behavior",
+      "statement": "When B5 is idle, open V12, B4 to B5.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "When B5 is idle, open V12, B4 to B5"
+    },
+    {
+      "category": "constraint",
+      "statement": "LIS-301 >= 0.13 m",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "LIS-301 >= 0.13 m"
+    },
+    {
+      "category": "constraint",
+      "statement": "LIS-301 < 0.01 m",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "LIS-301 < 0.01 m"
+    },
+    {
+      "category": "constraint",
+      "statement": "Both complete and time > 2500 s",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Both complete and time > 2500 s"
+    },
+    {
+      "category": "constraint",
+      "statement": "Tank connections can pass above or below the liquid level.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Tank connections can pass above or below the liquid level."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

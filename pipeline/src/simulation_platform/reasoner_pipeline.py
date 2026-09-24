@@ -33,6 +33,7 @@ from __future__ import annotations
 import csv
 import json
 import re
+import shutil
 import time
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -620,6 +621,62 @@ def _when_block_issues(filename: str, code: str) -> list[str]:
     return issues
 
 
+def _double_initialized_variable_issues(draft: ModelicaDraft) -> list[str]:
+    """A variable given a fixed start value AND assigned inside `when
+    initial()` has TWO independent initial equations for the same quantity.
+
+    Found live, and OpenModelica does not report it in any usable way: five
+    discrete variables (a mode enumeration among them) were each declared
+    `(start=..., fixed=true)` in `TankController.mo` and ALSO assigned
+    inside `when initial() then ... end when;`. The over-determined
+    initialization forced OMC's tearing algorithm to fold the enumeration
+    into a nonlinear system's iteration variables -- its own diagnostic
+    said so verbatim ("The initial conditions are over specified" / "the
+    tearing heuristic was not able to avoid discrete iteration variables")
+    -- and OMC's C code generator for nonlinear systems unconditionally
+    emits a `.nominal` field access for every iteration variable regardless
+    of type, which does not exist on an Integer/enumeration's attribute
+    struct. The real toolchain then fails with a C build error naming a
+    generated file and line, not the model or the actual mistake at all:
+    `TwoTankSystem_02nls.c:225: error: no member named 'nominal' in
+    'struct INTEGER_ATTRIBUTE'`. Two repair attempts in the same run hit
+    this identical wall because nothing in that error text points back to
+    the real cause."""
+
+    fixed_start = re.compile(
+        r"(?m)^\s*(?:discrete\s+)?[A-Za-z_][\w.]*\s+([A-Za-z_]\w*)\s*"
+        r"\([^)()]*\bfixed\s*=\s*true\b[^)()]*\)\s*;"
+    )
+    when_initial = re.compile(r"(?ms)^([ \t]*)when\s+initial\(\)\s+then\b(.*?)^\1end\s+when\s*;")
+    issues: list[str] = []
+    for file in draft.files:
+        fixed_names = set(fixed_start.findall(file.code))
+        if not fixed_names:
+            continue
+        for match in when_initial.finditer(file.code):
+            body = match.group(2)
+            line = file.code.count("\n", 0, match.start()) + 1
+            assigned = set(re.findall(r"(?m)^\s*([A-Za-z_]\w*)\s*:?=", body))
+            doubled = sorted(fixed_names & assigned)
+            if doubled:
+                names = ", ".join(doubled)
+                issues.append(
+                    f"- {file.filename}:{line}: {names} "
+                    f"{'is' if len(doubled) == 1 else 'are'} declared with `fixed=true` (a fixed start "
+                    "value) AND assigned again inside this `when initial()` block -- two independent "
+                    "initial equations for the same variable. OpenModelica will not point at this clearly: "
+                    "it can surface many attempts later as an unrelated, locationless C build failure "
+                    "(\"no member named 'nominal' in 'struct INTEGER_ATTRIBUTE'\") because the over-"
+                    "determined initialization forces a discrete/enumeration variable into a nonlinear "
+                    "system's iteration variables, and OMC's C codegen for those assumes Real. Pick ONE "
+                    f"way to set {'it' if len(doubled) == 1 else 'each of them'}: either keep "
+                    "`start=..., fixed=true` on the declaration and remove the assignment from "
+                    "`when initial()`, or drop `fixed=true` from the declaration and keep the "
+                    "`when initial()` assignment as the only initial equation."
+                )
+    return issues
+
+
 def _modelica_static_issues(draft: ModelicaDraft, checked_variables: set[str] | None = None) -> list[str]:
     """Catch deterministic Modelica mistakes before spending an omc run.
 
@@ -698,6 +755,611 @@ def _modelica_static_issues(draft: ModelicaDraft, checked_variables: set[str] | 
 
     issues.extend(_diagram_issues(draft))
     issues.extend(_frozen_state_issues(draft, checked_variables or set()))
+    issues.extend(_connector_unit_mismatches(draft))
+    issues.extend(_parameter_alias_issues(draft, checked_variables or set()))
+    issues.extend(_double_initialized_variable_issues(draft))
+    issues.extend(_magnetic_fixed_shape_misuse_issues(draft))
+    issues.extend(_magnetic_port_parallel_short_issues(draft))
+    issues.extend(_class_instance_name_collision_issues(draft))
+    issues.extend(_edge_at_t0_table_issues(draft))
+    issues.extend(_unguarded_ratio_numerator_issues(draft))
+    issues.extend(_pump_characteristic_hallucination_issues(draft))
+    issues.extend(_prescribed_pump_missing_characteristic_issues(draft))
+    issues.extend(_fluid_vessel_missing_ports_data_issues(draft))
+    issues.extend(_if_guarded_flow_division_issues(draft))
+    return issues
+
+
+_QUANTITY_KIND_PATTERNS: dict[str, re.Pattern[str]] = {
+    "volumetric_flow": re.compile(r"(?:^|_)m3s$", re.IGNORECASE),
+    "mass_flow": re.compile(r"(?:^|_)kg_s$", re.IGNORECASE),
+    "length_or_level": re.compile(r"(?:^level$|_level$|level_m$|(?:^|_)m$|height_m$)", re.IGNORECASE),
+    "temperature": re.compile(r"(?:temp_c$|_degc$|_c$)", re.IGNORECASE),
+    "mass_fraction": re.compile(r"(?:w_nacl|_frac$|mass_fraction)", re.IGNORECASE),
+    "pressure": re.compile(r"(?:_pa$|pressure)", re.IGNORECASE),
+}
+
+
+def _quantity_kind(port_name: str) -> str | None:
+    """The physical quantity a port's own name claims to carry, if unambiguous."""
+
+    matches = [kind for kind, pattern in _QUANTITY_KIND_PATTERNS.items() if pattern.search(port_name)]
+    return matches[0] if len(matches) == 1 else None
+
+
+def _connector_unit_mismatches(draft: ModelicaDraft) -> list[str]:
+    """A connect() between two ports whose names claim different physical quantities.
+
+    Found live: `connect(TK_101.level_m, TK_102.inflow_m3s)` wired one tank's
+    LEVEL output straight into another tank's volumetric-FLOW-RATE input. Both
+    ends are legitimate Real connectors, so nothing else here catches it --
+    the model compiles and simulates, it just reports a level value wherever a
+    flow rate belongs. Deliberately conservative: only fires when each
+    endpoint's own port name matches exactly one quantity kind and the two
+    kinds differ, so an ordinary same-kind connection or an unrecognisable
+    generic port name (`y`, `u`, `flange_a`, ...) never triggers it.
+    """
+
+    connection = re.compile(r"\bconnect\s*\(\s*([^,()]+?)\s*,\s*([^,()]+?)\s*\)", re.MULTILINE)
+    issues: list[str] = []
+    for file in draft.files:
+        for match in connection.finditer(file.code):
+            a, b = match.group(1).strip(), match.group(2).strip()
+            port_a, port_b = a.rsplit(".", 1)[-1], b.rsplit(".", 1)[-1]
+            kind_a, kind_b = _quantity_kind(port_a), _quantity_kind(port_b)
+            if kind_a and kind_b and kind_a != kind_b:
+                line = file.code.count("\n", 0, match.start()) + 1
+                issues.append(
+                    f"- {file.filename}:{line}: connect({a}, {b}) wires a port named like a "
+                    f"{kind_a} ('{port_a}') to one named like a {kind_b} ('{port_b}'). If these are "
+                    "really the same signal, rename one side so the names agree with what is "
+                    "actually carried; otherwise this is very likely the wrong source -- a "
+                    "level/temperature/fraction output wired into a flow-rate input (or vice versa) "
+                    "compiles and simulates cleanly but reports a physically meaningless trajectory."
+                )
+    return issues
+
+
+def _parameter_alias_issues(draft: ModelicaDraft, checked_variables: set[str]) -> list[str]:
+    """A reported quantity aliased to a source block's PARAMETER, not its output.
+
+    Found live: `FIS801_kg_s = fis801.k;` reports the constant block's
+    parameter `k` (the value it was configured with) rather than its output
+    connector `y`. A parameter is not part of the simulated variable
+    trajectory, so the quantity the brief requires by name is silently
+    missing from the result summary even though the bundle compiles, runs,
+    and the generation stage's own notes claim the signal was added.
+    """
+
+    if not checked_variables:
+        return []
+    alias = re.compile(r"(?m)^\s*([A-Za-z_]\w*)\s*=\s*([A-Za-z_]\w*)\.k\s*;")
+    issues: list[str] = []
+    for file in draft.files:
+        for match in alias.finditer(_equation_section(file.code)):
+            name, instance = match.group(1), match.group(2)
+            if name in checked_variables:
+                issues.append(
+                    f"- {file.filename}: '{name} = {instance}.k;' reports {instance}'s PARAMETER "
+                    "'k' (its configured constant), not its output connector. A parameter drops out "
+                    f"of the simulated trajectory and will be absent from the result summary. Report "
+                    f"'{instance}.y' (the block's RealOutput/BooleanOutput) instead."
+                )
+    return issues
+
+
+def _magnetic_fixed_shape_misuse_issues(draft: ModelicaDraft) -> list[str]:
+    """Two `Modelica.Magnetic.FluxTubes` components that silently produce the
+    wrong physics while compiling and simulating without error or warning.
+
+    Confirmed live against the real omc compiler and the REAL flattened
+    class (`instantiateModel`), not a guess:
+
+    1. `Shapes.FixedShape.*` (`Cuboid`, `GenericFluxTube`,
+       `HollowCylinderAxialFlux`, etc.) all declare
+       `final parameter Boolean nonLinearPermeability = true` -- `final`,
+       unconditional, un-overridable. Their `mu_rConst` parameter is only
+       used `if nonLinearPermeability = false`, which can never happen, so
+       setting `mu_rConst` has NO EFFECT AT ALL: the component always uses
+       the nonlinear soft-magnetic default material curve instead
+       (`material.mu_i = 1.0`, i.e. relative permeability approximately 1,
+       like air). A core segment built this way was found live reporting
+       `mu_r = 1.003` at runtime despite `mu_rConst=1200` in the source,
+       making its reluctance ~1200x too high and silently wrecking the
+       whole circuit's flux split -- with no compiler error, no warning,
+       just wrong numbers. `Modelica.Magnetic.FluxTubes.Basic.
+       ConstantReluctance(R_m=length/(mu0*mu_r*area))`, computed as a plain
+       parameter expression, is the correct, faithful choice for a linear
+       core segment (matches the domain catalog's own existing rule: use a
+       nonlinear shape/material class only when the brief supplies a real
+       B-H curve).
+    2. `Basic.LeakageWithCoefficient` has a REQUIRED `RealInput
+       R_mUsefulTot` -- the reluctance of the "useful" flux path it is
+       calculating relative to. Instantiating it with only `c_usefulFlux`
+       set (as the catalog's own worked example does NOT show a wiring for)
+       leaves that input completely unconnected, which surfaces many
+       attempts later as a locationless `Too few equations, under-
+       determined system` error naming no variable and no file at all.
+       `ConstantReluctance(R_m = R_gap*(1 - c_usefulFlux)/c_usefulFlux)`
+       (or the equivalent closed-form expression for the intended flux
+       split) reproduces the same coupling with no external signal to wire.
+    """
+
+    issues: list[str] = []
+    fixed_shape = re.compile(
+        r"(?m)^\s*Modelica\.Magnetic\.FluxTubes\.Shapes\.FixedShape\.\w+\s+(\w+)\([^;]*\bmu_rConst\s*=",
+    )
+    leakage = re.compile(
+        r"(?m)^\s*Modelica\.Magnetic\.FluxTubes\.Basic\.LeakageWithCoefficient\s+(\w+)\(",
+    )
+    for file in draft.files:
+        for match in fixed_shape.finditer(file.code):
+            issues.append(
+                f"- {file.filename}: '{match.group(1)}' sets `mu_rConst` on a "
+                "`Modelica.Magnetic.FluxTubes.Shapes.FixedShape.*` class. That parameter has NO EFFECT -- "
+                "the class hardcodes `nonLinearPermeability = true` (final, un-overridable), so it always "
+                "uses the nonlinear default material (relative permeability approximately 1) regardless of "
+                "`mu_rConst`, silently making the reluctance wildly wrong with no compiler warning at all. "
+                "Use `Modelica.Magnetic.FluxTubes.Basic.ConstantReluctance(R_m = length/(mu0*mu_r*area))` "
+                "instead for a linear core segment."
+            )
+        for match in leakage.finditer(file.code):
+            issues.append(
+                f"- {file.filename}: '{match.group(1)}' instantiates "
+                "`Modelica.Magnetic.FluxTubes.Basic.LeakageWithCoefficient`, which has a REQUIRED "
+                "`RealInput R_mUsefulTot` -- if it is not connected (and the catalog's own pattern never "
+                "wires it), the bundle compiles this attempt and fails several attempts later with a "
+                "locationless 'Too few equations, under-determined system' naming no variable at all. Use "
+                "`Modelica.Magnetic.FluxTubes.Basic.ConstantReluctance(R_m = R_gap*(1 - c_usefulFlux)/"
+                "c_usefulFlux)` instead -- same coupling, no signal input to forget."
+            )
+    return issues
+
+
+def _magnetic_port_parallel_short_issues(draft: ModelicaDraft) -> list[str]:
+    """Two magnetic (or any acausal) two-port components wired port_p<->port_p
+    AND port_n<->port_n between the SAME pair of instances -- always wrong for
+    a series chain, and mechanically detectable regardless of what either
+    component is called.
+
+    A proper series link between two-port through-elements always alternates
+    polarity: `A.port_n -> B.port_p`. Connecting the same-named ports of the
+    same two instances together instead (`A.port_p<->B.port_p` and
+    `A.port_n<->B.port_n`) forces both components' potential DIFFERENCE to be
+    identical, which for an ideal zero-drop element (a sensor) or any element
+    on the lower-reluctance side of a junction shorts the pair to zero drop
+    and steals essentially all the flux through itself -- with no compiler
+    error, because both operands are legitimate connectors.
+
+    Confirmed live: a custom flux-sensor wrapper (`UsefulFluxSensor`, own
+    `port_p`/`port_n`) was connected exactly this way across `GAP_1`'s own
+    two terminals. The real, independent result: `GAP_1.Phi = 0`,
+    `GAP_1.V_m = 0` for the whole run (the sensor carried the branch's flux
+    instead), and the useful/core flux ratio and mmf balance were wrecked --
+    while the bundle compiled and simulated without a single warning. The
+    same session's earlier catalog guidance about routing a sensor "in
+    series" did not stop this, because the sensor here was wrapped in a
+    custom component with a different name, so this check does not rely on
+    recognising any specific class -- it looks at the connect() SHAPE alone.
+    """
+
+    port_pair = re.compile(r"\bconnect\s*\(\s*([A-Za-z_]\w*)\.(port_p|port_n)\s*,\s*([A-Za-z_]\w*)\.(port_p|port_n)\s*\)")
+    issues: list[str] = []
+    for file in draft.files:
+        # (instance_a, instance_b) -> {"p": line_of_port_p_to_port_p, "n": line_of_port_n_to_port_n}
+        seen: dict[tuple[str, str], dict[str, int]] = {}
+        for match in port_pair.finditer(file.code):
+            a_name, a_port, b_name, b_port = match.groups()
+            if a_port != b_port or a_name == b_name:
+                continue  # only the same-polarity, distinct-instance shape is suspect
+            key = tuple(sorted((a_name, b_name)))
+            line = file.code.count("\n", 0, match.start()) + 1
+            seen.setdefault(key, {})[a_port[-1]] = line
+        for (a_name, b_name), polarities in seen.items():
+            if "p" in polarities and "n" in polarities:
+                issues.append(
+                    f"- {file.filename}:{polarities['p']},{polarities['n']}: '{a_name}' and '{b_name}' are "
+                    "connected port_p<->port_p AND port_n<->port_n -- wired in PARALLEL straight across each "
+                    "other's own two terminals, not in series. This shorts them to an identical potential "
+                    "difference and is almost never what a series flux/current path needs; for two "
+                    "through-elements in series, the chain must alternate polarity: "
+                    f"connect one's port_n to the other's port_p (`{a_name}.port_n -> {b_name}.port_p`, or "
+                    "insert the second element between the first and whatever came next), not port_p to "
+                    "port_p and port_n to port_n."
+                )
+    return issues
+
+
+def _class_instance_name_collision_issues(draft: ModelicaDraft) -> list[str]:
+    """A component declared with the SAME name as its own class/type.
+
+    `CurrentRamp CurrentRamp;` declares an instance that shadows the very
+    class it is an instance of, in the same scope. Confirmed live: this
+    compiled the declaration line itself but failed flattening several
+    lines later, at the first reference that needed to resolve the class
+    rather than the instance, with `Expected <Name> to be a class, but
+    found component instead` -- a message pointing at a USE of the name,
+    not the declaration that actually caused the collision, so the
+    generated bundle's own line number is not where the fix belongs. Two
+    repair attempts in the same run reproduced this identically because
+    nothing in that error text points back to the declaration.
+
+    Only flags a custom class defined IN THIS SAME BUNDLE (its bare name is
+    one of the bundle's own file/class names) instantiated under its own
+    bare name -- an MSL class instantiated under a short name that happens
+    to match its own last path segment (`Modelica.Blocks.Sources.Ramp
+    Ramp;`) is a separate, much weaker signal and not what this reproduces.
+    """
+
+    own_classes = {file.filename[:-3] for file in draft.files if file.filename.endswith(".mo")}
+    declaration = re.compile(r"(?m)^\s*([A-Za-z_]\w*)\s+([A-Za-z_]\w*)\s*(?:\(|;|annotation)")
+    issues: list[str] = []
+    for file in draft.files:
+        for match in declaration.finditer(file.code):
+            type_name, instance_name = match.groups()
+            if type_name == instance_name and type_name in own_classes:
+                line = file.code.count("\n", 0, match.start()) + 1
+                issues.append(
+                    f"- {file.filename}:{line}: '{type_name} {instance_name}' declares an instance with the "
+                    f"SAME name as its own class '{type_name}' (defined in this bundle). The instance name "
+                    "shadows the class name in this scope, so a later reference that needs to resolve the "
+                    "CLASS (not this instance) fails with a locationless-feeling 'Expected "
+                    f"{type_name} to be a class, but found component instead', reported at the USE, not "
+                    f"this declaration. Rename the instance -- `{type_name} {instance_name[0].lower()}"
+                    f"{instance_name[1:]}` or any name distinct from the class -- and update every "
+                    f"reference to it."
+                )
+    return issues
+
+
+def _edge_at_t0_table_issues(draft: ModelicaDraft) -> list[str]:
+    """A `BooleanTable`/`IntegerTable` whose FIRST scheduled toggle is exactly
+    t=0, wired into a connector that some `when`/algorithm block gates with
+    `edge(...)`.
+
+    Confirmed live and reproduced in a minimal isolated model against the
+    real compiler: `BooleanTable(table={0, 0.2, 2505, 2505.2}, startValue=
+    false)` feeding `startPulse = edge(startEnable);` NEVER fires on the
+    t=0 toggle -- `pre()` is defined to already equal the signal's value at
+    the very first instant, so there is no false-to-true edge for `edge()`
+    to catch there. `pulseCount` stayed 0 through the whole first pulse and
+    only incremented once, on the SECOND scheduled toggle at t=2505.
+    Shifting the same table's first entry to `{0.001, 0.2, ...}` and
+    re-running the identical model caught BOTH pulses (`pulseCount` went 0
+    -> 1 at t=0.001 -> 2 at t=2505). This is a distinct failure mode from
+    the "permissive already true from the start" rule -- here the source
+    itself genuinely toggles, but the toggle's timing (exactly on the
+    initial instant) makes it invisible to `edge()`.
+
+    Found live: this shifted an entire batch-cycle model's timeline by the
+    length of its own genuinely-scheduled SECOND pulse (the only one that
+    still worked), because the guarded `if ... pre(mainState) ==
+    MainState.Initial then mainState := MainState.Step1;` branch under
+    `startPulse` simply never ran until that second, later pulse arrived --
+    with no compiler error, since every construct involved is individually
+    legal Modelica.
+
+    Only flags a table whose FIRST vector entry is a literal 0 (or 0.0),
+    and only when the same instance's `.y` output is connect()-ed to a pin
+    whose bare name is then passed straight to `edge(...)` somewhere in the
+    bundle -- a table that starts later, or one that never feeds an
+    edge()-gated transition at all, does not trigger this.
+    """
+
+    table_decl = re.compile(r"\b(\w+)\s*\([^;]*?\btable\s*=\s*\{\s*0(?:\.0+)?\s*[,}]", re.DOTALL)
+    connection = re.compile(r"\bconnect\s*\(\s*([^,()]+?)\s*,\s*([^,()]+?)\s*\)", re.MULTILINE)
+    edge_call = re.compile(r"\bedge\s*\(\s*(\w+)\s*\)")
+
+    zero_start_instances: set[str] = set()
+    for file in draft.files:
+        for match in table_decl.finditer(file.code):
+            zero_start_instances.add(match.group(1))
+    if not zero_start_instances:
+        return []
+
+    connected_pins: set[str] = set()
+    for file in draft.files:
+        for match in connection.finditer(file.code):
+            a, b = match.group(1).strip(), match.group(2).strip()
+            for source, target in ((a, b), (b, a)):
+                inst, _, pin = source.rpartition(".")
+                if inst in zero_start_instances and pin == "y":
+                    connected_pins.add(target.rsplit(".", 1)[-1])
+
+    issues: list[str] = []
+    for file in draft.files:
+        for match in edge_call.finditer(file.code):
+            var = match.group(1)
+            if var in connected_pins:
+                line = file.code.count("\n", 0, match.start()) + 1
+                issues.append(
+                    f"- {file.filename}:{line}: 'edge({var})' gates a transition on a signal fed by a "
+                    "table whose FIRST scheduled toggle is exactly t=0. That toggle can never register as "
+                    "an edge (pre() already equals the signal's value at the initial instant), so this "
+                    "branch only fires on the table's LATER entries -- silently shifting the whole "
+                    "sequence's start by however long it takes to reach the next scheduled toggle, with no "
+                    "compiler error. Shift the table's first entry to a small positive offset (e.g. 0.001 "
+                    "instead of 0) so the toggle happens strictly after t=0, or OR the edge with an "
+                    "initial()-guarded fallback for that one instant."
+                )
+    return issues
+
+
+def _unguarded_ratio_numerator_issues(draft: ModelicaDraft) -> list[str]:
+    """A strictly-positive-asserted ratio whose DENOMINATOR is floored with
+    `max(..., floor)` but whose NUMERATOR's own `start=` value is not --
+    so a state that legitimately starts at (or floors to) zero divides
+    cleanly into exactly 0, tripping the assert at t=0 with no compiler
+    hint that the real cause is an un-floored initial condition three
+    declarations away.
+
+    Confirmed live and reproduced against the real compiler: a custom
+    `SimpleBatchTank` component declared `Energy E(start = rho*area*
+    levelStart*cp*TStart)` and computed `T = E/max(cp*m, cp*mMin)` with
+    `assert(T > 0, "temperature below absolute zero");`. Every instance
+    started "empty" (`levelStart = 0.0`) makes `E`'s start evaluate to
+    EXACTLY 0 regardless of `TStart`, so `T` starts at exactly 0 K and
+    trips the assert during initialization -- reproduced identically on 3
+    consecutive Stage 3 repair attempts in the same run (`SimpleBatchTank
+    .mo:44:...: The following assertion has been violated during
+    initialization at time 0.000000 ... "temperature below absolute
+    zero"`), because the compiler's own message names the generic assert
+    line, reused by every instance of the class, and never says WHICH
+    instance or WHY -- so three separate repair attempts could not
+    converge on the same root cause from the error text alone. Fixed (by
+    a later, self-correcting attempt in the same run) by flooring the
+    numerator the same way: `E(start = max(rho*area*levelStart, mMin) *
+    cp*TStart)` -- the ratio then starts at the physically correct
+    `TStart` regardless of how small `levelStart` is, including exactly 0.
+
+    Deliberately narrow: only fires when the SAME file asserts a variable
+    is strictly positive, defines it as `numerator / max(denominator,
+    floor)`, and that numerator's own declared start expression has no
+    `max(` anywhere in it -- an ordinary ratio with no positivity assert,
+    or one whose numerator is already floored, never triggers this.
+    """
+
+    assert_positive = re.compile(r"\bassert\s*\(\s*(\w+)\s*>\s*0\b")
+    ratio_from_max = re.compile(r"\b(\w+)\s*=\s*(\w+)\s*/\s*max\s*\(")
+    issues: list[str] = []
+    for file in draft.files:
+        positive_vars = set(assert_positive.findall(file.code))
+        if not positive_vars:
+            continue
+        for match in ratio_from_max.finditer(file.code):
+            result_var, numerator = match.groups()
+            if result_var not in positive_vars:
+                continue
+            decl = re.search(rf"\b{re.escape(numerator)}\s*\([^)]*\bstart\s*=\s*([^,)]+)", file.code)
+            if decl is None or "max(" in decl.group(1):
+                continue
+            line = file.code.count("\n", 0, match.start()) + 1
+            issues.append(
+                f"- {file.filename}:{line}: '{result_var} = {numerator}/max(...)' is asserted strictly "
+                f"positive, but '{numerator}' declares its own start value without a matching `max(...)` "
+                "floor. If the parameters feeding that start expression can legitimately be zero (a tank "
+                "starting empty, a level of exactly 0), the numerator starts at exactly 0 while the "
+                "denominator is floored above 0 -- the ratio evaluates to exactly 0 at t=0 and trips the "
+                f"assert during initialization, with the compiler naming only this generic assert line, "
+                f"never which instance or why. Floor '{numerator}'s start expression the same way its "
+                "denominator is floored (e.g. wrap the same zero-able term in the same `max(term, floor)`) "
+                "so the ratio starts at its true physical value even when the extensive quantity floors to "
+                "(near) zero."
+            )
+    return issues
+
+
+_CALLABLE_PUMP_CHARACTERISTIC_FUNCTIONS = frozenset({
+    "linearFlow", "quadraticFlow", "polynomialFlow",
+    "constantEfficiency", "linearPower", "quadraticPower",
+})
+_PARTIAL_PUMP_CHARACTERISTIC_BASE_CLASSES = frozenset({"baseFlow", "basePower", "baseEfficiency"})
+
+
+def _pump_characteristic_hallucination_issues(draft: ModelicaDraft) -> list[str]:
+    """A `redeclare function flowCharacteristic = Modelica.Fluid.Machines.
+    BaseClasses.PumpCharacteristics.<name>` referencing either a name that
+    does not exist in that package, or one of its own PARTIAL base classes
+    (which exist but cannot be called directly).
+
+    Confirmed live: a fresh generation wrote `...PumpCharacteristics.
+    constantFlow` for a pump the brief only ever commands on/off (no stated
+    head-flow curve) -- a plausible-sounding name that is not one of this
+    package's real members. The real compiler rejects it with `Base class
+    ...constantFlow not found in scope <Model>`, naming the SYSTEM file, not
+    the actual invalid reference. Confirmed against the real package
+    (`getClassNames(...)`): the only real members are baseFlow, basePower,
+    baseEfficiency, linearFlow, quadraticFlow, polynomialFlow,
+    constantEfficiency, linearPower, quadraticPower -- but `list(...)` on
+    each of the first three shows they are themselves declared `partial
+    function`, so redeclaring TO one of them (not just omitting the
+    redeclare, see `_prescribed_pump_missing_characteristic_issues` below)
+    is equally broken: `Called function '<Model>.<pump>.flowCharacteristic'
+    is partial.` Every genuinely callable member needs real head-flow (or
+    power/efficiency) curve DATA POINTS as arguments, which a brief that
+    only states "on delivers nominal flow, off delivers none" never
+    supplies.
+    """
+
+    reference = re.compile(
+        r"Modelica\.Fluid\.Machines\.BaseClasses\.PumpCharacteristics\.(\w+)"
+    )
+    issues: list[str] = []
+    for file in draft.files:
+        for match in reference.finditer(file.code):
+            name = match.group(1)
+            if name in _CALLABLE_PUMP_CHARACTERISTIC_FUNCTIONS:
+                continue
+            line = file.code.count("\n", 0, match.start()) + 1
+            if name in _PARTIAL_PUMP_CHARACTERISTIC_BASE_CLASSES:
+                reason = (
+                    f"'{name}' is a real member of that package, but `list(...{name})` shows it is "
+                    f"declared `partial function` -- it has no body and cannot be called directly. "
+                    "Redeclaring to it compiles cleanly and only fails at simulation start: `Called "
+                    f"function '<Model>.<pump>.flowCharacteristic' is partial.`"
+                )
+            else:
+                reason = (
+                    f"'{name}' does not exist -- the real members of that package are baseFlow, "
+                    "basePower, baseEfficiency, linearFlow, quadraticFlow, polynomialFlow, "
+                    "constantEfficiency, linearPower, quadraticPower."
+                )
+            issues.append(
+                f"- {file.filename}:{line}: 'Modelica.Fluid.Machines.BaseClasses.PumpCharacteristics."
+                f"{name}' -- {reason} Every genuinely callable member requires real head-flow (or "
+                "power/efficiency) curve data points as its own arguments. If the brief states no such "
+                "curve -- only that the pump is on (nominal flow) or off (none) -- do not use "
+                "PrescribedPump at all; model it as a commanded-rate device instead (the signal-flow "
+                "alternative in the fluid catalog), which needs no pump curve."
+            )
+    return issues
+
+
+def _prescribed_pump_missing_characteristic_issues(draft: ModelicaDraft) -> list[str]:
+    """A `Modelica.Fluid.Machines.PrescribedPump` instance with NO
+    `flowCharacteristic` redeclare at all in its own argument list.
+
+    Confirmed live: `PrescribedPump P1(redeclare package Medium = Medium,
+    use_N_in=true, N_nominal=1500)` -- no `flowCharacteristic` redeclare
+    anywhere. The library's own default (`replaceable function
+    flowCharacteristic = PumpCharacteristics.baseFlow`, confirmed via
+    `list(Modelica.Fluid.Machines.BaseClasses.PartialPump)`) silently falls
+    back to `baseFlow`, itself a partial function with no body -- this
+    compiles cleanly and only fails at simulation start: `Called function
+    '<Model>.P1.flowCharacteristic' is partial.` The omitted redeclare
+    leaves no trace in the source for the error to point back to.
+    """
+
+    pump = re.compile(
+        r"\bModelica\.Fluid\.Machines\.PrescribedPump\s+(\w+)\s*\(([^;]*?)\)\s*(?:annotation|;)", re.DOTALL,
+    )
+    issues: list[str] = []
+    for file in draft.files:
+        for match in pump.finditer(file.code):
+            instance_name, args = match.groups()
+            if "flowCharacteristic" in args:
+                continue
+            line = file.code.count("\n", 0, match.start()) + 1
+            issues.append(
+                f"- {file.filename}:{line}: '{instance_name}' is a PrescribedPump with no "
+                "`flowCharacteristic` redeclare at all. Its library default falls back to `baseFlow`, "
+                "itself a partial function with no body -- this compiles cleanly and only fails at "
+                "simulation start with `Called function '<pump>.flowCharacteristic' is partial.`, "
+                "pointing at neither this declaration nor the missing redeclare that caused it. If the "
+                "brief states no head-flow curve for this pump -- only that it is on (nominal flow) or "
+                "off (none) -- do not use PrescribedPump for it at all; model it as a commanded-rate "
+                "device instead (the signal-flow alternative in the fluid catalog), which needs no pump "
+                "curve."
+            )
+    return issues
+
+
+def _fluid_vessel_missing_ports_data_issues(draft: ModelicaDraft) -> list[str]:
+    """A `Modelica.Fluid.Vessels.*` instance declares `nPorts=N` (N > 0)
+    without a `portsData` argument at all.
+
+    Confirmed live: `Modelica.Fluid.Vessels.ClosedVolume K1(... nPorts=2)`
+    was instantiated with no `portsData` -- every `OpenTank` in the SAME
+    bundle correctly supplied one `portsData` entry per port, but the
+    catalog guidance that pattern came from only mentions `portsData` under
+    `OpenTank`, so a different Vessels class in the same generation dropped
+    it. The real compiler accepts the declaration and only fails later, at
+    the first port actually used: `Parameter K1.portsData[1].diameter has
+    neither value nor start value, and is fixed during initialization` --
+    naming the missing parameter, not the missing argument that would have
+    supplied it.
+    """
+
+    vessel = re.compile(
+        r"\bModelica\.Fluid\.Vessels\.\w+\s+(\w+)\s*\(([^;]*?)\)\s*(?:annotation|;)", re.DOTALL,
+    )
+    n_ports = re.compile(r"\bnPorts\s*=\s*(\d+)")
+    issues: list[str] = []
+    for file in draft.files:
+        for match in vessel.finditer(file.code):
+            instance_name, args = match.groups()
+            ports_match = n_ports.search(args)
+            if ports_match is None or int(ports_match.group(1)) <= 0:
+                continue
+            if "portsData" in args:
+                continue
+            line = file.code.count("\n", 0, match.start()) + 1
+            issues.append(
+                f"- {file.filename}:{line}: '{instance_name}' declares `nPorts={ports_match.group(1)}` "
+                "with no `portsData` argument at all. The real compiler accepts this and only fails "
+                "later, at the first port actually used, with a missing-parameter error that names the "
+                "port's own diameter, not this missing argument. Give it one `Modelica.Fluid.Vessels."
+                "BaseClasses.VesselPortsData(diameter=..., height=...)` entry per port, the same as "
+                "every OpenTank in the bundle -- this applies to every Vessels class (ClosedVolume "
+                "included), not only OpenTank."
+            )
+    return issues
+
+
+def _if_guarded_flow_division_issues(draft: ModelicaDraft) -> list[str]:
+    """A continuous-equation `if <expr> > 0 then .../<same expr>... else ...`
+    -- an `if`-guard that LOOKS like it prevents division by zero but does
+    not, when `<expr>` is a discontinuous, valve/pump-command-driven flow
+    rather than a smoothly varying signal.
+
+    Confirmed live and reproduced against the real compiler: `B3.xIn = if
+    qB1B3 + qB2B3 > 0 then (...)/(qB1B3 + qB2B3) else 0;` (`qB1B3`/`qB2B3`
+    each `if <valve>.open then <rate> else 0`, i.e. a bare step, not a
+    smooth signal) crashed identically on 3 consecutive Stage 3 attempts --
+    byte-for-byte the SAME generated bundle each time -- with `division by
+    zero at time 104.51..., (a=0) / (b=0), where divisor b expression is:
+    B3.qIn` (an alias of the same `qB1B3 + qB2B3` sum). The generated C code
+    shows why the guard does not protect the division: OpenModelica compiles
+    a continuous-equation `if <expr> > 0 then ... else ...` for a
+    non-smooth, non-state expression into an EVENT-triggered relation
+    (`GreaterZC`/`relationhysteresis`), not a plain inline branch -- so the
+    condition's cached boolean value can still read as the PREVIOUS
+    instant's value at the exact simulated instant the divisor itself steps
+    to zero, and the division executes anyway. Rewriting the identical two
+    equations to `(...)/max(qB1B3 + qB2B3, 1e-9)` -- no `if` at all --
+    removed the event-relation path entirely; the SAME bundle then
+    completed the full 3000 s run with `LOG_SUCCESS`. This is the same
+    underlying "never divide by a flow" hazard the existing prompt rule
+    already names, wearing a disguise that passes visual inspection --
+    the guard reads as obviously safe, which is exactly why 3 repair
+    attempts in a row reproduced it unchanged.
+
+    Deliberately structural, not name-based: flags any `if EXPR > 0 then
+    ... / EXPR ... else ...` where the divisor's own text (parentheses and
+    whitespace aside) is IDENTICAL to the guard's comparison expression --
+    regardless of what either one is called. An `if`-guard whose divisor is
+    a DIFFERENT expression than its own condition is not this pattern and
+    is never flagged.
+    """
+
+    statement = re.compile(
+        r"if\s+(?P<cond>[A-Za-z_][\w\s+\-.]*?)\s*>\s*0(?:\.0+)?\s+then\b(?P<rest>[^;]*);",
+        re.DOTALL,
+    )
+    divisor = re.compile(r"/\s*\(?\s*(?P<denom>[A-Za-z_][\w+\-. ]*?)\s*\)?(?=\)|;|,|\s+else\b|$)")
+    issues: list[str] = []
+    for file in draft.files:
+        for match in statement.finditer(file.code):
+            cond_norm = re.sub(r"\s+", "", match.group("cond"))
+            for div_match in divisor.finditer(match.group("rest")):
+                denom_norm = re.sub(r"\s+", "", div_match.group("denom"))
+                if denom_norm == cond_norm:
+                    line = file.code.count("\n", 0, match.start()) + 1
+                    issues.append(
+                        f"- {file.filename}:{line}: 'if {match.group('cond').strip()} > 0 then ... / "
+                        f"{match.group('cond').strip()} ... else ...' -- this guard does not actually "
+                        "prevent division by zero when the guarded expression is a discontinuous, "
+                        "valve/pump-command-driven flow rather than a smooth signal: OpenModelica compiles "
+                        "such an `if` in a continuous equation into an event-triggered relation "
+                        "(GreaterZC/relationhysteresis), whose cached condition can still read the "
+                        "PREVIOUS instant's value at the exact moment the divisor itself steps to zero, "
+                        "so the division executes anyway -- confirmed live: byte-for-byte the same bundle "
+                        "crashed identically on 3 consecutive repair attempts with 'division by zero ... "
+                        "(a=0) / (b=0)' at a fixed simulated instant. Replace the `if`/`else` with a "
+                        "`max(...)` floor instead -- no `if` at all -- e.g. "
+                        f"`.../max({match.group('cond').strip()}, 1e-9)`; confirmed the identical bundle "
+                        "then completes the full run cleanly."
+                    )
     return issues
 
 
@@ -718,7 +1380,7 @@ def _inert_variables(
 
     continuous = [
         name for name in checked_variables
-        if any(token in name.lower() for token in ("level", "_w_", "w_nacl", "temp", "_t", "conc", "mass", "flow"))
+        if any(token in name.lower() for token in ("level", "_w_", "w_nacl", "temp", "conc", "mass", "flow"))
         and not name.lower().endswith("_cmd")
     ]
     observed = {name: result_summary[name] for name in continuous if name in result_summary}
@@ -1377,6 +2039,29 @@ def _load_clarified_answers(ws: Workspace, project_id: str) -> dict[str, str]:
     return {str(key): str(value) for key, value in answers.items() if str(value).strip()}
 
 
+def _stage2_human_notes_path(ws: Workspace, project_id: str) -> Path:
+    return ws.extracted_dir(project_id) / "stage2_human_notes.json"
+
+
+def _take_stage2_human_notes(ws: Workspace, project_id: str) -> list[dict]:
+    """Answers a person gave to a PRIOR draft's on-draft questions after the
+    live pause that would normally fold them straight back in was lost (the
+    server restarted -- see api.py's `_make_clarify`/recovery endpoints).
+    Consumed once: a fresh draft can raise a different question set, so
+    there is no stable id to reconcile against on a second read, but the
+    model can still be told what a human already decided and asked to
+    honor it if the same or an equivalent question comes up again."""
+    path = _stage2_human_notes_path(ws, project_id)
+    if not path.exists():
+        return []
+    try:
+        notes = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        notes = []
+    path.unlink(missing_ok=True)
+    return notes if isinstance(notes, list) else []
+
+
 def _answers_record(
     clarifications: list[Clarification], answers: dict[str, str], *, from_file: bool = False,
 ) -> dict:
@@ -1700,6 +2385,18 @@ def execute_reasoner_stage_2(
     context = _understanding_context(understanding, _load_clarified_answers(ws, project_id))
     sysml_prompt = SYSML + domain_skill_block(understanding.domains)
 
+    prior_notes = _take_stage2_human_notes(ws, project_id)
+    if prior_notes:
+        notes_text = "\n".join(
+            f"- {n.get('question', '')}\n  Human-confirmed answer: {n.get('answer', '')}" for n in prior_notes
+        )
+        context = (
+            f"{context}\n\nA human engineer already answered these open questions on an earlier draft "
+            f"of this same model (the draft itself wasn't kept, so you're writing a fresh one, but these "
+            f"decisions are authoritative -- honor them if the same or an equivalent question comes up "
+            f"again):\n\n{notes_text}"
+        )
+
     reasoner = Reasoner(settings, 2, backend="openai", run_log=run_log)
     issues_summary = ""
 
@@ -1731,10 +2428,24 @@ def execute_reasoner_stage_2(
                 "-- proceeding on the model's own suggested defaults", flush=True,
             )
 
+    # Full rejection history, not just the immediately previous attempt --
+    # matching Stage 3's own repair loop below (see its comment: sending
+    # back only the last attempt's error gives the loop no memory, and it
+    # can oscillate between two failure modes, each "fix" reintroducing the
+    # one from two attempts earlier). Every attempt's error joins this list
+    # so a repeat is visible to the model as a repeat.
+    history: list[str] = []
+
     for attempt in range(settings.max_repair_attempts + 1):
         if attempt > 0:
+            history_block = (
+                "\n\nEvery earlier attempt in THIS run and why it was rejected. Do NOT reintroduce a "
+                "structure that already failed, and do not trade the current error for one already "
+                f"listed here:\n\n{chr(10).join(history)}\n"
+                if len(history) > 1 else ""
+            )
             prompt_context = (
-                f"{context}\n\nYour previous attempt:\n\n{draft.code}\n\n"
+                f"{context}{history_block}\n\nYour previous attempt:\n\n{draft.code}\n\n"
                 f"The real SysML v2 parser found these errors:\n\n{issues_summary}\n\n"
                 "Before patching: re-read the engineering brief above and work out WHY this error happened in "
                 "terms of what element of the actual system it was trying to represent, not just the parser's "
@@ -1773,6 +2484,7 @@ def execute_reasoner_stage_2(
             "validation_attempt", stage=2, attempt=attempt + 1, tool="sysml_parser", status="FAILED",
             issue_count=len(issues), issues=issues_summary,
         )
+        history.append(f"Attempt {attempt + 1} rejected by the real SysML v2 parser:\n{issues_summary}")
 
     path = _sysml_generated_path(ws, project_id)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -1794,24 +2506,54 @@ def execute_reasoner_stage_2(
     )
 
 
-def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None) -> StageResult:
+def execute_reasoner_stage_3(
+    project_id: str, projects_root: Path | None = None, validation_feedback: str | None = None,
+    max_repair_attempts: int | None = None,
+) -> StageResult:
     """Write an ordered, graphical, Standard-Library-based Modelica bundle
     from the consolidated understanding + Stage 2's concise SysML flow.
     Real repair loop: if the real `omc` compiler (`tools/modelica_validator.py`,
     an actual `simulate()`, not just `checkModel()` -- see that module's own
     docstring for why) reports
     errors, they're fed back to the model for another attempt -- up to
-    `MAX_REPAIR_ATTEMPTS`."""
+    `MAX_REPAIR_ATTEMPTS` (or `max_repair_attempts` below, when given).
+
+    `validation_feedback`, when given, is Stage 4's REAL, independent
+    verdict on a PREVIOUS generation of this same project -- issues and root
+    causes found by re-simulating against the actual brief, not anything
+    Stage 3 could see on its own. See `execute_reasoner_stage_3_and_4`,
+    which is what supplies it: Stage 3's own repair loop below only proves
+    the bundle compiles and does something, never that it does what the
+    brief requires.
+
+    `max_repair_attempts`, when given, OVERRIDES `settings.max_repair_
+    attempts` for this call only -- used by `execute_reasoner_stage_3_and_4`
+    to give its behavioral fix rounds a single shot (0 = one attempt, no
+    internal compiler retry) instead of the full compiler-repair budget,
+    so the outer validation loop's cost is additive (5 + 1 + 2), not
+    multiplicative (5 x rounds)."""
 
     from simulation_platform.tools import CompilerUnavailable, compile_files
 
     ws = _workspace(projects_root)
     run_log = RunLog(ws.run_log_path(project_id))
     settings = PlatformSettings.load()
+    repair_attempts = settings.max_repair_attempts if max_repair_attempts is None else max_repair_attempts
     understanding = _load_merged_understanding(ws, project_id)
     sysml_code = _sysml_generated_path(ws, project_id).read_text(encoding="utf-8")
 
     context = f"{_understanding_context(understanding, _load_clarified_answers(ws, project_id))}\n\nSysML v2 model (already generated):\n\n{sysml_code}"
+    if validation_feedback:
+        context += (
+            "\n\nOne or more earlier generations of this model in THIS run compiled and ran, but an "
+            "independent validation stage re-simulated each one and checked the REAL result against the "
+            "acceptance checks above -- not against your own self-report -- and found it wrong. Every "
+            "round below is a DISTINCT prior attempt and why it failed; a bundle that fixes the latest "
+            "round by reintroducing a defect from an earlier round is not an improvement. Fix every "
+            "behavioral defect listed across ALL rounds at once; do not just make the model compile "
+            "again, and do not trade one round's defect for another round's already-seen defect:\n\n"
+            + validation_feedback
+        )
     modelica_prompt = (
         MODELICA
         + domain_skill_block(understanding.domains)
@@ -1827,7 +2569,7 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
     # rejection history makes a repeat visible to the model as a repeat.
     history: list[str] = []
 
-    for attempt in range(settings.max_repair_attempts + 1):
+    for attempt in range(repair_attempts + 1):
         history_block = (
             "\n\nEvery earlier attempt in THIS run and why it was rejected. Do not reintroduce a "
             "structure that already failed, and do not trade the current error for one already "
@@ -1858,7 +2600,7 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
             "passes on THIS attempt, not one that trades today's reported error for a different one next "
             "attempt."
         )
-        with _traced_stage(f"Stage 3: write Modelica (attempt {attempt + 1}/{settings.max_repair_attempts + 1})", run_log):
+        with _traced_stage(f"Stage 3: write Modelica (attempt {attempt + 1}/{repair_attempts + 1})", run_log):
             draft = reasoner.ask(modelica_prompt, prompt_context, ModelicaDraft, Packet([]))
 
         attempt_dir = _archive_modelica_attempt(ws, project_id, attempt + 1, draft)
@@ -1949,7 +2691,7 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
             # temperatures sat at physically meaningless constants. Both were
             # accepted here and only caught downstream.
             dead = _inert_variables(result.result_summary, _checked_variable_names(understanding))
-            if dead and attempt < settings.max_repair_attempts:
+            if dead and attempt < repair_attempts:
                 errors_summary = (
                     f"The bundle compiles and simulates the full {understanding.simulation.stop_time:.0f}s "
                     f"window, but {', '.join(dead)} never change value for the entire run. A quantity an "
@@ -1970,16 +2712,32 @@ def execute_reasoner_stage_3(project_id: str, projects_root: Path | None = None)
                 history.append(f"Attempt {attempt + 1} compiled but did nothing:\n{errors_summary}")
                 continue
             if dead:
+                # Do NOT accept a bundle Stage 3 has itself proven inert just
+                # because attempts ran out. Shipping it silently is exactly
+                # what let the NaCl plant's dead controller reach Stage 4 and
+                # beyond -- the warning below used to be the only trace of
+                # it. Fall through with errors_summary populated so the
+                # final `if errors_summary: raise` below refuses to hand
+                # back a READY status for it.
+                errors_summary = (
+                    f"The bundle compiles and simulates the full {understanding.simulation.stop_time:.0f}s "
+                    f"window, but {', '.join(sorted(dead))} never change value for the entire run, and no "
+                    "repair attempts remain. Refusing to report this bundle as validated."
+                )
                 print(
                     f"    [Stage 3] real omc: PASSED ({attempt + 1} attempt(s)) -- but "
-                    f"{len(dead)} checked variable(s) never changed; no attempts left to fix it", flush=True,
+                    f"{len(dead)} checked variable(s) never changed; no attempts left, rejecting", flush=True,
                 )
-            else:
-                print(f"    [Stage 3] real omc: PASSED ({attempt + 1} attempt(s))", flush=True)
+                run_log.event(
+                    "validation_attempt", stage=3, attempt=attempt + 1, tool="omc", status="INERT_UNRESOLVED",
+                    inert=sorted(dead),
+                )
+                break
+            print(f"    [Stage 3] real omc: PASSED ({attempt + 1} attempt(s))", flush=True)
             errors_summary = ""  # otherwise StageResult.remaining_errors would show a stale prior error
             run_log.event(
                 "validation_attempt", stage=3, attempt=attempt + 1, tool="omc", status="PASSED",
-                inert=sorted(dead) or None,
+                inert=None,
             )
             break
         errors_summary = "\n".join(f"- {e.file}:{e.line}: {e.message}" for e in result.errors)
@@ -2263,6 +3021,29 @@ def execute_reasoner_stage_4(project_id: str, projects_root: Path | None = None)
         reasoner = Reasoner(settings, 4, backend="openai", run_log=run_log)
         with _traced_stage("Stage 4: independent review of the real result against the brief", run_log):
             report: ValidationReport = reasoner.ask(VALIDATION, context, ValidationReport, Packet([]))
+
+        # Hard cross-check, independent of the LLM's free-text verdict: run the
+        # SAME inertness probe Stage 3 uses, but against THIS canonical Stage 4
+        # resimulation rather than Stage 3's own compile probe. Found live: on
+        # the NaCl plant, Stage 3's own probe reported no inert variables on the
+        # accepted attempt while this same check, run against Stage 4's
+        # resimulation of the identical bundle, found the reported levels and
+        # compositions 100% flat for the whole run. Two independent
+        # compile_files() calls can disagree; do not let a false negative in
+        # Stage 3's probe be the only thing standing between a dead model and a
+        # "valid" verdict.
+        dead = _inert_variables(result.result_summary, _checked_variable_names(understanding))
+        if dead:
+            note = (
+                f"Hard check (Stage 4, against the canonical resimulation, independent of the LLM "
+                f"review): {', '.join(sorted(dead))} never change value across the whole run."
+            )
+            print(f"    [Stage 4] hard inert-variable check: {len(dead)} checked variable(s) never changed", flush=True)
+            run_log.event("validation_attempt", stage=4, tool="inert_check", status="INERT", inert=sorted(dead))
+            if report.verdict == "valid":
+                report.verdict = "invalid"
+            if not any(note == rc for rc in report.root_causes):
+                report.root_causes = [note, *report.root_causes]
     else:
         errors_summary = "\n".join(f"- {e.file}:{e.line}: {e.message}" for e in result.errors)
         print(f"    [Stage 4] real omc did not pass, skipping trajectory review:\n{errors_summary}", flush=True)
@@ -2300,5 +3081,273 @@ def execute_reasoner_stage_4(project_id: str, projects_root: Path | None = None)
             "issues": report.issues, "assumptions": report.assumptions, "root_causes": report.root_causes,
             "csv": str(csv_path) if result.status.value == "PASSED" else None,
             "plots": [str(p) for p in plot_paths],
+        },
+    )
+
+
+def _render_validation_feedback(stage4_details: dict) -> str:
+    """Stage 4's verdict, as text Stage 3 can act on for another attempt."""
+
+    lines = [f"Verdict: {stage4_details.get('verdict')}", f"Summary: {stage4_details.get('summary')}"]
+    if stage4_details.get("issues"):
+        lines.append("Issues:\n" + "\n".join(f"- {i}" for i in stage4_details["issues"]))
+    if stage4_details.get("root_causes"):
+        lines.append("Root causes:\n" + "\n".join(f"- {r}" for r in stage4_details["root_causes"]))
+    return "\n\n".join(lines)
+
+
+def _validation_round_snapshot_dir(ws: Workspace, project_id: str, round_index: int) -> Path:
+    return ws.project_dir(project_id) / "modelica" / "validation_rounds" / f"round_{round_index:02d}"
+
+
+def _snapshot_validation_round(ws: Workspace, project_id: str, round_index: int) -> Path:
+    """Preserve one round's active Modelica bundle + real results + validation
+    report, so the best-scoring round can be restored later even if a later
+    round regresses. Snapshots only the ACTIVE top-level bundle, not Stage 3's
+    own internal `attempts/` archive -- that is already preserved by
+    `_archive_modelica_attempt` for every compiler-repair attempt within a
+    round; duplicating it per round would multiply the same files."""
+
+    snapshot_dir = _validation_round_snapshot_dir(ws, project_id, round_index)
+    if snapshot_dir.exists():
+        shutil.rmtree(snapshot_dir)
+    snapshot_dir.mkdir(parents=True, exist_ok=True)
+
+    generated = _modelica_generated_dir(ws, project_id)
+    if generated.exists():
+        bundle_snapshot = snapshot_dir / "generated"
+        bundle_snapshot.mkdir(parents=True, exist_ok=True)
+        for file in generated.glob("*.mo"):
+            shutil.copy2(file, bundle_snapshot / file.name)
+        manifest = _modelica_manifest_path(ws, project_id)
+        if manifest.exists():
+            shutil.copy2(manifest, bundle_snapshot / manifest.name)
+
+    results = _modelica_results_dir(ws, project_id)
+    if results.exists():
+        shutil.copytree(results, snapshot_dir / "results", dirs_exist_ok=True)
+
+    validation = ws.validation_dir(project_id)
+    if validation.exists():
+        shutil.copytree(validation, snapshot_dir / "validation", dirs_exist_ok=True)
+
+    return snapshot_dir
+
+
+def _restore_validation_round_snapshot(ws: Workspace, project_id: str, snapshot_dir: Path) -> None:
+    """Make a previous round's snapshot the active Modelica/validation output
+    again, e.g. because a later round scored worse. The active bundle is
+    replaced wholesale so no file from the losing round survives alongside
+    the restored one."""
+
+    generated = _modelica_generated_dir(ws, project_id)
+    if generated.exists():
+        for file in generated.glob("*.mo"):
+            file.unlink()
+    manifest = _modelica_manifest_path(ws, project_id)
+    if manifest.exists():
+        manifest.unlink()
+    bundle_snapshot = snapshot_dir / "generated"
+    if bundle_snapshot.exists():
+        generated.mkdir(parents=True, exist_ok=True)
+        for file in bundle_snapshot.iterdir():
+            shutil.copy2(file, generated / file.name)
+
+    results = _modelica_results_dir(ws, project_id)
+    if results.exists():
+        shutil.rmtree(results)
+    results_snapshot = snapshot_dir / "results"
+    if results_snapshot.exists():
+        shutil.copytree(results_snapshot, results)
+
+    validation = ws.validation_dir(project_id)
+    if validation.exists():
+        shutil.rmtree(validation)
+    validation_snapshot = snapshot_dir / "validation"
+    if validation_snapshot.exists():
+        shutil.copytree(validation_snapshot, validation)
+
+
+_VERDICT_RANK = {"valid": 2, "partially_valid": 1, "invalid": 0}
+
+
+def _round_score(stage4_details: dict) -> tuple[int, int, int]:
+    """How good one round's real validation result is: verdict first (valid
+    beats partially_valid beats invalid), then how many individual acceptance
+    checks actually passed, then fewer open issues. Reads the check_results
+    straight from the round's own report file rather than trusting a count
+    carried in `details`, since `details` does not include check_results."""
+
+    verdict_rank = _VERDICT_RANK.get(stage4_details.get("verdict"), -1)
+    passed = 0
+    report_path = stage4_details.get("report_file")
+    if report_path:
+        try:
+            report = json.loads(Path(report_path).read_text(encoding="utf-8"))
+            passed = sum(1 for c in report.get("check_results", []) if c.get("outcome") == "pass")
+        except (OSError, ValueError):
+            pass
+    return (verdict_rank, passed, -len(stage4_details.get("issues") or []))
+
+
+def execute_reasoner_stage_3_and_4(project_id: str, projects_root: Path | None = None) -> StageResult:
+    """Generate the Modelica bundle (Stage 3) and independently validate it
+    against the brief's REAL acceptance criteria (Stage 4), and close the
+    loop between them: if Stage 4 comes back anything other than "valid",
+    feed its issues and root causes back into another Stage 3 generation
+    attempt and validate again, up to `MAX_VALIDATION_REPAIR_ATTEMPTS` extra
+    rounds -- the same real repair-loop shape Stage 3 already runs against
+    compiler errors (see that function), but closed around BEHAVIORAL
+    correctness, which the compiler can never judge on its own. Stage 3
+    passing only ever proved the model compiles and does something; only
+    Stage 4 can say whether that something is what the brief describes.
+
+    Cost is kept ADDITIVE, not multiplicative. Round 0 (the initial
+    generation) gets Stage 3's full compiler-repair budget --
+    `MAX_REPAIR_ATTEMPTS` attempts against the real compiler, exactly as
+    "as it was earlier" when Stage 3 ran alone. Every later round is a
+    single-shot behavioral fix attempt (`max_repair_attempts=0`): one
+    generation call carrying the accumulated validation feedback, checked
+    once against the real compiler, not a fresh 5-attempt sub-loop. Total
+    real-compiler-facing generation calls in the worst case is therefore
+    `MAX_REPAIR_ATTEMPTS + 1` (round 0) `+ MAX_VALIDATION_REPAIR_ATTEMPTS`
+    (one call per fix round) -- the default 5 + 1 + 2, not 5 x 3 = 15.
+
+    Every round's real result is scored (`_round_score`) and snapshotted
+    (`_snapshot_validation_round`); whichever round scored best is what is
+    left as the active bundle/result at the end (`_restore_validation_round_
+    snapshot` if that was not the last round), and its own StageResult is
+    what this function returns -- "show whichever gives the correct best
+    results," not necessarily the last thing generated. If nothing reaches
+    "valid", this function still does not raise: it reports the best real
+    validation result actually found.
+
+    Full round history (not just the latest verdict) is carried forward the
+    same way Stage 3's own compiler-repair history is, and for the same
+    reason: a model that oscillates between two different behavioral
+    defects across rounds needs to see both to avoid reintroducing one
+    while fixing the other."""
+
+    ws = _workspace(projects_root)
+    run_log = RunLog(ws.run_log_path(project_id))
+    settings = PlatformSettings.load()
+    total_rounds = settings.max_validation_repair_attempts + 1
+
+    round_history: list[str] = []
+    rounds: list[dict] = []
+
+    for round_index in range(total_rounds):
+        feedback = None
+        if round_history:
+            feedback = (
+                "\n\n".join(
+                    f"Round {i + 1} of this run:\n{entry}" for i, entry in enumerate(round_history)
+                ) if len(round_history) > 1 else round_history[0]
+            )
+        # Round 0 gets the full compiler-repair budget to reach a syntactically
+        # valid bundle at all; every later round is a single behavioral fix
+        # shot -- see this function's own docstring for why.
+        repair_budget = None if round_index == 0 else 0
+        print(
+            f"    [Stage 3+4] validation round {round_index + 1}/{total_rounds}"
+            + ("" if round_index == 0 else " (single-shot behavioral fix)"),
+            flush=True,
+        )
+        run_log.event(
+            "validation_round_started", stage="3_4", round=round_index + 1, of=total_rounds,
+            repair_budget=repair_budget,
+        )
+        try:
+            stage3_result = execute_reasoner_stage_3(
+                project_id, projects_root=projects_root, validation_feedback=feedback,
+                max_repair_attempts=repair_budget,
+            )
+        except RuntimeError as exc:
+            # Round 0 has the full compiler-repair budget already, so if IT
+            # still can't reach a compiling bundle, there is nothing to fall
+            # back to yet -- surface the failure, same as Stage 3 always has
+            # standalone. A single-shot fix round failing to compile is
+            # different: earlier rounds already proved a working bundle
+            # exists, so losing that to a bad fix attempt would break "always
+            # show the best real result" -- skip this round and keep going
+            # (or fall through to best-of-what-we-have if none remain).
+            if round_index == 0:
+                raise
+            print(
+                f"    [Stage 3+4] fix round {round_index + 1} failed to produce a compiling bundle: "
+                f"{exc}; discarding this round, keeping the best one found so far", flush=True,
+            )
+            run_log.event(
+                "validation_round_finished", stage="3_4", round=round_index + 1, verdict="FIX_ATTEMPT_FAILED",
+            )
+            if round_index == total_rounds - 1:
+                break
+            continue
+        stage4_result = execute_reasoner_stage_4(project_id, projects_root=projects_root)
+
+        if stage4_result.status == "SKIPPED":
+            # Stage 4 couldn't run at all (e.g. the real compiler is
+            # unavailable) -- not a behavioral defect another generation
+            # attempt could fix. Retrying would just burn every remaining
+            # round against the same infrastructure problem.
+            print(
+                f"    [Stage 3+4] Stage 4 skipped ({stage4_result.details.get('reason')}); "
+                "not a behavioral defect, stopping the validation loop here", flush=True,
+            )
+            run_log.event("validation_round_finished", stage="3_4", round=round_index + 1, verdict="SKIPPED")
+            if not rounds:
+                return StageResult(
+                    stage="stage_4", project_id=project_id, status=stage4_result.status,
+                    details={**stage4_result.details, "stage_3": stage3_result.details, "validation_rounds": 1},
+                )
+            break
+
+        score = _round_score(stage4_result.details)
+        snapshot_dir = _snapshot_validation_round(ws, project_id, round_index)
+        rounds.append({
+            "score": score, "stage3": stage3_result, "stage4": stage4_result, "snapshot_dir": snapshot_dir,
+        })
+
+        verdict = stage4_result.details.get("verdict")
+        if verdict == "valid":
+            run_log.event("validation_round_finished", stage="3_4", round=round_index + 1, verdict=verdict, score=score)
+            break
+        round_history.append(_render_validation_feedback(stage4_result.details))
+        if round_index < total_rounds - 1:
+            print(
+                f"    [Stage 3+4] verdict '{verdict}' after round {round_index + 1}, "
+                "feeding it back for the next fix attempt", flush=True,
+            )
+            run_log.event("validation_round_finished", stage="3_4", round=round_index + 1, verdict=verdict, score=score)
+        else:
+            print(
+                f"    [Stage 3+4] verdict '{verdict}' after round {round_index + 1}: "
+                "no fix attempts left; keeping whichever round scored best", flush=True,
+            )
+            run_log.event(
+                "validation_repair_exhausted", stage="3_4", rounds=round_index + 1, verdict=verdict, score=score,
+            )
+
+    best_index, best = max(enumerate(rounds), key=lambda pair: pair[1]["score"])
+    # Always restore, even when the best round LOOKS like the last one that
+    # scored -- a later fix round can fail to compile (caught above) after
+    # already writing its broken files to the active directory before
+    # raising, which would otherwise leave those broken files active even
+    # though `rounds` correctly excludes that round from scoring.
+    print(
+        f"    [Stage 3+4] round {best_index + 1}/{len(rounds)} scored best "
+        f"(verdict/passed-checks/issues = {best['score']}); restoring it as the active result", flush=True,
+    )
+    _restore_validation_round_snapshot(ws, project_id, best["snapshot_dir"])
+    run_log.event(
+        "validation_best_round_restored", stage="3_4", round=best_index + 1, of=len(rounds), score=best["score"],
+    )
+
+    stage3_result, stage4_result = best["stage3"], best["stage4"]
+    return StageResult(
+        stage="stage_4", project_id=project_id, status=stage4_result.status,
+        details={
+            **stage4_result.details, "stage_3": stage3_result.details,
+            "validation_rounds": len(rounds), "best_round": best_index + 1,
         },
     )

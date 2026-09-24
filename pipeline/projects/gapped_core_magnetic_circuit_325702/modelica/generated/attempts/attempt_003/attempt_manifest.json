@@ -1,0 +1,45 @@
+{
+  "attempt": 3,
+  "entry_class": "GappedCoreMagneticCircuitSystem",
+  "files": [
+    {
+      "filename": "ExcitationCoil.mo",
+      "role": "component"
+    },
+    {
+      "filename": "IronCore.mo",
+      "role": "component"
+    },
+    {
+      "filename": "AirGap.mo",
+      "role": "component"
+    },
+    {
+      "filename": "MagneticReference.mo",
+      "role": "component"
+    },
+    {
+      "filename": "MagneticGroundUnit.mo",
+      "role": "component"
+    },
+    {
+      "filename": "GappedCoreMagneticCircuitSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Sources.Ramp",
+    "Modelica.Constants",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Replaced the invalid connect() calls from scalar Phi_core_Wb to component RealInput connectors with equation assignments, because Phi_core_Wb is an ordinary Real report variable rather than a connector. This fixes the reported root-cause class: the previous bundle tried to use signal wiring semantics for a scalar quantity computed in the system equations.",
+    "Kept each named physical unit as its own top-level component instance in the system diagram, per the brief and the earlier preflight rejection of an aggregated plant.",
+    "Used the prescribed excitation current as a Modelica.Blocks.Sources.Ramp with height=2 A, duration=0.1 s, offset=0 A, and startTime=0 s, matching the merged assumption and the brief\u2019s stated scenario.",
+    "Set experiment Interval=0.001 s from the merged assumption of 1000 output intervals over the 1 s run; Tolerance=1e-6 is an assumption because the brief states the duration and output intervals but does not state a solver tolerance.",
+    "The brief names one magnetic reference and exactly one magnetic ground but does not provide a magnetic connector topology or a Modelica Magnetic.FluxTubes component mapping for those custom reference entities. This bundle therefore preserves them as separately inspectable signal-level components rather than asserting an unstated FluxTubes topology."
+  ],
+  "references": []
+}

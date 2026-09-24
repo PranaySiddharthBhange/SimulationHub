@@ -37,6 +37,8 @@ from __future__ import annotations
 import os
 import re
 import shutil
+import subprocess
+import sys
 from pathlib import Path
 
 from simulation_platform.schemas import SyntaxIssue
@@ -81,6 +83,56 @@ def _java_executable(kernels_dir: Path) -> Path:
     )
 
 
+def _kill_kernel_process_tree(pid: int | None) -> None:
+    """Kill a launched kernel process and every descendant it spawned.
+
+    `KernelManager.shutdown_kernel` only terminates the DIRECT process it
+    launched: on Windows, `LocalProvisioner.kill()` falls straight through to
+    plain `Popen.kill()`, because the process-group kill jupyter_client
+    prefers (`os.killpg`) does not exist on that platform at all. If the
+    launched java process spawns a separate worker JVM rather than exec'ing
+    in place -- which conda's `jupyter-sysml-kernel` does on Windows --
+    killing the launcher orphans the worker it spawned; `shutdown_kernel`
+    never even learns that process exists.
+
+    Confirmed live: one working session of repeated real-parser calls left
+    roughly 130 orphaned `java.exe` processes running, none reachable
+    through `shutdown_kernel`, together exhausting system memory and making
+    every LATER kernel launch fail with an unrelated-looking JVM
+    out-of-memory error ("Failed to reserve memory for ... mark stack") --
+    a failure that looked like a flaky test, not the real leak six kernel
+    launches earlier that caused it.
+
+    Called BEFORE `shutdown_kernel`, while the launched process and its
+    children still form an intact, walkable process tree -- calling it
+    after would let `taskkill /T`'s own tree-walk find nothing, since the
+    parent jupyter_client already killed is no longer there to walk from.
+    Must never raise: this always runs from a `finally` that may already be
+    unwinding a real failure, and a cleanup helper failing loudly on top of
+    that would hide the original error.
+    """
+
+    if not pid:
+        return
+    try:
+        if sys.platform == "win32":
+            subprocess.run(
+                ["taskkill", "/F", "/T", "/PID", str(pid)],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False, timeout=10,
+            )
+        else:
+            import signal
+            try:
+                os.killpg(os.getpgid(pid), signal.SIGKILL)
+            except OSError:
+                try:
+                    os.kill(pid, signal.SIGKILL)
+                except OSError:
+                    pass
+    except Exception:
+        pass
+
+
 def _parse_error_line(raw: str, filename: str) -> SyntaxIssue:
     match = _ERROR_LINE.match(raw.strip())
     if not match:
@@ -117,8 +169,10 @@ def validate_files_with_real_parser(files: dict[str, str], timeout: float = 60.0
     km.kernel_spec.argv[0] = str(java_exe)
 
     issues: list[SyntaxIssue] = []
+    kernel_pid: int | None = None
     try:
         km.start_kernel()
+        kernel_pid = getattr(km.provisioner, "pid", None)
         kc = km.client()
         kc.start_channels()
         try:
@@ -146,6 +200,7 @@ def validate_files_with_real_parser(files: dict[str, str], timeout: float = 60.0
         finally:
             kc.stop_channels()
     finally:
+        _kill_kernel_process_tree(kernel_pid)
         km.shutdown_kernel(now=True)
 
     return issues

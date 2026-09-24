@@ -1,0 +1,33 @@
+{
+  "attempt": 1,
+  "entry_class": "SingleTankFillSystem",
+  "files": [
+    {
+      "filename": "ConstantInletValve.mo",
+      "role": "component"
+    },
+    {
+      "filename": "TankLevel.mo",
+      "role": "component"
+    },
+    {
+      "filename": "SingleTankFillSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Sources.BooleanExpression",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Assumption carried from the brief: the stated nominal inflow 0.01 m^3/s is applied as a constant volumetric inflow while the inlet valve is commanded open, because no supply-pressure dependence or valve characteristic is stated.",
+    "Assumption carried from the brief: tank cross-sectional area is constant at 0.5 m^2, so der(level) = inflow/crossArea.",
+    "The model uses signal-flow custom components rather than Modelica.Fluid library components because the brief states only a constant inflow, one tank level state, and a level-triggered closure, but does not state the pressure, medium, or hydraulic parameters required to parameterize a faithful acausal fluid network.",
+    "The tank height 1.0 m is enforced as a physical bound by stopping further rise when tank_level_m >= tankHeight and inflow remains positive. This bound does not interfere with the stated 0.80 m fill target because the target is below the tank height.",
+    "Reported variables are exposed at top level under the exact required names tank_level_m and valve_open_cmd."
+  ],
+  "references": []
+}

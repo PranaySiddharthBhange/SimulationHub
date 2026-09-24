@@ -1,0 +1,80 @@
+Subject: Water-NaCl Medium and Tank Modeling Note
+Document kind: design note
+
+## Entities
+* water-NaCl medium -- medium  <[page 1]>
+* Modelica.Media -- software library  <[page 1]>
+* PartialMedium -- medium hierarchy element  <[page 1]>
+* PartialMixtureMedium -- medium hierarchy element  <[page 1]>
+* PartialMixtureTwoPhaseMedium -- medium hierarchy element  <[page 1]>
+* WaterNaCl -- medium  <[page 1]>
+* medium -- medium state  <[page 1]>
+* p_ambient -- pressure variable  <[page 1]>
+* V -- volume variable  <[page 1]>
+* area -- geometric variable  <[page 1]>
+* level -- level variable  <[page 1]>
+* V0 -- volume offset variable  <[page 1]>
+* m -- mass variable  <[page 1]>
+* mXi -- species mass variable  <[page 1]>
+* U -- internal energy variable  <[page 1]>
+* topPorts -- port collection  <[page 1]>
+* ports -- port collection  <[page 1]>
+* HeatB5 -- heater/heat component  <[page 1]>
+    - Q_flow: 20000
+* controller.actuators.T5_Heater -- actuator command  <[page 1]>
+* Q_up -- heat flow variable  <[page 1]>
+* heatPort -- heat port  <[page 1]>
+* m_con -- condensate mass flow variable  <[page 1]>
+    - mass flow: 0
+* K1 -- component  <[page 1]>
+* B5 evaporator model -- evaporator model  <[page 1]>
+* fluid port -- port  <[page 1]>
+* rho(T,p,w) -- property function  <[page 1]>
+* h(T,p,w) -- property function  <[page 1]>
+* cp(T,w) -- property function  <[page 1]>
+* p_sat(T,w) -- property function  <[page 1]>
+* eta(T,w) -- property function  <[page 1]>
+* c1 -- coefficient  <[page 1]>
+    - coefficient: -6.83241E-07
+* c2 -- coefficient  <[page 1]>
+    - coefficient: 0.000765676
+* c3 -- coefficient  <[page 1]>
+    - coefficient: -0.297018665
+* c4 -- coefficient  <[page 1]>
+    - coefficient: -0.299730079
+* c5 -- coefficient  <[page 1]>
+    - coefficient: 2.065267182
+* c6 -- coefficient  <[page 1]>
+    - coefficient: 1.546491257
+* c7 -- coefficient  <[page 1]>
+    - coefficient: 31.57571595
+* StandardWater -- medium  <[page 1]>
+* return pump -- pump  <[page 1]>
+
+## Relationships
+* water-NaCl medium intended hierarchy includes PartialMedium (PartialMedium -> PartialMixtureMedium -> PartialMixtureTwoPhaseMedium -> WaterNaCl)  <[page 1]>
+* PartialMedium followed by PartialMixtureMedium  <[page 1]>
+* PartialMixtureMedium followed by PartialMixtureTwoPhaseMedium  <[page 1]>
+* PartialMixtureTwoPhaseMedium followed by WaterNaCl  <[page 1]>
+* medium pressure equals p_ambient  <[page 1]>
+* V equals area (V = area*level + V0)  <[page 1]>
+* m equals V (m = V*medium.d)  <[page 1]>
+* mXi equals m (mXi = m*medium.Xi)  <[page 1]>
+* U equals m (U = m*medium.u)  <[page 1]>
+* der(m) equals sum of topPorts (sum(topPorts.m_flow) + sum(ports.m_flow))  <[page 1]>
+* HeatB5 Q_flow controlled by controller.actuators.T5_Heater (if true then 20000 else 0)  <[page 1]>
+* K1 is physically separate from B5 evaporator model  <[page 1]>
+* B5 evaporator model exports condensate through fluid port (additional fluid port)  <[page 1]>
+
+## Requirements
+* Required properties: density rho(T,p,w), enthalpy h(T,p,w), cp(T,w), saturation pressure p_sat(T,w), and viscosity eta(T,w).  <[page 1]>
+
+## Behaviors
+* If Q_up > heatPort.Q_flow then m_con = 0; else m_con = -(heatPort.Q_flow - Q_up) /(hv - hl + Xi[1]*(cp*dT_dX + dhl_dX));  <[page 1]>
+
+## Physical relationships
+* der(U) = sum(H_flow) - p_ambient*der(V);  <[page 1]>
+* eta(T,w) = exp(c1*T^3 + c2*T^2 + c3*T + c4 + c5*w + c6*w^2 + c7*w^3)  <[page 1]>
+
+## Unreadable
+* Some source correlations omit numeric coefficients and those coefficients are intentionally absent from this benchmark evidence.

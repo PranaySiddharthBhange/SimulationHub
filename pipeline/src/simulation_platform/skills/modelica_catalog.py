@@ -81,6 +81,41 @@ levels, the two vessels were duplicated classes instead of one type
 instantiated twice, and nothing enforced mass continuity across a connection
 because a Real signal is not a flow.
 
+THIS MANDATE IS SCOPED TO A PLANT SHAPED LIKE THE MSL TWO-TANK EXAMPLE -- a
+handful of vessels on ONE mostly-linear path with a source and a drain. For a
+BATCH-SEQUENTIAL process with MANY named vessels cross-linked by MANY
+independently Boolean-gated valves (several branches that can each be open or
+closed on their own schedule, not one path with a start/stop/shut button), the
+real acausal Fluid network carries a confirmed, repeatable risk the two-tank
+shape does not: connecting many `ValveDiscrete`s into a shared pressure/flow
+network forces OpenModelica to solve the WHOLE network's flows as one implicit
+nonlinear system, and the valves' own Boolean `open` state (itself driven by a
+discrete controller variable) can end up folded into that SAME nonlinear
+system as an iteration variable. Boolean/Integer types have no `.nominal`,
+`.min` or `.max` fields, but the C code generated for ANY nonlinear system's
+scaling data unconditionally accesses all three for every iteration variable,
+regardless of type -- confirmed live: `Error building simulator. The C build
+failed ... error: no member named 'nominal' in 'struct BOOLEAN_ATTRIBUTE'`,
+repeated for a dozen-plus `$whenConditionN` variables across a model reporting
+`OMC_NUM_NONLINEAR_SYSTEMS=41`, for a bundle built from real `OpenTank`/
+`ClosedVolume`/`ValveDiscrete` components wired into an 8-vessel, 17-valve
+batch network. This is NOT the same mechanism as the "double-initialized
+variable" trap documented elsewhere in this prompt (there is no double
+initialization anywhere in the offending bundle) and it reproduces the exact
+same class of error the OTHER mechanism does purely because a real acausal
+Fluid network's implicit pressure/flow solve pulled in Boolean iteration
+variables that a simpler signal-flow model never creates in the first place --
+confirmed by this project's own history: every generation that used the
+signal-flow/custom-tank alternative for a multi-vessel batch process has
+compiled; every generation that used the real Fluid network for the SAME kind
+of multi-branch batch process has hit a distinct, confirmed real-compiler
+defect (this one, plus the PrescribedPump/portsData defects earlier in this
+catalog entry). For a brief whose physics is level/composition/temperature
+sequencing through named vessels -- not a hydraulic design where pressure drop
+or pump curves are the point -- prefer the signal-flow alternative below for
+that reason alone, even though the note above still holds for a simple,
+few-vessel, single-path plant.
+
 - Modelica.Fluid.System: the required global fluid settings; exactly one
   `inner Modelica.Fluid.System system;` in the top-level model. Every Fluid
   component looks it up by name, and without it nothing elaborates.
@@ -88,6 +123,18 @@ because a Real signal is not a flow.
   and `level_start` from the brief, and give it one `portsData` entry per
   connection with that port's `height` (an inlet at the top, an outlet at the
   bottom). It draws as a tank with a live level.
+  THIS `portsData` REQUIREMENT APPLIES TO EVERY Vessels CLASS, not only
+  OpenTank -- `Modelica.Fluid.Vessels.ClosedVolume` (a sealed vessel, the
+  right choice for a condenser or any vessel with no open surface to
+  atmosphere) needs it exactly the same way. Confirmed live: an `OpenTank`
+  correctly given `portsData` compiled, while a `ClosedVolume` with
+  `nPorts=2` and NO `portsData` in the same bundle compiled cleanly and only
+  failed later, at the first port actually used, with `Parameter
+  K1.portsData[1].diameter has neither value nor start value` -- naming the
+  missing PARAMETER, not the missing argument that would have supplied it.
+  Give every `Vessels.*` instance with `nPorts > 0` one `VesselPortsData`
+  entry per port, with no exceptions for a vessel that happens not to be an
+  OpenTank.
 - Modelica.Fluid.Valves.ValveDiscrete: a commanded on/off valve with a Boolean
   `open` input. Size `m_flow_nominal` and `dp_nominal` so the flow while open
   matches the rate the brief states, and record that sizing as an assumption.
@@ -139,6 +186,38 @@ commanded rate rather than a pressure-driven flow, and say so in `corrections`:
 Also available for a richer hydraulic network when the brief supports it:
 Modelica.Fluid.Sources.MassFlowSource_T, Modelica.Fluid.Pipes.StaticPipe,
 Modelica.Fluid.Machines.PrescribedPump, Modelica.Fluid.Sensors.*.
+`Modelica.Fluid.Machines.PrescribedPump` NEEDS A REAL HEAD-FLOW (OR
+POWER/EFFICIENCY) CURVE, NOT JUST A NOMINAL SPEED. Its `flowCharacteristic`
+redeclare only accepts a REAL member of
+`Modelica.Fluid.Machines.BaseClasses.PumpCharacteristics` -- confirmed
+against the actual package, the complete list is `baseFlow`, `basePower`,
+`baseEfficiency`, `linearFlow`, `quadraticFlow`, `polynomialFlow`,
+`constantEfficiency`, `linearPower`, `quadraticPower`. There is no
+`constantFlow` or similarly-named "just deliver the nominal rate" shortcut
+-- confirmed live, a fresh generation invented that exact name and the real
+compiler rejected it with `Base class ...constantFlow not found in scope
+<Model>`, naming the whole system file, not the invalid reference.
+`baseFlow`, `basePower` and `baseEfficiency` EXIST but are each declared
+`partial function` (confirmed via `list(...)` on each) -- they compile
+whether referenced explicitly OR left as the library's own unredeclared
+default, and only fail at simulation START, not compile time: `Called
+function '<pump>.flowCharacteristic' is partial.` Confirmed live twice on
+the SAME test case: once naming the invented `constantFlow`, and separately
+on a follow-up rerun that dropped the `flowCharacteristic` redeclare
+entirely, silently inheriting the same broken `baseFlow` default. Every
+genuinely callable member additionally requires actual curve DATA POINTS as
+its own arguments (`linearFlow` alone needs two `V_flow_nominal`/
+`head_nominal` pairs with head strictly decreasing as flow increases) --
+data a brief that only ever says "pump on delivers nominal flow, pump off
+delivers none" does not supply, and inventing plausible-looking numbers for
+it is exactly the kind of unstated assumption this catalog exists to avoid.
+If the brief states no head-flow curve for a pump, do not use
+`PrescribedPump` for it AT ALL -- not with an invented function name, not
+with a bare `base*` redeclare, and not by omitting the redeclare and hoping
+the default works. Model it with the signal-flow alternative below (a
+commanded-rate device gated by the same Boolean/enumeration state that
+would have driven `use_N_in`), which needs no curve and is exactly the case
+that alternative exists for.
 
 The signal-flow form below is for a brief that gives a level or flow balance
 WITHOUT a plant of connected units to hang it on -- a lumped inventory, a rate
@@ -182,16 +261,71 @@ Required/recommended MSL classes:
 - Modelica.Icons.Example: the finished top-level experiment. Never use
   Modelica.Icons.UnderConstruction in output.
 
-Use nonlinear shape/material FluxTubes classes only when the brief supplies a
-B-H curve or the geometry those classes require; otherwise ConstantReluctance
-is the faithful choice.
+NEVER use a `Modelica.Magnetic.FluxTubes.Shapes.FixedShape.*` class (`Cuboid`,
+`GenericFluxTube`, `HollowCylinderAxialFlux`, `HollowCylinderRadialFlux`,
+`HollowCylinderCircumferentialFlux`, `Toroid`) for a linear core segment, even
+though each one exposes a `mu_rConst` parameter that looks like exactly what
+you want. VERIFIED against the real flattened class
+(`instantiateModel`): every one of them declares `final parameter Boolean
+nonLinearPermeability = true` -- `final`, unconditional, impossible to
+override from outside. `mu_rConst` is only used in the branch `if
+nonLinearPermeability = false`, which can never be reached, so setting it has
+ZERO EFFECT. The component silently falls back to its nonlinear default
+material curve (`material.mu_i = 1.0`, i.e. relative permeability
+approximately 1, like air) instead of the value you gave it. Confirmed live: a
+core segment built this way reported `mu_r = 1.003` at runtime despite
+`mu_rConst = 1200` in the source, making its reluctance ~1200x too high and
+silently wrecking the whole circuit's flux split -- with no compiler error, no
+warning, and a bundle that compiles and simulates every time. Use
+`Modelica.Magnetic.FluxTubes.Basic.ConstantReluctance(R_m =
+length/(mu0*mu_r*area))`, a plain parameter expression, for EVERY linear core
+segment, air gap, and leakage path. Reserve the `Shapes.FixedShape.*` family
+strictly for a brief that supplies a real B-H curve or the exact geometry
+those classes require.
+
+NEVER use `Modelica.Magnetic.FluxTubes.Basic.LeakageWithCoefficient` for a
+fixed-ratio leakage split. It has a REQUIRED `RealInput R_mUsefulTot` (the
+reluctance of the "useful" path it splits against) that must be driven by a
+real signal; leaving it unconnected compiles THIS attempt but fails several
+attempts later with a locationless `Too few equations, under-determined
+system` naming no variable and no file at all -- nothing connects the symptom
+back to the actual missing wire. For a stated coupling ratio
+`c_usefulFlux`, use `Modelica.Magnetic.FluxTubes.Basic.ConstantReluctance(R_m
+= R_gap*(1 - c_usefulFlux)/c_usefulFlux)` instead: the identical split,
+computed as a closed-form parameter, no signal input to forget.
 
 `ConstantReluctance` takes parameter `R_m` and magnetic `port_p`/`port_n`; the
 signal source takes input `V_m` and the same magnetic ports. Build the series
 and parallel structure the BRIEF states, and check that the flux split it
 implies actually holds (the flux into a junction equals the sum out of it).
-A sensor is connected by its magnetic ports into the path it measures; its
-scalar output is not itself a magnetic port.
+GENERAL RULE, not just for sensors: two magnetic two-port elements are wired
+IN SERIES by alternating polarity -- `A.port_n -> B.port_p` -- NEVER by
+connecting the SAME polarity twice (`A.port_p<->B.port_p` AND
+`A.port_n<->B.port_n`), which wires the pair in PARALLEL straight across each
+other's own two terminals instead. Confirmed live TWICE in the same
+generated bundle: a sensor and, separately, the exciting coil's own magnetic
+port pair were each connected this way -- once straight across a
+`ConstantReluctance`'s own two terminals, and once so that the coil's mmf
+landed in parallel with one core segment instead of feeding the loop in
+series. Both compiled and simulated cleanly with no warning; the real result
+showed the shorted element (`GAP_1.Phi = GAP_1.V_m = 0` for the whole run)
+carrying no flux at all while everything downstream came out 3-6x wrong. This
+mistake is NOT tied to any specific class name -- it happened again even
+though the sensor was wrapped in a custom component with its own `port_p`/
+`port_n`, so recognising "is this a MagneticFluxSensor" is not enough;
+recognise the CONNECT SHAPE itself. Apply this to every element you place: a
+sensor's port_p receives from the upstream element and its port_n feeds the
+downstream one (`upstream -> reluctance.port_p; reluctance.port_n ->
+sensor.port_p; sensor.port_n -> downstream`); the exciting coil is itself one
+link in the loop (`source.port_p -> firstElement.port_p; ...; lastElement.
+port_n -> source.port_n`), never shunted across an element already in the
+chain. A sensor's scalar output is not itself a magnetic port. Its reported
+sign follows `port_p`/`port_n` orientation, not the physical direction you
+have in mind -- after wiring it, check the reported value's SIGN against the
+brief's own stated sign convention (a positive flux/mmf/voltage in the
+direction the brief describes), and negate the read-out
+(`Phi_gap_Wb = -sensor.Phi;`) if the two disagree, rather than rewiring the
+topology to chase a sign.
 """,
 
     "thermal": """\

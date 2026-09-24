@@ -1,0 +1,35 @@
+Subject: TEST ENGINEER SCRATCH NOTES - 04 APR 2026
+Document kind: operator log
+
+## Entities
+* tank1 -- tank; aliases: TK-101, T1
+    - displayed level: ~0.05 m [observed]
+* tank2 -- tank; aliases: TK-102, T2
+    - displayed level: ~0.05 m [observed]
+* valve1 -- valve; aliases: XV-101, V1
+* valve2 -- valve; aliases: XV-102
+* valve3 -- valve; aliases: XV-103
+* Start -- command
+    - time: 20 s [observed]
+    - time: 280 s [observed]
+* Stop -- command
+    - time: 220 [observed]
+    - time: 650 [observed]
+* SHUT -- command; aliases: shut
+    - time: 700 [observed]
+* E-stop -- command
+
+## Constraints
+* Observed high target is 0.80; old model number is 0.78. [observed]
+* After T1 low the dead time is 12 s. [observed]
+* After T2 low new fill comes back in ~8 s. [observed]
+
+## Physical relationships
+* T1 fill is slow/linear. [observed]
+
+## Scheduled commands
+* Start at 20 s. [observed]
+* Stop at 220. [observed]
+* Start at 280. [observed]
+* Stop at 650. [observed]
+* Shut at 700. [observed]

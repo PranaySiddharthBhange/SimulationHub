@@ -1,0 +1,44 @@
+{
+  "questions": [
+    "Tank 1 high-level setpoint: Merge resolved this to 0.80 m. Confirm, or choose a different value.",
+    "Delay after Tank 1 reaches low level before opening V3: Merge resolved this to 12 s. Confirm, or choose a different value.",
+    "Delay after Tank 2 reaches low level before next fill starts: Merge resolved this to 8 s. Confirm, or choose a different value.",
+    "Whether V2 and V3 may be open simultaneously: Merge resolved this to V2 and V3 are commanded open together only in SHUTDOWN; simultaneous opening is not allowed during normal automatic operation. Confirm, or choose a different value."
+  ],
+  "answers": {
+    "resolve_T1_high_setpoint": "0.80 m",
+    "resolve_post_transfer_delay": "12 s",
+    "resolve_intercycle_delay": "8 s",
+    "resolve_shutdown_concurrency": "V2 and V3 are commanded open together only in SHUTDOWN; simultaneous opening is not allowed during normal automatic operation"
+  },
+  "decisions": [
+    {
+      "id": "resolve_T1_high_setpoint",
+      "question": "Tank 1 high-level setpoint: Merge resolved this to 0.80 m. Confirm, or choose a different value.",
+      "merge_suggested": "0.80 m",
+      "answer": "0.80 m",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_post_transfer_delay",
+      "question": "Delay after Tank 1 reaches low level before opening V3: Merge resolved this to 12 s. Confirm, or choose a different value.",
+      "merge_suggested": "12 s",
+      "answer": "12 s",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_intercycle_delay",
+      "question": "Delay after Tank 2 reaches low level before next fill starts: Merge resolved this to 8 s. Confirm, or choose a different value.",
+      "merge_suggested": "8 s",
+      "answer": "8 s",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_shutdown_concurrency",
+      "question": "Whether V2 and V3 may be open simultaneously: Merge resolved this to V2 and V3 are commanded open together only in SHUTDOWN; simultaneous opening is not allowed during normal automatic operation. Confirm, or choose a different value.",
+      "merge_suggested": "V2 and V3 are commanded open together only in SHUTDOWN; simultaneous opening is not allowed during normal automatic operation",
+      "answer": "V2 and V3 are commanded open together only in SHUTDOWN; simultaneous opening is not allowed during normal automatic operation",
+      "outcome": "confirmed"
+    }
+  ]
+}

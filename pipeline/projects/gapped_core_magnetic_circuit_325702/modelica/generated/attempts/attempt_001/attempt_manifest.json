@@ -1,0 +1,92 @@
+{
+  "attempt": 1,
+  "entry_class": "GappedCoreMagneticCircuitSystem",
+  "files": [
+    {
+      "filename": "ExcitationCoil.mo",
+      "role": "component"
+    },
+    {
+      "filename": "MagneticCoreWithGap.mo",
+      "role": "component"
+    },
+    {
+      "filename": "GappedCoreMagneticCircuitSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Sources.Ramp",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Assumption retained from the brief merge: the excitation current is modeled as a prescribed input using Modelica.Blocks.Sources.Ramp with height=2 A, duration=0.1 s, offset=0 A, startTime=0 s, which gives 0 A at 0 s, a linear ramp to 2 A at 0.1 s, and 2 A thereafter through 1 s.",
+    "Assumption retained from the brief merge: 1000 output intervals are represented by experiment Interval=0.001 s over the 1 s duration.",
+    "Derived from the explicit magnetic-circuit relationships and geometry in the brief: the series reluctances are R_core = l_core/(mu0*mu_r*A) and R_gap = l_gap/(mu0*A); flux is Phi = mmf/(R_core + R_gap); magnetic potential drops are Vm_core = Phi*R_core and Vm_gap = Phi*R_gap; flux densities are B_core = Phi/A and B_gap = Phi/A because the same flux passes through core and gap in series and both have the same cross-section.",
+    "No nonlinear magnetic material law, inductance, winding resistance, leakage branch, dynamic electrical circuit element, or separate magnetic ground component was added because the brief states these were not provided."
+  ],
+  "references": [
+    {
+      "path": "01_gapped_core.txt <AC-02>",
+      "time_column": "time",
+      "reference_column": "final mmf",
+      "model_variable": "mmf_At",
+      "absolute_tolerance": 1.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Approved acceptance criterion AC-02 requires final mmf_At == 1000.0 at t=1.0 s."
+    },
+    {
+      "path": "01_gapped_core.txt <AC-03>",
+      "time_column": "time",
+      "reference_column": "final core flux",
+      "model_variable": "Phi_core_Wb",
+      "absolute_tolerance": 2.2848e-06,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Approved acceptance criterion AC-03 requires final Phi_core_Wb == 0.00022848 at t=1.0 s."
+    },
+    {
+      "path": "01_gapped_core.txt <AC-04>",
+      "time_column": "time",
+      "reference_column": "final core flux density",
+      "model_variable": "B_core_T",
+      "absolute_tolerance": 0.00571199,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Approved acceptance criterion AC-04 requires final B_core_T == 0.571199 at t=1.0 s."
+    },
+    {
+      "path": "01_gapped_core.txt <AC-05>",
+      "time_column": "time",
+      "reference_column": "final gap flux density",
+      "model_variable": "B_gap_T",
+      "absolute_tolerance": 0.00571199,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Approved acceptance criterion AC-05 requires final B_gap_T == 0.571199 at t=1.0 s."
+    },
+    {
+      "path": "01_gapped_core.txt <AC-06>",
+      "time_column": "time",
+      "reference_column": "final core magnetic potential drop",
+      "model_variable": "Vm_core_At",
+      "absolute_tolerance": 0.909091,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Approved acceptance criterion AC-06 requires final Vm_core_At == 90.9091 at t=1.0 s."
+    },
+    {
+      "path": "01_gapped_core.txt <AC-07>",
+      "time_column": "time",
+      "reference_column": "final gap magnetic potential drop",
+      "model_variable": "Vm_gap_At",
+      "absolute_tolerance": 9.09091,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Approved acceptance criterion AC-07 requires final Vm_gap_At == 909.091 at t=1.0 s."
+    }
+  ]
+}

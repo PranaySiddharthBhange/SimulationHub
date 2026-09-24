@@ -1,0 +1,245 @@
+{
+  "document": "# Magnetic Circuit Design Review - DR-MAG-03\n\n**Date:** 2026-03-12  \n**Status:** Final / approved\n\n## Decisions\n\n1. The released case is a **quasi-static, linear magnetic flux-tube model**.\n2. The current input is an **RMS phasor magnitude**, not an instantaneous sinusoidal waveform and not a peak phasor magnitude.\n3. The leakage branch is retained explicitly. Effective coefficient: `sigma = 0.08`.\n4. Useful air-gap flux is `(1-sigma)*Phi_core`.\n5. The nominal design/analytic air gap is `1.50 mm`; the `1.58 mm` measurement is a separate as-built prototype configuration.\n6. Effective benchmark `mu_r = 1200`.\n7. Measuring coil turns = 50. Exciting coil turns = 600.\n8. Electric and magnetic grounds are both required.\n9. No force interaction, saturation, hysteresis, or eddy-current loss is included in the baseline.\n10. The model shall preserve the distinction between **model parameter**, **as-built measurement**, and **verification configuration**.\n\n## Action items\n\n- V&V to issue AV-11 with final analytic values.\n- Modeling team to keep legacy v1.0 available but tag its sigma, mu_r and measuring-coil turns as superseded.\n",
+  "subject": "Magnetic Circuit Design Review - DR-MAG-03",
+  "kind": "correspondence",
+  "entities": [
+    {
+      "name": "DR-MAG-03",
+      "kind": "design review",
+      "aliases": [],
+      "values": [],
+      "ref": "DR-MAG-03",
+      "anchor": "",
+      "from_image": false,
+      "quote": "# Magnetic Circuit Design Review - DR-MAG-03"
+    },
+    {
+      "name": "leakage branch",
+      "kind": "magnetic branch",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "effective coefficient",
+          "value": "0.08",
+          "unit": "",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Effective coefficient: `sigma = 0.08`"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The leakage branch is retained explicitly. Effective coefficient: `sigma = 0.08`."
+    },
+    {
+      "name": "useful air-gap flux",
+      "kind": "magnetic quantity",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Useful air-gap flux is `(1-sigma)*Phi_core`."
+    },
+    {
+      "name": "Phi_core",
+      "kind": "magnetic quantity",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Useful air-gap flux is `(1-sigma)*Phi_core`."
+    },
+    {
+      "name": "air gap",
+      "kind": "design parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "air gap",
+          "value": "1.50",
+          "unit": "mm",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "The nominal design/analytic air gap is `1.50 mm`"
+        },
+        {
+          "quantity": "air gap",
+          "value": "1.58",
+          "unit": "mm",
+          "status": "as-built",
+          "supersedes": "",
+          "quote": "the `1.58 mm` measurement is a separate as-built prototype configuration"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The nominal design/analytic air gap is `1.50 mm`; the `1.58 mm` measurement is a separate as-built prototype configuration."
+    },
+    {
+      "name": "mu_r",
+      "kind": "material parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "mu_r",
+          "value": "1200",
+          "unit": "",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Effective benchmark `mu_r = 1200`"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Effective benchmark `mu_r = 1200`."
+    },
+    {
+      "name": "Measuring coil",
+      "kind": "coil",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "50",
+          "unit": "",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Measuring coil turns = 50"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Measuring coil turns = 50."
+    },
+    {
+      "name": "Exciting coil",
+      "kind": "coil",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "600",
+          "unit": "",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Exciting coil turns = 600"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Exciting coil turns = 600."
+    },
+    {
+      "name": "Electric ground",
+      "kind": "ground",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Electric and magnetic grounds are both required."
+    },
+    {
+      "name": "magnetic ground",
+      "kind": "ground",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Electric and magnetic grounds are both required."
+    },
+    {
+      "name": "AV-11",
+      "kind": "verification artifact",
+      "aliases": [],
+      "values": [],
+      "ref": "AV-11",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V&V to issue AV-11 with final analytic values."
+    },
+    {
+      "name": "legacy v1.0",
+      "kind": "legacy version",
+      "aliases": [
+        "v1.0"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Modeling team to keep legacy v1.0 available but tag its sigma, mu_r and measuring-coil turns as superseded."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "useful air-gap flux",
+      "predicate": "defined_as",
+      "object": "Phi_core",
+      "detail": "(1-sigma)*Phi_core",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Useful air-gap flux is `(1-sigma)*Phi_core`."
+    },
+    {
+      "subject": "legacy v1.0",
+      "predicate": "has_superseded_parameters",
+      "object": "mu_r",
+      "detail": "tag its sigma, mu_r and measuring-coil turns as superseded",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Modeling team to keep legacy v1.0 available but tag its sigma, mu_r and measuring-coil turns as superseded."
+    },
+    {
+      "subject": "legacy v1.0",
+      "predicate": "has_superseded_parameters",
+      "object": "Measuring coil",
+      "detail": "tag its sigma, mu_r and measuring-coil turns as superseded",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Modeling team to keep legacy v1.0 available but tag its sigma, mu_r and measuring-coil turns as superseded."
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "Electric and magnetic grounds are both required.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Electric and magnetic grounds are both required."
+    },
+    {
+      "category": "requirement",
+      "statement": "The model shall preserve the distinction between model parameter, as-built measurement, and verification configuration.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "The model shall preserve the distinction between **model parameter**, **as-built measurement**, and **verification configuration**."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Useful air-gap flux is `(1-sigma)*Phi_core`.",
+      "ref": "",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "Useful air-gap flux is `(1-sigma)*Phi_core`."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

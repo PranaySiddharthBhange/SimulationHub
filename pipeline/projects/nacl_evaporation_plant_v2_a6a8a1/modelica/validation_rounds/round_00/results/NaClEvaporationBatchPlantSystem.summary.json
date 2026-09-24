@@ -1,0 +1,907 @@
+{
+  "B1.Qcmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.TdegC": {
+    "min": 20.0,
+    "max": 20.00000000000006,
+    "final": 20.00000000000006
+  },
+  "B1.X": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.Xin": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.evapWater": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.level": {
+    "min": 0.3572857142049795,
+    "max": 0.45,
+    "final": 0.3572857142049795
+  },
+  "B1.qIn": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B1.qOut": {
+    "min": 0.0,
+    "max": 0.001,
+    "final": 0.0
+  },
+  "B1.qOutCmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "B2.Qcmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.TdegC": {
+    "min": 20.0,
+    "max": 20.00000000000006,
+    "final": 20.00000000000006
+  },
+  "B2.X": {
+    "min": 0.25,
+    "max": 0.25,
+    "final": 0.25
+  },
+  "B2.Xin": {
+    "min": 0.0,
+    "max": 0.1795410660897677,
+    "final": 0.1795410660897677
+  },
+  "B2.evapWater": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.level": {
+    "min": 0.1563025208835694,
+    "max": 0.2,
+    "final": 0.1563025208835694
+  },
+  "B2.qIn": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B2.qOut": {
+    "min": 0.0,
+    "max": 0.0004,
+    "final": 0.0
+  },
+  "B2.qOutCmd": {
+    "min": 0.0,
+    "max": 0.4,
+    "final": 0.0
+  },
+  "B3.Qcmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B3.TdegC": {
+    "min": 20.0,
+    "max": 20.00000000000011,
+    "final": 20.00000000000011
+  },
+  "B3.Xin": {
+    "min": 0.0,
+    "max": 0.25,
+    "final": 0.0
+  },
+  "B3.evapWater": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B3.qIn": {
+    "min": 0.0,
+    "max": 0.001,
+    "final": 0.0
+  },
+  "B3.qOut": {
+    "min": 0.0,
+    "max": 0.0008,
+    "final": 0.0
+  },
+  "B3.qOutCmd": {
+    "min": 0.0,
+    "max": 0.8,
+    "final": 0.0
+  },
+  "B3_X_NaCl": {
+    "min": 0.0,
+    "max": 0.08000000010811054,
+    "final": 0.08000000010811054
+  },
+  "B3_level": {
+    "min": 0.0002,
+    "max": 0.1911764708760315,
+    "final": 0.009999999898651054
+  },
+  "B4.Qcmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4.TdegC": {
+    "min": -86.21563268568678,
+    "max": 20.00000000000011,
+    "final": -86.21563268568678
+  },
+  "B4.evapWater": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B4.qIn": {
+    "min": 0.0,
+    "max": 0.0008,
+    "final": 0.0
+  },
+  "B4.qOut": {
+    "min": 0.0,
+    "max": 0.0012,
+    "final": 0.0
+  },
+  "B4.qOutCmd": {
+    "min": 0.0,
+    "max": 1.2,
+    "final": 0.0
+  },
+  "B4_level": {
+    "min": 9.999989960587078e-05,
+    "max": 0.1648877008885277,
+    "final": 9.999989960587078e-05
+  },
+  "B5.Qcmd": {
+    "min": 0.0,
+    "max": 20000.0,
+    "final": 0.0
+  },
+  "B5.Xin": {
+    "min": 0.0,
+    "max": 0.07991178579930078,
+    "final": 0.05095773194390657
+  },
+  "B5.qIn": {
+    "min": 0.0,
+    "max": 0.0012,
+    "final": 0.0
+  },
+  "B5.qOut": {
+    "min": 0.0,
+    "max": 0.0005,
+    "final": 0.0
+  },
+  "B5.qOutCmd": {
+    "min": 0.0,
+    "max": 0.5,
+    "final": 0.0
+  },
+  "B5_T": {
+    "min": 19.99999999999994,
+    "max": 228.7927892362003,
+    "final": 228.7927892362003
+  },
+  "B5_X_NaCl": {
+    "min": 0.0,
+    "max": 0.1800000001180214,
+    "final": 0.1800000001180214
+  },
+  "B5_heater_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "B5_level": {
+    "min": 0.0001666666666666667,
+    "max": 0.1800000001184406,
+    "final": 0.009999999898808022
+  },
+  "B6.Qcmd": {
+    "min": -6500.0,
+    "max": 0.0,
+    "final": -6500.0
+  },
+  "B6.X": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.Xin": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.evapWater": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.qIn": {
+    "min": 0.0,
+    "max": 2e-05,
+    "final": 0.0
+  },
+  "B6.qOut": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6.qOutCmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B6_T": {
+    "min": 43.91262223746639,
+    "max": 80.00000000000023,
+    "final": 43.91262223746639
+  },
+  "B6_cooler_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "B6_level": {
+    "min": 0.0002,
+    "max": 0.1259573531567673,
+    "final": 0.1259573531567673
+  },
+  "B7.Qcmd": {
+    "min": -4500.0,
+    "max": 0.0,
+    "final": -4500.0
+  },
+  "B7.Tin": {
+    "min": 293.1499999999999,
+    "max": 501.9427892362003,
+    "final": 501.9427892362003
+  },
+  "B7.evapWater": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7.qIn": {
+    "min": 0.0,
+    "max": 0.0005,
+    "final": 0.0
+  },
+  "B7.qOut": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7.qOutCmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B7_T": {
+    "min": 80.0,
+    "max": 228.4134221578973,
+    "final": 190.4442901667668
+  },
+  "B7_cooler_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "B7_level": {
+    "min": 0.0002,
+    "max": 0.07844264710679175,
+    "final": 0.07844264710679175
+  },
+  "K1.Qcmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "K1.TdegC": {
+    "min": 80.0,
+    "max": 80.0,
+    "final": 80.0
+  },
+  "K1.X": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "K1.Xin": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "K1.evapWater": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "K1.level": {
+    "min": 0.001,
+    "max": 0.001,
+    "final": 0.001
+  },
+  "K1.qOut": {
+    "min": 0.0,
+    "max": 2e-05,
+    "final": 0.0
+  },
+  "K1.qOutCmd": {
+    "min": 0.0,
+    "max": 0.02,
+    "final": 0.0
+  },
+  "P1_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "P2_cmd": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V11_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "V12_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "V15_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "V18_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V1_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V20_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V22_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V23_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V24_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V25_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V3_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V5_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V6_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "V8_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "V9_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "startCmd.combiTimeTable.y[1]": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "time_s": {
+    "min": 0.0,
+    "max": 3000.0,
+    "final": 3000.0
+  },
+  "controller_state": {
+    "min": 1.0,
+    "max": 8.0,
+    "final": 8.0
+  },
+  "region": {
+    "min": 1.0,
+    "max": 3.0,
+    "final": 3.0
+  },
+  "controller.V11_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.V12_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.V15_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.V3_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V6_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V8_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.V9_open": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.coolerB6On": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "controller.coolerB7On": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "controller.heaterOn": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.startEnable": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "B3.X": {
+    "min": 0.0,
+    "max": 0.08000000010811054,
+    "final": 0.08000000010811054
+  },
+  "B3.level": {
+    "min": 0.0002,
+    "max": 0.1911764708760315,
+    "final": 0.009999999898651054
+  },
+  "B4.X": {
+    "min": 0.0,
+    "max": 0.07991178579930078,
+    "final": 0.05095773194390657
+  },
+  "B4.Xin": {
+    "min": 0.0,
+    "max": 0.08000000010811054,
+    "final": 0.08000000010811054
+  },
+  "B4.level": {
+    "min": 9.999989960587078e-05,
+    "max": 0.1648877008885277,
+    "final": 9.999989960587078e-05
+  },
+  "B5.TdegC": {
+    "min": 19.99999999999994,
+    "max": 228.7927892362003,
+    "final": 228.7927892362003
+  },
+  "B5.X": {
+    "min": 0.0,
+    "max": 0.1800000001180214,
+    "final": 0.1800000001180214
+  },
+  "B5.evapWater": {
+    "min": 0.0,
+    "max": 0.02,
+    "final": 0.0
+  },
+  "B5.level": {
+    "min": 0.0001666666666666667,
+    "max": 0.1800000001184406,
+    "final": 0.009999999898808022
+  },
+  "B6.TdegC": {
+    "min": 43.91262223746639,
+    "max": 80.00000000000023,
+    "final": 43.91262223746639
+  },
+  "B6.level": {
+    "min": 0.0002,
+    "max": 0.1259573531567673,
+    "final": 0.1259573531567673
+  },
+  "B7.TdegC": {
+    "min": 80.0,
+    "max": 228.4134221578973,
+    "final": 190.4442901667668
+  },
+  "B7.X": {
+    "min": 0.0,
+    "max": 0.1795410660897677,
+    "final": 0.1795410660897677
+  },
+  "B7.Xin": {
+    "min": 0.0,
+    "max": 0.1800000001180214,
+    "final": 0.1800000001180214
+  },
+  "B7.level": {
+    "min": 0.0002,
+    "max": 0.07844264710679175,
+    "final": 0.07844264710679175
+  },
+  "K1.qIn": {
+    "min": 0.0,
+    "max": 2e-05,
+    "final": 0.0
+  },
+  "c6Real.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "c7Real.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "controller.LIS301": {
+    "min": 0.0002,
+    "max": 0.1911764708760315,
+    "final": 0.009999999898651054
+  },
+  "controller.LIS501": {
+    "min": 0.0001666666666666667,
+    "max": 0.1800000001184406,
+    "final": 0.009999999898808022
+  },
+  "controller.LIS601": {
+    "min": 0.0002,
+    "max": 0.1259573531567673,
+    "final": 0.1259573531567673
+  },
+  "controller.LIS701": {
+    "min": 0.0002,
+    "max": 0.07844264710679175,
+    "final": 0.07844264710679175
+  },
+  "controller.QI302": {
+    "min": 0.0,
+    "max": 0.08000000010811054,
+    "final": 0.08000000010811054
+  },
+  "controller.QIS502": {
+    "min": 0.0,
+    "max": 0.1800000001180214,
+    "final": 0.1800000001180214
+  },
+  "controller.TIS602": {
+    "min": 43.91262223746639,
+    "max": 80.00000000000023,
+    "final": 43.91262223746639
+  },
+  "controller.TIS702": {
+    "min": 80.0,
+    "max": 228.4134221578973,
+    "final": 190.4442901667668
+  },
+  "hReal.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "p1Real.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "p2Real.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "startCmd.realToBoolean.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "v11r.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "v12r.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "v15r.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "v18r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v1r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v20r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v22r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v23r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v24r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v25r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v3r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v5r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v6r.y": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v8r.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "v9r.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "controller.controller_state": {
+    "min": 1.0,
+    "max": 8.0,
+    "final": 8.0
+  },
+  "controller.region": {
+    "min": 1.0,
+    "max": 3.0,
+    "final": 3.0
+  },
+  "c6Real.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "c7Real.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "controller.P1_on": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.P2_on": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V18_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V1_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V20_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V22_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V23_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V24_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V25_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "controller.V5_open": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "hReal.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "p1Real.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "p2Real.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "startCmd.realToBoolean.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "startCmd.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "v11r.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "v12r.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "v15r.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "v18r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v1r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v20r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v22r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v23r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v24r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v25r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v3r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v5r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v6r.u": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "v8r.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "v9r.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  }
+}

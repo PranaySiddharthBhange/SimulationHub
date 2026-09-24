@@ -1,0 +1,54 @@
+Subject: Composite Valve and Pump Datasheet - Rev C
+Document kind: datasheet
+
+## Entities
+* automated valve family -- valve family  <[page 1]>
+    - command voltage: 24 VDC
+    - nominal opening time: 0.7 s [nominal]
+    - nominal closing time: 0.5 s [nominal]
+    - leakage at closed: <0.02 % Kv
+    - permitted medium temperature range: 0-120 degC [permitted]
+* V1 -- automated valve  <[page 1]>; aliases: automated valve family
+* V3 -- automated valve  <[page 1]>; aliases: automated valve family
+* V5 -- automated valve  <[page 1]>; aliases: automated valve family
+* V6 -- automated valve  <[page 1]>; aliases: automated valve family
+* V8 -- automated valve  <[page 1]>; aliases: automated valve family
+* V9 -- automated valve  <[page 1]>; aliases: automated valve family
+* V11 -- automated valve  <[page 1]>; aliases: automated valve family
+* V12 -- automated valve  <[page 1]>; aliases: automated valve family
+* V15 -- automated valve  <[page 1]>; aliases: automated valve family
+* V18 -- automated valve  <[page 1]>; aliases: automated valve family
+* V20 -- automated valve  <[page 1]>; aliases: automated valve family
+* V22 -- automated valve  <[page 1]>; aliases: automated valve family
+* V23 -- automated valve  <[page 1]>; aliases: automated valve family
+* V24 -- automated valve  <[page 1]>; aliases: automated valve family
+* V25 -- automated valve  <[page 1]>; aliases: automated valve family
+* P1 -- return pump  <[page 1]>
+    - nominal mass flow: 0.30 kg/s [nominal]
+    - nominal differential pressure: 1.8 bar [nominal]
+    - minimum source level permissive threshold: 0.02 m [minimum_permissive/minimum permissive]
+    - low discharge pressure alarm threshold: 0.8 bar [alarm]
+* P2 -- return pump  <[page 1]>
+    - nominal mass flow: 0.30 kg/s [nominal]
+    - nominal differential pressure: 1.8 bar [nominal]
+    - minimum source level permissive threshold: 0.02 m [minimum_permissive/minimum permissive]
+    - low discharge pressure alarm threshold: 0.8 bar [alarm]
+* LIS-701 -- level indicator switch  <[page 1]>
+* LIS-601 -- level indicator switch  <[page 1]>
+* PIS-901 -- pressure indicator switch  <[page 1]>
+* PIS-1001 -- pressure indicator switch  <[page 1]>
+* pump discharge headers -- header  <[page 1]>
+* charging-vessel return manifolds -- manifold  <[page 1]>
+
+## Relationships
+* pump discharge headers cross-connected to charging-vessel return manifolds  <[page 1]>
+* P1 has minimum source level permissive from LIS-701 (>0.02 m)  <[page 1]>
+* P2 has minimum source level permissive from LIS-601 (>0.02 m)  <[page 1]>
+* P1 has low discharge pressure alarm from PIS-901 (<0.8 bar)  <[page 1]>
+* P2 has low discharge pressure alarm from PIS-1001 (<0.8 bar)  <[page 1]>
+
+## Behaviors
+* Low discharge pressure alarm when PIS-901 <0.8 bar for P1.  <[page 1]>
+* Low discharge pressure alarm when PIS-1001 <0.8 bar for P2.  <[page 1]>
+* Minimum source level permissive for P1 requires LIS-701 >0.02 m.  <[page 1]>
+* Minimum source level permissive for P2 requires LIS-601 >0.02 m.  <[page 1]>

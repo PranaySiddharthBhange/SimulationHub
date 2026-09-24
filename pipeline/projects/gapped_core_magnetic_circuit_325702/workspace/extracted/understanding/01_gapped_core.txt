@@ -1,0 +1,47 @@
+Subject: Gapped Core Magnetic Circuit — Ramped Excitation
+Document kind: requirement specification
+
+## Entities
+* Excitation coil -- coil
+    - turns: 500 turns [nominal]
+    - current: 0 A [nominal]
+    - current: 2 A [nominal]
+    - time: 0 s [nominal]
+    - time: 0.1 s [nominal]
+    - current: 2 A [nominal]
+* Core (iron path) -- core; aliases: iron core
+    - mean path length: 0.4 m [nominal]
+    - cross-section: 4 cm^2 [nominal]
+    - cross-section: 0.0004 m^2 [nominal]
+    - relative permeability: 2000 [nominal]
+* Air gap -- air gap
+    - length: 2 mm [nominal]
+    - length: 0.002 m [nominal]
+    - cross-section: 4 cm^2 [nominal]
+    - cross-section: 0.0004 m^2 [nominal]
+* Magnetic reference -- reference
+    - count: one [nominal]
+* magnetic ground -- ground
+
+## Relationships
+* Air gap in series with Core (iron path)
+* Excitation coil drives magnetic flux around Core (iron path) (closed iron core)
+* Magnetic reference has magnetic ground (exactly one)
+* Core (iron path) carries same flux in series with Air gap
+
+## Requirements
+* Simulate for 1 second and report the coil mmf, the core flux, the core flux density, the air-gap flux density, the magnetic potential drop across the iron core, and the magnetic potential drop across the air gap for the whole run, not only at the end. [approved]  <REQ-SIM-001>
+* Starting from zero, every reported quantity shall rise with the coil current during the 0-0.1 s ramp and then hold steady at its final value for the rest of the run. [approved]  <REQ-FUN-001>
+* `mmf_At <= 1e-06` at t = 0.0 s. [approved]  <AC-00>
+* `mmf_At >= 999.0` becomes true at some point during the run (ever value == 1.0) -- the ramp must actually reach full current. [approved]  <AC-01>
+* `mmf_At == 1000.0` A-turn at t = 1.0 s (N * I = 500 * 2, absolute tolerance 1.0 A-turn). [approved]  <AC-02>
+* `Phi_core_Wb == 0.00022848` Wb at t = 1.0 s (absolute tolerance 1% of expected). [approved]  <AC-03>
+* `B_core_T == 0.571199` T at t = 1.0 s (absolute tolerance 1% of expected). [approved]  <AC-04>
+* `B_gap_T == 0.571199` T at t = 1.0 s (absolute tolerance 1% of expected) -- same flux, same cross-section as the core, so the same flux density. [approved]  <AC-05>
+* `Vm_core_At == 90.9091` A-turn at t = 1.0 s (absolute tolerance 1% of expected). [approved]  <AC-06>
+* `Vm_gap_At == 909.091` A-turn at t = 1.0 s (absolute tolerance 1% of expected). [approved]  <AC-07>
+* `abs((mmf_At - Vm_core_At - Vm_gap_At) / mmf_At) <= 0.005` at t = 1.0 s (the core drop plus the gap drop must equal the applied mmf). [approved]  <AC-08>
+
+## Physical relationships
+* N * I = 500 * 2 [approved]  <AC-02>
+* same flux, same cross-section as the core, so the same flux density. [approved]  <AC-05>

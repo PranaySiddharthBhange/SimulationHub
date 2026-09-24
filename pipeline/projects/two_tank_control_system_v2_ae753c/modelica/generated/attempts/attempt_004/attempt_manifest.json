@@ -1,0 +1,47 @@
+{
+  "attempt": 4,
+  "entry_class": "TwoTankSystem",
+  "files": [
+    {
+      "filename": "TwoTankPlant.mo",
+      "role": "component"
+    },
+    {
+      "filename": "PLC101.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "TwoTankSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Replaced the earlier controller wait-completion helper booleans with direct event guards based on pre(mode) and waitElapsed in one dispatcher. This targets the reported chattering at the WAIT_AFTER_FILL timer boundary by avoiding a continuously re-derived intermediate done signal feeding the same mode transition.",
+    "Preserved the brief's explicit level-balance equations instead of switching to Modelica.Fluid components, because the brief provides direct level ODEs and does not provide a hydraulic pressure/flow law, medium, or approved mapping from valve stroke time to effective intermediate flow.",
+    "Retained valve stroke times as parameters only. The brief states stroke times and also states Boolean commanded valve outputs, but does not provide an explicit command-to-intermediate-flow relationship; therefore no partial-opening flow law was added.",
+    "Used command pulse width cmdWidth = 2*scanPeriod = 0.2 s for BooleanTable schedules, matching the retained merged assumption and the instruction that sampled commands be visible to the 0.1 s scan.",
+    "Kept physical level floors at 0.0 m, which is strictly below the tested low-level threshold 0.05 m, so level trajectories can cross the acceptance threshold in the required direction instead of stalling at the threshold."
+  ],
+  "references": [
+    {
+      "path": "12_10_demo_run_900s.txt",
+      "time_column": "time",
+      "reference_column": "controller_state_code",
+      "model_variable": "controller_state_code",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Recorded dataset is reference evidence for one run and is consistent with the resolved parameter set; controller state can be compared as a stepwise signal without using it as an input forcing function."
+    }
+  ]
+}

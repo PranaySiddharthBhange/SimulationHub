@@ -1,0 +1,270 @@
+{
+  "document": "@startuml\n' Synthetic legacy architecture draft - intentionally incomplete\nskinparam componentStyle rectangle\ncomponent \"tankController\n(PLC-101)\" as PLC\ncomponent \"tank1\n(TK-101)\" as T1\ncomponent \"tank2\n(TK-102)\" as T2\ncomponent \"valve1\n(XV-101)\" as V1\ncomponent \"valve2\n(XV-102)\" as V2\ncomponent \"valve3\n(XV-103)\" as V3\ncomponent \"source\n(SRC-101)\" as SRC\ncomponent \"ambient1\n(DRN-101)\" as DRN\n\nSRC --> V1 : liquid\nV1 --> T1 : liquid\nT1 --> V2 : liquid\nV2 --> T2 : liquid\nT2 --> V3 : liquid\nV3 --> DRN : liquid\nPLC ..> V1 : valve1\nPLC ..> V2 : valve2\nPLC ..> V3 : valve3\n\nnote right of PLC\nLegacy draft does not show:\n- LT-101 / LT-102\n- START / STOP / SHUT inputs\n- pause state\n- controlled shutdown concurrency\nend note\n@enduml\n",
+  "subject": "Synthetic legacy architecture draft - intentionally incomplete",
+  "kind": "legacy model",
+  "entities": [
+    {
+      "name": "tankController",
+      "kind": "component",
+      "aliases": [
+        "PLC-101"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"tankController\n(PLC-101)\" as PLC"
+    },
+    {
+      "name": "tank1",
+      "kind": "component",
+      "aliases": [
+        "TK-101"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"tank1\n(TK-101)\" as T1"
+    },
+    {
+      "name": "tank2",
+      "kind": "component",
+      "aliases": [
+        "TK-102"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"tank2\n(TK-102)\" as T2"
+    },
+    {
+      "name": "valve1",
+      "kind": "component",
+      "aliases": [
+        "XV-101"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"valve1\n(XV-101)\" as V1"
+    },
+    {
+      "name": "valve2",
+      "kind": "component",
+      "aliases": [
+        "XV-102"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"valve2\n(XV-102)\" as V2"
+    },
+    {
+      "name": "valve3",
+      "kind": "component",
+      "aliases": [
+        "XV-103"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"valve3\n(XV-103)\" as V3"
+    },
+    {
+      "name": "source",
+      "kind": "component",
+      "aliases": [
+        "SRC-101"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"source\n(SRC-101)\" as SRC"
+    },
+    {
+      "name": "ambient1",
+      "kind": "component",
+      "aliases": [
+        "DRN-101"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component \"ambient1\n(DRN-101)\" as DRN"
+    },
+    {
+      "name": "LT-101",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- LT-101 / LT-102"
+    },
+    {
+      "name": "LT-102",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- LT-101 / LT-102"
+    },
+    {
+      "name": "START",
+      "kind": "input",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- START / STOP / SHUT inputs"
+    },
+    {
+      "name": "STOP",
+      "kind": "input",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- START / STOP / SHUT inputs"
+    },
+    {
+      "name": "SHUT",
+      "kind": "input",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- START / STOP / SHUT inputs"
+    },
+    {
+      "name": "pause state",
+      "kind": "state",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- pause state"
+    },
+    {
+      "name": "controlled shutdown concurrency",
+      "kind": "control feature",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "- controlled shutdown concurrency"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "source",
+      "predicate": "flows to",
+      "object": "valve1",
+      "detail": "liquid",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "SRC --> V1 : liquid"
+    },
+    {
+      "subject": "valve1",
+      "predicate": "flows to",
+      "object": "tank1",
+      "detail": "liquid",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V1 --> T1 : liquid"
+    },
+    {
+      "subject": "tank1",
+      "predicate": "flows to",
+      "object": "valve2",
+      "detail": "liquid",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "T1 --> V2 : liquid"
+    },
+    {
+      "subject": "valve2",
+      "predicate": "flows to",
+      "object": "tank2",
+      "detail": "liquid",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V2 --> T2 : liquid"
+    },
+    {
+      "subject": "tank2",
+      "predicate": "flows to",
+      "object": "valve3",
+      "detail": "liquid",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "T2 --> V3 : liquid"
+    },
+    {
+      "subject": "valve3",
+      "predicate": "flows to",
+      "object": "ambient1",
+      "detail": "liquid",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "V3 --> DRN : liquid"
+    },
+    {
+      "subject": "tankController",
+      "predicate": "controls",
+      "object": "valve1",
+      "detail": "valve1",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "PLC ..> V1 : valve1"
+    },
+    {
+      "subject": "tankController",
+      "predicate": "controls",
+      "object": "valve2",
+      "detail": "valve2",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "PLC ..> V2 : valve2"
+    },
+    {
+      "subject": "tankController",
+      "predicate": "controls",
+      "object": "valve3",
+      "detail": "valve3",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "PLC ..> V3 : valve3"
+    }
+  ],
+  "facts": [],
+  "unreadable": [
+    "The note states omissions but does not provide further detail for \"controlled shutdown concurrency\"."
+  ],
+  "unverified_quotes": []
+}

@@ -101,6 +101,25 @@ class PlatformSettings:
     omc_timeout_seconds: float
 
     max_repair_attempts: int
+    # How many extra Stage 3 -> Stage 4 rounds to run when Stage 4's REAL,
+    # independent validation (against the brief's actual acceptance checks,
+    # never Stage 3's own self-report) comes back invalid/partially_valid.
+    # Only round 0 (the initial generation) spends Stage 3's full
+    # `max_repair_attempts` compiler-repair budget -- up to `max_repair_
+    # attempts + 1` generation calls (the default 5), matching what Stage 3
+    # did on its own before this loop existed. Every round after that is a
+    # single-shot behavioral fix attempt (exactly 1 generation call) carrying
+    # the accumulated validation feedback (see `execute_reasoner_stage_3_
+    # and_4`), so the two bounds ADD rather than multiply: worst case is
+    # (max_repair_attempts + 1) + max_validation_repair_attempts generation
+    # calls in total -- the default 5 + 2 = 7, not 5x3 = 15 -- plus one
+    # Stage 4 validation call per round. Whichever round's real validation
+    # scored best (verdict, then checks passed, then fewest open issues) is
+    # what is left as the active result and what this loop returns -- not
+    # necessarily the last round run. If no round reaches "valid", the
+    # pipeline does NOT fail: it reports the best real validation result
+    # actually found.
+    max_validation_repair_attempts: int
 
     # Re-added per the user's explicit choice: Stage 1 (document
     # understanding) stays on the local Ollama models -- cheap, high-
@@ -165,6 +184,8 @@ class PlatformSettings:
             omc_timeout_seconds=_float("OMC_TIMEOUT_SECONDS", 120.0, "MODELICA_AGENT_OMC_TIMEOUT_SECONDS"),
             # Four repairs after the initial generation display and execute as 1/5..5/5.
             max_repair_attempts=int(_float("MAX_REPAIR_ATTEMPTS", 4.0)),
+            # Two extra Stage 3->4 rounds after the first display and execute as 1/3..3/3.
+            max_validation_repair_attempts=int(_float("MAX_VALIDATION_REPAIR_ATTEMPTS", 2.0)),
             stage2_repair_budget_usd=_float("STAGE_2_REPAIR_BUDGET_USD", 1.0),
             stage3_repair_budget_usd=_float("STAGE_3_REPAIR_BUDGET_USD", 1.0),
             stage4_budget_usd=_float("STAGE_4_BUDGET_USD", 1.0),

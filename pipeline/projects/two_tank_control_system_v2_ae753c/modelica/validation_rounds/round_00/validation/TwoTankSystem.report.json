@@ -1,0 +1,91 @@
+{
+  "verdict": "valid",
+  "check_results": [
+    {
+      "name": "AC-01_first_transfer_after_T1_high",
+      "expression": "tank1_level_m >= 0.80 and controller_state_code == 3 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "At t=180.000000036105 s, controller_state_code = 3 and tank1_level_m had just reached 0.80 m at the preceding transition t=170.0000000341016 s and remained at 0.80 m through WAIT_AFTER_FILL until transfer began; expected ever occurrence of tank1_level_m >= 0.80 with controller_state_code == 3."
+    },
+    {
+      "name": "AC-02_all_valves_closed_during_first_stop",
+      "expression": "(not (time_s >= 220 and time_s < 280)) or ((valve1_open_cmd == 0) and (valve2_open_cmd == 0) and (valve3_open_cmd == 0)) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "From t=220.000000022101 s, valve1_open_cmd = 0, valve2_open_cmd = 0, valve3_open_cmd = 0, and no valve command changes occur again until t=280.0000000281066 s; expected all three valves closed for 220 s <= t < 280 s."
+    },
+    {
+      "name": "AC-03_resume_transfer_at_second_start",
+      "expression": "controller_state_code == 3 and valve2_open_cmd == 1 and valve1_open_cmd == 0 and valve3_open_cmd == 0 == 1.0 (relative tolerance 0.000%), at t=280.0",
+      "outcome": "pass",
+      "observed": "At t=280.0000000281066 s, controller_state_code = 3, valve2_open_cmd = 1, valve1_open_cmd = 0, valve3_open_cmd = 0; expected transfer resumed at the second START."
+    },
+    {
+      "name": "AC-04_second_fill_begins_after_intercycle_wait",
+      "expression": "controller_state_code == 1 and valve1_open_cmd == 1 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "After first drain and inter-cycle wait, at t=640.0000001704749 s controller_state_code = 1 and valve1_open_cmd = 1; expected ever occurrence of second fill beginning."
+    },
+    {
+      "name": "AC-05_all_valves_closed_during_second_stop",
+      "expression": "(not (time_s >= 650 and time_s < 700)) or ((valve1_open_cmd == 0) and (valve2_open_cmd == 0) and (valve3_open_cmd == 0)) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "From t=650.0000000651044 s, valve1_open_cmd = 0, valve2_open_cmd = 0, valve3_open_cmd = 0, and no valve command changes occur again until t=700.0000000701131 s; expected all three valves closed for 650 s <= t < 700 s."
+    },
+    {
+      "name": "AC-06_shutdown_entry_outputs",
+      "expression": "valve1_open_cmd == 0 and valve2_open_cmd == 1 and valve3_open_cmd == 1 == 1.0 (relative tolerance 0.000%), at t=700.0",
+      "outcome": "pass",
+      "observed": "At t=700.0000000701131 s, valve1_open_cmd = 0, valve2_open_cmd = 1, valve3_open_cmd = 1; expected shutdown entry outputs V1 closed and V2/V3 open together."
+    },
+    {
+      "name": "AC-07_idle_closed_at_end",
+      "expression": "controller_state_code == 0 and valve1_open_cmd == 0 and valve2_open_cmd == 0 and valve3_open_cmd == 0 == 1.0 (relative tolerance 0.000%), final value",
+      "outcome": "pass",
+      "observed": "Final values at t=900 s: controller_state_code = 0, valve1_open_cmd = 0, valve2_open_cmd = 0, valve3_open_cmd = 0; expected IDLE with all valves closed."
+    },
+    {
+      "name": "AC-08_no_V1_V2_overlap",
+      "expression": "not (valve1_open_cmd == 1 and valve2_open_cmd == 1) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "Valve1 is open only during 20.00000000210014-170.0000000341016 s and 640.0000001704749-650.0000000651044 s; valve2 is open only during 180.000000036105-220.000000022101 s, 280.0000000281066-440.0000000994511 s, and 700.0000000701131-713.3333332629589 s. No overlap occurs; expected no simultaneous V1 and V2 commands."
+    },
+    {
+      "name": "AC-08_no_V2_V3_overlap_outside_shutdown",
+      "expression": "not (controller_state_code != 8 and valve2_open_cmd == 1 and valve3_open_cmd == 1) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "Valve2 and valve3 are simultaneously open only from t=700.0000000701131 s to t=713.3333332629589 s, during which controller_state_code = 8 throughout; expected no V2/V3 overlap outside SHUTDOWN."
+    },
+    {
+      "name": "URS-FUN-004_wait_after_fill",
+      "expression": "controller_state_code == 2 and wait_remaining_s <= 10 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "At t=170.0000000341016 s controller_state_code = 2. wait_remaining_s summary range is 0 to 12 s, so the condition wait_remaining_s <= 10 is satisfied at least on entry to or within WAIT_AFTER_FILL; expected ever occurrence in WAIT_AFTER_FILL with remaining wait not exceeding 10 s."
+    },
+    {
+      "name": "URS-FUN-007_drain_reaches_T2_low",
+      "expression": "tank2_level_m <= 0.05 and controller_state_code == 6 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "At t=632.0000001688683 s, controller_state_code = 6 and tank2_level_m reached 0.05 m before continuing lower only later during shutdown; expected ever occurrence of T2 low at WAIT_AFTER_DRAIN entry."
+    },
+    {
+      "name": "URS-MOD-004_shutdown_completion_both_low",
+      "expression": "tank1_level_m <= 0.05 and tank2_level_m <= 0.05 and controller_state_code == 0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "At t=713.3333332629589 s, controller_state_code = 0, tank1_level_m = 0.05 m, and tank2_level_m = 0.0452381 m; expected ever occurrence of both tanks low with controller returned to IDLE."
+    }
+  ],
+  "summary": "The 900 s run matches the required sequence and all listed checks pass on the reported results. Tank 1 filled from 0.05 m to 0.80 m, transfer began only after that high level and the 10 s wait, STOP at 220 s closed all valves and START at 280 s resumed transfer rather than restarting fill, Tank 2 drained to low and the controller restarted filling after the 8 s inter-cycle wait, the second STOP kept all valves closed until SHUT at 700 s, shutdown opened V2 and V3 together with V1 closed, and shutdown completed at 713.33 s with both tanks low before the controller returned to IDLE and stayed there through 900 s.",
+  "issues": [],
+  "assumptions": [
+    "Numeric state reporting code assumption retained: IDLE=0, FILL_T1=1, WAIT_AFTER_FILL=2, TRANSFER_T1_T2=3, WAIT_AFTER_TRANSFER=4, DRAIN_T2=5, WAIT_AFTER_DRAIN=6, PAUSED=7, SHUTDOWN=8.",
+    "Simulation horizon/output-grid assumption retained: 900 s horizon with 9000 output intervals to represent 0.1 s scan/update behavior on the result grid.",
+    "Exact-time evaluation assumption retained: checks at scheduled times are evaluated at the stated schedule instants directly, without adding an extra machine-evaluable +/-2 s slack window.",
+    "Plant-physics assumption retained: the model uses the explicit constant-cross-section level-balance equations from the legacy note rather than a head-dependent hydraulic network.",
+    "Valve-stroking assumption retained: 0.8 s open and 0.6 s close stroke times are not converted into partial-opening flow dynamics; valve commands act as binary flow enable signals.",
+    "Command-pulse assumption retained: momentary command pulse width is 0.2 s so the 0.1 s PLC scan can observe each scheduled command.",
+    "Drain-floor assumption retained: a 1e-6 m physical floor is used only in the T2 drain cutoff condition to avoid negative level.",
+    "Non-negative inventory assumption retained: transfer outflow from TK-101 is cut off when tank1_level_m <= 0.",
+    "Further inferred from parameter values: the simulated process uses fixed nominal flows qFill=0.0060 m^3/s, qTransfer=0.0045 m^3/s, qDrain=0.0050 m^3/s independent of liquid head, because the observed level slopes remain piecewise constant at 0.005, -0.00375, 0.003214, -0.003571, and -0.000357 m/s according to which valve commands are active."
+  ],
+  "root_causes": []
+}

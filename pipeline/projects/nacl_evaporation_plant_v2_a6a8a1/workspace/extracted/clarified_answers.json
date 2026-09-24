@@ -1,0 +1,71 @@
+{
+  "questions": [
+    "What is the exact modeled role and transition logic of Step7 in the parallel branch sequence?",
+    "What are the exact definitions of the Initial-to-Step1 conditions startEnable and B3 available?",
+    "Should the corrected CR-017 return valve-group membership be treated as exactly the observed sets {V20,V24,V25,V1,V3} for B6->B1 and {V18,V22,V23,V5,V6} for B7->B2, or only the branch destinations are approved?",
+    "B7 cooling completion temperature: Merge resolved this to 25 degC current/approved. Confirm, or choose a different value.",
+    "Post-evaporation return routing destinations: Merge resolved this to B6 condensate returns to B1 via P2; B7 concentrate returns to B2 via P1. Confirm, or choose a different value.",
+    "StandardWater versus WaterNaCl applicability: Merge resolved this to StandardWater is baseline integration-test medium only; WaterNaCl is the intended physical medium. Confirm, or choose a different value.",
+    "Whether B5 and K1 may be combined in simulation: Merge resolved this to A combined evaporator/condenser simulation component is allowed only as an abstraction; K1 remains a separate physical component in system architecture. Confirm, or choose a different value."
+  ],
+  "answers": {
+    "clarify_step7_role": "Model Step7 as an explicit no-actuator wait state in the concentrate branch preceding Step8, with completion condition LIS-701 <0.01 m.",
+    "clarify_initial_start_conditions": "Treat startEnable as an external scenario input and B3 available as an initialization condition that B3 can accept charge.",
+    "clarify_return_valve_groups": "Treat branch destinations as approved facts and the observed valve sets as the best-supported executable implementation unless clarified otherwise.",
+    "resolve_b7_cooling_target": "25 degC current/approved",
+    "resolve_return_routing": "B6 condensate returns to B1 via P2; B7 concentrate returns to B2 via P1",
+    "resolve_medium_context": "StandardWater is baseline integration-test medium only; WaterNaCl is the intended physical medium",
+    "resolve_b5_k1_modeling_abstraction": "A combined evaporator/condenser simulation component is allowed only as an abstraction; K1 remains a separate physical component in system architecture"
+  },
+  "decisions": [
+    {
+      "id": "clarify_step7_role",
+      "question": "What is the exact modeled role and transition logic of Step7 in the parallel branch sequence?",
+      "merge_suggested": "",
+      "answer": "Model Step7 as an explicit no-actuator wait state in the concentrate branch preceding Step8, with completion condition LIS-701 <0.01 m.",
+      "outcome": "answered"
+    },
+    {
+      "id": "clarify_initial_start_conditions",
+      "question": "What are the exact definitions of the Initial-to-Step1 conditions startEnable and B3 available?",
+      "merge_suggested": "",
+      "answer": "Treat startEnable as an external scenario input and B3 available as an initialization condition that B3 can accept charge.",
+      "outcome": "answered"
+    },
+    {
+      "id": "clarify_return_valve_groups",
+      "question": "Should the corrected CR-017 return valve-group membership be treated as exactly the observed sets {V20,V24,V25,V1,V3} for B6->B1 and {V18,V22,V23,V5,V6} for B7->B2, or only the branch destinations are approved?",
+      "merge_suggested": "Treat branch destinations as approved facts and the observed valve sets as the best-supported executable implementation unless clarified otherwise.",
+      "answer": "Treat branch destinations as approved facts and the observed valve sets as the best-supported executable implementation unless clarified otherwise.",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_b7_cooling_target",
+      "question": "B7 cooling completion temperature: Merge resolved this to 25 degC current/approved. Confirm, or choose a different value.",
+      "merge_suggested": "25 degC current/approved",
+      "answer": "25 degC current/approved",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_return_routing",
+      "question": "Post-evaporation return routing destinations: Merge resolved this to B6 condensate returns to B1 via P2; B7 concentrate returns to B2 via P1. Confirm, or choose a different value.",
+      "merge_suggested": "B6 condensate returns to B1 via P2; B7 concentrate returns to B2 via P1",
+      "answer": "B6 condensate returns to B1 via P2; B7 concentrate returns to B2 via P1",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_medium_context",
+      "question": "StandardWater versus WaterNaCl applicability: Merge resolved this to StandardWater is baseline integration-test medium only; WaterNaCl is the intended physical medium. Confirm, or choose a different value.",
+      "merge_suggested": "StandardWater is baseline integration-test medium only; WaterNaCl is the intended physical medium",
+      "answer": "StandardWater is baseline integration-test medium only; WaterNaCl is the intended physical medium",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_b5_k1_modeling_abstraction",
+      "question": "Whether B5 and K1 may be combined in simulation: Merge resolved this to A combined evaporator/condenser simulation component is allowed only as an abstraction; K1 remains a separate physical component in system architecture. Confirm, or choose a different value.",
+      "merge_suggested": "A combined evaporator/condenser simulation component is allowed only as an abstraction; K1 remains a separate physical component in system architecture",
+      "answer": "A combined evaporator/condenser simulation component is allowed only as an abstraction; K1 remains a separate physical component in system architecture",
+      "outcome": "confirmed"
+    }
+  ]
+}

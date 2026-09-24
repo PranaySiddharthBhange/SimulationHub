@@ -1,0 +1,57 @@
+flowchart TD
+    A["Simulation start<br/>Initial: all automated valves closed; P1, P2, B5 heater, B6 cooler, B7 cooler off"] --> B{"startEnable and B3 available?"}
+    B -->|Yes| C["Step1: open V8<br/>Transfer B1 to B3"]
+    B -->|No| B
+    C --> D{"LIS-301 >= 0.13 m?"}
+    D -->|Yes| E["Step2: open V9<br/>Continue charging B3 from B2"]
+    D -->|No| C
+    E --> F{"QI-302 >= 0.080 kg/kg?"}
+    F -->|Yes| G["Step3: open V11<br/>Transfer B3 to B4"]
+    F -->|No| E
+    G --> H{"LIS-301 < 0.01 m?"}
+    H -->|Yes| I["Step4: wait for B5 idle<br/>Require LIS-501 < 0.01 m and V15 closed"]
+    H -->|No| G
+    I --> J{"LIS-501 < 0.01 m and V15 closed?"}
+    J -->|Yes| K["Step5: open V12<br/>Transfer B4 to B5"]
+    J -->|No| I
+    K --> L{"LIS-501 >= 0.18 m?"}
+    L -->|Yes| M["Step6: command B5 heater on at 20000 W when permissives hold<br/>Heater permissives: LIS-501 >= 0.05 m and FIS-801 >= 0.10 kg/s"]
+    L -->|No| K
+    M --> N{"QIS-502 >= 0.180 kg/kg?"}
+    N -->|Yes| O["Split into parallel branches after evaporation"]
+    N -->|No| P{"LIS-501 >= 0.05 m and FIS-801 >= 0.10 kg/s?"}
+    P -->|Yes| M
+    P -->|No| Q["Heater inhibited/off<br/>Wait until permissives restored"]
+    Q -->|Yes| P
+    O --> R["Branch A Step12: B6 cooler on<br/>Cool B6"]
+    O --> S["Branch B Step7: no-actuator wait state"]
+    R --> T{"TIS-602 <= 20 degC?"}
+    T -->|Yes| U["Branch A Step13: return condensate B6 to B1<br/>Command P2 with observed B1 return valve group V20,V24,V25,V1,V3"]
+    T -->|No| R
+    U --> V{"LIS-601 > 0.02 m?"}
+    V -->|Yes| W["P2 return active to B1"]
+    V -->|No| X["P2 inhibited/off<br/>Wait for LIS-601 > 0.02 m"]
+    X -->|Yes| V
+    S --> Y{"LIS-701 < 0.01 m?"}
+    Y -->|Yes| Z["Branch B Step8: open V15<br/>Transfer concentrate B5 to B7"]
+    Y -->|No| S
+    Z --> AA{"LIS-501 < 0.01 m?"}
+    AA -->|Yes| AB["Branch B Step9: B7 cooler on<br/>Cool B7"]
+    AA -->|No| Z
+    AB --> AC{"TIS-702 <= 25 degC?"}
+    AC -->|Yes| AD["Branch B Step10/11: return concentrate B7 to B2<br/>Command P1 with observed B2 return valve group V18,V23,V22,V5,V6"]
+    AC -->|No| AB
+    AD --> AE{"LIS-701 > 0.02 m?"}
+    AE -->|Yes| AF["P1 return active to B2"]
+    AE -->|No| AG["P1 inhibited/off<br/>Wait for LIS-701 > 0.02 m"]
+    AG -->|Yes| AE
+    W --> AH["Branch A complete"]
+    AF --> AI["Branch B complete"]
+    AH --> AJ{"A complete and B complete and time > 2500 s?"}
+    AI --> AJ
+    AJ -->|Yes| AK["Join: reset to Initial<br/>Recorded restart evidenced by V8_open at t=2505 s"]
+    AJ -->|No| AL["JoinWait: commands off"]
+    AL -->|Yes| AJ
+    AK --> AM{"time_s >= 3000 s?"}
+    AM -->|Yes| AN["End condition: 3000 s run complete<br/>Report BAT-09 outputs at 5 s or faster"]
+    AM -->|No| C

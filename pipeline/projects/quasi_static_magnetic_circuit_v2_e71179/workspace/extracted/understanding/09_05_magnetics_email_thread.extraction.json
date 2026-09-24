@@ -1,0 +1,235 @@
+{
+  "document": "From: priya.nair@synthetic-magnetics.example\nDate: Wed, 25 Feb 2026 09:12:00 +0100\nSubject: RE: MCB-02 leakage fit / which gap value goes into the reference model\n\nThe v1.0 file still has sigma=0.05. That was the early idealized estimate.\n\nThe calibration fit using the nominal geometry is closer to sigma=0.08. I have CR-MAG-006 in approval now.\n\nAlso: the technician measured 1.58 mm at the physical shim stack. Please do NOT silently replace the 1.50 mm nominal gap in the analytic benchmark. We need both:\n- nominal model: delta=1.50 mm\n- prototype/as-built validation configuration: delta=1.58 mm\n\n---- reply ----\nFrom: daniel.cho@synthetic-magnetics.example\nDate: Wed, 25 Feb 2026 10:01:00 +0100\n\nUnderstood. One more mismatch: CoreCatalog_A says mu_r=1000, but the batch characterization sheet used 1200. CR-MAG-004 already approved 1200 for the linear reference benchmark.\n\nThe old measurement-coil sketch also says 40 turns. Coil Data B says 50 and has the polarity dots.\n\n---- approval ----\nFrom: a.mehta@synthetic-magnetics.example\nDate: Thu, 26 Feb 2026 16:20:00 +0100\nSubject: CR-MAG-006 approved\n\nApproved sigma=0.08 for the released nominal benchmark. Archive the 0.05 model for traceability.\n",
+  "subject": "MCB-02 leakage fit / which gap value goes into the reference model",
+  "kind": "correspondence",
+  "entities": [
+    {
+      "name": "v1.0 file",
+      "kind": "file",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "sigma",
+          "value": "0.05",
+          "unit": "",
+          "status": "archived",
+          "supersedes": "sigma=0.08",
+          "quote": "The v1.0 file still has sigma=0.05."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The v1.0 file still has sigma=0.05."
+    },
+    {
+      "name": "CR-MAG-006",
+      "kind": "change request",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "sigma",
+          "value": "0.08",
+          "unit": "",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "Approved sigma=0.08 for the released nominal benchmark."
+        }
+      ],
+      "ref": "CR-MAG-006",
+      "anchor": "",
+      "from_image": false,
+      "quote": "I have CR-MAG-006 in approval now."
+    },
+    {
+      "name": "physical shim stack",
+      "kind": "component",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "gap",
+          "value": "1.58",
+          "unit": "mm",
+          "status": "measured",
+          "supersedes": "",
+          "quote": "the technician measured 1.58 mm at the physical shim stack"
+        },
+        {
+          "quantity": "delta",
+          "value": "1.58",
+          "unit": "mm",
+          "status": "as-built",
+          "supersedes": "",
+          "quote": "prototype/as-built validation configuration: delta=1.58 mm"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the technician measured 1.58 mm at the physical shim stack"
+    },
+    {
+      "name": "analytic benchmark",
+      "kind": "benchmark model",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "nominal gap",
+          "value": "1.50",
+          "unit": "mm",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "1.50 mm nominal gap in the analytic benchmark"
+        },
+        {
+          "quantity": "delta",
+          "value": "1.50",
+          "unit": "mm",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "nominal model: delta=1.50 mm"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "1.50 mm nominal gap in the analytic benchmark"
+    },
+    {
+      "name": "CoreCatalog_A",
+      "kind": "catalog",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "mu_r",
+          "value": "1000",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "CoreCatalog_A says mu_r=1000"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CoreCatalog_A says mu_r=1000"
+    },
+    {
+      "name": "batch characterization sheet",
+      "kind": "sheet",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "mu_r",
+          "value": "1200",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "the batch characterization sheet used 1200"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the batch characterization sheet used 1200"
+    },
+    {
+      "name": "CR-MAG-004",
+      "kind": "change request",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "mu_r",
+          "value": "1200",
+          "unit": "",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "CR-MAG-004 already approved 1200 for the linear reference benchmark."
+        }
+      ],
+      "ref": "CR-MAG-004",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CR-MAG-004 already approved 1200 for the linear reference benchmark."
+    },
+    {
+      "name": "linear reference benchmark",
+      "kind": "benchmark model",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "mu_r",
+          "value": "1200",
+          "unit": "",
+          "status": "approved",
+          "supersedes": "",
+          "quote": "approved 1200 for the linear reference benchmark"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "approved 1200 for the linear reference benchmark"
+    },
+    {
+      "name": "measurement-coil sketch",
+      "kind": "sketch",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "40",
+          "unit": "turns",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "The old measurement-coil sketch also says 40 turns."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The old measurement-coil sketch also says 40 turns."
+    },
+    {
+      "name": "Coil Data B",
+      "kind": "data sheet",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "50",
+          "unit": "turns",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Coil Data B says 50"
+        },
+        {
+          "quantity": "polarity dots",
+          "value": "present",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "has the polarity dots"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Coil Data B says 50 and has the polarity dots."
+    }
+  ],
+  "relationships": [],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "Do not silently replace the 1.50 mm nominal gap in the analytic benchmark; both nominal and prototype/as-built values are needed.",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Please do NOT silently replace the 1.50 mm nominal gap in the analytic benchmark. We need both:"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

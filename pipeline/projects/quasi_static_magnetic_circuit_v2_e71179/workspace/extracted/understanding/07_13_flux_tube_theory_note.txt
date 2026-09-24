@@ -1,0 +1,37 @@
+Subject: Quasi-Static Magnetic Flux Tube Theory Note
+Document kind: design note
+
+## Entities
+* flux tube -- magnetic element  <[page 1]>
+* magnetic node -- node  <[page 1]>
+* linear reluctance -- magnetic element  <[page 1]>
+* GAP-1 -- magnetic element  <[page 1]>
+* LEAK-1 -- magnetic element  <[page 1]>
+* exciting coils -- coil  <[page 1]>
+* measuring coils -- coil  <[page 1]>
+* baseline benchmark -- benchmark case  <[page 1]>
+
+## Relationships
+* GAP-1 in parallel with LEAK-1  <[page 1]>
+* GAP-1 has equal magnetic potential difference as LEAK-1  <[page 1]>
+* exciting coils defined with opposite induced-voltage orientation to measuring coils (in the benchmark)  <[page 1]>
+
+## Constraints
+* Force interaction is excluded.  <[page 1]>
+* The baseline benchmark does not use a nonlinear B-H curve, hysteresis, eddy-current loss, or frequency-dependent permeability. [current]  <[page 1]>
+* A nonlinear inductor example may exist elsewhere but it is not authority for this case.  <[page 1]>
+
+## Physical relationships
+* Phi = integral_A B_n dA  <[page 1]>
+* Vm = integral_l H_n dl  <[page 1]>
+* Rm = Vm/Phi  <[page 1]>
+* For constant A and l: Rm = l/(mu0*mu_r*A)  <[page 1]>
+* B = Phi/A  <[page 1]>
+* H_iron = B/(mu0*mu_r)  <[page 1]>
+* H_air = B/mu0  <[page 1]>
+* Phi_gap/Phi_core = 1-sigma  <[page 1]>
+* Phi_leak/Phi_core = sigma  <[page 1]>
+* R_leak = R_gap*(1-sigma)/sigma  <[page 1]>
+* R_parallel = 1/(1/R_gap + 1/R_leak)  <[page 1]>
+* Phi_core = N*I / (R_core + R_parallel)  <[page 1]>
+* induced-voltage magnitude is 2*pi*f*N*|Phi|  <[page 1]>

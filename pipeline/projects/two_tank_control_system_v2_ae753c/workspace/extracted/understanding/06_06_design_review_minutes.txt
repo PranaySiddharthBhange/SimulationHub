@@ -1,0 +1,44 @@
+Subject: DR-02 Design Review Minutes - Two-Tank Controller
+Document kind: correspondence
+
+## Entities
+* URS -- document
+* STOP -- operator command
+* START -- operator command
+* SHUT -- operator command; aliases: shut
+* active delay timer -- timer
+* V1 -- valve
+* V2 -- valve
+* V3 -- valve
+* LT-101 -- level transmitter
+* LT-102 -- level transmitter
+* IDLE -- controller state
+* T1 -- tank
+    - high level: 0.78 m [current]
+    - high level: 0.80 m [proposed] (supersedes/superseded: 0.78 m)
+* post-transfer delay -- delay
+    - delay: 12 s [approved]
+* inter-cycle delay after Tank 2 low -- delay
+    - delay: 8 s [approved]
+* Tank 2 -- tank
+
+## Relationships
+* STOP waits for either START
+* STOP waits for either SHUT
+* SHUT commands open together V2 (with V3)
+* SHUT commands open together V3 (with V2)
+* SHUT keeps closed V1
+
+## Requirements
+* Command precedence is `SHUT > STOP > START`. [approved]  <D-01>
+* STOP closes all valves and stores the interrupted state. [approved]  <D-02>
+* SHUT is complete only when both LT-101 and LT-102 are at or below their low-level setpoints. [approved]  <D-06>
+* After shutdown completion, all valves are closed and the sequence context is reset to IDLE. A later START begins a new fill cycle. [approved]  <D-07>
+* V1 and V2 must never be commanded open together. [approved]  <D-08>
+* V2 and V3 must not be commanded open together in normal auto operation; SHUT is the only permitted exception. [approved]  <D-09>
+* Do not model `shut` as a power-loss or emergency-stop event.
+
+## Behaviors
+* STOP during any delay freezes the remaining delay; START resumes the remaining delay. [approved]  <D-03>
+* START while the automatic sequence is already running is ignored. [approved]  <D-04>
+* START and STOP received during active SHUT are ignored. [approved]  <D-05>

@@ -1,0 +1,63 @@
+Subject: Process Requirement Specification - NaCl Evaporation Plant
+Document kind: requirement specification
+
+## Entities
+* B1 -- vessel  <[page 1]>
+* B2 -- vessel  <[page 1]>
+* B3 -- vessel  <[page 1]>
+* B4 -- vessel  <[page 1]>
+* B5 -- evaporator  <[page 1]>
+    - time: 2500 s [approved]
+* K1 -- condenser  <[page 1]>
+* B6 -- cooler  <[page 1]>
+* B7 -- cooler  <[page 1]>
+* V8 -- valve  <[page 1]>
+* V9 -- valve  <[page 1]>
+* V11 -- valve  <[page 1]>
+* V12 -- valve  <[page 1]>
+* LIS-301 -- instrument  <[page 1]>
+    - level: 0.13 m [approved]
+    - level: 0.01 m [approved]
+* QI-302 -- instrument  <[page 1]>
+* LIS-501 -- instrument  <[page 1]>
+* QIS-502 -- instrument  <[page 1]>
+* central controller -- controller  <[page 1]>
+* P1 -- pump  <[page 1]>
+* P2 -- pump  <[page 1]>
+* charging-vessel header system -- header system  <[page 1]>
+* P&ID -- diagram  <[page 1]>
+* Automated valves -- valves  <[page 1]>
+* StandardWater configuration -- configuration  <[page 1]>
+* water-NaCl mixture -- simulation medium  <[page 1]>
+* Tank connections -- connections  <[page 1]>
+* Small junction volumes -- junction volumes  <[page 1]>
+* All non-horizontal pipes -- pipes  <[page 1]>
+* evaporator/condenser -- combined simulation component  <[page 1]>
+
+## Relationships
+* B1 charged to B3  <[page 1]>
+* B2 charged to B3  <[page 1]>
+* B3 transfers to B4  <[page 1]>
+* B4 charges B5  <[page 1]>
+* K1 condenses vapor  <[page 1]>
+* P1 returns cooled process streams to charging-vessel header system  <[page 1]>
+* P2 returns cooled process streams to charging-vessel header system  <[page 1]>
+* evaporator/condenser represented as combined simulation component (provided the physical condenser K1 remains identifiable in the system architecture)  <[page 1]>
+
+## Requirements
+* The laboratory plant shall concentrate a water/sodium-chloride batch using staged charging, mixing, buffering, evaporation, condensation, cooling and return pumping. [approved]  <[page 1]>
+* The central controller shall command discrete on/off valves. [approved]  <[page 1]>
+* Automated valves shall fail closed. [approved]  <[page 1]>
+* Small junction volumes shall be used where multiple isolating pressure-drop components could otherwise leave undefined pressure, enthalpy or composition states. [approved]  <[page 1]>
+* All non-horizontal pipes shall include static head in their pressure-drop relationship. [approved]  <[page 1]>
+* The acceptance simulation shall demonstrate a full charge-mix-buffer-evaporate-cool-return cycle, including the controller parallel split and join after evaporation. [approved]  <[page 1]>
+* It shall continue beyond 2500 s to demonstrate cycle reset. [approved]  <[page 1]>
+
+## Constraints
+* LIS-301 >= 0.13 m [approved]  <[page 1]>
+* LIS-301 < 0.01 m [approved]  <[page 1]>
+* Both complete and time > 2500 s [approved]  <[page 1]>
+* Tank connections can pass above or below the liquid level. [approved]  <[page 1]>
+
+## Behaviors
+* When B5 is idle, open V12, B4 to B5. [approved]  <[page 1]>

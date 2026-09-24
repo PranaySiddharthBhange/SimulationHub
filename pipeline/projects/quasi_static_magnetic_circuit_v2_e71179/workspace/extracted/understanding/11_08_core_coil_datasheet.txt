@@ -1,0 +1,24 @@
+Subject: Core and Coil Data Sheet - Rev B
+Document kind: datasheet
+
+## Entities
+* core -- core  <[page 1]>
+    - relative permeability: 1200 [approved/released]
+    - relative permeability: 1000 [archived] (supersedes/superseded: 1200)
+    - cross-section: 25 mm x 25 mm mm x mm [approved/released]
+    - nominal air gap: 1.50 mm [nominal]
+    - prototype gap: 1.58 mm [as_built/as-built]
+* exciting coil -- coil  <[page 1]>
+    - turns: 600
+    - reference frequency: 50 Hz
+    - final benchmark current: 2.0 A RMS [current]
+* measuring coil -- coil  <[page 1]>
+    - turns: 50 [approved/released]
+    - turns: 40 [archived]
+* mmf -- magnetomotive force  <[page 1]>
+* useful flux arrow -- reference direction  <[page 1]>
+
+## Relationships
+* measuring coil located in core (Air-gap region)  <[page 1]>
+* exciting coil polarity maps positive current to positive mmf  <[page 1]>
+* measuring coil induced-voltage orientation is negative relative to useful flux arrow  <[page 1]>

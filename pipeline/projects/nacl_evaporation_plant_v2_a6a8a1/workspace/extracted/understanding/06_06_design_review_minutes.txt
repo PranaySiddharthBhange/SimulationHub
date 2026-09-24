@@ -1,0 +1,43 @@
+Subject: Design Review DR-07 - NaCl Evaporation Bench
+Document kind: correspondence
+
+## Entities
+* Controller -- control element
+* B5 heater -- heater
+    - permissive threshold: 0.05 m [approved]
+    - permissive threshold: 0.10 kg/s [approved]
+* LIS-501 -- instrument
+    - threshold: 0.05 m [approved]
+* FIS-801 -- instrument
+    - threshold: 0.10 kg/s [approved]
+* P1 -- pump
+* P2 -- pump
+* source-tank level -- level signal
+* Automated process valves -- valves
+* K1 -- condenser
+* legacy Modelica component -- model component
+* Junction volumes -- volume elements
+* closed valve combinations -- valve state combination
+* pressure/composition states -- states
+* StandardWater -- physical variant
+* WaterNaCl -- physical variant
+* return-header stream -- stream
+* B7 -- cooling step
+* WaterNaCl pump-start convergence issue -- issue
+
+## Relationships
+* Controller has topology parallel split (after evaporation and a join before cycle reset)
+* B5 heater has permissive condition LIS-501 (>= 0.05 m)
+* B5 heater has permissive condition FIS-801 (>= 0.10 kg/s)
+* P1 requires dry-run inhibit from source-tank level
+* P2 requires dry-run inhibit from source-tank level
+* legacy Modelica component combines equations of K1 (combines evaporator and condenser equations)
+* StandardWater is baseline only for WaterNaCl (topology/control integration baseline only; intended physical variant remains WaterNaCl)
+
+## Requirements
+* P1 and P2 require dry-run inhibit from source-tank level. [approved]
+* Automated process valves are discrete and fail closed. [approved]
+* Junction volumes are mandatory where closed valve combinations could otherwise leave pressure/composition states undefined. [approved]
+
+## Constraints
+* B5 heater permissive requires LIS-501 >= 0.05 m and FIS-801 >= 0.10 kg/s. [approved]

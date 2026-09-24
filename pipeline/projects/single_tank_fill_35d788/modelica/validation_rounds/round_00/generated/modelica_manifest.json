@@ -1,0 +1,36 @@
+{
+  "entry_class": "SingleTankFillSystem",
+  "files": [
+    {
+      "filename": "SingleSupply.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ConstantInletValve.mo",
+      "role": "component"
+    },
+    {
+      "filename": "TankLevel.mo",
+      "role": "component"
+    },
+    {
+      "filename": "SingleTankFillSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Sources.BooleanExpression",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Assumption carried forward from the merged brief: no outlet, leak, evaporation, or other loss path is modeled.",
+    "Assumption carried forward from the merged brief: the stated nominal inflow 0.01 m^3/s is constant while the inlet valve is commanded open.",
+    "Assumption carried forward from the merged brief: the tank cross-sectional area is constant at 0.5 m^2.",
+    "The previous bundle's system diagram omitted the named Single supply as its own placed instance. This revision adds SingleSupply as a separate top-level component so the diagram shows each named physical unit: Single supply, Inlet valve, and Tank.",
+    "Assumption for standalone execution: the supply provides the stated 0.01 m^3/s continuously, represented as a constant RealOutput in SingleSupply because the brief states no supply pressure model or other supply dynamics."
+  ],
+  "references": []
+}

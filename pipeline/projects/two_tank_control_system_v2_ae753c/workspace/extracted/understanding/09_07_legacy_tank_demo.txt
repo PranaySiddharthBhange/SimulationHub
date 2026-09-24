@@ -1,0 +1,67 @@
+Subject: TankDemo_Rev12
+Document kind: legacy model
+
+## Entities
+* TankDemo_Rev12 -- model
+* A1 -- parameter
+    - area: 1.20 m2 [archived]
+* A2 -- parameter
+    - area: 1.40 m2 [archived]
+* h0 -- parameter
+    - level: 0.05 m [archived]
+* h1High -- parameter
+    - level: 0.78 m [archived]
+* h1Low -- parameter
+    - level: 0.05 m [archived]
+* h2Low -- parameter
+    - level: 0.05 m [archived]
+* qFill -- parameter
+    - flow rate: 0.0060 m3/s [archived]
+* qTransfer -- parameter
+    - flow rate: 0.0045 m3/s [archived]
+* qDrain -- parameter
+    - flow rate: 0.0050 m3/s [archived]
+* wait1 -- parameter
+    - time: 10 s [archived]
+* wait2 -- parameter
+    - time: 10 s [archived]
+* wait3 -- parameter
+    - time: 10 s [archived]
+* tank1Level -- state variable
+* tank2Level -- state variable
+* valve1 -- boolean control
+* valve2 -- boolean control
+* valve3 -- boolean control
+* startCmd -- boolean command
+* stopCmd -- boolean command
+* shutCmd -- boolean command
+* StepState -- enumeration type; aliases: IDLE, FILL, HOLD1, TRANSFER, HOLD2, DRAIN, HOLD3
+* seq -- discrete state
+* stopped -- discrete state
+
+## Relationships
+* tank1Level has_start_value_from h0
+* tank2Level has_start_value_from h0
+* seq has_type StepState
+* seq has_start_state IDLE (StepState.IDLE)
+* valve1 controlled_by_state seq (open when seq == StepState.FILL and not stopped)
+* valve1 inhibited_by stopped
+* valve2 controlled_by_state seq (open when seq == StepState.TRANSFER and not stopped)
+* valve2 inhibited_by stopped
+* valve3 controlled_by_state seq (open when seq == StepState.DRAIN and not stopped)
+* valve3 inhibited_by stopped
+
+## Behaviors
+* When edge(startCmd), stopped becomes false. [archived]
+* When edge(stopCmd), stopped becomes true. [archived]
+
+## Physical relationships
+* der(tank1Level) = (if valve1 then qFill else 0)/A1 - (if valve2 then qTransfer else 0)/A1; [archived]
+* der(tank2Level) = (if valve2 then qTransfer else 0)/A2 - (if valve3 then qDrain else 0)/A2; [archived]
+
+## Scheduled commands
+* A test harness supplies button edges at 20, 220, 280, 650 and 700 seconds. [archived]
+
+## Unreadable
+* State transition details are omitted: "State transition details omitted from this archived fragment."
+* SHUT handling completeness is unclear beyond the note: "SHUT handling was not completed in this revision."

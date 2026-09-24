@@ -1,0 +1,572 @@
+{
+  "der(Phi_gap_Wb)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(coreD.Phi)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(excitingCoil.i)": {
+    "min": -4.999999999999999,
+    "max": -0.0,
+    "final": -0.0
+  },
+  "der(gap1.Phi)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(gap1.V_m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(leak1.V_m)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "der(measuringCoil.Phi)": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B_core_T": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "B_gap_T": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "H_core_A_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "H_gap_A_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "Phi_core_Wb": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "Phi_gap_Wb": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "Phi_gap_over_Phi_core": {
+    "min": 0.92,
+    "max": 0.92,
+    "final": 0.92
+  },
+  "Phi_leak_Wb": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "U_exc_induced_V_rms": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "U_meas_induced_signed_V_rms": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "Vm_core_At": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "Vm_gap_At": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreD.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreD.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreD.port_n.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreL.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreL.port_n.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreR.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreR.port_n.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreU.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreU.port_n.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "electricGround.p.i": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "electricGround.p.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCoil.L_stat": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCoil.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCoil.Psi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCoil.V_m": {
+    "min": -1200.000000449829,
+    "max": -0.0,
+    "final": -1200.0
+  },
+  "excitingCoil.i": {
+    "min": -2.000000000749715,
+    "max": -0.0,
+    "final": -2.0
+  },
+  "excitingCoil.port_n.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCoil.port_n.V_m": {
+    "min": 0.0,
+    "max": 1200.000000449829,
+    "final": 1200.0
+  },
+  "excitingCoil.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCoil.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingVoltageSensor.n.i": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingVoltageSensor.p.i": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "fluxSensor.port_n.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "gap1.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "gap1.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "gap1.port_n.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "leak1.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "leak1.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "leak1.port_n.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "leak1.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "magneticGround.port.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.L_stat": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.Psi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.i": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.p.i": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.port_n.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringElectricGround.p.i": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringElectricGround.p.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringVoltageSensor.n.i": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringVoltageSensor.p.i": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "mmf_At": {
+    "min": 0.0,
+    "max": 1200.000000449829,
+    "final": 1200.0
+  },
+  "time_s": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "I_rms_A": {
+    "min": 0.0,
+    "max": 2.000000000749715,
+    "final": 2.0
+  },
+  "coreD.port_n.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreD.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreD.port_p.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreL.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreL.port_n.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreL.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreL.port_p.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreR.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreR.port_n.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreR.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreR.port_p.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreU.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreU.port_n.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreU.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "coreU.port_p.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "currentRamp.y": {
+    "min": 0.0,
+    "max": 2.000000000749715,
+    "final": 2.0
+  },
+  "excitingCoil.n.i": {
+    "min": 0.0,
+    "max": 2.000000000749715,
+    "final": 2.0
+  },
+  "excitingCoil.n.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCoil.p.i": {
+    "min": -2.000000000749715,
+    "max": -0.0,
+    "final": -2.0
+  },
+  "excitingCoil.p.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCoil.port_p.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCurrent.i": {
+    "min": 0.0,
+    "max": 2.000000000749715,
+    "final": 2.0
+  },
+  "excitingCurrent.n.i": {
+    "min": -2.000000000749715,
+    "max": -0.0,
+    "final": -2.0
+  },
+  "excitingCurrent.n.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCurrent.p.i": {
+    "min": 0.0,
+    "max": 2.000000000749715,
+    "final": 2.0
+  },
+  "excitingCurrent.p.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingCurrent.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingVoltageSensor.n.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingVoltageSensor.p.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "excitingVoltageSensor.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "fluxSensor.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "fluxSensor.port_n.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "fluxSensor.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "fluxSensor.port_p.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "gap1.port_n.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "gap1.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "gap1.port_p.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "leak1.port_n.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "leak1.port_p.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "magneticGround.port.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.n.i": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.n.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.p.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.port_n.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.port_p.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringCoil.port_p.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringVoltageSensor.n.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringVoltageSensor.p.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "measuringVoltageSensor.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  }
+}

@@ -1,0 +1,66 @@
+Subject: Two-Tank Fill/Transfer/Drain Controller
+Document kind: design note
+
+## Entities
+* Two-Tank Fill/Transfer/Drain Controller -- controller  <CDS-02>
+* IDLE -- state
+* FILL_T1 -- state; aliases: FILL
+* WAIT_AFTER_FILL -- state; aliases: HOLD1
+* TRANSFER_T1_T2 -- state; aliases: TRANSFER
+* WAIT_AFTER_TRANSFER -- state; aliases: HOLD2
+* DRAIN_T2 -- state; aliases: DRAIN
+* WAIT_AFTER_DRAIN -- state; aliases: HOLD3
+* PAUSED -- state
+* SHUTDOWN -- state
+* XV-101 -- valve
+* XV-102 -- valve
+* XV-103 -- valve
+* V1 -- valve output
+* V2 -- valve output
+* V3 -- valve output
+* LT-101 -- level threshold/input
+* LT-102 -- level threshold/input
+* T1_High -- level limit
+    - level: 0.78 m [archived]
+* T1_Low -- level limit
+* T2_Low -- level limit
+* START -- command
+* STOP -- command
+* SHUT -- command
+* DR-02 -- design review
+* CR-004 -- change request
+* URS-001 Rev A -- requirement specification
+
+## Relationships
+* FILL maps to FILL_T1 (Legacy simulation code state mapping)
+* HOLD1 maps to WAIT_AFTER_FILL (Legacy simulation code state mapping)
+* TRANSFER maps to TRANSFER_T1_T2 (Legacy simulation code state mapping)
+* HOLD2 maps to WAIT_AFTER_TRANSFER (Legacy simulation code state mapping)
+* DRAIN maps to DRAIN_T2 (Legacy simulation code state mapping)
+* HOLD3 maps to WAIT_AFTER_DRAIN (Legacy simulation code state mapping)
+
+## Requirements
+* Numeric setpoints and delays shall follow the latest approved parameter/change records. [approved]
+* When STOP occurs in WAIT_AFTER_FILL, WAIT_AFTER_TRANSFER or WAIT_AFTER_DRAIN, the remaining delay shall be retained. [approved]
+* START shall resume with that remaining delay. [approved]
+* On controller power loss, output commands shall be false. [approved]
+* Level threshold comparisons shall include equality (>= high, <= low). [approved]
+
+## Constraints
+* V1 and V2 shall never be open simultaneously. [approved]
+* V2 and V3 shall not be open simultaneously during normal automatic operation. [approved]
+
+## Behaviors
+* A START edge begins FILL_T1 from IDLE. [approved]
+* Transition from FILL_T1 when LT-101 >= T1_High. [approved]
+* STOP freezes remaining time in WAIT_AFTER_FILL. [approved]
+* Transition from TRANSFER_T1_T2 when LT-101 <= T1_Low. [approved]
+* STOP freezes remaining time in WAIT_AFTER_TRANSFER. [approved]
+* Transition from DRAIN_T2 when LT-102 <= T2_Low. [approved]
+* WAIT_AFTER_DRAIN returns to FILL_T1 automatically after inter-cycle wait. [approved]
+* START resumes the stored state from PAUSED. [approved]
+* Remain in SHUTDOWN until both tanks are at or below their low-level limits, then close all valves and go to IDLE. [approved]
+* A valid SHUT edge immediately abandons any stored resume context and enters SHUTDOWN. [approved]
+* STOP is accepted from any normal running or wait state and places the controller in PAUSED with all valve outputs false. [approved]
+* START from IDLE begins FILL_T1; START from PAUSED restores the interrupted state. START while already running is ignored. [approved]
+* Commands received while SHUTDOWN is active do not interrupt the shutdown sequence. [approved]

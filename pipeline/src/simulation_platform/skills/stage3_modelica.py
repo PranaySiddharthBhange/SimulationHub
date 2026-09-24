@@ -48,6 +48,20 @@ CONNECTOR DISCIPLINE -- check this before returning any bundle:
 - Audit both operands of every `connect(...)` against their declarations. This
   applies to command pulses, sensor values, schedules, and physical quantities;
   graphical annotations do not turn an ordinary scalar into a connector.
+- ONE REFERENCE PER NETWORK, NEVER TWO SOURCES FIXING THE SAME NODE. Every
+  electrical circuit needs exactly one `Ground`, every mechanical chain exactly
+  one fixed reference, every magnetic circuit exactly one magnetic ground/reference,
+  and every fluid loop exactly one pressure reference (a boundary or expansion
+  source). A missing one leaves a potential undetermined (a singular system); an
+  extra one over-determines it. The same discipline applies at an ordinary
+  connection point: never let two components each try to FIX the same
+  potential/level/pressure/flow at one node (two voltage sources in parallel, two
+  fixed-temperature boundaries on one node, two prescribed levels feeding one
+  tank's inlet) -- exactly one definition per connected quantity, matching the
+  equation-count rule below. Seen live on this project: an earlier bundle had two
+  separate outlet connections each trying to define the same tank inlet flow;
+  fixed by summing them into one scalar flow equation and one mixed-composition
+  equation instead of leaving both connected directly.
 
 COMPONENT DIAGRAM -- the bundle is opened and read in OMEdit, so the system
 file's diagram layer must show the real plant, not a block box. Judge your own
@@ -156,6 +170,15 @@ file, or nothing at all. Check every one before returning a bundle:
   cannot be evaluated at all -- which is a worse outcome than failing, because
   nothing is learned. Declare each one at the top level under the exact name
   the brief uses, even where it only mirrors an internal value.
+- A REPORTED VARIABLE MUST ALIAS A COMPONENT'S OUTPUT, NEVER ITS PARAMETER.
+  `X = someBlock.k;` reads `someBlock`'s PARAMETER -- the value it was
+  configured with -- not a simulated signal, and a parameter is not part of
+  the result trajectory: the variable compiles cleanly but is silently absent
+  from the result summary. Seen live: a required flow-proof signal was
+  written as `FIS801_kg_s = fis801.k;` against a `Modelica.Blocks.Sources.
+  Constant`, and the acceptance check reading it found the variable simply
+  missing. Always alias the OUTPUT connector, `someBlock.y`
+  (`RealOutput`/`BooleanOutput`), even for a value that never changes.
 - A CONSTANT BOOLEAN IS `BooleanConstant`, NEVER A ONE-ENTRY `BooleanTable`.
   BooleanTable TOGGLES at every time it lists, so
   `BooleanTable(table={0}, startValue=true)` starts true and flips to false at
@@ -168,11 +191,73 @@ file, or nothing at all. Check every one before returning a bundle:
   Write `Modelica.Blocks.Sources.BooleanConstant(k = true)` for a signal that
   simply holds. Reserve BooleanTable for a signal that genuinely changes at
   stated times, and give each momentary occurrence a PAIR of entries.
+- ANY TABLE'S TIME COLUMN (`BooleanTable.table`, `CombiTimeTable.table`'s first
+  column, or similar) MUST BE STRICTLY INCREASING, with no duplicate or
+  reversed timestamp. A repeated or out-of-order time is rejected by the real
+  compiler with an error that names the table instance, not the schedule value
+  that caused it, so check every table's own time values against the brief's
+  stated schedule before returning, not just its shape.
+- A CONTINUOUS SIGNAL DRIVING ITS OWN SWITCHING COMMAND NEEDS AN EDGE OR A
+  DWELL GUARD, NEVER A BARE LEVEL COMPARISON RE-EVALUATED EVERY STEP.
+  `cmd = level >= setpoint;` where `cmd` itself drives the flow that moves
+  `level` can toggle every solver step once `level` sits within numerical
+  noise of `setpoint`, producing thousands of events in a tiny time span
+  ("model terminated ... too many events" / the simulation appears to hang).
+  This does NOT mean moving or widening the brief's stated threshold -- see
+  the "do not add an arbitrary threshold margin" rule under EVENT AND
+  DISCRETE-CONTROL DISCIPLINE below, which still governs the threshold VALUE.
+  Keep the exact stated threshold and prevent the chatter a different way:
+  latch the transition through the controller's own scan/edge machinery
+  (`pre(mode) == ... and level >= setpoint` inside the mode dispatcher, which
+  only re-evaluates on an event and only fires the one edge) rather than a
+  free-standing continuous equation re-armed every step. Reserve an actual
+  second threshold (true two-level hysteresis) for a case where the brief
+  itself describes two distinct setpoints (a high and a low), and never
+  invent one around a threshold an acceptance check compares against.
 - A PERMISSIVE IN A TRANSITION GUARD IS COMPUTED, NOT ASSUMED. If a guard reads
   a condition the brief defines from plant state -- a vessel being empty, a
   flow proof being present -- derive it from that state, so it becomes true
   when the plant makes it true. Wiring it to a source fixes the whole sequence
   to whatever that source happens to say.
+- AN ENTRY GUARD ALREADY TRUE AT t=0 NEVER FIRES AGAIN. A `when {...} then`
+  mode dispatcher only re-evaluates its branches on an EVENT -- something
+  changing. If a transition's guard is built from permissives that are all
+  `BooleanConstant`/always-true from the very first instant, the condition
+  never has a false-to-true EDGE for the `when` to catch, because it was
+  already true before the first event existed to notice it. Worse, if that
+  same `when` also carries an `if initial() then mode := State.Initial; ...`
+  branch, that branch matches first on the ONE event that does fire (the
+  initial event itself) and the dispatcher re-asserts the initial state
+  forever -- the model compiles, simulates the full horizon, and every
+  command stays at its starting value for the whole run. Do not let a
+  same-scan `if initial()` branch pre-empt the real entry check: either give
+  the entry transition an explicit one-shot pulse (`entryPulse =
+  edge(startButton) or (initial() and startEnable and ...)`, wired to an
+  actual clock/button edge, not a bare constant) or verify by construction
+  that the entry guard can only become true from a later event, never from
+  the initial one.
+- A SCHEDULED `BooleanTable`/`IntegerTable` PULSE WHOSE FIRST ENTRY IS
+  EXACTLY t=0 IS INVISIBLE TO `edge()`, even though the signal genuinely
+  toggles. This is a different trap from the rule above (there the source
+  never toggles at all; here it does, but at the one instant `edge()`
+  cannot see). Confirmed live in an isolated model against the real
+  compiler: `BooleanTable(table={0, 0.2, 2505, 2505.2}, startValue=false)`
+  feeding `startPulse = edge(startEnable);` never fired on the t=0 toggle
+  -- a counter driven by `when startPulse then ... end when;` stayed at 0
+  through the whole first pulse and only incremented once, on the SECOND
+  scheduled toggle at t=2505 -- because `pre()` already equals the signal's
+  own value at the very first instant, so there is no false-to-true edge
+  there for `edge()` to catch. Shifting the same table to `{0.001, 0.2,
+  2505, 2505.2}` and re-running the identical model caught BOTH pulses.
+  Found live: this silently shifted an entire batch-cycle's start (and
+  therefore its whole timeline) by 2505 seconds, because the `Initial ->
+  Step1` transition simply never ran until the scenario's SECOND pulse --
+  which was meant to test a later restart, not the initial start -- with no
+  compiler error, since every construct involved is individually legal.
+  If a command table is meant to fire (or start high) right at the
+  beginning of the run, give its first entry a small positive offset
+  (`0.001`, not `0`) instead of landing exactly on t=0, so the toggle
+  happens strictly after the initial instant and `edge()` can see it.
 - NEVER DIVIDE BY A FLOW. A flow is zero whenever its valve or pump is off,
   which in a sequenced process is most of the run, and the simulation stops the
   instant it happens: "division by zero at time 43, (a=0) / (b=0), where
@@ -190,6 +275,50 @@ file, or nothing at all. Check every one before returning a bundle:
   applies to any other divisor a schedule can drive to zero -- a level, an
   area, an elapsed time. Guard the divisor at its definition rather than
   wrapping each use in an `if`.
+- FLOOR A RATIO'S NUMERATOR THE SAME WAY ITS DENOMINATOR IS FLOORED, or the
+  ratio can start at exactly 0 even though it is asserted strictly positive.
+  Confirmed live and reproduced against the real compiler: a custom tank
+  component computed `T = E/max(cp*m, cp*m_min)` (temperature from stored
+  energy) with `assert(T > 0, "temperature below absolute zero");`, but
+  declared `E(start = rho*area*levelStart*cp*TStart)` -- no floor at all on
+  the numerator's own start expression. Every instance meant to start
+  "empty" (`levelStart = 0.0`) made `E`'s start evaluate to EXACTLY 0
+  regardless of `TStart`, so `T` started at exactly 0 K and tripped the
+  assert during initialization -- reproduced identically on 3 consecutive
+  repair attempts in the same run, because the compiler's own message names
+  only the generic assert line (reused by every instance of the class) and
+  never says which instance or why, so repeated attempts could not converge
+  on the real cause from the error text alone. The fix that finally worked:
+  floor the numerator's start value with the SAME expression that floors
+  the denominator, `E(start = max(rho*area*levelStart, m_min)*cp*TStart)`
+  -- the ratio then starts at the physically correct `TStart` regardless of
+  how small (or exactly zero) `levelStart` is. Apply this whenever an
+  extensive state's start value is a product that includes a parameter
+  which can legitimately be 0 (a level, a mass, an area) and that state
+  also feeds a ratio asserted strictly positive or otherwise physically
+  bounded away from 0.
+- AN `if X > 0 then .../X... else ...` GUARD DOES NOT PROTECT A DIVISION BY
+  A DISCONTINUOUS FLOW, even though it looks obviously safe on inspection --
+  use `max(X, floor)` instead, with NO `if` at all. Confirmed live and
+  reproduced against the real compiler: `B3.xIn = if qB1B3 + qB2B3 > 0 then
+  (qB1B3*B1.xNaCl + qB2B3*B2.xNaCl)/(qB1B3 + qB2B3) else 0;`, where
+  `qB1B3`/`qB2B3` are each `if <valve>.open then <rate> else 0` (a bare
+  step, not a smooth signal) -- crashed identically on 3 consecutive repair
+  attempts, byte-for-byte the SAME generated bundle every time, with
+  `division by zero at time 104.5..., (a=0) / (b=0), where divisor b
+  expression is: B3.qIn` (an alias of the same sum). The generated C code
+  shows why: OpenModelica compiles an `if`-guard in a continuous equation
+  into an EVENT-triggered relation (`GreaterZC`/`relationhysteresis`) when
+  the guarded expression is not smooth or a state -- so the condition's
+  cached boolean can still read the PREVIOUS instant's value at the exact
+  moment the divisor itself steps to zero, and the division executes
+  anyway. This is the same "never divide by a flow" hazard above wearing a
+  disguise that passes visual review -- confirmed fix: replace the whole
+  `if`/`else` with a bare `max()` floor, `.../max(qB1B3 + qB2B3, 1e-9)` --
+  the IDENTICAL bundle then completed the full run with `LOG_SUCCESS`. Any
+  time a divisor is built from valve/pump Boolean commands (however many
+  terms are summed), floor it with `max(...)`; never gate the division with
+  an `if` on that same expression.
 - COUNT EQUATIONS AGAINST VARIABLES BEFORE RETURNING. Every non-parameter
   variable you declare must be determined by exactly one equation, and a
   `connect` determines the connected variable. Two short of that is rejected
@@ -211,14 +340,17 @@ file, or nothing at all. Check every one before returning a bundle:
   because that builtin takes a Real and rounds it toward minus infinity.
 - `edge()` AND `pre()` TAKE A VARIABLE, NEVER AN EXPRESSION. Give the
   expression its own Boolean and pass that:
-      Boolean startSample;
+      Boolean levelHighSample;
     equation
-      startSample = sample(0, scanPeriod) and startButton;
-      startPulse  = edge(startSample);
-  Writing `edge(sample(0, scanPeriod) and startButton)` is rejected with
-  "First argument to edge in component <REMOVE ME> must be a variable" -- the
-  component name is not even reported, so the message does not say where to
-  look. The same applies to `pre()`.
+      levelHighSample = sample(0, scanPeriod) and level >= levelHigh;
+      levelHighPulse  = edge(levelHighSample);
+  Writing `edge(sample(0, scanPeriod) and level >= levelHigh)` is rejected
+  with "First argument to edge in component <REMOVE ME> must be a variable"
+  -- the component name is not even reported, so the message does not say
+  where to look. The same applies to `pre()`. (This example samples a
+  continuous THRESHOLD condition, which is a legitimate use of `sample()`
+  -- see the sampling rule below for when `sample()` helps and when it only
+  adds latency.)
 - RESERVED WORDS. These are keywords and can NEVER be used as the name of a
   variable, parameter, component, connector, or class:
   algorithm and annotation block break class connect connector constant
@@ -235,6 +367,17 @@ file, or nothing at all. Check every one before returning a bundle:
   This mistake surfaces as `No viable alternative near token: <the PRECEDING
   token>`, so a parse error naming a token that looks perfectly correct means
   you should inspect the IDENTIFIER that follows it, not the token named.
+
+- AN INSTANCE NEVER SHARES ITS OWN CLASS'S NAME. Never write
+  `CurrentRamp CurrentRamp;` -- an instance name identical to its class name
+  shadows the class in that scope, so it compiles at the declaration line
+  itself but fails flattening several lines later, the first time anything
+  needs to resolve the CLASS rather than this instance: `Expected
+  CurrentRamp to be a class, but found component instead`, reported at that
+  later USE, never at the declaration that actually caused it. Give every
+  instance a name distinct from its class -- conventionally lower-camelCase
+  for the instance against PascalCase for the class (`CurrentRamp
+  currentRamp;`), which also makes the two visually distinct at a glance.
 
 - BUILT-IN OPERATORS ONLY. Use only operators that really exist: der, pre,
   initial, terminal, sample, edge, change, reinit, delay, noEvent, smooth,
@@ -254,29 +397,51 @@ file, or nothing at all. Check every one before returning a bundle:
   have the same set of component references on the left-hand side`. Use the
   algorithm form and avoid the whole class.
 
-- SAMPLE A CONTROLLER'S COMMANDS ON ITS SCAN CYCLE. A programmable controller
-  latches its inputs on a fixed scan period, so model it that way rather than
-  reacting to continuous signals instantaneously:
+- SAMPLE ONLY THE SIGNALS THAT ACTUALLY NEED IT -- ones the controller's own
+  state feeds back into. Gating EVERY input through `sample(0, scanPeriod)`,
+  including an independent operator command that never depends on the
+  controller's own output at all, costs real timing accuracy for no benefit
+  and is a mistake on its own, not just a defensive habit:
   ```
   parameter Modelica.Units.SI.Time scanPeriod = 0.1;
-  startSample = sample(0, scanPeriod) and startButton;
-  startPulse  = edge(startSample);
+  startPulse = edge(startButton);   -- startButton comes from an independent
+                                     -- schedule/operator source, never from
+                                     -- this controller's own mode/output, so
+                                     -- capture the edge directly.
   ```
-  This is the primary structural remedy for `Purely discrete algebraic loops
-  cannot be solved by iterative processes`: inside one scan every discrete
-  value is computed from values latched in the previous scan, so the discrete
-  equations are well-ordered by construction instead of depending on each
-  other in the same instant. It also matches the real device, so the scan
-  period is a genuine modeling parameter. Take the period from the brief when
-  it states one; otherwise choose one and record it in `corrections`.
-  Sampling costs response latency: a command arriving at t is acted on at the
-  next scan tick, up to one period later. Size the period against the TIMING
-  TOLERANCE the acceptance checks demand, not merely against the stated
-  durations -- if a check requires an action at an exact instant, a 0.1 s scan
-  that responds at t+0.1 s fails it. When the brief demands exact event
-  instants, capture the operator command edges as real events and clock only
-  the internal sequencing, or make the period small enough that the latency is
-  inside the stated tolerance.
+  Confirmed live and verified against the real compiler: `startSample =
+  sample(0, scanPeriod) and startButton; startPulse = edge(startSample);`
+  compiles and simulates cleanly, but costs a FULL extra scan period of
+  latency beyond what `sample()` itself already implies, because the
+  command's own source event (a `BooleanTable`/`CombiTimeTable` entry) lands
+  a hair after the exact stated instant (its own root-finding tolerance), so
+  it can just barely miss the coincident scan tick and only gets caught on
+  the NEXT one. On a real case this made every operator-command response land
+  one full scan period late (0.80 s target crossed at t=220.0 s, but the
+  command took effect at t=220.1 s) and failed two acceptance checks written
+  against the stated command times. Removing the `sample()` layer for that
+  same signal -- `startPulse = edge(startButton);` directly -- reproduced the
+  identical sequence with every transition landing within numerical
+  tolerance of its true commanded instant, and did NOT reintroduce any
+  algebraic-loop error.
+  RESERVE `sample()`-gating for a signal that genuinely creates a same-instant
+  dependency on the controller's own state or output -- for example a
+  continuous condition computed FROM a value the controller itself just set,
+  or two discrete quantities that would otherwise need each other's CURRENT
+  value in the same event. That is what actually causes `Purely discrete
+  algebraic loops cannot be solved by iterative processes`, and latching such
+  a signal to the previous scan's value is the real fix for it. An
+  independent operator button, a scheduled command table, or any other input
+  that never reads back from this controller's own mode/output has no such
+  cycle to break, at any latency, and should be captured directly with
+  `edge(...)` on the raw signal for exact response timing.
+  When you DO need genuine periodic scanning (state-dependent conditions,
+  or the brief explicitly describes a scanned PLC and states its own
+  response-time tolerance), take the period from the brief when it states
+  one; otherwise choose one and record it in `corrections`. Size it against
+  the TIMING TOLERANCE the acceptance checks demand, not merely against the
+  stated durations -- if a check requires an action at an exact instant, a
+  0.1 s scan that responds a period later still fails it.
 
 - `reinit` IS ALLOWED, IN ONE SPECIFIC SHAPE. It sets a continuous state to a
   new value at an event, and OpenModelica accepts it only inside a `when` in
@@ -353,6 +518,14 @@ not a generic template:
    the flow it produces is what the physics limits. A trajectory that leaves the
    physically possible range is a wrong result even when it compiles, simulates
    and satisfies every stated acceptance check.
+   Back that up with an explicit `assert(...)` on every quantity with a real
+   physical limit -- `assert(w_NaCl >= 0 and w_NaCl <= 1, "mass fraction out of
+   range")`, `assert(T_K > 0, "temperature below absolute zero")`, a valve
+   opening in `[0, 1]`, an absolute pressure `> 0`. An `assert` costs nothing
+   when the model is right, and turns a silently-wrong trajectory (the failure
+   mode this pipeline has actually hit) into a loud simulation-time failure
+   this repair loop can see and fix, instead of a report that looks plausible
+   but is not.
 2. DISCRETE CONTROL -- use an explicit mode variable, enumeration, clock, or
    StateGraph only when the evidence requires discrete stages. Drive transitions
    with the stated guards, threshold events, or timer logic, and preserve the
@@ -368,6 +541,10 @@ not a generic template:
    Derived values may remain equations. If the brief resolves
    historical values, use only the authoritative value and do not blend it with a
    superseded value.
+   Set `nominal = ...` on a variable whose brief-stated magnitude sits far from
+   1 in its own SI unit (a pressure around 1e5 Pa next to a mass flow around
+   1e-3 kg/s, for example), so the solver scales its iteration against the
+   right magnitude instead of an arbitrary one.
 5. SCHEDULE AND OUTPUTS -- put the actual stated command schedule in the controller
    or top-level system model so the bundle runs standalone. Expose the exact output
    variable names used by the structured checks and reports.
@@ -425,7 +602,25 @@ exact pattern:
 
 - Initialize each discrete mode exactly once. Use either a fixed start value or
   an explicit `when initial() then` assignment. Do not combine two independent
-  initial equations for the same variable.
+  initial equations for the same variable -- never write `discrete Mode
+  mode(start = Mode.IDLE, fixed = true);` AND ALSO assign `mode := Mode.IDLE;`
+  inside `when initial() then ... end when;`. This is the single most
+  misleading real-compiler failure in this whole prompt: OpenModelica does
+  NOT reject it as an initialization error. The over-determined
+  initialization forces the enumeration/Integer variable into a nonlinear
+  system's iteration variables, and OMC's C code generator for those
+  unconditionally emits a `.nominal` field access for every iteration
+  variable regardless of type -- which Integer/enumeration attributes do not
+  have. What you actually see, many attempts later, is a locationless C
+  build failure naming a GENERATED file, not yours: `error: no member named
+  'nominal' in 'struct INTEGER_ATTRIBUTE'` in a file named
+  `<Model>_NNnls.c`, sometimes preceded by the warnings "The initial
+  conditions are over specified" and "the tearing heuristic was not able to
+  avoid discrete iteration variables". If you ever see either of those, the
+  fix is NOT in the nonlinear-system machinery the message points at -- find
+  every discrete/Integer/enumeration variable declared with `fixed = true`
+  and check whether `when initial()` also assigns it; remove one of the two
+  initial equations.
 - Give each discrete variable one clear writer. For a mode machine, prefer one
   `when` statement with one ordered `if/elseif` chain. If separate when blocks
   are necessary for different variables, remove live cross-dependencies between
@@ -478,19 +673,15 @@ A robust controller shape for a one-shot schedule is:
   discrete Real tEnter(start = 0, fixed = true);
   discrete Real waitRemaining(start = 0, fixed = true);
   Real waitElapsed;
-  // edge() and pre() take a VARIABLE, never an expression, so the sampled
-  // command needs its own Boolean to hold it. Writing
-  // `edge(sample(0, scanPeriod) and startButton)` is rejected with
-  // "First argument to edge in component ... must be a variable", and the
-  // same applies to pre().
-  Boolean startSample;
-  Boolean stopSample;
 equation
-  // startButton / stopButton come in as BooleanInput from the command sources
-  startSample = sample(0, scanPeriod) and startButton;
-  stopSample  = sample(0, scanPeriod) and stopButton;
-  startPulse  = edge(startSample);
-  stopPulse   = edge(stopSample);
+  // startButton / stopButton come in as BooleanInput from an independent
+  // command source (an operator or a schedule table) that never reads back
+  // from this controller's own mode/output, so capture the edge directly --
+  // NOT through sample(scanPeriod), which would cost a full extra scan
+  // period of latency against the command's true instant for no benefit
+  // (see the sampling rule above).
+  startPulse  = edge(startButton);
+  stopPulse   = edge(stopButton);
   waitElapsed = time - pre(tEnter);
 algorithm
   when {startPulse, stopPulse, pre(mode) == Mode.Running and level >= levelHigh,
@@ -520,18 +711,29 @@ Adapt this shape to the actual system. It is not a requirement to use this exact
 controller, and a valid clocked or StateGraph design may be used when it
 faithfully represents the evidence and passes the real compiler and trajectory
 checks.
-Never emit empty stubs, unused component placeholders, disconnected ports, generic
-boundary sources, arbitrary parameter defaults or copied incomplete legacy code.
-Preserve units, physical topology, dynamics, event priorities and initialization.
-For sampled inputs use the real source schedule, not the expected output trajectory.
-Apply flow cutoffs at physical inventory bounds without changing commanded valve
-states. Include annotation(experiment(StartTime=..., StopTime=..., Tolerance=...,
-Interval=...)) matching the brief's stated simulation horizon and tolerance. Source
-reference tables are supplied as column schemas only: map applicable output columns to
-modeled variables in references, with justified comparison tolerances and
-interpolation. Do not weaken checks or tune against reference output values. Do not
-put expected trajectories in the model. No external functions, file I/O, scripts,
-system calls or external resources. Return complete code for every file through the
-structured `files` field, without Markdown fences, and report material upstream
-corrections separately.
+
+FINAL CHECKLIST -- unrelated final constraints, kept short on purpose. Go
+through every one before returning:
+- Never emit empty stubs, unused component placeholders, disconnected ports,
+  generic boundary sources, arbitrary parameter defaults, or copied incomplete
+  legacy code.
+- Preserve units, physical topology, dynamics, event priorities, and
+  initialization exactly as the brief establishes them.
+- For sampled inputs, drive them from the real source schedule, never from the
+  expected OUTPUT trajectory -- an input built from the answer is not a model.
+- Apply flow cutoffs at physical inventory bounds without changing the
+  commanded valve state itself (see STATE VARIABLES above).
+- Include `annotation(experiment(StartTime=..., StopTime=..., Tolerance=...,
+  Interval=...))` matching the brief's stated simulation horizon and
+  tolerance, on the system file.
+- Source reference tables are supplied as column schemas only: map applicable
+  output columns to modeled variables in `references`, with justified
+  comparison tolerances and interpolation. Never weaken a check or tune a
+  parameter against a reference output value, and never put an expected
+  trajectory inside the model itself.
+- No external functions, file I/O, scripts, system calls, or other external
+  resources -- the bundle must be self-contained and runnable offline.
+- Return complete code for every file through the structured `files` field,
+  with no Markdown fences around any file's `code`, and report every material
+  upstream assumption or correction in `corrections`, separately from the code.
 """

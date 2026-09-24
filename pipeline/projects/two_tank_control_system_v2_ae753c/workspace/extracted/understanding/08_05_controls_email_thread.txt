@@ -1,0 +1,37 @@
+Subject: Tank demo timing / high-level tuning and shutdown semantics
+Document kind: correspondence
+
+## Entities
+* CR-004 -- change request  <CR-004>
+* DR-02 -- design reference  <DR-02>
+* T1 -- tank
+    - high limit: 0.80 m [approved] (supersedes/superseded: 0.78 m)
+    - high: 0.80 m [accepted]
+    - high: 0.78 m [archived]
+    - high: 0.78 m [current]
+* T2 -- tank
+* drain valve -- valve
+* V2 -- valve
+* V3 -- valve
+* SHUT -- state
+* STOP -- state
+* START -- command
+* hackathon test log -- test log
+* Modelica demo -- model
+* current model -- model
+* all valves -- valves
+
+## Relationships
+* SHUT higher priority than STOP  <DR-02>
+* V2 commanded open during SHUT (until both low-level conditions are satisfied)
+* V3 commanded open during SHUT (until both low-level conditions are satisfied)
+
+## Requirements
+* Treat 0.80 m as the effective T1 high limit. [approved]  <CR-004>
+* Use 12 s after T1 reaches low level before opening the drain valve. [approved]
+* Use 8 s after T2 reaches low before the next fill starts. [approved]
+
+## Behaviors
+* During SHUT, V2 and V3 stay commanded open until both low-level conditions are satisfied. [current]  <DR-02>
+* START during SHUT is ignored. [current]  <DR-02>
+* STOP is implemented as a latch that forces all valves closed; START clears it. [current]

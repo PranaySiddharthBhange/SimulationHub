@@ -1,0 +1,55 @@
+Subject: PLC-101 sequence behavior
+Document kind: test procedure
+
+## Entities
+* PLC-101 -- controller  <TP-17 [page 1]>
+* T1 -- tank  <[page 1]>
+    - initial level: 0.05 m
+    - effective high-level setpoint: 0.80 m
+    - fill start time: 20 s [expected]
+* T2 -- tank  <[page 1]>
+    - initial level: 0.05 m
+    - inter-cycle delay: 8 s
+* V1 -- valve  <[page 1]>
+* V2 -- valve  <[page 1]>
+* V3 -- valve  <[page 1]>
+* START -- operator command  <[page 1]>
+    - time: 20 s [scheduled]
+    - time: 280 s [scheduled]
+* STOP -- operator command  <[page 1]>
+    - time: 220 s [scheduled]
+    - time: 650 s [scheduled]
+* SHUT -- operator command  <[page 1]>
+    - time: 700 s [scheduled]
+
+## Relationships
+* PLC-101 controls V1 (sequence behavior)  <[page 1]>
+* PLC-101 controls V2 (sequence behavior)  <[page 1]>
+* PLC-101 controls V3 (sequence behavior)  <[page 1]>
+
+## Requirements
+* T1 shall reach the effective high-level setpoint of 0.80 m before the first transfer begins. [approved]  <AC-01 [page 1]>
+* All valves shall be closed throughout the STOP interval from 220 s until the START command at 280 s. [approved]  <AC-02 [page 1]>
+* The START at 280 s shall resume the interrupted transfer rather than restart filling. [approved]  <AC-03 [page 1]>
+* Following completion of the first T2 drain, the controller shall automatically begin another fill cycle after the effective 8 s inter-cycle delay. [approved]  <AC-04 [page 1]>
+* All valves shall be closed throughout the STOP interval from 650 s until SHUT at 700 s. [approved]  <AC-05 [page 1]>
+* At 700 s V1 shall remain closed and V2/V3 shall be commanded open together for controlled draining. [approved]  <AC-06 [page 1]>
+* After shutdown drain completion the controller shall return to IDLE with all valves closed and shall remain there through 900 s because no subsequent START is scheduled. [approved]  <AC-07 [page 1]>
+* Normal automatic operation shall never command V1 and V2 simultaneously, nor V2 and V3 simultaneously. The latter combination is permitted only in SHUTDOWN. [approved]  <AC-08 [page 1]>
+
+## Constraints
+* A tolerance of +/-2 s is acceptable for state-boundary comparisons when the effective parameter set is used. [approved]  <[page 1]>
+
+## Behaviors
+* If START occurs at 20 s, begin or resume automatic operation; first occurrence begins T1 fill. [expected]  <[page 1]>
+* If STOP occurs at 220 s, close all three valves and hold sequence context. [expected]  <[page 1]>
+* If START occurs at 280 s, resume the state interrupted at 220 s. [expected]  <[page 1]>
+* If STOP occurs at 650 s, close all valves; hold sequence context. [expected]  <[page 1]>
+* If SHUT occurs at 700 s, enter controlled shutdown, inhibit V1, and command V2 and V3 open until both tanks are at low level. [expected]  <[page 1]>
+
+## Scheduled commands
+* At 20 s issue START. [scheduled]  <[page 1]>
+* At 220 s issue STOP. [scheduled]  <[page 1]>
+* At 280 s issue START. [scheduled]  <[page 1]>
+* At 650 s issue STOP. [scheduled]  <[page 1]>
+* At 700 s issue SHUT. [scheduled]  <[page 1]>

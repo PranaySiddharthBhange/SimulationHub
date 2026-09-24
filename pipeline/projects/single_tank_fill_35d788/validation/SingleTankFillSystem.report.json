@@ -1,0 +1,46 @@
+{
+  "verdict": "valid",
+  "check_results": [
+    {
+      "name": "AC-01_fill_target_reached",
+      "expression": "tank_level_m >= 0.80 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "tank_level_m reaches a maximum of 0.8 m during the run and is 0.8 m at t=100 s; therefore the condition tank_level_m >= 0.80 becomes true. Expected: true (1.0)."
+    },
+    {
+      "name": "AC-02_level_never_exceeds_limit",
+      "expression": "tank_level_m <= 0.85 == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "tank_level_m has min=0 m and max=0.8 m for the full 0-100 s run, so it remains <= 0.85 m throughout. Expected: true (1.0)."
+    },
+    {
+      "name": "AC-03_valve_open_at_5s",
+      "expression": "valve_open_cmd == 1 == 1.0 (relative tolerance 0.000%), at t=5.0",
+      "outcome": "pass",
+      "observed": "Event trace shows valve_open_cmd = 1 from t=0 until it changes to 0 at t=40.00000000900099 s, so at t=5.0 s valve_open_cmd = 1. Expected: 1."
+    },
+    {
+      "name": "AC-04_valve_closed_at_100s",
+      "expression": "valve_open_cmd == 0 == 1.0 (relative tolerance 0.000%), at t=100.0",
+      "outcome": "pass",
+      "observed": "Event trace shows valve_open_cmd changes to 0 at t=40.00000000900099 s and stays there; final value is 0, so at t=100.0 s valve_open_cmd = 0. Expected: 0."
+    },
+    {
+      "name": "AC-05_final_level_at_target",
+      "expression": "tank_level_m == 0.8 (absolute tolerance 0.01), at t=100.0",
+      "outcome": "pass",
+      "observed": "tank_level_m final = 0.8 m at t=100.0 s. Expected: 0.8 m with absolute tolerance 0.01 m."
+    }
+  ],
+  "summary": "The run matches the brief end to end. Starting from 0 m, the tank fills at 0.02 m/s while the valve is open, reaches the 0.80 m target at t=40.000000009 s, and the valve then closes and stays closed for the rest of the 100 s simulation. All five acceptance checks pass on the real trajectory: the target is reached, level never exceeds 0.85 m, the valve is open at 5 s, closed at 100 s, and the final level is exactly 0.80 m.",
+  "issues": [],
+  "assumptions": [
+    "No outlet, leak, evaporation, or other mass loss path is modeled, carried forward from the merged brief and model-generation stage.",
+    "The nominal inflow of 0.01 m^3/s is treated as constant whenever the inlet valve is commanded open, with no supply pressure or valve-characteristic dependence modeled.",
+    "The tank cross-sectional area is treated as constant at 0.5 m^2.",
+    "The initial condition is tank_level_m = 0 m at t=0 s.",
+    "For standalone execution, the supply is represented as a continuous constant-flow source at 0.01 m^3/s.",
+    "A further assumption implied by the trajectory is ideal instantaneous valve action and threshold logic: valve_open_cmd switches directly from 1 to 0 at t=40.000000009 s with no modeled opening/closing delay or partial-open state."
+  ],
+  "root_causes": []
+}

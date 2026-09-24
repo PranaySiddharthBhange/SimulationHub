@@ -1,0 +1,33 @@
+{
+  "attempt": 3,
+  "entry_class": "TwoTankSystem",
+  "files": [
+    {
+      "filename": "TwoTankPlant.mo",
+      "role": "component"
+    },
+    {
+      "filename": "PLC101.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "TwoTankSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Previous controller attempt used a continuously evaluated wait-completion expression activeWaitElapsed = time - pre(tEnter) in the trigger set for wait-state transitions. Derived from the compiler log and the controller structure, this lets the same WAIT_AFTER_FILL completion relation remain true during event iteration at the boundary near 180 s, causing repeated re-triggering/chattering instead of a single settled transition. The replacement bundle below should remove the continuously self-rearming wait-completion trigger and compute timed transitions from a stored remaining delay or sampled/event-qualified state logic.",
+    "The brief gives Boolean valve commands and explicit level-balance equations using commanded valve states. No explicit evidence defines intermediate effective flow during the 0.8 s/0.6 s valve strokes, so stroke-to-flow dynamics should not be imposed as fact. If stroke dynamics are represented, that would be an assumption rather than explicit evidence."
+  ],
+  "references": []
+}

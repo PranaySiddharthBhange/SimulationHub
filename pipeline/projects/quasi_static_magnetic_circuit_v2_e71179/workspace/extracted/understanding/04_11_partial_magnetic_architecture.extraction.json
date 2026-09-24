@@ -1,0 +1,122 @@
+{
+  "document": "@startuml\ntitle Partial Magnetic Architecture - Draft\ncomponent CurrentRamp\ncomponent ExcitingCoil\ncomponent IronCore\ncomponent AirGap\ncomponent FluxSensor\ncomponent MeasuringCoil\n\nCurrentRamp --> ExcitingCoil : current phasor\nExcitingCoil --> IronCore : mmf / flux\nIronCore --> AirGap : flux\nAirGap --> FluxSensor : Phi\nAirGap --> MeasuringCoil : induction\n\nnote right of IronCore\n  Draft model does not expose:\n  - leakage branch\n  - element-wise core segmentation\n  - electric ground\n  - magnetic ground\n  - revision/configuration values\nend note\n@enduml\n",
+  "subject": "Partial Magnetic Architecture - Draft",
+  "kind": "architecture diagram",
+  "entities": [
+    {
+      "name": "CurrentRamp",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component CurrentRamp"
+    },
+    {
+      "name": "ExcitingCoil",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component ExcitingCoil"
+    },
+    {
+      "name": "IronCore",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component IronCore"
+    },
+    {
+      "name": "AirGap",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component AirGap"
+    },
+    {
+      "name": "FluxSensor",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component FluxSensor"
+    },
+    {
+      "name": "MeasuringCoil",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component MeasuringCoil"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "CurrentRamp",
+      "predicate": "connects to",
+      "object": "ExcitingCoil",
+      "detail": "current phasor",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CurrentRamp --> ExcitingCoil : current phasor"
+    },
+    {
+      "subject": "ExcitingCoil",
+      "predicate": "connects to",
+      "object": "IronCore",
+      "detail": "mmf / flux",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "ExcitingCoil --> IronCore : mmf / flux"
+    },
+    {
+      "subject": "IronCore",
+      "predicate": "connects to",
+      "object": "AirGap",
+      "detail": "flux",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "IronCore --> AirGap : flux"
+    },
+    {
+      "subject": "AirGap",
+      "predicate": "connects to",
+      "object": "FluxSensor",
+      "detail": "Phi",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "AirGap --> FluxSensor : Phi"
+    },
+    {
+      "subject": "AirGap",
+      "predicate": "connects to",
+      "object": "MeasuringCoil",
+      "detail": "induction",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "AirGap --> MeasuringCoil : induction"
+    }
+  ],
+  "facts": [],
+  "unreadable": [],
+  "unverified_quotes": []
+}

@@ -1,0 +1,110 @@
+{
+  "verdict": "invalid",
+  "check_results": [
+    {
+      "name": "REQ-ELC-003 ramp start current",
+      "expression": "I_rms_A <= 1e-9 == 1.0 (relative tolerance 0.000%), at t=0.1",
+      "outcome": "pass",
+      "observed": "At t=0.1 s, I_rms_A is 0 A. This satisfies I_rms_A <= 1e-9; expected boolean 1.0."
+    },
+    {
+      "name": "REQ-ELC-003 attain final current",
+      "expression": "I_rms_A == 2.0 (absolute tolerance 0.001), ever value",
+      "outcome": "pass",
+      "observed": "I_rms_A reaches 2.0 A (max=2 A, final=2 A). Expected 2.0 A ±0.001 A."
+    },
+    {
+      "name": "REQ-ELC-003 final hold current",
+      "expression": "I_rms_A == 2.0 (absolute tolerance 0.001), final value",
+      "outcome": "pass",
+      "observed": "At final time t=1.0 s, I_rms_A = 2.0 A. Expected 2.0 A ±0.001 A."
+    },
+    {
+      "name": "REQ-FUN-001 positive mmf from positive current",
+      "expression": "mmf_At > 0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "mmf_At becomes positive during the run and reaches 1200 A-turn (max=1200 A-turn, final=1200 A-turn). Expected boolean 1.0."
+    },
+    {
+      "name": "REQ-VV-002 useful/core ratio at endpoint",
+      "expression": "Phi_gap_over_Phi_core == 0.92 (absolute tolerance 0.002), final value",
+      "outcome": "pass",
+      "observed": "At final time t=1.0 s, Phi_gap_over_Phi_core = 0.92. Expected 0.92 ±0.002."
+    },
+    {
+      "name": "AVP mmf balance residual",
+      "expression": "abs(mmf_At - Vm_core_At - Vm_gap_At) / mmf_At <= 0.005 == 1.0 (relative tolerance 0.000%), final value",
+      "outcome": "fail",
+      "observed": "At final time t=1.0 s, mmf_At = 1200 A-turn, Vm_core_At = 0 A-turn, Vm_gap_At = 0 A-turn, so residual = abs(1200-0-0)/1200 = 1.0. Expected residual <= 0.005 (boolean 1.0)."
+    },
+    {
+      "name": "REQ-VV-003 Phi_core endpoint",
+      "expression": "Phi_core_Wb == 0.0005249354 (absolute tolerance 5.249354e-06), final value",
+      "outcome": "fail",
+      "observed": "At final time t=1.0 s, Phi_core_Wb = 0 Wb. Expected 0.0005249354 Wb ± 5.249354e-06 Wb."
+    },
+    {
+      "name": "REQ-VV-003 Phi_gap endpoint",
+      "expression": "Phi_gap_Wb == 0.0004829406 (absolute tolerance 4.829406e-06), final value",
+      "outcome": "fail",
+      "observed": "At final time t=1.0 s, Phi_gap_Wb = 0 Wb. Expected 0.0004829406 Wb ± 4.829406e-06 Wb."
+    },
+    {
+      "name": "REQ-VV-003 B_core endpoint",
+      "expression": "B_core_T == 0.839897 (absolute tolerance 0.00839897), final value",
+      "outcome": "fail",
+      "observed": "At final time t=1.0 s, B_core_T = 0 T. Expected 0.839897 T ± 0.00839897 T."
+    },
+    {
+      "name": "REQ-VV-003 B_gap endpoint",
+      "expression": "B_gap_T == 0.772705 (absolute tolerance 0.00772705), final value",
+      "outcome": "fail",
+      "observed": "At final time t=1.0 s, B_gap_T = 0 T. Expected 0.772705 T ± 0.00772705 T."
+    },
+    {
+      "name": "REQ-VV-003 U_exc endpoint",
+      "expression": "U_exc_induced_V_rms == 98.948 (absolute tolerance 0.98948), final value",
+      "outcome": "fail",
+      "observed": "At final time t=1.0 s, U_exc_induced_V_rms = 0 V. Expected 98.948 V ± 0.98948 V."
+    },
+    {
+      "name": "REQ-IND-002 measuring polarity negative",
+      "expression": "U_meas_induced_signed_V_rms < 0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "fail",
+      "observed": "U_meas_induced_signed_V_rms stays at 0 V throughout the run (min=0 V, max=0 V, final=0 V), so it never becomes negative. Expected boolean 1.0."
+    },
+    {
+      "name": "REQ-VV-003 U_meas magnitude endpoint",
+      "expression": "-U_meas_induced_signed_V_rms == 7.586 (absolute tolerance 0.07586), final value",
+      "outcome": "fail",
+      "observed": "At final time t=1.0 s, U_meas_induced_signed_V_rms = 0 V, so -U_meas_induced_signed_V_rms = 0 V. Expected 7.586 V ± 0.07586 V."
+    }
+  ],
+  "summary": "The run is invalid for the released magnetic benchmark. The commanded current ramp did occur: I_rms_A was 0 A at 0.1 s, reached 2.0 A by 0.5 s, and held 2.0 A at 1.0 s; mmf_At likewise reached 1200 A-turn. However, the magnetic circuit itself did not respond: Phi_core_Wb, Phi_gap_Wb, Phi_leak_Wb, B_core_T, B_gap_T, Vm_core_At, Vm_gap_At, U_exc_induced_V_rms, and U_meas_induced_signed_V_rms all remained exactly 0 for the entire simulation. As a result, the endpoint analytic checks all failed except the fixed ratio Phi_gap_over_Phi_core = 0.92, which appears reported independently of any nonzero flux. The final mmf-balance residual was 1.0 instead of the required <=0.005 because 1200 A-turn of source mmf was not balanced by any magnetic drops.",
+  "issues": [
+    "At t=1.0 s, the mmf balance check fails: mmf_At = 1200 A-turn while Vm_core_At = 0 A-turn and Vm_gap_At = 0 A-turn, giving abs(mmf_At - Vm_core_At - Vm_gap_At)/mmf_At = 1.0, above the 0.005 limit.",
+    "At t=1.0 s, Phi_core_Wb = 0 Wb, short of the required 0.0005249354 Wb ± 5.249354e-06 Wb.",
+    "At t=1.0 s, Phi_gap_Wb = 0 Wb, short of the required 0.0004829406 Wb ± 4.829406e-06 Wb.",
+    "At t=1.0 s, B_core_T = 0 T, short of the required 0.839897 T ± 0.00839897 T.",
+    "At t=1.0 s, B_gap_T = 0 T, short of the required 0.772705 T ± 0.00772705 T.",
+    "At t=1.0 s, U_exc_induced_V_rms = 0 V, short of the required 98.948 V ± 0.98948 V.",
+    "U_meas_induced_signed_V_rms never becomes negative; it remains 0 V for the full run (min=0 V, max=0 V, final=0 V), so the required negative measuring-coil polarity under positive excitation was not demonstrated.",
+    "At t=1.0 s, -U_meas_induced_signed_V_rms = 0 V, short of the required 7.586 V ± 0.07586 V.",
+    "The central benchmark behavior did not occur: despite I_rms_A ramping from 0 to 2.0 A and mmf_At reaching 1200 A-turn, every reported magnetic-flux, magnetic-drop, and induced-voltage variable stayed exactly zero throughout the simulation."
+  ],
+  "assumptions": [
+    "For the reported endpoint checks, the final sample at 1.0 s represents the held 2.0 A RMS operating point specified by the requirements and test procedures.",
+    "Vm_core_At is reported as the total iron-core magnetic potential drop across CORE-L, CORE-U, CORE-R, and CORE-D combined, because the notes give endpoint totals and mmf-balance checks at that aggregate level rather than requiring per-segment reported outputs.",
+    "The executable released benchmark model uses the nominal 1.50 mm air gap, while the 1.58 mm as-built gap is retained only as separate prototype-comparison evidence and not mixed into the released nominal acceptance case.",
+    "A simulation tolerance of 1e-6 is assigned for numerical configuration because the notes provide acceptance tolerances but do not state a solver tolerance.",
+    "The generated model assumes linear constant-reluctance elements for CORE-L, CORE-U, CORE-R, CORE-D, and LEAK-1 rather than geometry-based nonlinear FluxTubes elements.",
+    "The reported Phi_gap_over_Phi_core value of 0.92 appears to be imposed algebraically or parameterically rather than emerging from nonzero simulated branch fluxes, because both Phi_gap_Wb and Phi_core_Wb are reported as 0 Wb for the entire run while the ratio remains fixed at 0.92."
+  ],
+  "root_causes": [
+    "The source current path is active but the magnetic path is not carrying flux. This is shown directly by excitingCoil.i reaching -2 A and excitingCoil.V_m reaching -1200 A-turn while excitingCoil.Phi, coreL.Phi, coreU.Phi, coreR.Phi, coreD.Phi, gap1.Phi, leak1.Phi, and fluxSensor.Phi all remain 0. Physically, the model applied coil current and computed coil mmf, but that mmf did not drive any closed magnetic-flux solution through the reluctance network.",
+    "Because no magnetic flux was solved anywhere in the network, all quantities derived from flux also stayed zero: Vm_core_At and Vm_gap_At stayed 0 A-turn, B_core_T and B_gap_T stayed 0 T, and both induced voltages stayed 0 V. This directly produces the failed endpoint checks and the mmf-balance residual of 1.0: the model has 1200 A-turn of source mmf with no corresponding magnetic potential drops in the reported reluctance path.",
+    "The event trace shows only the commanded current-ramp changes at about 0.1 s and 0.5 s; there are no discrete changes in any magnetic state or branch variable. Together with der(gap1.Phi)=0, der(coreD.Phi)=0, and der(measuringCoil.Phi)=0 for the full run, this indicates the magnetic subsystem remained identically at the zero solution while the electrical current source changed independently.",
+    "A likely structural contributor, based on the model-generation assumptions, is the unresolved measuring-coil electrical-reference arrangement: the stage notes explicitly warned that the extra dedicated ground on MeasuringCoil.n could create an over-constrained or otherwise incorrect instrumentation topology. The real run did compile, so no compiler rejection occurred, but the trajectory still shows that the measuring side produced no voltage and the whole magnetic network remained inactive. This warning does not by itself prove the sole cause, but it is the only explicitly documented topology concern in the generation stage evidence.",
+    "Another structural sign is that Phi_gap_over_Phi_core remains exactly 0.92 even when both Phi_gap_Wb and Phi_core_Wb are 0 Wb throughout. That means at least part of the benchmark output was not being obtained from the solved branch fluxes. This is consistent with a model where parameter relationships were coded, but the actual magnetic-network connections or constitutive coupling needed to produce nonzero flux were missing or ineffective."
+  ]
+}

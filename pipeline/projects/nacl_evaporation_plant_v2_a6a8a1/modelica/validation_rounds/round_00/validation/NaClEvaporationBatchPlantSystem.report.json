@@ -1,0 +1,127 @@
+{
+  "verdict": "partially_valid",
+  "check_results": [
+    {
+      "name": "REQ-FUN-002 B3 reaches fill level",
+      "expression": "B3_level >= 0.13 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "Pass: B3_level reaches 0.13 m at t=2511.490000256269 s and later 0.191176 m at t=2519.137059101644 s; expected ever B3_level >= 0.13 m."
+    },
+    {
+      "name": "REQ-FUN-003 B3 reaches target concentration",
+      "expression": "B3_X_NaCl >= 0.080 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "Pass: B3_X_NaCl reaches 0.08 kg/kg at t=2519.137059101644 s; expected ever B3_X_NaCl >= 0.080 kg/kg."
+    },
+    {
+      "name": "REQ-FUN-004 B3 empties below threshold",
+      "expression": "B3_level < 0.01 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "Pass: B3_level is 0.0002 m at t=0 s, which satisfies the ever condition B3_level < 0.01 m; it later returns to 0.01 m at t=2530.46058853773 s."
+    },
+    {
+      "name": "REQ-FUN-006 B5 reaches batch fill level",
+      "expression": "B5_level >= 0.18 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "Pass: B5_level reaches 0.18 m; event trace shows B5 fill into Step6 beginning after V12 transfer, and summary max(B5_level)=0.18 m; expected ever B5_level >= 0.18 m."
+    },
+    {
+      "name": "REQ-FUN-007 B5 reaches evaporation concentration target",
+      "expression": "B5_X_NaCl >= 0.180 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "Pass: B5_X_NaCl reaches 0.18 kg/kg; summary max(B5_X_NaCl)=0.18 kg/kg and final=0.18 kg/kg; expected ever B5_X_NaCl >= 0.180 kg/kg."
+    },
+    {
+      "name": "REQ-FUN-009 B6 reaches cooling target",
+      "expression": "B6_T <= 20 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "fail",
+      "observed": "Fail: B6_T stays between 43.9126 degC and 80 degC, with min(B6_T)=43.9126 degC and final=43.9126 degC; expected ever B6_T <= 20 degC."
+    },
+    {
+      "name": "REQ-FUN-010 B7 reaches cooling target",
+      "expression": "B7_T <= 25 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "fail",
+      "observed": "Fail: B7_T stays between 80 degC and 228.413 degC, with min(B7_T)=80 degC and final=190.444 degC; expected ever B7_T <= 25 degC."
+    },
+    {
+      "name": "REQ-SAF-001 Heater only on with condenser flow proof",
+      "expression": "not (B5_heater_cmd > 0.5 and FIS801_flow < 0.10) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "not_evaluable",
+      "observed": "FIS801_flow is required by the brief but is absent from the reported result variables. B5_heater_cmd turns on at t=2539.45225521032 s and off at t=2853.845638102238 s, but condenser flow proof cannot be checked numerically without FIS801_flow."
+    },
+    {
+      "name": "REQ-SAF-005 Heater only on above B5 low level inhibit",
+      "expression": "not (B5_heater_cmd > 0.5 and B5_level < 0.05) == 1.0 (relative tolerance 0.000%), always value",
+      "outcome": "pass",
+      "observed": "Pass: whenever B5_heater_cmd=1 (t=2539.45225521032 s to 2853.845638102238 s), B5_level is at or above the fill/evaporation inventory; summary min during run includes startup 0.000166667 m, but heater is off there. The heater turns on after B5 has reached 0.18 m, so no reported interval shows B5_heater_cmd > 0.5 with B5_level < 0.05 m."
+    },
+    {
+      "name": "REQ-ROU-003 P2 return branch occurs",
+      "expression": "P2_cmd > 0.5 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "fail",
+      "observed": "Fail: P2_cmd has min=0, max=0, final=0; no event trace entry shows P2_cmd changing above 0.5. Expected ever P2_cmd > 0.5."
+    },
+    {
+      "name": "REQ-ROU-004 P1 return branch occurs",
+      "expression": "P1_cmd > 0.5 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "fail",
+      "observed": "Fail: P1_cmd has min=0, max=0, final=0; no event trace entry shows P1_cmd changing above 0.5. Expected ever P1_cmd > 0.5."
+    },
+    {
+      "name": "CR-017 B6 return uses approved B1 valve group pattern",
+      "expression": "P2_cmd > 0.5 and V1_open > 0.5 and V3_open > 0.5 and V20_open > 0.5 and V24_open > 0.5 and V25_open > 0.5 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "fail",
+      "observed": "Fail: P2_cmd, V1_open, V3_open, V20_open, V24_open, and V25_open all remain 0 for the full run (each min=0, max=0, final=0). Expected the full approved pattern to occur at least once."
+    },
+    {
+      "name": "CR-017 B7 return uses approved B2 valve group pattern",
+      "expression": "P1_cmd > 0.5 and V18_open > 0.5 and V22_open > 0.5 and V23_open > 0.5 and V5_open > 0.5 and V6_open > 0.5 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "fail",
+      "observed": "Fail: P1_cmd, V18_open, V22_open, V23_open, V5_open, and V6_open all remain 0 for the full run (each min=0, max=0, final=0). Expected the full approved pattern to occur at least once."
+    },
+    {
+      "name": "REQ-VV-001 run continues beyond 2500 s",
+      "expression": "time_s > 2500 == 1.0 (relative tolerance 0.000%), final value",
+      "outcome": "pass",
+      "observed": "Pass: final time_s=3000 s; expected final time_s > 2500 s."
+    },
+    {
+      "name": "BAT-09 restart occurs only after 2500 s",
+      "expression": "V8_open > 0.5 == 1.0 (relative tolerance 0.000%), at t=2505.0",
+      "outcome": "pass",
+      "observed": "Pass: event trace shows V8_open changes to 1 at t=2505.000000250618 s; expected V8_open > 0.5 at t=2505.0 s."
+    }
+  ],
+  "summary": "The run shows a real partial batch sequence and restart, but it does not complete the full acceptance cycle the brief requires. The model charges B3, reaches B3 level 0.13 m at 2511.49 s, reaches B3 concentration 0.08 kg/kg at 2519.14 s, transfers through B4 into B5, fills B5 to 0.18 m, heats B5 from 20 to 228.793 degC, and reaches B5 concentration 0.18 kg/kg before opening V15 at 2853.85 s. However, the downstream split does not complete: B6 never cools to 20 degC (minimum 43.9126 degC), B7 never cools to 25 degC (minimum 80 degC), neither return pump ever runs (P1_cmd max 0, P2_cmd max 0), none of the approved return-routing valve groups ever energize, and the required FIS801_flow signal is missing so condenser-flow heater permissive cannot be evaluated. The run does continue to 3000 s and V8 reopens at 2505.0 s, but because several acceptance checks fail or cannot be evaluated, the simulation is only partially valid, not valid.",
+  "issues": [
+    "B6 cooling target is missed: B6_T never reaches 20 degC; min(B6_T)=43.9126 degC and final(B6_T)=43.9126 degC, so REQ-FUN-009 fails.",
+    "B7 cooling target is missed: B7_T never reaches 25 degC; min(B7_T)=80 degC and final(B7_T)=190.444 degC, so REQ-FUN-010 fails.",
+    "Condensate return branch never occurs: P2_cmd remains 0 for the whole run (min=max=final=0), so REQ-ROU-003 fails.",
+    "Concentrate return branch never occurs: P1_cmd remains 0 for the whole run (min=max=final=0), so REQ-ROU-004 fails.",
+    "Approved B6->B1 routing pattern never occurs: P2_cmd, V1_open, V3_open, V20_open, V24_open, and V25_open all stay 0 throughout the run, so the CR-017 B1 valve-group check fails.",
+    "Approved B7->B2 routing pattern never occurs: P1_cmd, V18_open, V22_open, V23_open, V5_open, and V6_open all stay 0 throughout the run, so the CR-017 B2 valve-group check fails.",
+    "The required condenser flow proof variable FIS801_flow is absent from the reported results, so REQ-SAF-001 cannot be evaluated even though heater command does turn on from 2539.45225521032 s to 2853.845638102238 s.",
+    "The run does not demonstrate the brief’s full parallel cool-and-return completion before reset. Region advances to 3 at t=2853.845638102238 s, but with both pumps and all return-branch valves still never commanded, the split/join behavior is incomplete in the real trajectory."
+  ],
+  "assumptions": [
+    "Simulation stop time was assumed to be 3000 s to satisfy the requirement to continue beyond 2500 s and include restart.",
+    "Reporting interval count was assumed to be 600 to represent 5 s logging over 3000 s.",
+    "Controller state and region were reported using a chosen numeric encoding even though the brief did not define the numeric codes.",
+    "For executable routing checks, the observed valve-group patterns {V20,V24,V25,V1,V3} for B6->B1 and {V18,V22,V23,V5,V6} for B7->B2 were assumed as the best-supported implementation of CR-017.",
+    "B5_T was assumed to be the logged B5 temperature corresponding to TI-503 when available.",
+    "Empty vessels B3, B4, B5, K1, B6, and B7 were initialized with small positive holdup levelStart=1e-4 m and mass floor mMin=0.01 kg so concentration and temperature calculations remain defined; the brief did not provide startup holdup values.",
+    "The Step4 idle guard was implemented using not pre(V15_open) through a derived b5Idle signal to break a discrete algebraic loop, rather than testing V15_open in the same event directly.",
+    "Experiment tolerance 1e-6 was assumed because the brief specified no solver tolerance.",
+    "The generated model is a simplified signal-flow surrogate rather than a full Modelica.Fluid hydraulic realization with gravity pressure drop, junction volumes, and separate K1 hydraulics.",
+    "Derived from the result magnitudes and behavior: the model appears to treat the evaporator split as simple signal-flow outflows/inflows with fixed small rates (for example B5.qOut peaks at 0.0005 and K1.qOut at 2e-05) and no executable pump-driven return path, because B6 and B7 accumulate inventory while P1/P2 and all return valves remain permanently zero."
+  ],
+  "root_causes": [
+    "B6 does not reach 20 degC because the cooler only turns on at t=2853.845638102238 s, after B6 has already accumulated hot condensate during heating, and the remaining simulation time is insufficient for the modeled cooling duty of -6500 W to reduce B6_T below 20 degC. The real run ends with B6_cooler_cmd still 1 and B6_T still 43.9126 degC.",
+    "B7 does not reach 25 degC because concentrate transfer to B7 begins late (B7.qIn starts at t=2853.845638102238 s and ends at 2861.669902812917 s), B7_cooler_cmd only turns on at t=2861.669902812917 s, and the modeled cooling duty of -4500 W is far too small over the remaining 138 s to cool material that enters as hot as the B5 concentrate. B7 therefore stays extremely hot, ending at 190.444 degC.",
+    "P2 never runs because the generated controller/model does not include an executable transition from the cooling phase into the condensate return command. This is evidenced directly by P2_cmd, controller.P2_on, V1_open, V3_open, V20_open, V24_open, and V25_open all remaining zero even while B6 contains liquid up to 0.125957 m.",
+    "P1 never runs for the same structural reason on the concentrate side: the model reaches concentrate transfer and starts B7 cooling, but no executable logic ever asserts P1_cmd or the associated B2 return valve group. This is evidenced by P1_cmd, controller.P1_on, V18_open, V22_open, V23_open, V5_open, and V6_open all remaining zero while B7 level rises to 0.0784426 m.",
+    "The CR-017 routing checks fail as a direct consequence of the missing return-branch actuation logic. Since neither pump command is ever asserted, the corresponding approved valve groups are never energized, so the required conjunctions can never become true.",
+    "REQ-SAF-001 cannot be evaluated because the model output contract in the brief requires FIS801_flow, but the actual reported result set contains no variable of that name. The omission is a reporting/model-instrumentation deficiency, not just a post-processing problem, because the acceptance requirement explicitly depends on that signal.",
+    "The trajectory only partially matches the intended split/join cycle because the simplified signal-flow surrogate implements upstream charge, transfer, heating, and a one-way split into B6/B7, but not the full downstream return hydraulics and completion logic. Inventories collect in B6 and B7, both cooler commands remain on at the end, and the controller never issues the pump/valve actions needed to empty those vessels and satisfy the join-before-reset intent."
+  ]
+}

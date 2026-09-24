@@ -1,0 +1,44 @@
+{
+  "attempt": 3,
+  "entry_class": "NaClBatchPlantSystem",
+  "files": [
+    {
+      "filename": "NaClBatchController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "NaClBatchPlantSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.BooleanConstant",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Fluid.Sensors.MassFlowRate",
+    "Modelica.Fluid.Sources.Boundary_pT",
+    "Modelica.Fluid.Sources.MassFlowSource_T",
+    "Modelica.Fluid.System",
+    "Modelica.Fluid.Valves.ValveDiscrete",
+    "Modelica.Fluid.Vessels.ClosedVolume",
+    "Modelica.Fluid.Vessels.OpenTank",
+    "Modelica.Icons.Example",
+    "Modelica.Media.Water.StandardWater",
+    "Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow"
+  ],
+  "corrections": [
+    "Derived root cause of the translation error: the previous system model connected more than one physical branch to the same vessel port indices while also using surrogate source/sink branches for condensate and return pumping. In this plant, B3, B4, B5, B6, and B7 each participate in more distinct hydraulic connections than the previous nPorts declarations allowed. The bundle increases nPorts and assigns one unique ports[i] per actual connection so each vessel connection path is represented separately.",
+    "Assumption: because the brief confirms branch destinations and observed commanded return valve sets but does not provide a full readable manifold path or a pump head-flow curve, the return pumping remains represented with commanded MassFlowSource_T devices and the approved/observed valve groups remain as separate actuated hydraulic path elements. This preserves the commanded routing behavior without reusing one vessel port for multiple connections.",
+    "Assumption: the StandardWater medium is used as the baseline integration-test medium exactly as resolved in the brief; composition reports QI-302 and QIS-502 remain surrogate report expressions in this baseline model because StandardWater cannot carry NaCl mass fraction.",
+    "Assumption: no explicit solver tolerance is stated in the brief. The system file keeps experiment Tolerance=1e-6 as a modeling choice, not as a brief-stated fact.",
+    "Assumption: initial levels for B1 and B2 remain 0.30 m because the brief supplies geometry, max levels, and B3 prefill evidence but does not state initial B1/B2 fill levels. This preserves the earlier executable choice; the brief is otherwise silent.",
+    "Assumption: K1 volume V=0.01 m3 remains an executable placeholder because the brief requires K1 to remain a distinct physical component but provides no condenser hold-up volume.",
+    "Derived concern retained from evidence: the exact physical semantics of condensate generation from B5 into K1 are not fully established for this StandardWater baseline. The brief provides an evidence-grounded condensation relation involving Q_up, heatPort.Q_flow, hv, hl, Xi[1], cp, dT_dX, and dhl_dX, but also states units are not fully established and must be verified before implementation. This baseline therefore does not claim physical validation of evaporation/condensation energetics."
+  ],
+  "references": []
+}

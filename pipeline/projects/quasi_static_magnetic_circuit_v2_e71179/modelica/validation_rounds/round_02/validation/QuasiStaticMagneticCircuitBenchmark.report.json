@@ -1,0 +1,95 @@
+{
+  "verdict": "valid",
+  "check_results": [
+    {
+      "name": "REQ-ELC-003 ramp start current",
+      "expression": "I_rms_A <= 1e-9 == 1.0 (relative tolerance 0.000%), at t=0.1",
+      "outcome": "pass",
+      "observed": "At t=0.1 s, I_rms_A is 0 A (event trace shows the ratio changes from 0 to 0.92 at t=0.1000000001108274 s, implying excitation becomes positive only just after 0.1 s); expected I_rms_A <= 1e-9, i.e. true == 1.0."
+    },
+    {
+      "name": "REQ-ELC-003 attain final current",
+      "expression": "I_rms_A == 2.0 (absolute tolerance 0.001), ever value",
+      "outcome": "pass",
+      "observed": "I_rms_A reaches a maximum of 2.0 A during the run; expected 2.0 ± 0.001 A."
+    },
+    {
+      "name": "REQ-ELC-003 final hold current",
+      "expression": "I_rms_A == 2.0 (absolute tolerance 0.001), final value",
+      "outcome": "pass",
+      "observed": "At final time t=1.0 s, I_rms_A = 2.0 A; expected 2.0 ± 0.001 A."
+    },
+    {
+      "name": "REQ-FUN-001 positive mmf from positive current",
+      "expression": "mmf_At > 0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "mmf_At reaches a maximum of 1200 A-turn during the run, so mmf_At > 0 occurs; expected true == 1.0."
+    },
+    {
+      "name": "REQ-VV-002 useful/core ratio at endpoint",
+      "expression": "Phi_gap_over_Phi_core == 0.92 (absolute tolerance 0.002), final value",
+      "outcome": "pass",
+      "observed": "At final time t=1.0 s, Phi_gap_over_Phi_core = 0.92; expected 0.92 ± 0.002."
+    },
+    {
+      "name": "AVP mmf balance residual",
+      "expression": "abs(mmf_At - Vm_core_At - Vm_gap_At) / mmf_At <= 0.005 == 1.0 (relative tolerance 0.000%), final value",
+      "outcome": "pass",
+      "observed": "At final time t=1.0 s, mmf_At = 1200 A-turn, Vm_core_At = 277.651 A-turn, Vm_gap_At = 922.349 A-turn, so residual = |1200 - 277.651 - 922.349| / 1200 = 0 / 1200 = 0; expected <= 0.005, i.e. true == 1.0."
+    },
+    {
+      "name": "REQ-VV-003 Phi_core endpoint",
+      "expression": "Phi_core_Wb == 0.0005249354 (absolute tolerance 5.249354e-06), final value",
+      "outcome": "pass",
+      "observed": "At final time t=1.0 s, Phi_core_Wb = 0.000524935 Wb; expected 0.0005249354 ± 0.000005249354 Wb."
+    },
+    {
+      "name": "REQ-VV-003 Phi_gap endpoint",
+      "expression": "Phi_gap_Wb == 0.0004829406 (absolute tolerance 4.829406e-06), final value",
+      "outcome": "pass",
+      "observed": "At final time t=1.0 s, Phi_gap_Wb = 0.000482941 Wb; expected 0.0004829406 ± 0.000004829406 Wb."
+    },
+    {
+      "name": "REQ-VV-003 B_core endpoint",
+      "expression": "B_core_T == 0.839897 (absolute tolerance 0.00839897), final value",
+      "outcome": "pass",
+      "observed": "At final time t=1.0 s, B_core_T = 0.839897 T; expected 0.839897 ± 0.00839897 T."
+    },
+    {
+      "name": "REQ-VV-003 B_gap endpoint",
+      "expression": "B_gap_T == 0.772705 (absolute tolerance 0.00772705), final value",
+      "outcome": "pass",
+      "observed": "At final time t=1.0 s, B_gap_T = 0.772705 T; expected 0.772705 ± 0.00772705 T."
+    },
+    {
+      "name": "REQ-VV-003 U_exc endpoint",
+      "expression": "U_exc_induced_V_rms == 98.948 (absolute tolerance 0.98948), final value",
+      "outcome": "pass",
+      "observed": "At final time t=1.0 s, U_exc_induced_V_rms = 98.948 V RMS; expected 98.948 ± 0.98948 V RMS."
+    },
+    {
+      "name": "REQ-IND-002 measuring polarity negative",
+      "expression": "U_meas_induced_signed_V_rms < 0 == 1.0 (relative tolerance 0.000%), ever value",
+      "outcome": "pass",
+      "observed": "U_meas_induced_signed_V_rms reaches a minimum of -7.58601 V RMS during positive excitation, so it becomes negative; expected true == 1.0."
+    },
+    {
+      "name": "REQ-VV-003 U_meas magnitude endpoint",
+      "expression": "-U_meas_induced_signed_V_rms == 7.586 (absolute tolerance 0.07586), final value",
+      "outcome": "pass",
+      "observed": "At final time t=1.0 s, U_meas_induced_signed_V_rms = -7.58601 V RMS, so -U_meas_induced_signed_V_rms = 7.58601 V RMS; expected 7.586 ± 0.07586 V RMS."
+    }
+  ],
+  "summary": "The run is valid for the released nominal quasi-static magnetic-circuit benchmark. The commanded RMS current stays at 0 A through t=0.1 s, ramps to 2.0 A, and holds 2.0 A at t=1.0 s. At the endpoint, the model reports mmf_At = 1200 A-turn, Phi_core_Wb = 5.24935e-4 Wb, Phi_gap_Wb = 4.82941e-4 Wb, Phi_gap_over_Phi_core = 0.92, B_core_T = 0.839897 T, B_gap_T = 0.772705 T, U_exc_induced_V_rms = 98.948 V, and U_meas_induced_signed_V_rms = -7.58601 V, all within the stated tolerances. The mmf balance also closes exactly at the endpoint: 1200 - 277.651 - 922.349 = 0 A-turn. The event trace is consistent with zero excitation up to 0.1 s and positive excitation afterward, with the useful/core ratio stepping from 0 to 0.92 at t=0.1000000001108274 s.",
+  "issues": [],
+  "assumptions": [
+    "For the reported endpoint checks, the final sample at 1.0 s represents the held 2.0 A RMS operating point specified by the requirements and test procedures.",
+    "Vm_core_At is reported as the total iron-core magnetic potential drop across CORE-L, CORE-U, CORE-R, and CORE-D combined, because the notes give endpoint totals and mmf-balance checks at that aggregate level rather than requiring per-segment reported outputs.",
+    "The executable released benchmark model uses the nominal 1.50 mm air gap, while the 1.58 mm as-built gap is retained only as separate prototype-comparison evidence and not mixed into the released nominal acceptance case.",
+    "A simulation tolerance of 1e-6 is assigned for numerical configuration because the notes provide acceptance tolerances but do not state a solver tolerance.",
+    "The executable model is built directly from the released closed-form reluctance equations rather than from a solved FluxTubes network, even though both ElectricGround and MagneticGround are instantiated as named components.",
+    "Phi_gap_over_Phi_core is computed as Phi_gap_Wb/max(Phi_core_Wb, 1e-30) so the ratio is forced defined at zero excitation; this is reflected in the event trace where the reported ratio is 0 at t=0 and 0.92 once excitation becomes positive.",
+    "From the constant reluctances and endpoint values, the run behavior implies a strictly linear, time-independent magnetic circuit with constant mu_r = 1200, constant sigma = 0.08, and induced voltages proportional to flux magnitude through |U| = 2*pi*f*N*|Phi|."
+  ],
+  "root_causes": []
+}

@@ -1,0 +1,476 @@
+{
+  "document": "[page 1]\n     Composite Valve and Pump Datasheet - Rev C\n\n\nSynthetic supplier composite datasheet. Project aliases have been added in brackets.\n\n1. Automated valve family\n\n Property                                Value\n Type                                      2/2-way solenoid/pneumatic discrete valve\n Command                              24 VDC / Boolean open command\n Fail action                                   Spring return CLOSED\n Nominal opening time                         0.7 s\n Nominal closing time                          0.5 s\n Leakage at closed                       <0.02% Kv\n Permitted medium                         Water / aqueous NaCl, 0-120 degC\n Modelica abstraction                          ValveDiscrete; no modulation\n\nProject automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25. Valves not in\nthis list are manual/local isolation, drain or cooling-water valves unless a later approved ICD assigns them to\nthe controller.\n\n2. Return pump family\n\n Property                         P1                                 P2\n Service                                Concentrate return                        Condensate return\n Nominal mass flow                       0.30 kg/s                                    0.30 kg/s\n Nominal differential pressure              1.8 bar                                       1.8 bar\n Minimum source level permissive         LIS-701 >0.02 m                            LIS-601 >0.02 m\n Low discharge pressure alarm            PIS-901 <0.8 bar                          PIS-1001 <0.8 bar\n Dry-run policy                                   Inhibit start / trip                                     Inhibit start / trip\n\n3. Installation note\nPump discharge headers are cross-connected to the charging-vessel return manifolds. Final routing is\ndetermined by the approved process-routing change record, not by pump physical location alone.\n[page 1 also supplied as visual image 1]",
+  "subject": "Composite Valve and Pump Datasheet - Rev C",
+  "kind": "datasheet",
+  "entities": [
+    {
+      "name": "automated valve family",
+      "kind": "valve family",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "command voltage",
+          "value": "24",
+          "unit": "VDC",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "24 VDC / Boolean open command"
+        },
+        {
+          "quantity": "nominal opening time",
+          "value": "0.7",
+          "unit": "s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "Nominal opening time                         0.7 s"
+        },
+        {
+          "quantity": "nominal closing time",
+          "value": "0.5",
+          "unit": "s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "Nominal closing time                          0.5 s"
+        },
+        {
+          "quantity": "leakage at closed",
+          "value": "<0.02",
+          "unit": "% Kv",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Leakage at closed                       <0.02% Kv"
+        },
+        {
+          "quantity": "permitted medium temperature range",
+          "value": "0-120",
+          "unit": "degC",
+          "status": "permitted",
+          "supersedes": "",
+          "quote": "Permitted medium                         Water / aqueous NaCl, 0-120 degC"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "1. Automated valve family"
+    },
+    {
+      "name": "V1",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V3",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V5",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V6",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V8",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V9",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V11",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V12",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V15",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V18",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V20",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V22",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V23",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V24",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "V25",
+      "kind": "automated valve",
+      "aliases": [
+        "automated valve family"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Project automated tags: V1, V3, V5, V6, V8, V9, V11, V12, V15, V18, V20, V22, V23, V24, V25."
+    },
+    {
+      "name": "P1",
+      "kind": "return pump",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "nominal mass flow",
+          "value": "0.30",
+          "unit": "kg/s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "Nominal mass flow                       0.30 kg/s                                    0.30 kg/s"
+        },
+        {
+          "quantity": "nominal differential pressure",
+          "value": "1.8",
+          "unit": "bar",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "Nominal differential pressure              1.8 bar                                       1.8 bar"
+        },
+        {
+          "quantity": "minimum source level permissive threshold",
+          "value": "0.02",
+          "unit": "m",
+          "status": "minimum permissive",
+          "supersedes": "",
+          "quote": "Minimum source level permissive         LIS-701 >0.02 m                            LIS-601 >0.02 m"
+        },
+        {
+          "quantity": "low discharge pressure alarm threshold",
+          "value": "0.8",
+          "unit": "bar",
+          "status": "alarm",
+          "supersedes": "",
+          "quote": "Low discharge pressure alarm            PIS-901 <0.8 bar                          PIS-1001 <0.8 bar"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": " Property                         P1                                 P2"
+    },
+    {
+      "name": "P2",
+      "kind": "return pump",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "nominal mass flow",
+          "value": "0.30",
+          "unit": "kg/s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "Nominal mass flow                       0.30 kg/s                                    0.30 kg/s"
+        },
+        {
+          "quantity": "nominal differential pressure",
+          "value": "1.8",
+          "unit": "bar",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "Nominal differential pressure              1.8 bar                                       1.8 bar"
+        },
+        {
+          "quantity": "minimum source level permissive threshold",
+          "value": "0.02",
+          "unit": "m",
+          "status": "minimum permissive",
+          "supersedes": "",
+          "quote": "Minimum source level permissive         LIS-701 >0.02 m                            LIS-601 >0.02 m"
+        },
+        {
+          "quantity": "low discharge pressure alarm threshold",
+          "value": "0.8",
+          "unit": "bar",
+          "status": "alarm",
+          "supersedes": "",
+          "quote": "Low discharge pressure alarm            PIS-901 <0.8 bar                          PIS-1001 <0.8 bar"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": " Property                         P1                                 P2"
+    },
+    {
+      "name": "LIS-701",
+      "kind": "level indicator switch",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Minimum source level permissive         LIS-701 >0.02 m                            LIS-601 >0.02 m"
+    },
+    {
+      "name": "LIS-601",
+      "kind": "level indicator switch",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Minimum source level permissive         LIS-701 >0.02 m                            LIS-601 >0.02 m"
+    },
+    {
+      "name": "PIS-901",
+      "kind": "pressure indicator switch",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Low discharge pressure alarm            PIS-901 <0.8 bar                          PIS-1001 <0.8 bar"
+    },
+    {
+      "name": "PIS-1001",
+      "kind": "pressure indicator switch",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Low discharge pressure alarm            PIS-901 <0.8 bar                          PIS-1001 <0.8 bar"
+    },
+    {
+      "name": "pump discharge headers",
+      "kind": "header",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Pump discharge headers are cross-connected to the charging-vessel return manifolds."
+    },
+    {
+      "name": "charging-vessel return manifolds",
+      "kind": "manifold",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Pump discharge headers are cross-connected to the charging-vessel return manifolds."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "pump discharge headers",
+      "predicate": "cross-connected to",
+      "object": "charging-vessel return manifolds",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Pump discharge headers are cross-connected to the charging-vessel return manifolds."
+    },
+    {
+      "subject": "P1",
+      "predicate": "has minimum source level permissive from",
+      "object": "LIS-701",
+      "detail": ">0.02 m",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Minimum source level permissive         LIS-701 >0.02 m                            LIS-601 >0.02 m"
+    },
+    {
+      "subject": "P2",
+      "predicate": "has minimum source level permissive from",
+      "object": "LIS-601",
+      "detail": ">0.02 m",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Minimum source level permissive         LIS-701 >0.02 m                            LIS-601 >0.02 m"
+    },
+    {
+      "subject": "P1",
+      "predicate": "has low discharge pressure alarm from",
+      "object": "PIS-901",
+      "detail": "<0.8 bar",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Low discharge pressure alarm            PIS-901 <0.8 bar                          PIS-1001 <0.8 bar"
+    },
+    {
+      "subject": "P2",
+      "predicate": "has low discharge pressure alarm from",
+      "object": "PIS-1001",
+      "detail": "<0.8 bar",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Low discharge pressure alarm            PIS-901 <0.8 bar                          PIS-1001 <0.8 bar"
+    }
+  ],
+  "facts": [
+    {
+      "category": "behavior",
+      "statement": "Low discharge pressure alarm when PIS-901 <0.8 bar for P1.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Low discharge pressure alarm            PIS-901 <0.8 bar                          PIS-1001 <0.8 bar"
+    },
+    {
+      "category": "behavior",
+      "statement": "Low discharge pressure alarm when PIS-1001 <0.8 bar for P2.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Low discharge pressure alarm            PIS-901 <0.8 bar                          PIS-1001 <0.8 bar"
+    },
+    {
+      "category": "behavior",
+      "statement": "Minimum source level permissive for P1 requires LIS-701 >0.02 m.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Minimum source level permissive         LIS-701 >0.02 m                            LIS-601 >0.02 m"
+    },
+    {
+      "category": "behavior",
+      "statement": "Minimum source level permissive for P2 requires LIS-601 >0.02 m.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Minimum source level permissive         LIS-701 >0.02 m                            LIS-601 >0.02 m"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

@@ -1,0 +1,16 @@
+flowchart TD
+    A["Start simulation"] --> B["Set run duration to 1 s<br/>Set output intervals to 1000"]
+    B --> C["Apply prescribed excitation current input<br/>0 A at 0 s to 2 A at 0.1 s"]
+    C --> D{"t < 0.1 s?"}
+    D -->|Yes| E["Ramp excitation current linearly toward 2 A"]
+    D -->|No| F["Hold excitation current at 2 A"]
+    E --> G["Compute mmf_At = N * I<br/>N = 500 turns nominal"]
+    F --> G
+    G --> H["Drive magnetic flux around closed iron core"]
+    H --> I["Core and air gap in series carry same flux<br/>Same cross-section 0.0004 m^2"]
+    I --> J["Set B_core_T = B_gap_T"]
+    J --> K["Report over whole run<br/>mmf_At, Phi_core_Wb, B_core_T, B_gap_T, Vm_core_At, Vm_gap_At"]
+    K --> L{"t = 1.0 s?"}
+    L -->|No| D
+    L -->|Yes| M["Check AC-00 through AC-08 at stated timing"]
+    M --> N["End"]

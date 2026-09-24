@@ -1,0 +1,34 @@
+{
+  "entry_class": "NaClEvaporationBatchPlantSystem",
+  "files": [
+    {
+      "filename": "SimpleBatchTank.mo",
+      "role": "component"
+    },
+    {
+      "filename": "NaClBatchController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "NaClEvaporationBatchPlantSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Icons.Example",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Blocks.Sources.Constant",
+    "Modelica.Blocks.Math.BooleanToReal"
+  ],
+  "corrections": [
+    "Derived from the reported initialization assertion at SimpleBatchTank line 44: the previous bundle initialized several nearly empty tanks at exactly zero mass while also asserting physical bounds during initialization. This bundle changes empty starts to a small positive levelStart=1e-4 m for B3, B4, B5, K1, B6, and B7 and raises internal mass floors to mMin=0.01 kg so X=mSalt/max(m,mMin) and T=E/max(cp*m,cp*mMin) stay defined at initialization. This is an assumption to make the simplified signal-flow tank executable; the brief does not provide startup holdup values for these vessels.",
+    "The previous controller attempt failed earlier with a purely discrete algebraic loop involving V15_open in the Step4 idle guard. This bundle keeps V15_open derived from branchBState and changes the Step4 idle test to use not pre(V15_open) via b5Idle, preserving the stated idle condition LIS-501 < 0.01 m and V15 closed while breaking the same-event dependency.",
+    "Tolerance 1e-6 in the experiment annotation is an assumption because the brief states no solver tolerance.",
+    "This remains a simplified signal-flow surrogate, not a full Modelica.Fluid realization of the evidenced plant topology with gravity pressure drop, junction volumes, and separate K1 hydraulics. The brief supports StandardWater only for baseline integration, but it does not provide enough resolved hydraulic sizing data here to build a trustworthy gravity-driven acausal network without further assumptions beyond those recorded."
+  ],
+  "references": []
+}

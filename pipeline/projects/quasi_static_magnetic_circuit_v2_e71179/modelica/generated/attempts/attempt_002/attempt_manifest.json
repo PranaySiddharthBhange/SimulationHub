@@ -1,0 +1,34 @@
+{
+  "attempt": 2,
+  "entry_class": "BenchmarkMagneticCircuitSystem",
+  "files": [
+    {
+      "filename": "CurrentRamp.mo",
+      "role": "component"
+    },
+    {
+      "filename": "BenchmarkMagneticCircuitSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Electrical.Analog.Basic.Ground",
+    "Modelica.Electrical.Analog.Sensors.VoltageSensor",
+    "Modelica.Electrical.Analog.Sources.SignalCurrent",
+    "Modelica.Icons.Example",
+    "Modelica.Magnetic.FluxTubes.Basic.ConstantReluctance",
+    "Modelica.Magnetic.FluxTubes.Basic.ElectroMagneticConverter",
+    "Modelica.Magnetic.FluxTubes.Basic.Ground",
+    "Modelica.Magnetic.FluxTubes.Sensors.MagneticFluxSensor"
+  ],
+  "corrections": [
+    "Replaced the previous use of Modelica.Magnetic.FluxTubes.Shapes.FixedShape.Cuboid with Modelica.Magnetic.FluxTubes.Basic.ConstantReluctance for CORE-L, CORE-U, CORE-R, and CORE-D because the brief requires the released baseline to be linear with constant effective relative permeability mu_r = 1200, and the reported preflight evidence states the FixedShape classes hardcode nonlinear permeability behavior and would not represent the released linear benchmark.",
+    "Replaced the previous custom LeakageFluxBranch based on Modelica.Magnetic.FluxTubes.Basic.LeakageWithCoefficient with a direct Modelica.Magnetic.FluxTubes.Basic.ConstantReluctance leak branch using R_leak = R_gap*(1-sigma)/sigma, because the brief explicitly gives that released benchmark relation and the reported preflight evidence states LeakageWithCoefficient requires an unconnected RealInput that leaves the system under-determined if omitted.",
+    "Rewired the useful-flux sensor in series in the GAP-1 branch by connecting CORE-R -> FluxSensor -> GAP-1 -> CORE-D, because the brief says FluxSensor reports useful air-gap flux through GAP-1; the previous port_p-to-port_p and port_n-to-port_n wiring placed the sensor in parallel across the gap rather than in the useful-flux path.",
+    "Kept the nominal released air gap delta = 0.00150 m in the executable benchmark and did not use the separate as-built 0.00158 m prototype gap, per the brief's resolved released-benchmark decision.",
+    "Assigned simulation tolerance 1e-6 in the experiment annotation because the brief says the notes do not state a solver tolerance directly and this assigned numerical tolerance was already resolved by Merge as an assumption.",
+    "The brief requires one electric ground and one magnetic ground. This bundle instantiates both. A second electrical reference connection is still present on the measuring coil circuit through MeasuringCoil.n to a dedicated ground instance; if the real compiler rejects that topology as an over-constrained electrical reference, the brief does not state the exact open-circuit instrumentation arrangement needed for the measuring coil and that wiring would need clarification rather than invention."
+  ],
+  "references": []
+}

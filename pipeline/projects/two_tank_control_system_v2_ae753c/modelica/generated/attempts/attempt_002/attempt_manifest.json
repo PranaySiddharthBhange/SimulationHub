@@ -1,0 +1,65 @@
+{
+  "attempt": 2,
+  "entry_class": "TwoTankSystem",
+  "files": [
+    {
+      "filename": "TwoTankPlant.mo",
+      "role": "component"
+    },
+    {
+      "filename": "PLC101.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "TwoTankSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Icons.Example",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Blocks.Math.BooleanToReal"
+  ],
+  "corrections": [
+    "Derived root-cause fix for the non-finishing previous run: the controller used event guards that depended directly on continuously recomputed expressions involving the same wait timing state and mode dispatch, which can re-trigger near state boundaries. This revision introduces explicit Boolean guard variables for phase-completion conditions and keeps every read of a variable written by the when-algorithm behind pre(...) where previous-event values are intended.",
+    "Assumption retained from the brief: valve stroke times 0.8 s open and 0.6 s close are preserved as parameters in the engineering description but not converted into intermediate effective flow dynamics, because the brief states Boolean valve commands and provides no explicit command-to-partial-flow relationship.",
+    "Assumption retained from the brief: output interval is 0.1 s over 0..900 s, represented by experiment Interval=0.1 so 9000 output intervals match the merged assumption."
+  ],
+  "references": [
+    {
+      "path": "12_10_demo_run_900s.txt",
+      "time_column": "time_s",
+      "reference_column": "controller_state_code",
+      "model_variable": "controller_state_code",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Reference evidence about one recorded run; compare reported controller state trajectory without using it as a forcing input."
+    },
+    {
+      "path": "12_10_demo_run_900s.txt",
+      "time_column": "time_s",
+      "reference_column": "tank1_level_m",
+      "model_variable": "tank1_level_m",
+      "absolute_tolerance": 0.02,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Reference evidence for the observed tank 1 level trajectory, with tolerance justified by stated +/-2 s acceptance for state-boundary comparisons rather than exact trajectory forcing."
+    },
+    {
+      "path": "12_10_demo_run_900s.txt",
+      "time_column": "time_s",
+      "reference_column": "tank2_level_m",
+      "model_variable": "tank2_level_m",
+      "absolute_tolerance": 0.02,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Reference evidence for the observed tank 2 level trajectory, with tolerance justified by stated +/-2 s acceptance for state-boundary comparisons rather than exact trajectory forcing."
+    }
+  ]
+}

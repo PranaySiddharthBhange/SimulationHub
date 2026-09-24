@@ -1,0 +1,114 @@
+{
+  "title": "Gapped Core Magnetic Circuit — Ramped Excitation",
+  "narrative": "Canonical entities and aliases:\n- Excitation coil: a coil with 500 turns [nominal].\n- Core (iron path), alias iron core: magnetic core segment with mean path length 0.4 m, cross-section 4 cm^2 = 0.0004 m^2, and relative permeability 2000 [all nominal].\n- Air gap: magnetic gap segment with length 2 mm = 0.002 m and cross-section 4 cm^2 = 0.0004 m^2 [nominal].\n- Magnetic reference: one reference [nominal] with exactly one magnetic ground.\n- magnetic ground.\n\nTopology and relationships:\n- The air gap is in series with the core (iron path).\n- The excitation coil drives magnetic flux around the closed iron core.\n- The core (iron path) carries the same flux in series with the air gap.\n- Because the core and air gap are stated to have the same flux and the same cross-section, the requirement note explicitly states that the core flux density and air-gap flux density are the same.\n\nScenario and behaviour:\n- The requirement specification defines a ramped excitation current for the excitation coil from 0 A at 0 s to 2 A at 0.1 s, then holding at 2 A thereafter. This is grounded by the coil entity values and by the behavioural requirement that every reported quantity shall rise with coil current during the 0–0.1 s ramp and then hold steady at its final value for the rest of the 1 s run.\n- The simulation duration is 1 second.\n\nReported variables contract for later stages:\n- mmf_At [A-turn]: coil magnetomotive force.\n- Phi_core_Wb [Wb]: magnetic flux in the core.\n- B_core_T [T]: magnetic flux density in the core.\n- B_gap_T [T]: magnetic flux density in the air gap.\n- Vm_core_At [A-turn]: magnetic potential drop across the iron core.\n- Vm_gap_At [A-turn]: magnetic potential drop across the air gap.\nThese names are taken directly from the approved acceptance criteria and satisfy the reporting requirement to report these quantities for the whole run, not only at the end.\n\nPhysical relationships explicitly stated in the notes:\n- mmf_At = N * I, with approved reference value at full current given as 500 * 2 = 1000 A-turn. This is explicit from the requirement note under Physical relationships and AC-02.\n- B_core_T and B_gap_T are equal because the same flux passes through core and air gap in series and both are stated to have the same cross-section.\n- The approved acceptance criterion AC-08 requires the magnetic potential drops across the core and air gap to sum to the applied mmf at t = 1.0 s, expressed as abs((mmf_At - Vm_core_At - Vm_gap_At) / mmf_At) <= 0.005.\n\nDerived consistency from approved end values:\n- Derived: Phi_core_Wb = B_core_T * A = 0.571199 T * 0.0004 m^2 = 0.0002284796 Wb, numerically consistent with the approved value 0.00022848 Wb in AC-03.\n- Derived: Vm_core_At + Vm_gap_At = 90.9091 + 909.091 = 1000.0001 A-turn, consistent with AC-08 and AC-02 within the stated tolerance and rounding.\n\nThere are no other equations, nonlinear magnetic properties, inductance values, or dynamic electrical circuit elements stated in the notes. The note establishes a magnetic-circuit requirement case with a prescribed current ramp and required reported magnetic quantities over time.",
+  "simulation": {
+    "start_time": 0.0,
+    "stop_time": 1.0,
+    "intervals": 1000,
+    "tolerance": 1e-6
+  },
+  "checks": [
+    {
+      "name": "AC-00 mmf zero at start",
+      "expression": "mmf_At <= 1e-06",
+      "kind": "at",
+      "at_time": 0.0,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_gapped_core.txt <AC-00>"
+    },
+    {
+      "name": "AC-01 mmf reaches full current level",
+      "expression": "mmf_At >= 999.0",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_gapped_core.txt <AC-01>"
+    },
+    {
+      "name": "AC-02 final mmf",
+      "expression": "mmf_At",
+      "kind": "at",
+      "at_time": 1.0,
+      "expected": 1000.0,
+      "absolute_tolerance": 1.0,
+      "relative_tolerance": 0.0,
+      "source": "01_gapped_core.txt <AC-02>"
+    },
+    {
+      "name": "AC-03 final core flux",
+      "expression": "Phi_core_Wb",
+      "kind": "at",
+      "at_time": 1.0,
+      "expected": 0.00022848,
+      "absolute_tolerance": 2.2848e-6,
+      "relative_tolerance": 0.0,
+      "source": "01_gapped_core.txt <AC-03>"
+    },
+    {
+      "name": "AC-04 final core flux density",
+      "expression": "B_core_T",
+      "kind": "at",
+      "at_time": 1.0,
+      "expected": 0.571199,
+      "absolute_tolerance": 0.00571199,
+      "relative_tolerance": 0.0,
+      "source": "01_gapped_core.txt <AC-04>"
+    },
+    {
+      "name": "AC-05 final gap flux density",
+      "expression": "B_gap_T",
+      "kind": "at",
+      "at_time": 1.0,
+      "expected": 0.571199,
+      "absolute_tolerance": 0.00571199,
+      "relative_tolerance": 0.0,
+      "source": "01_gapped_core.txt <AC-05>"
+    },
+    {
+      "name": "AC-06 final core magnetic potential drop",
+      "expression": "Vm_core_At",
+      "kind": "at",
+      "at_time": 1.0,
+      "expected": 90.9091,
+      "absolute_tolerance": 0.909091,
+      "relative_tolerance": 0.0,
+      "source": "01_gapped_core.txt <AC-06>"
+    },
+    {
+      "name": "AC-07 final gap magnetic potential drop",
+      "expression": "Vm_gap_At",
+      "kind": "at",
+      "at_time": 1.0,
+      "expected": 909.091,
+      "absolute_tolerance": 9.09091,
+      "relative_tolerance": 0.0,
+      "source": "01_gapped_core.txt <AC-07>"
+    },
+    {
+      "name": "AC-08 mmf balances core and gap drops",
+      "expression": "abs((mmf_At - Vm_core_At - Vm_gap_At) / mmf_At) <= 0.005",
+      "kind": "at",
+      "at_time": 1.0,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_gapped_core.txt <AC-08>"
+    }
+  ],
+  "tables": [],
+  "assumptions": [
+    "The excitation current schedule is treated as a prescribed model input: linear ramp from 0 A at 0 s to 2 A at 0.1 s, then constant at 2 A through 1 s. This is needed to make the requirement case executable because the note gives endpoint values and a behavioural description but no separate input table.",
+    "1000 output intervals are chosen because the note specifies the 1 s duration but does not specify sample count or output interval.",
+    "No additional monotonicity checks were added for 'rise during the 0–0.1 s ramp and then hold steady' because the note does not provide a mechanically evaluable tolerance or discrete sampled criterion for monotonic rise/hold over the whole trajectory beyond the stated endpoint and attainment checks."
+  ],
+  "questions": [],
+  "clarifications": [],
+  "resolutions": [],
+  "domains": [
+    "magnetic_circuit"
+  ]
+}

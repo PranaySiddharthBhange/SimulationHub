@@ -1,0 +1,47 @@
+Subject: MagneticCircuit_v1
+Document kind: legacy model
+
+## Entities
+* MagneticCircuit_v1 -- model
+* FluxTubes -- imported package
+* a -- parameter
+    - Length: 0.025
+* l -- parameter
+    - Length: 0.150
+* delta -- parameter
+    - Length: 0.0015
+* mu_r -- parameter  <CR-MAG-004>
+    - relative permeability: 1000 [superseded] (supersedes/superseded: 1200)
+* sigma -- parameter  <CR-MAG-006>
+    - sigma: 0.05 [superseded] (supersedes/superseded: 0.08)
+* N_exc -- parameter
+    - Integer: 600
+* N_meas -- parameter
+    - Integer: 40 [superseded] (supersedes/superseded: 50)
+* f -- parameter
+    - Frequency: 50
+* leftLeg -- magnetic circuit element
+* upperYoke -- magnetic circuit element
+* rightLeg -- magnetic circuit element
+* airGap -- magnetic circuit element
+* leakage -- magnetic circuit element
+* lowerYoke -- magnetic circuit element
+* Phi_gap -- magnetic flux quantity
+* Phi_core -- magnetic flux quantity
+* Electric and magnetic grounds -- grounds
+* benchmark current -- current quantity  <EP-03>
+    - current: 2 A [archived]
+    - current: 2 A [approved/released]
+
+## Relationships
+* leftLeg connects_to upperYoke (topology note)
+* upperYoke connects_to rightLeg (topology note)
+* rightLeg connects_to airGap (parallel branch entry)
+* rightLeg connects_to leakage (parallel branch entry)
+* airGap connects_to lowerYoke (parallel branch exit)
+* leakage connects_to lowerYoke (parallel branch exit)
+* airGap in_parallel_with leakage
+* Electric and magnetic grounds instantiated_in complete example
+
+## Physical relationships
+* Phi_gap = (1-sigma)*Phi_core

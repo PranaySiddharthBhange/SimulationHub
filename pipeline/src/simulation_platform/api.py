@@ -8,16 +8,25 @@ doesn't also have), and human-in-the-loop clarification pauses after Merge
 and during SysML generation.
 
 In-memory `RunState` per project is deliberately process-local, not
-persisted -- restarting this server loses "is a run currently paused
-waiting on a human", same as restarting any dev server loses in-flight
-request state; there is no checkpoint/resume, a run that was live when the
+persisted -- restarting this server loses the live Python thread a run was
+blocked on, same as restarting any dev server loses in-flight request
+state; there is no general checkpoint/resume, a run that was live when the
 server died has to be started over. `run.jsonl` on disk is the durable
-record; this registry is just what lets the API pause a live Python thread
-and resume it later from an HTTP request.
+record; this registry is what lets the API pause a live thread and resume
+it later from an HTTP request.
 
-What restarting the server does NOT lose: every project's `run.jsonl`
-still replays in full over `/logs/stream` (see `stream_logs`), and
-`_effective_status` (see below) derives an honest status from that log
+The one deliberate exception is a clarification pause itself (see
+`_make_clarify`): the question set survives a restart on disk, so
+`_effective_status` can still report "awaiting_input" with no live
+`RunState`, and the answer endpoints can still record an answer with no
+live thread to wake -- straight into `clarified_answers.json` for a
+Merge/Confirm pause, or as human notes folded into the next Design
+attempt's context for a Stage 2 pause. Everything else about a run that
+was live when the server died still has to be started over.
+
+What restarting the server does NOT lose otherwise: every project's
+`run.jsonl` still replays in full over `/logs/stream` (see `stream_logs`),
+and `_effective_status` (see below) derives an honest status from that log
 plus the generated artifacts for any project this fresh process has no
 live `RunState` for -- "done" if the final artifact exists, "error" if the
 log's last line was a failed stage, "interrupted" otherwise -- rather than
@@ -35,6 +44,7 @@ import time
 import traceback
 import uuid
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
 
@@ -50,8 +60,7 @@ from simulation_platform.reasoner_pipeline import (
     execute_merge,
     execute_reasoner_stage_1,
     execute_reasoner_stage_2,
-    execute_reasoner_stage_3,
-    execute_reasoner_stage_4,
+    execute_reasoner_stage_3_and_4,
 )
 from simulation_platform.workspace import Workspace
 
@@ -85,27 +94,74 @@ def _state(project_id: str) -> RunState:
         return _states.setdefault(project_id, RunState())
 
 
-def _make_clarify(project_id: str):
-    """Build a callback for a Merge Clarify or Stage 2 clarification pause.
+def _pending_clarification_path(project_id: str) -> Path:
+    return _ws.extracted_dir(project_id) / "pending_clarification.json"
+
+
+def _make_clarify(project_id: str, stage: str):
+    """Build a callback for a Merge/Confirm or Stage 2/Design clarification
+    pause.
 
     The callback is called from the BACKGROUND PIPELINE THREAD, so it
     blocks that thread (not the request handling the run) until a person
     answers via POST .../clarifications/answer, or accepts suggested defaults
-    via .../clarifications/use-defaults when defaults are available."""
+    via .../clarifications/use-defaults when defaults are available.
+
+    The question set (and which stage raised it) is also written to disk for
+    the duration of the pause. A server restart while a person is
+    mid-decision used to just lose the pause outright (see the module
+    docstring) -- now `_effective_status` can still report it from this
+    file, and the answer endpoints can still record an answer with no live
+    thread left to wake: straight into clarified_answers.json for a
+    Merge/Confirm pause (the format `execute_clarify` itself reads back), or
+    as human notes folded into the next Design attempt's context for a
+    Stage 2 pause, since a fresh draft can raise a different question set
+    with no stable id to resume against -- see `_take_stage2_human_notes`."""
 
     def clarify(clarifications: list[Clarification]) -> dict[str, str]:
         state = _state(project_id)
         state.pending_clarifications = [c.model_dump() for c in clarifications]
         state.status = "awaiting_input"
         state.event = threading.Event()
+        _pending_clarification_path(project_id).write_text(
+            json.dumps({"stage": stage, "clarifications": state.pending_clarifications}, indent=2),
+            encoding="utf-8",
+        )
         state.event.wait()
         answers = state.answers or {}
         state.pending_clarifications = None
         state.answers = None
         state.status = "running"
+        _pending_clarification_path(project_id).unlink(missing_ok=True)
         return answers
 
     return clarify
+
+
+def _record_clarify_answers_from_disk(project_id: str, stage: str, clarifications: list[dict], answers: dict[str, str]) -> None:
+    """Recovery path for the answer endpoints when the pause was inherited
+    from disk after a restart (no live thread to wake -- see `_make_clarify`).
+    Records the answer durably enough that the relevant stage won't just
+    pause and ask the same thing again the next time it runs."""
+    if stage == "clarify":
+        from simulation_platform.reasoner_pipeline import _answers_record
+
+        clarification_objs = [Clarification(**item) for item in clarifications]
+        answers_path = _ws.extracted_dir(project_id) / "clarified_answers.json"
+        answers_path.write_text(
+            json.dumps(_answers_record(clarification_objs, answers), indent=2) + "\n", encoding="utf-8",
+        )
+    elif stage == "stage_2":
+        from simulation_platform.reasoner_pipeline import _stage2_human_notes_path
+        from simulation_platform.utils.run_log import RunLog
+
+        notes = [
+            {"question": c.get("question", ""), "answer": answers.get(c["id"], c.get("suggested_value", ""))}
+            for c in clarifications
+        ]
+        _stage2_human_notes_path(_ws, project_id).write_text(json.dumps(notes, indent=2), encoding="utf-8")
+        RunLog(_ws.run_log_path(project_id)).event("clarification_answered", stage=2, answers=answers)
+    _pending_clarification_path(project_id).unlink(missing_ok=True)
 
 
 def _run_pipeline(project_id: str) -> None:
@@ -139,16 +195,18 @@ def _run_pipeline(project_id: str) -> None:
         state.current_stage = "clarify"
         execute_clarify(
             project_id, projects_root=_ws.projects_root,
-            clarify=_make_clarify(project_id),
+            clarify=_make_clarify(project_id, "clarify"),
         )
         state.current_stage = "stage_2"
         execute_reasoner_stage_2(
-            project_id, projects_root=_ws.projects_root, clarify=_make_clarify(project_id),
+            project_id, projects_root=_ws.projects_root, clarify=_make_clarify(project_id, "stage_2"),
         )
         state.current_stage = "stage_3"
-        execute_reasoner_stage_3(project_id, projects_root=_ws.projects_root)
-        state.current_stage = "stage_4"
-        execute_reasoner_stage_4(project_id, projects_root=_ws.projects_root)
+        # Generate + independently validate, looping the two together when
+        # validation finds the result behaviorally wrong -- see
+        # `execute_reasoner_stage_3_and_4`'s own docstring for why this is
+        # not just Stage 3 followed by Stage 4.
+        execute_reasoner_stage_3_and_4(project_id, projects_root=_ws.projects_root)
         state.status = "done"
         state.current_stage = None
     except Exception as exc:  # noqa: BLE001 -- surfaced to the UI via /state, not swallowed
@@ -243,6 +301,24 @@ def _effective_status(project_id: str) -> dict:
         error = f"{last_event.get('error_type')}: {last_event.get('error_message')}"
         return {"status": "error", "current_stage": None, "error": error, "pending_clarifications": None}
 
+    # A clarification pause survives a server restart: `_make_clarify` writes
+    # the exact question set (and which stage raised it) here the moment it
+    # starts waiting on a human, and removes it the moment it's answered
+    # (live or via the recovery path in the answer endpoints below) -- so if
+    # it's still here, this project is genuinely still waiting, no live
+    # thread required to say so.
+    pending_path = _pending_clarification_path(project_id)
+    if pending_path.exists():
+        try:
+            pending = json.loads(pending_path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            pending = None
+        if pending and pending.get("clarifications"):
+            return {
+                "status": "awaiting_input", "current_stage": pending.get("stage", "clarify"),
+                "error": None, "pending_clarifications": pending["clarifications"],
+            }
+
     meta = _read_meta(project_id)
     stage1_finished = (
         last_event is not None
@@ -297,6 +373,27 @@ async def create_project(name: str = Form(...), stage1_backend: str = Form("olla
     return {"project_id": project_id, "name": name}
 
 
+def _project_domain(project_id: str) -> str | None:
+    path = _ws.extracted_dir(project_id) / "merged_understanding.json"
+    if not path.exists():
+        return None
+    try:
+        domains = json.loads(path.read_text(encoding="utf-8")).get("domains") or []
+    except Exception:
+        return None
+    return domains[0].replace("_", " ").title() if domains else None
+
+
+def _project_document_count(project_id: str) -> int:
+    docs_dir = _ws.documents_dir(project_id)
+    if not docs_dir.exists():
+        return 0
+    # Uploaded documents can land inside a nested folder (e.g. an extracted
+    # dataset archive), not only directly under documents_dir, so count
+    # recursively rather than just the top level.
+    return sum(1 for p in docs_dir.rglob("*") if p.is_file())
+
+
 @app.get("/api/projects")
 def list_projects():
     root = _ws.projects_root
@@ -314,9 +411,16 @@ def list_projects():
             except Exception:
                 pass
         effective = _effective_status(d.name)
+        # Newest file anywhere under the project (the run log if the pipeline
+        # has run, meta.json otherwise) stands in for "last updated" -- there
+        # is no explicit timestamp field on a project.
+        newest_mtime = max((p.stat().st_mtime for p in d.rglob("*") if p.is_file()), default=d.stat().st_mtime)
         out.append({
             "project_id": d.name, "name": name, "status": effective["status"],
             "current_stage": effective["current_stage"],
+            "updated_at": datetime.fromtimestamp(newest_mtime, tz=timezone.utc).isoformat(),
+            "domain": _project_domain(d.name),
+            "document_count": _project_document_count(d.name),
         })
     return out
 
@@ -381,8 +485,6 @@ def _require_stage_input(project_id: str, stage: str) -> None:
         raise HTTPException(400, "SysML generation requires completed Clarify")
     elif stage == "stage_3" and not artifacts["sysml"]:
         raise HTTPException(400, "Modelica generation requires SysML output")
-    elif stage == "stage_4" and not artifacts["modelica"]:
-        raise HTTPException(400, "Validation requires Modelica output")
 
 
 def _remove(path: Path) -> None:
@@ -406,6 +508,8 @@ def _clear_modelica_active_outputs(project_root: Path) -> None:
             shutil.rmtree(results)
 
 def _prepare_stage_rerun(project_id: str, stage: str) -> None:
+    from simulation_platform.reasoner_pipeline import _stage2_human_notes_path
+
     extracted = _ws.extracted_dir(project_id)
     project_root = _ws.project_dir(project_id)
     if stage == "stage_1":
@@ -413,6 +517,8 @@ def _prepare_stage_rerun(project_id: str, stage: str) -> None:
         _remove(extracted / "merged_understanding.json")
         _remove(extracted / "merged_understanding.md")
         _remove(extracted / "clarified_answers.json")
+        _remove(_pending_clarification_path(project_id))
+        _remove(_stage2_human_notes_path(_ws, project_id))
         _remove(extracted / "system_flow.mmd")
         _remove(project_root / "sysml")
         _clear_modelica_active_outputs(project_root)
@@ -421,25 +527,28 @@ def _prepare_stage_rerun(project_id: str, stage: str) -> None:
         _remove(extracted / "merged_understanding.json")
         _remove(extracted / "merged_understanding.md")
         _remove(extracted / "clarified_answers.json")
+        _remove(_pending_clarification_path(project_id))
+        _remove(_stage2_human_notes_path(_ws, project_id))
         _remove(extracted / "system_flow.mmd")
         _remove(project_root / "sysml")
         _clear_modelica_active_outputs(project_root)
         _remove(project_root / "validation")
     elif stage == "clarify":
         _remove(extracted / "clarified_answers.json")
+        _remove(_pending_clarification_path(project_id))
         _remove(extracted / "system_flow.mmd")
         _remove(project_root / "sysml")
         _clear_modelica_active_outputs(project_root)
         _remove(project_root / "validation")
     elif stage == "stage_2":
+        _remove(_pending_clarification_path(project_id))
         _remove(project_root / "sysml")
         _clear_modelica_active_outputs(project_root)
         _remove(project_root / "validation")
     elif stage == "stage_3":
+        # "Build" now runs generation + validation together (see
+        # execute_reasoner_stage_3_and_4), so a rerun clears both.
         _clear_modelica_active_outputs(project_root)
-        _remove(project_root / "validation")
-    elif stage == "stage_4":
-        _remove(project_root / "modelica" / "results")
         _remove(project_root / "validation")
 
 
@@ -461,16 +570,17 @@ def _run_single_stage(project_id: str, stage: str, stage1_backend: str | None) -
         elif stage == "clarify":
             execute_clarify(
                 project_id, projects_root=_ws.projects_root,
-                clarify=_make_clarify(project_id),
+                clarify=_make_clarify(project_id, "clarify"),
             )
         elif stage == "stage_2":
             execute_reasoner_stage_2(
-                project_id, projects_root=_ws.projects_root, clarify=_make_clarify(project_id),
+                project_id, projects_root=_ws.projects_root, clarify=_make_clarify(project_id, "stage_2"),
             )
         elif stage == "stage_3":
-            execute_reasoner_stage_3(project_id, projects_root=_ws.projects_root)
-        elif stage == "stage_4":
-            execute_reasoner_stage_4(project_id, projects_root=_ws.projects_root)
+            # "Build" runs generation + validation together, with the
+            # behavioral repair loop between them -- see
+            # execute_reasoner_stage_3_and_4's own docstring.
+            execute_reasoner_stage_3_and_4(project_id, projects_root=_ws.projects_root)
         state.status = "created"
         state.current_stage = None
     except Exception as exc:  # noqa: BLE001
@@ -483,7 +593,7 @@ def _run_single_stage(project_id: str, stage: str, stage1_backend: str | None) -
 def run_stage(project_id: str, stage: str, body: StageRunBody | None = None):
     if not _ws.project_dir(project_id).exists():
         raise HTTPException(404, "project not found")
-    if stage not in {"stage_1", "merge", "clarify", "stage_2", "stage_3", "stage_4"}:
+    if stage not in {"stage_1", "merge", "clarify", "stage_2", "stage_3"}:
         raise HTTPException(404, "unknown pipeline stage")
     state = _state(project_id)
     if state.status in ("running", "awaiting_input"):
@@ -504,23 +614,45 @@ class AnswerBody(BaseModel):
 @app.post("/api/projects/{project_id}/clarifications/answer")
 def answer_clarifications(project_id: str, body: AnswerBody):
     state = _state(project_id)
-    if state.status != "awaiting_input" or state.event is None:
-        raise HTTPException(409, "no pending clarification for this project")
-    state.answers = body.answers
-    state.event.set()
-    return {"status": "ok"}
+    if state.status == "awaiting_input" and state.event is not None:
+        state.answers = body.answers
+        state.event.set()
+        return {"status": "ok"}
+    # No live thread (e.g. the server restarted while this project was
+    # waiting) -- the question set and which stage raised it survive on
+    # disk, so the answer can still be recorded. See `_make_clarify`.
+    pending_path = _pending_clarification_path(project_id)
+    if pending_path.exists():
+        pending = json.loads(pending_path.read_text(encoding="utf-8"))
+        _record_clarify_answers_from_disk(
+            project_id, pending.get("stage", "clarify"), pending.get("clarifications", []), body.answers,
+        )
+        return {"status": "ok"}
+    raise HTTPException(409, "no pending clarification for this project")
 
 
 @app.post("/api/projects/{project_id}/clarifications/use-defaults")
 def use_default_clarifications(project_id: str):
     state = _state(project_id)
-    if state.status != "awaiting_input" or state.event is None:
+    live = state.status == "awaiting_input" and state.event is not None
+    pending_path = _pending_clarification_path(project_id)
+    stage = "clarify"
+    if live:
+        clarifications = state.pending_clarifications or []
+    elif pending_path.exists():
+        pending = json.loads(pending_path.read_text(encoding="utf-8"))
+        stage = pending.get("stage", "clarify")
+        clarifications = pending.get("clarifications", [])
+    else:
         raise HTTPException(409, "no pending clarification for this project")
-    pending = state.pending_clarifications or []
-    if any(not str(c.get("suggested_value", "")).strip() for c in pending):
+    if any(not str(c.get("suggested_value", "")).strip() for c in clarifications):
         raise HTTPException(409, "this clarification stage requires explicit answers")
-    state.answers = {c["id"]: c["suggested_value"] for c in pending}
-    state.event.set()
+    answers = {c["id"]: c["suggested_value"] for c in clarifications}
+    if live:
+        state.answers = answers
+        state.event.set()
+    else:
+        _record_clarify_answers_from_disk(project_id, stage, clarifications, answers)
     return {"status": "ok"}
 
 

@@ -32,9 +32,9 @@ const TABS = [
   { key: 'clarified', label: 'Questions', icon: HelpCircle, kind: 'clarifications', ready: 'Answers on record', locked: 'Unlocks at Confirm' },
   { key: 'diagram', label: 'Flow diagram', icon: GitBranch, kind: 'diagram', ready: 'System flow', locked: 'Unlocks at Combine' },
   { key: 'sysml', label: 'SysML v2', icon: FileCode2, kind: 'code', ready: 'Generated model', locked: 'Unlocks at Design' },
-  { key: 'modelica', label: 'Modelica', icon: FileCode2, kind: 'code', ready: 'Compiled bundle', locked: 'Unlocks at Build' },
-  { key: 'result', label: 'Result', icon: ChartLine, kind: 'result', ready: 'Simulation plots', locked: 'Unlocks at Build' },
-  { key: 'validation', label: 'Validation', icon: ClipboardCheck, kind: 'validation', ready: 'Independent review', locked: 'Unlocks at Verify' },
+  { key: 'modelica', label: 'Modelica', icon: FileCode2, kind: 'code', ready: 'Compiled bundle', locked: 'Unlocks at Simulate' },
+  { key: 'result', label: 'Result', icon: ChartLine, kind: 'result', ready: 'Simulation plots', locked: 'Unlocks at Simulate' },
+  { key: 'validation', label: 'Validation', icon: ClipboardCheck, kind: 'validation', ready: 'Independent review', locked: 'Unlocks at Simulate' },
 ]
 
 // The file browser reads the project folder directly, so it has nothing to wait
@@ -556,7 +556,21 @@ function MermaidView({ code }) {
 
     const render = async () => {
       try {
-        mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'default' })
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: 'strict',
+          theme: 'base',
+          themeVariables: {
+            background: '#ffffff',
+            primaryColor: '#f6f5f1',
+            primaryBorderColor: '#d8d4c4',
+            primaryTextColor: '#262624',
+            lineColor: '#a19d8d',
+            secondaryColor: '#f4e3d4',
+            tertiaryColor: '#ffffff',
+          },
+          flowchart: { curve: 'linear' },
+        })
         await mermaid.parse(code)
         const result = await mermaid.render(renderIdRef.current, code)
         if (!cancelled) setSvg(result.svg)

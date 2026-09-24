@@ -40,8 +40,9 @@ function computeStepStates(project) {
     if (s.key === 'merge' && artifacts?.merged_understanding) return 'done'
     if (s.key === 'clarify' && artifacts?.clarified) return 'done'
     if (s.key === 'stage_2' && artifacts?.sysml) return 'done'
-    if (s.key === 'stage_3' && artifacts?.modelica) return 'done'
-    if (s.key === 'stage_4' && artifacts?.validation) return 'done'
+    // "Simulate" now covers generation + validation together, so it is only
+    // done once both artifacts exist.
+    if (s.key === 'stage_3' && artifacts?.modelica && artifacts?.validation) return 'done'
     if (status === 'done') return 'done'
     return 'pending'
   })
@@ -147,6 +148,7 @@ export default function ProjectDetail({ projectId, onNavigateHome }) {
   const stepStates = computeStepStates(project)
   const canRun = project && project.status !== 'running' && project.status !== 'awaiting_input'
   const artifacts = project?.artifacts || EMPTY_ARTIFACTS
+  const needsClarification = project?.status === 'awaiting_input' && project?.pending_clarifications?.length > 0
   const nextStageIdx = stepStates.findIndex((s) => s !== 'done')
   const nextStageLabel = nextStageIdx >= 0 ? STAGES[nextStageIdx].label : null
   const primaryLabel = !project
@@ -229,18 +231,21 @@ export default function ProjectDetail({ projectId, onNavigateHome }) {
                 </div>
               )}
 
-              {project.status === 'awaiting_input' && project.pending_clarifications?.length > 0 && (
-                <ClarificationCard
-                  clarifications={project.pending_clarifications}
-                  stage={project.current_stage}
-                  onSubmit={handleAnswer}
-                  onUseDefaults={handleUseDefaults}
-                  busy={clarifyBusy}
-                />
-              )}
-
-              <div className="min-h-[540px] flex-1 pb-2">
-                <ArtifactViewer projectId={projectId} available={artifacts} refreshToken={refreshToken} logs={logs} />
+              <div className="flex min-h-[540px] flex-1 gap-5 pb-2">
+                {needsClarification && (
+                  <div className="w-1/2 min-w-0">
+                    <ClarificationCard
+                      clarifications={project.pending_clarifications}
+                      stage={project.current_stage}
+                      onSubmit={handleAnswer}
+                      onUseDefaults={handleUseDefaults}
+                      busy={clarifyBusy}
+                    />
+                  </div>
+                )}
+                <div className={needsClarification ? 'w-1/2 min-w-0' : 'min-w-0 flex-1'}>
+                  <ArtifactViewer projectId={projectId} available={artifacts} refreshToken={refreshToken} logs={logs} />
+                </div>
               </div>
             </div>
           )}

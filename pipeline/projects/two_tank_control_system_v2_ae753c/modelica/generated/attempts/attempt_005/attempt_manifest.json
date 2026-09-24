@@ -1,0 +1,65 @@
+{
+  "attempt": 5,
+  "entry_class": "TwoTankSystem",
+  "files": [
+    {
+      "filename": "TankController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "TwoTankSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.IntegerOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.RealOutput",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Icons.Example"
+  ],
+  "corrections": [
+    "Root cause of the reported Attempt 3/4 error: PLC_101.stateCode is already an IntegerOutput carrying the required numeric reporting code; applying Integer(...) to it treated it as if it were an enumeration and caused the compiler error. The alias now uses controller_state_code = PLC_101.stateCode; with no conversion.",
+    "The model keeps the brief's explicit level-balance equations instead of introducing a Modelica.Fluid network, because the brief provides those equations directly and states that no other hydraulic law, head-dependent flow law, leakage term, or compressibility term is to be added.",
+    "Valve stroke times 0.8 s open and 0.6 s close are retained as parameters in the brief evidence, but no intermediate effective-flow law during stroking is modeled. This is an explicit assumption permitted by the brief because no note provides the command-to-partial-flow relationship.",
+    "A small physical floor levelFloor_m = 1e-6 m is used only to cut off draining below zero inventory while remaining strictly below the tested low-level setpoint 0.05 m, so the <= 0.05 m transitions can still fire.",
+    "BooleanTable command pulse width is set to cmdWidth = 2*scanPeriod = 0.2 s, following the stated sampled-controller rule so each momentary START/STOP/SHUT pulse is visible to the 0.1 s PLC scan.",
+    "The experiment annotation uses StartTime=0, StopTime=900, Tolerance=1e-6, Interval=0.1, matching the stated 900 s horizon and the retained Merge assumption of 9000 output intervals."
+  ],
+  "references": [
+    {
+      "path": "12_10_demo_run_900s.txt",
+      "time_column": "time_s",
+      "reference_column": "controller_state_code",
+      "model_variable": "controller_state_code",
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "interpolation": "previous",
+      "reason": "Reference evidence about one recorded run for discrete state-sequence comparison; not used as an input forcing function."
+    },
+    {
+      "path": "12_10_demo_run_900s.txt",
+      "time_column": "time_s",
+      "reference_column": "tank1_level_m",
+      "model_variable": "tank1_level_m",
+      "absolute_tolerance": 0.02,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Reference evidence about one recorded run for tank 1 level trend comparison, with tolerance aligned to the brief's +/-2 s acceptance context rather than exact trajectory forcing."
+    },
+    {
+      "path": "12_10_demo_run_900s.txt",
+      "time_column": "time_s",
+      "reference_column": "tank2_level_m",
+      "model_variable": "tank2_level_m",
+      "absolute_tolerance": 0.02,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Reference evidence about one recorded run for tank 2 level trend comparison, not as a forcing function."
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "title": "Single Tank Fill — One Valve, One Threshold",
+  "narrative": "Canonical entities and aliases:\n- Tank: a tank with cross-sectional area 0.5 m^2 [current], height 1.0 m [current], and initial level 0 m [current], from 01_single_tank_fill.txt.\n- Inlet valve: the single inlet valve feeding the tank. Its nominal inflow is stated as 0.01 m^3/s [nominal], also given equivalently as 10 L/s [nominal].\n- Single supply: upstream supply feeding the tank via the inlet valve.\n- Fill target: a level setpoint of 0.80 m [current]. The note also states an expected time of 40 s for reaching this target.\n- Reported variables contract for later stages:\n  - tank_level_m [m]: tank liquid level over the run.\n  - valve_open_cmd [1]: inlet valve open/closed command, with 1 meaning open and 0 meaning closed.\n\nTopology and relationships:\n- The single supply fills through the Inlet valve.\n- The Inlet valve feeds the Tank.\n- The Inlet valve closes at the Fill target: it closes as soon as tank level reaches the 0.80 m target and stays closed.\n\nBehavior and control:\n- Starting from empty, the tank fills until its level reaches the 0.80 m fill target, at which point the inlet valve closes and the level stops rising. This is explicitly required in <REQ-FUN-001>.\n- The valve is open whenever tank level is below the fill target, and closed once the target is reached.\n- Once closed, the valve never reopens during this run.\n- The command schedule implied by the requirements and acceptance criteria is not an externally forced input schedule. Instead, acceptance criteria state that valve_open_cmd must be 1 at t = 5 s and 0 at t = 100 s, consistent with level-triggered closure.\n\nPhysical relationship:\n- The note explicitly gives 0.80 m * 0.5 m^2 / 0.01 m^3/s = 40 s <AC-01>. Units are consistent: m * m^2 / (m^3/s) = s. Derived meaning: with constant inflow at the nominal value and constant cross-sectional area, filling from 0 m to 0.80 m requires 0.40 m^3, so the expected fill time is 40 s.\n\nRequirements and acceptance:\n- Simulate for 100 s and report tank_level_m and valve_open_cmd for the whole run <REQ-SIM-001>.\n- Acceptance criteria recorded in the note:\n  - tank_level_m >= 0.80 must become true at some point during the run <AC-01>.\n  - tank_level_m <= 0.85 must hold for the entire run <AC-02>.\n  - valve_open_cmd == 1 at t = 5 s <AC-03>.\n  - valve_open_cmd == 0 at t = 100 s <AC-04>.\n  - tank_level_m == 0.80 at t = 100 s with absolute tolerance 0.01 m <AC-05>.\n\nModel content supported by the note:\n- This is a fluid level and flow system with one tank and one inlet valve.\n- The behavior is event-driven by the level threshold at 0.80 m; no outlet, leakage, or other flow path is stated.\n- No additional dynamics for valve motion, supply pressure variation, or level-dependent area are stated in the note, so they are not included as facts.\n- The note states the tank height is 1.0 m; acceptance also limits the level to 0.85 m through the run. The target 0.80 m is therefore below the stated height.\n",
+  "simulation": {
+    "start_time": 0.0,
+    "stop_time": 100.0,
+    "intervals": 1000,
+    "tolerance": 1e-6
+  },
+  "checks": [
+    {
+      "name": "AC-01_fill_target_reached",
+      "expression": "tank_level_m >= 0.80",
+      "kind": "ever",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_single_tank_fill.txt <AC-01>"
+    },
+    {
+      "name": "AC-02_level_never_exceeds_limit",
+      "expression": "tank_level_m <= 0.85",
+      "kind": "always",
+      "at_time": null,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_single_tank_fill.txt <AC-02>"
+    },
+    {
+      "name": "AC-03_valve_open_at_5s",
+      "expression": "valve_open_cmd == 1",
+      "kind": "at",
+      "at_time": 5.0,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_single_tank_fill.txt <AC-03>"
+    },
+    {
+      "name": "AC-04_valve_closed_at_100s",
+      "expression": "valve_open_cmd == 0",
+      "kind": "at",
+      "at_time": 100.0,
+      "expected": 1.0,
+      "absolute_tolerance": 0.0,
+      "relative_tolerance": 0.0,
+      "source": "01_single_tank_fill.txt <AC-04>"
+    },
+    {
+      "name": "AC-05_final_level_at_target",
+      "expression": "tank_level_m",
+      "kind": "at",
+      "at_time": 100.0,
+      "expected": 0.8,
+      "absolute_tolerance": 0.01,
+      "relative_tolerance": 0.0,
+      "source": "01_single_tank_fill.txt <AC-05>"
+    }
+  ],
+  "tables": [],
+  "assumptions": [
+    "No outlet, leak, evaporation, or other mass loss path is stated in the note; the model omits such paths.",
+    "The stated nominal inflow 0.01 m^3/s is treated as constant while the inlet valve is commanded open, because no other inflow dependence or valve characteristic is stated.",
+    "The tank cross-sectional area is treated as constant at 0.5 m^2, consistent with the explicit fill-time relationship given in the note.",
+    "The initial condition is tank_level_m = 0 m at t = 0 s, based on the Tank entity and the phrase 'Starting from empty.'"
+  ],
+  "questions": [],
+  "clarifications": [],
+  "resolutions": [],
+  "domains": [
+    "fluid_level_and_flow"
+  ]
+}

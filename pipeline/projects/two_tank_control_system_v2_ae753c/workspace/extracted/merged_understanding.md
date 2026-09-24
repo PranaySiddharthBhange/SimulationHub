@@ -1,0 +1,112 @@
+# Resolved engineering brief - Two-Tank Fill/Transfer/Drain Sequence Controller
+
+## Simulation
+
+| setting | value |
+| --- | --- |
+| start time | 0.0 s |
+| stop time | 900.0 s |
+| output samples | 9000 |
+| solver tolerance | 1e-06 |
+
+**Domains:** `fluid_level_and_flow`, `batch_sequential_process`
+
+## Engineering brief
+
+Canonical entities and aliases. PLC-101 is the controller, also called tankController, Controller, and in the design note the Two-Tank Fill/Transfer/Drain Controller. TK-101 is Tank 1, also tank1, T1. TK-102 is Tank 2, also tank2, T2. XV-101 is inlet valve V1/valve1. XV-102 is transfer valve V2/valve2. XV-103 is drain valve V3/valve3. LT-101 measures TK-101 level and is also level1. LT-102 measures TK-102 level and is also level2. PB-START/START, PB-STOP/STOP, and PB-SHUT/SHUT are momentary operator commands. SRC-101 is the upstream boundary source. DRN-101, also ambient1, is the downstream boundary sink. Legacy state aliases are FILL=FILL_T1, HOLD1=WAIT_AFTER_FILL, TRANSFER=TRANSFER_T1_T2, HOLD2=WAIT_AFTER_TRANSFER, DRAIN=DRAIN_T2, HOLD3=WAIT_AFTER_DRAIN from 05_04_control_logic_design_notes.txt.
+
+Topology. The liquid path is SRC-101 -> XV-101 -> TK-101 -> XV-102 -> TK-102 -> XV-103 -> DRN-101, established by the engineering register interface matrix IF-HYD-01 through IF-HYD-06 in 02_02_engineering_data_register.txt and consistent with the legacy and diagram notes. LT-101 sends the TK-101 level measurement to PLC-101 through AI-101, and LT-102 sends the TK-102 level measurement to PLC-101 through AI-102. PB-START, PB-STOP, and PB-SHUT send commands to PLC-101 through DI-101, DI-102, and DI-103 respectively. PLC-101 sends binary valve-open commands to XV-101, XV-102, and XV-103 through DO-101, DO-102, and DO-103. Valve commands are Boolean open/closed commands per 01_01_customer_URS.txt and 02_02_engineering_data_register.txt.
+
+Physical parameters retained for the model. TK-101 cross-section area A1 = 1.2 m^2 and height = 1 m. TK-102 cross-section area A2 = 1.4 m^2 and height = 1 m. TK-101 and TK-102 initial levels are both 0.05 m. TK-101 low-level setpoint T1_low = 0.05 m. TK-102 low-level setpoint T2_low = 0.05 m. The resolved effective TK-101 high-level setpoint T1_high = 0.80 m. XV-101 nominal flow qFill = 0.0060 m^3/s. XV-102 nominal flow qTransfer = 0.0045 m^3/s. XV-103 nominal flow qDrain = 0.0050 m^3/s. XV-101, XV-102, and XV-103 full open stroke times are each 0.8 s from the datasheet; full close stroke times are each 0.6 s. PLC-101 scan time is 0.1 s. LT-101 and LT-102 update every 100 ms and have signal range 0.0..1.0 m. Levels are represented internally in metres with nominal valid range 0.0 to 1.0 m.
+
+Resolved timing parameters. The delay after TK-101 reaches the high-level limit and before XV-102 opens is 10 s. The delay after TK-101 reaches the low-level limit and before XV-103 opens is 12 s. The inter-cycle delay after TK-102 reaches the low-level limit and before refilling TK-101 begins is 8 s. These are the latest approved/current values supported by the engineering register, design review, email thread, test procedure, and recorded dataset.
+
+Continuous relationships. The archived legacy model 09_07_legacy_tank_demo.txt provides explicit level-balance equations consistent with the established topology and units, and no later note contradicts their form. For TK-101, der(tank1_level_m) = (if valve1_open_cmd then qFill else 0)/A1 - (if valve2_open_cmd then qTransfer else 0)/A1. For TK-102, der(tank2_level_m) = (if valve2_open_cmd then qTransfer else 0)/A2 - (if valve3_open_cmd then qDrain else 0)/A2. Derived: each term has units (m^3/s)/(m^2)=m/s, so the equations are unit-consistent level balances over constant cross-section tanks. The notes do not provide any other hydraulic law, head-dependent flow law, leakage term, or compressibility term, so none is added. The model should treat the commanded valve outputs as binary commands; the notes establish Boolean commands, while the datasheet gives stroke times. Because no note provides an explicit relationship between command and intermediate effective flow during stroking, later stages should report commanded states and may include stroke dynamics only if done as an explicit modeling assumption.
+
+Discrete control behavior and states. The established controller states are IDLE, FILL_T1, WAIT_AFTER_FILL, TRANSFER_T1_T2, WAIT_AFTER_TRANSFER, DRAIN_T2, WAIT_AFTER_DRAIN, PAUSED, and SHUTDOWN from 05_04_control_logic_design_notes.txt and confirmed by the recorded dataset 12_10_demo_run_900s.txt. The system begins in IDLE with both tank levels at 0.05 m and all valve commands false. A START edge from IDLE initiates automatic operation by entering FILL_T1. In FILL_T1, XV-101 is commanded open, XV-102 and XV-103 are commanded closed, and TK-101 fills until LT-101 >= T1_high; equality is included in the threshold comparison. When LT-101 >= T1_high, XV-101 closes and the controller enters WAIT_AFTER_FILL. In WAIT_AFTER_FILL, all valve commands are false and a 10 s timer runs. When that timer expires, the controller enters TRANSFER_T1_T2. In TRANSFER_T1_T2, XV-102 is commanded open, XV-101 and XV-103 are commanded closed, and liquid transfers from TK-101 to TK-102 until LT-101 <= T1_low; equality is included. When LT-101 <= T1_low, XV-102 closes and the controller enters WAIT_AFTER_TRANSFER. In WAIT_AFTER_TRANSFER, all valve commands are false and a 12 s timer runs. When that timer expires, the controller enters DRAIN_T2. In DRAIN_T2, XV-103 is commanded open, XV-101 and XV-102 are commanded closed, and TK-102 drains until LT-102 <= T2_low; equality is included. When LT-102 <= T2_low, XV-103 closes and the controller enters WAIT_AFTER_DRAIN. In WAIT_AFTER_DRAIN, all valve commands are false and an 8 s timer runs. When that timer expires, the controller returns automatically to FILL_T1 and the cyclic automatic process repeats.
+
+Pause and resume behavior. STOP closes all three valves and places the controller in PAUSED from any normal running or wait state. START after STOP resumes the interrupted sequence context rather than forcing a new initialization. When STOP occurs during WAIT_AFTER_FILL, WAIT_AFTER_TRANSFER, or WAIT_AFTER_DRAIN, the remaining delay is retained rather than restarting. START from PAUSED resumes with the stored state and, for wait states, the stored remaining delay. START while already running is ignored. The notes say STOP shall suspend automatic operation until another operator command is received; the supported resumption commands are START and SHUT, because SHUT has higher priority and abandons the stored resume context.
+
+Controlled shutdown behavior. SHUT has higher priority than STOP, and STOP has higher priority than START. A valid SHUT edge immediately abandons any stored resume context and enters SHUTDOWN. In SHUTDOWN, XV-101 is inhibited closed and XV-102 and XV-103 are commanded open together. This concurrent opening of XV-102 and XV-103 is permitted only in SHUTDOWN. SHUTDOWN continues until both LT-101 and LT-102 are at or below their low-level setpoints. When shutdown completion is achieved, XV-102 and XV-103 close, all three valves are closed, the controller returns to IDLE, and the sequence context is reset so a later START begins a new fill cycle. START and STOP received during active SHUTDOWN are ignored until shutdown completes. The notes explicitly state not to model SHUT as a power-loss or emergency-stop event.
+
+Safety and fail-safe behavior. V1 and V2 shall never be commanded open simultaneously. During normal automatic operation, V2 and V3 shall not be open simultaneously. During SHUTDOWN, V2 and V3 may be open simultaneously and are expected to be open together until both tanks are low. On loss of controller power, or loss of valve actuator electrical power, all process valves move to or remain closed; the customer URS states actuators fail closed on loss of power, the engineering register states all process valves shall move to or remain closed on loss of controller power, the design note states output commands shall be false on controller power loss, and the valve datasheet states loss of electrical power returns the valve to closed by spring action.
+
+Demonstration scenario and reported variables. The demonstration run simulates from 0 s through 900 s. Scheduled commands for the demonstration are START at 20 s, STOP at 220 s, START at 280 s, STOP at 650 s, and SHUT at 700 s. The model will report these variables: time_s [s], simulation time; tank1_level_m [m], level in TK-101; tank2_level_m [m], level in TK-102; valve1_open_cmd [0/1], PLC command to XV-101 open; valve2_open_cmd [0/1], PLC command to XV-102 open; valve3_open_cmd [0/1], PLC command to XV-103 open; controller_state_code [-], numeric encoding of controller state with IDLE=0, FILL_T1=1, WAIT_AFTER_FILL=2, TRANSFER_T1_T2=3, WAIT_AFTER_TRANSFER=4, DRAIN_T2=5, WAIT_AFTER_DRAIN=6, PAUSED=7, SHUTDOWN=8; wait_remaining_s [s], remaining active wait time, zero when no wait state is active; cmd_start [0/1], applied START pulse signal; cmd_stop [0/1], applied STOP pulse signal; cmd_shut [0/1], applied SHUT pulse signal. This numeric state-code mapping is introduced here as a reporting convention so checks can be written mechanically against the named states; the notes establish the state names but not a numeric code.
+
+Acceptance behavior grounded in the test procedure and current requirements. T1 must reach the effective high-level setpoint of 0.80 m before the first transfer begins. All valves must be closed throughout the STOP interval from 220 s until the START at 280 s. The START at 280 s must resume the interrupted transfer rather than restart filling. Following completion of the first T2 drain, the controller must automatically begin another fill cycle after the effective 8 s inter-cycle delay. All valves must be closed throughout the STOP interval from 650 s until SHUT at 700 s. At 700 s, V1 must remain closed and V2 and V3 must be commanded open together for controlled draining. After shutdown drain completion, the controller must return to IDLE with all valves closed and remain there through 900 s because no subsequent START is scheduled. Normal automatic operation must never command V1 and V2 simultaneously, nor V2 and V3 simultaneously; the latter is permitted only in SHUTDOWN. The test procedure allows +/-2 s tolerance for state-boundary comparisons when the effective parameter set is used.
+
+Evidence from the recorded 900 s dataset is reference evidence about one run, not a required command input. It is consistent with the resolved parameter set: transition to WAIT_AFTER_FILL at 170 s aligns with filling from 0.05 m to 0.80 m at qFill/A1 = 0.006/1.2 = 0.005 m/s, requiring 150 s after the START at 20 s; transition to TRANSFER_T1_T2 at 180 s reflects the 10 s wait after fill; transition to WAIT_AFTER_TRANSFER at 440 s is consistent with transfer from 0.80 m down to 0.05 m at qTransfer/A1 = 0.0045/1.2 = 0.00375 m/s, requiring 200 s of active transfer split by the STOP/PAUSED interval; transition to DRAIN_T2 at 452 s reflects the 12 s post-transfer wait; transition to WAIT_AFTER_DRAIN at 632 s is consistent with draining approximately 0.69286 m from TK-102 to 0.05 m at qDrain/A2 = 0.005/1.4 ≈ 0.003571 m/s over about 180 s; transition back to FILL_T1 at 640 s reflects the 8 s inter-cycle wait; and transition to IDLE at 714 s after SHUT at 700 s is consistent with concurrent draining of both tanks to 0.05 m. These consistency statements are derived cross-checks, not added requirements.
+
+## Acceptance checks (12)
+
+| # | when | expression | expected | tolerance | source |
+| --- | --- | --- | --- | --- | --- |
+| 1 | ever | `tank1_level_m >= 0.80 and controller_state_code == 3` | 1 | 0 | 11_09_test_procedure_TP17.txt AC-01 |
+| 2 | always | `(not (time_s >= 220 and time_s < 280)) or ((valve1_open_cmd == 0) and (valve2_open_cmd == 0) and (valve3_open_cmd == 0))` | 1 | 0 | 11_09_test_procedure_TP17.txt AC-02 |
+| 3 | at 280 s | `controller_state_code == 3 and valve2_open_cmd == 1 and valve1_open_cmd == 0 and valve3_open_cmd == 0` | 1 | 0 | 11_09_test_procedure_TP17.txt AC-03 |
+| 4 | ever | `controller_state_code == 1 and valve1_open_cmd == 1` | 1 | 0 | 11_09_test_procedure_TP17.txt AC-04 |
+| 5 | always | `(not (time_s >= 650 and time_s < 700)) or ((valve1_open_cmd == 0) and (valve2_open_cmd == 0) and (valve3_open_cmd == 0))` | 1 | 0 | 11_09_test_procedure_TP17.txt AC-05 |
+| 6 | at 700 s | `valve1_open_cmd == 0 and valve2_open_cmd == 1 and valve3_open_cmd == 1` | 1 | 0 | 11_09_test_procedure_TP17.txt AC-06 |
+| 7 | final | `controller_state_code == 0 and valve1_open_cmd == 0 and valve2_open_cmd == 0 and valve3_open_cmd == 0` | 1 | 0 | 11_09_test_procedure_TP17.txt AC-07 |
+| 8 | always | `not (valve1_open_cmd == 1 and valve2_open_cmd == 1)` | 1 | 0 | 11_09_test_procedure_TP17.txt AC-08 |
+| 9 | always | `not (controller_state_code != 8 and valve2_open_cmd == 1 and valve3_open_cmd == 1)` | 1 | 0 | 11_09_test_procedure_TP17.txt AC-08 |
+| 10 | ever | `controller_state_code == 2 and wait_remaining_s <= 10` | 1 | 0 | 02_02_engineering_data_register.txt URS-FUN-004 |
+| 11 | ever | `tank2_level_m <= 0.05 and controller_state_code == 6` | 1 | 0 | 02_02_engineering_data_register.txt URS-FUN-007 |
+| 12 | ever | `tank1_level_m <= 0.05 and tank2_level_m <= 0.05 and controller_state_code == 0` | 1 | 0 | 02_02_engineering_data_register.txt URS-MOD-004 |
+
+## Conflicts resolved (4)
+
+### Tank 1 high-level setpoint
+
+**Adopted:** 0.80 m
+
+**Not adopted:**
+
+- 0.78 m rejected because it is explicitly superseded/archived in 02_02_engineering_data_register.txt URS-PER-001 and in 08_05_controls_email_thread.txt CR-004, and the design note marks 0.78 m as archived.
+- 0.78 m in 01_01_customer_URS.txt rejected as older approved URS text superseded by later approved change record CR-004 and current requirement register value URS-PER-002.
+
+**Evidence:** 02_02_engineering_data_register.txt gives approved/current 0.80 m and marks 0.78 m superseded; 08_05_controls_email_thread.txt states CR-004 approved 0.80 m as the effective limit; 11_09_test_procedure_TP17.txt uses 0.80 m as the effective high-level setpoint; 12_10_demo_run_900s.txt shows tank1_level_m reaching 0.8 m in the recorded run.
+
+### Delay after Tank 1 reaches low level before opening V3
+
+**Adopted:** 12 s
+
+**Not adopted:**
+
+- 10 s rejected because it appears in older/archived sources 01_01_customer_URS.txt URS-F-006 and 09_07_legacy_tank_demo.txt wait2.
+- A superseded requirement text in 02_02_engineering_data_register.txt URS-FUN-006 saying 10 s after Tank 1 low lost to the current performance requirement URS-PER-005 and later approved correspondence.
+
+**Evidence:** 02_02_engineering_data_register.txt states current post-transfer waiting time 12 s in URS-PER-005 and marks the older functional requirement text as superseded; 06_06_design_review_minutes.txt approves 12 s; 08_05_controls_email_thread.txt approves 12 s; 12_10_demo_run_900s.txt shows WAIT_AFTER_TRANSFER from 440 s to 452 s, consistent with 12 s.
+
+### Delay after Tank 2 reaches low level before next fill starts
+
+**Adopted:** 8 s
+
+**Not adopted:**
+
+- 10 s rejected because it appears in the older URS text 01_01_customer_URS.txt, the archived legacy model 09_07_legacy_tank_demo.txt wait3, and a superseded requirement text in 02_02_engineering_data_register.txt URS-FUN-008.
+
+**Evidence:** 02_02_engineering_data_register.txt states current inter-cycle waiting time 8 s in URS-PER-006 and marks the older 10 s return-to-fill text as superseded; 06_06_design_review_minutes.txt approves 8 s; 08_05_controls_email_thread.txt approves 8 s; 11_09_test_procedure_TP17.txt uses 8 s; 12_10_demo_run_900s.txt shows WAIT_AFTER_DRAIN from 632 s to 640 s, consistent with 8 s.
+
+### Whether V2 and V3 may be open simultaneously
+
+**Adopted:** V2 and V3 are commanded open together only in SHUTDOWN; simultaneous opening is not allowed during normal automatic operation
+
+**Not adopted:**
+
+- Any interpretation that V2 and V3 are never simultaneous rejected because 01_01_customer_URS.txt URS-M-003, 02_02_engineering_data_register.txt URS-MOD-003 and URS-SAF-005, 06_06_design_review_minutes.txt D-09, 08_05_controls_email_thread.txt, and 11_09_test_procedure_TP17.txt AC-06 explicitly require simultaneous V2 and V3 opening in SHUTDOWN.
+- Any interpretation that simultaneous V2 and V3 is allowed in normal automatic operation rejected because 02_02_engineering_data_register.txt URS-SAF-004 and 06_06_design_review_minutes.txt D-09 prohibit it outside SHUTDOWN.
+
+**Evidence:** Current and approved requirement/test sources consistently state the exception: V2 and V3 must not overlap in normal auto operation but shall open together during SHUTDOWN until both tanks are low.
+
+## Assumptions (3)
+
+- A numeric reporting code is assigned to the named controller states solely so mechanically evaluable checks can reference them: IDLE=0, FILL_T1=1, WAIT_AFTER_FILL=2, TRANSFER_T1_T2=3, WAIT_AFTER_TRANSFER=4, DRAIN_T2=5, WAIT_AFTER_DRAIN=6, PAUSED=7, SHUTDOWN=8.
+- The simulation uses the stated 900 s demonstration horizon and 9000 output intervals so 0.1 s controller scan/update behavior can be represented on the output grid; this interval count is a modeling choice because the notes state scan/update times but do not prescribe result sample count.
+- Checks at exact scheduled times use the stated schedule instants directly; no extra state-boundary slack is encoded into Boolean time-window expressions beyond the explicit times because the notes provide a +/-2 s acceptance for state-boundary comparisons but do not define a separate machine-evaluable temporal window syntax.
+
+## Source tables
+
+| document | role | why |
+| --- | --- | --- |
+| 12_10_demo_run_900s.txt | `reference` | Document kind is dataset and the note explicitly says it records one run that already happened over 0 to 900 s; it is evidence for current behavior and timing consistency, not a commanded input scenario. |

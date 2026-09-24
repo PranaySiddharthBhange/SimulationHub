@@ -1,0 +1,304 @@
+{
+  "document": "@startuml\ntitle Legacy Evaporation Plant Architecture - Draft\ncomponent B1\ncomponent B2\ncomponent B3\ncomponent B4\ncomponent B5\ncomponent B6\ncomponent B7\ncomponent K1\ncomponent P1\ncomponent P2\ncomponent Controller\nB1 --> B3 : V8\nB2 --> B3 : V9\nB3 --> B4 : V11\nB4 --> B5 : V12\nB5 --> K1 : vapor\nK1 --> B6 : condensate\nB5 --> B7 : V15\nB7 --> P1\nB6 --> P2\nController ..> B3 : LIS301/QI302\nController ..> B5 : LIS501/QIS502\nnote right of Controller\n  Junction volumes omitted.\n  Cooling-water interfaces omitted.\n  Return-header destinations unresolved.\nend note\n@enduml\n",
+  "subject": "Legacy Evaporation Plant Architecture - Draft",
+  "kind": "legacy model",
+  "entities": [
+    {
+      "name": "B1",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component B1"
+    },
+    {
+      "name": "B2",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component B2"
+    },
+    {
+      "name": "B3",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component B3"
+    },
+    {
+      "name": "B4",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component B4"
+    },
+    {
+      "name": "B5",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component B5"
+    },
+    {
+      "name": "B6",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component B6"
+    },
+    {
+      "name": "B7",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component B7"
+    },
+    {
+      "name": "K1",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component K1"
+    },
+    {
+      "name": "P1",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component P1"
+    },
+    {
+      "name": "P2",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component P2"
+    },
+    {
+      "name": "Controller",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "component Controller"
+    },
+    {
+      "name": "V8",
+      "kind": "connection_label",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B1 --> B3 : V8"
+    },
+    {
+      "name": "V9",
+      "kind": "connection_label",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B2 --> B3 : V9"
+    },
+    {
+      "name": "V11",
+      "kind": "connection_label",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B3 --> B4 : V11"
+    },
+    {
+      "name": "V12",
+      "kind": "connection_label",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B4 --> B5 : V12"
+    },
+    {
+      "name": "V15",
+      "kind": "connection_label",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B5 --> B7 : V15"
+    },
+    {
+      "name": "LIS301/QI302",
+      "kind": "signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controller ..> B3 : LIS301/QI302"
+    },
+    {
+      "name": "LIS501/QIS502",
+      "kind": "signal",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controller ..> B5 : LIS501/QIS502"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "B1",
+      "predicate": "connects_to",
+      "object": "B3",
+      "detail": "V8",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B1 --> B3 : V8"
+    },
+    {
+      "subject": "B2",
+      "predicate": "connects_to",
+      "object": "B3",
+      "detail": "V9",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B2 --> B3 : V9"
+    },
+    {
+      "subject": "B3",
+      "predicate": "connects_to",
+      "object": "B4",
+      "detail": "V11",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B3 --> B4 : V11"
+    },
+    {
+      "subject": "B4",
+      "predicate": "connects_to",
+      "object": "B5",
+      "detail": "V12",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B4 --> B5 : V12"
+    },
+    {
+      "subject": "B5",
+      "predicate": "connects_to",
+      "object": "K1",
+      "detail": "vapor",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B5 --> K1 : vapor"
+    },
+    {
+      "subject": "K1",
+      "predicate": "connects_to",
+      "object": "B6",
+      "detail": "condensate",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "K1 --> B6 : condensate"
+    },
+    {
+      "subject": "B5",
+      "predicate": "connects_to",
+      "object": "B7",
+      "detail": "V15",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B5 --> B7 : V15"
+    },
+    {
+      "subject": "B7",
+      "predicate": "connects_to",
+      "object": "P1",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B7 --> P1"
+    },
+    {
+      "subject": "B6",
+      "predicate": "connects_to",
+      "object": "P2",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "B6 --> P2"
+    },
+    {
+      "subject": "Controller",
+      "predicate": "signals_to",
+      "object": "B3",
+      "detail": "LIS301/QI302",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controller ..> B3 : LIS301/QI302"
+    },
+    {
+      "subject": "Controller",
+      "predicate": "signals_to",
+      "object": "B5",
+      "detail": "LIS501/QIS502",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controller ..> B5 : LIS501/QIS502"
+    }
+  ],
+  "facts": [],
+  "unreadable": [
+    "Unresolved destination noted: \"Return-header destinations unresolved.\""
+  ],
+  "unverified_quotes": []
+}

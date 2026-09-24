@@ -1,0 +1,354 @@
+{
+  "document": "From: lena.hoffmann@synthetic-lab.example\nDate: Tue, 03 Mar 2026 09:18:00 +0100\nSubject: RE: return headers and B7 cooling setpoint\n\nTeam,\n\nThe old StateGraph note still says:\n  P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1\n  P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2\n\nThat is what the teaching model did, but it does not preserve the stream identities stated in the URS. Process wants recovered condensate back to B1 and cooled concentrate back to B2.\n\nAlso, my handwritten commissioning sheet says both coolers go to 20 C. Marco thinks B7 only needs 25 C.\n\n- Lena\n\n---- Original message ----\nFrom: marco.silva@synthetic-lab.example\nDate: Tue, 3 Mar 2026 10:02:00 +0100\nSubject: RE: return headers and B7 cooling setpoint\n\nAgree on routing. The bottom headers are cross-connected, so pump physical location is not the destination.\nFor the benchmark update I propose:\n  B6 <= 20 C\n  B7 <= 25 C\nI will raise CR-017.\n\nOn the medium: please do not remove P1/P2 just because WaterNaCl dies at pump start in the old file. The StandardWater variant runs the sequence. I think we have a nonlinear initialization / medium-state issue.\n\n---- Follow-up ----\nFrom: a.mehta@synthetic-lab.example\nDate: Thu, 5 Mar 2026 16:41:00 +0100\nSubject: CR-017 approved\n\nCR-017 is approved:\n1) B6 condensate returns to B1.\n2) B7 concentrate returns to B2.\n3) B7 cooling completion is <=25 C.\nThe legacy StateGraph routing text is superseded. Keep it in the archive for traceability.\n",
+  "subject": "return headers and B7 cooling setpoint",
+  "kind": "correspondence",
+  "entities": [
+    {
+      "name": "StateGraph note",
+      "kind": "document note",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The old StateGraph note still says:"
+    },
+    {
+      "name": "P1",
+      "kind": "pump",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1"
+    },
+    {
+      "name": "B7",
+      "kind": "branch",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "cooling completion",
+          "value": "25",
+          "unit": "C",
+          "status": "proposed",
+          "supersedes": "",
+          "quote": "Marco thinks B7 only needs 25 C."
+        },
+        {
+          "quantity": "cooling completion",
+          "value": "25",
+          "unit": "C",
+          "status": "approved",
+          "supersedes": "20 C",
+          "quote": "3) B7 cooling completion is <=25 C."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1"
+    },
+    {
+      "name": "V18",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1"
+    },
+    {
+      "name": "V23",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1"
+    },
+    {
+      "name": "V22",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1"
+    },
+    {
+      "name": "V1",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1"
+    },
+    {
+      "name": "V3",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1"
+    },
+    {
+      "name": "B1",
+      "kind": "header",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1"
+    },
+    {
+      "name": "P2",
+      "kind": "pump",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2"
+    },
+    {
+      "name": "B6",
+      "kind": "branch",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "cooling completion",
+          "value": "20",
+          "unit": "C",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "my handwritten commissioning sheet says both coolers go to 20 C."
+        },
+        {
+          "quantity": "cooling completion",
+          "value": "20",
+          "unit": "C",
+          "status": "proposed",
+          "supersedes": "",
+          "quote": "  B6 <= 20 C"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2"
+    },
+    {
+      "name": "V20",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2"
+    },
+    {
+      "name": "V24",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2"
+    },
+    {
+      "name": "V25",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2"
+    },
+    {
+      "name": "V5",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2"
+    },
+    {
+      "name": "V6",
+      "kind": "valve",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2"
+    },
+    {
+      "name": "B2",
+      "kind": "header",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2"
+    },
+    {
+      "name": "CR-017",
+      "kind": "change request",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "I will raise CR-017."
+    },
+    {
+      "name": "P1/P2",
+      "kind": "pump pair",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "please do not remove P1/P2 just because WaterNaCl dies at pump start in the old file."
+    },
+    {
+      "name": "WaterNaCl",
+      "kind": "medium variant",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "please do not remove P1/P2 just because WaterNaCl dies at pump start in the old file."
+    },
+    {
+      "name": "StandardWater",
+      "kind": "medium variant",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The StandardWater variant runs the sequence."
+    },
+    {
+      "name": "legacy StateGraph routing text",
+      "kind": "routing text",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The legacy StateGraph routing text is superseded."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "P1",
+      "predicate": "routes branch",
+      "object": "B1",
+      "detail": "old StateGraph note maps branch B7 through V18/V23/V22 + V1/V3 to B1",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P1 branch (B7) -> V18/V23/V22 + V1/V3 -> B1"
+    },
+    {
+      "subject": "P2",
+      "predicate": "routes branch",
+      "object": "B2",
+      "detail": "old StateGraph note maps branch B6 through V20/V24/V25 + V5/V6 to B2",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P2 branch (B6) -> V20/V24/V25 + V5/V6 -> B2"
+    },
+    {
+      "subject": "bottom headers",
+      "predicate": "are cross-connected",
+      "object": "bottom headers",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The bottom headers are cross-connected, so pump physical location is not the destination."
+    },
+    {
+      "subject": "B6 condensate",
+      "predicate": "returns to",
+      "object": "B1",
+      "detail": "approved by CR-017",
+      "ref": "CR-017",
+      "anchor": "",
+      "from_image": false,
+      "quote": "1) B6 condensate returns to B1."
+    },
+    {
+      "subject": "B7 concentrate",
+      "predicate": "returns to",
+      "object": "B2",
+      "detail": "approved by CR-017",
+      "ref": "CR-017",
+      "anchor": "",
+      "from_image": false,
+      "quote": "2) B7 concentrate returns to B2."
+    },
+    {
+      "subject": "legacy StateGraph routing text",
+      "predicate": "is superseded by",
+      "object": "CR-017",
+      "detail": "",
+      "ref": "CR-017",
+      "anchor": "",
+      "from_image": false,
+      "quote": "The legacy StateGraph routing text is superseded."
+    }
+  ],
+  "facts": [
+    {
+      "category": "constraint",
+      "statement": "B6 cooling completion is <= 20 C.",
+      "ref": "",
+      "anchor": "",
+      "status": "proposed",
+      "from_image": false,
+      "quote": "  B6 <= 20 C"
+    },
+    {
+      "category": "constraint",
+      "statement": "B7 cooling completion is <= 25 C.",
+      "ref": "",
+      "anchor": "",
+      "status": "proposed",
+      "from_image": false,
+      "quote": "  B7 <= 25 C"
+    },
+    {
+      "category": "constraint",
+      "statement": "B7 cooling completion is <=25 C.",
+      "ref": "CR-017",
+      "anchor": "",
+      "status": "approved",
+      "from_image": false,
+      "quote": "3) B7 cooling completion is <=25 C."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

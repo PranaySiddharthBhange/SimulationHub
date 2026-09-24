@@ -1,0 +1,57 @@
+{
+  "tank.tank_level_m": {
+    "min": 0.0,
+    "max": 0.8000000001800199,
+    "final": 0.8000000001800199
+  },
+  "der(tank.tank_level_m)": {
+    "min": 0.0,
+    "max": 0.02,
+    "final": 0.0
+  },
+  "inletValve.outflow_m3_s": {
+    "min": 0.0,
+    "max": 0.01,
+    "final": 0.0
+  },
+  "singleSupply.supplied_flow_m3_s": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "valve_open_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "valveOpenLogic.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "inletValve.supply_flow_m3_s": {
+    "min": 0.01,
+    "max": 0.01,
+    "final": 0.01
+  },
+  "inletValve.valve_open_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "tank.inflow_m3_s": {
+    "min": 0.0,
+    "max": 0.01,
+    "final": 0.0
+  },
+  "tank_level_m": {
+    "min": 0.0,
+    "max": 0.8000000001800199,
+    "final": 0.8000000001800199
+  },
+  "inletValve.openCmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  }
+}

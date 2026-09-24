@@ -1,0 +1,62 @@
+{
+  "questions": [
+    "Leakage coefficient sigma for the released benchmark: Merge resolved this to sigma = 0.08 [current/effective, approved/released]. Confirm, or choose a different value.",
+    "Effective iron relative permeability for the linear benchmark: Merge resolved this to mu_r = 1200 [current/effective, approved/released]. Confirm, or choose a different value.",
+    "Measuring-coil turns: Merge resolved this to N_meas = 50 turn [current/effective, approved/released]. Confirm, or choose a different value.",
+    "Air-gap length to use in the released nominal benchmark acceptance case: Merge resolved this to delta = 1.50 mm nominal for the released analytic benchmark and AV-11 configuration. Confirm, or choose a different value.",
+    "Interpretation of the excitation current magnitude: Merge resolved this to Current schedule uses RMS current-phasor magnitude, not peak current. Confirm, or choose a different value.",
+    "Whether to include nonlinear magnetic effects in the baseline model: Merge resolved this to Baseline model is linear with constant effective relative permeability and excludes saturation, hysteresis, eddy-current loss, frequency-dependent permeability, and force interaction. Confirm, or choose a different value."
+  ],
+  "answers": {
+    "resolve_sigma": "sigma = 0.08 [current/effective, approved/released]",
+    "resolve_mu_r": "mu_r = 1200 [current/effective, approved/released]",
+    "resolve_measuring_turns": "N_meas = 50 turn [current/effective, approved/released]",
+    "resolve_gap_for_released_benchmark": "delta = 1.50 mm nominal for the released analytic benchmark and AV-11 configuration",
+    "resolve_current_representation": "Current schedule uses RMS current-phasor magnitude, not peak current",
+    "resolve_baseline_linearity": "Baseline model is linear with constant effective relative permeability and excludes saturation, hysteresis, eddy-current loss, frequency-dependent permeability, and force interaction"
+  },
+  "decisions": [
+    {
+      "id": "resolve_sigma",
+      "question": "Leakage coefficient sigma for the released benchmark: Merge resolved this to sigma = 0.08 [current/effective, approved/released]. Confirm, or choose a different value.",
+      "merge_suggested": "sigma = 0.08 [current/effective, approved/released]",
+      "answer": "sigma = 0.08 [current/effective, approved/released]",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_mu_r",
+      "question": "Effective iron relative permeability for the linear benchmark: Merge resolved this to mu_r = 1200 [current/effective, approved/released]. Confirm, or choose a different value.",
+      "merge_suggested": "mu_r = 1200 [current/effective, approved/released]",
+      "answer": "mu_r = 1200 [current/effective, approved/released]",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_measuring_turns",
+      "question": "Measuring-coil turns: Merge resolved this to N_meas = 50 turn [current/effective, approved/released]. Confirm, or choose a different value.",
+      "merge_suggested": "N_meas = 50 turn [current/effective, approved/released]",
+      "answer": "N_meas = 50 turn [current/effective, approved/released]",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_gap_for_released_benchmark",
+      "question": "Air-gap length to use in the released nominal benchmark acceptance case: Merge resolved this to delta = 1.50 mm nominal for the released analytic benchmark and AV-11 configuration. Confirm, or choose a different value.",
+      "merge_suggested": "delta = 1.50 mm nominal for the released analytic benchmark and AV-11 configuration",
+      "answer": "delta = 1.50 mm nominal for the released analytic benchmark and AV-11 configuration",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_current_representation",
+      "question": "Interpretation of the excitation current magnitude: Merge resolved this to Current schedule uses RMS current-phasor magnitude, not peak current. Confirm, or choose a different value.",
+      "merge_suggested": "Current schedule uses RMS current-phasor magnitude, not peak current",
+      "answer": "Current schedule uses RMS current-phasor magnitude, not peak current",
+      "outcome": "confirmed"
+    },
+    {
+      "id": "resolve_baseline_linearity",
+      "question": "Whether to include nonlinear magnetic effects in the baseline model: Merge resolved this to Baseline model is linear with constant effective relative permeability and excludes saturation, hysteresis, eddy-current loss, frequency-dependent permeability, and force interaction. Confirm, or choose a different value.",
+      "merge_suggested": "Baseline model is linear with constant effective relative permeability and excludes saturation, hysteresis, eddy-current loss, frequency-dependent permeability, and force interaction",
+      "answer": "Baseline model is linear with constant effective relative permeability and excludes saturation, hysteresis, eddy-current loss, frequency-dependent permeability, and force interaction",
+      "outcome": "confirmed"
+    }
+  ]
+}

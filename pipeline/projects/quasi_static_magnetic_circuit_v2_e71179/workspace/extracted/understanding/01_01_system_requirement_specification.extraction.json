@@ -1,0 +1,362 @@
+{
+  "document": "[page 1]\n    System Requirement Specification - Quasi-Static\n                  Magnetic Circuit\n\n\nReleased Rev A. Parameter values in later approved change records override conflicting values in this document.\n\n1. System purpose\nThe benchmark magnetic circuit consists of a rectangular iron core with a square cross section, one discrete air\ngap, an exciting coil, a measuring coil located at the air-gap region, a useful-flux sensor, and a leakage-flux\npath. It is modeled using quasi-static magnetic flux tubes under a linear-reluctance assumption.\n\n2. Functional behavior\nA positive RMS current-phasor magnitude ramp through the exciting coil produces a positive magnetomotive\nforce N*I. The resulting total core flux follows the defined positive magnetic direction. At the right-leg branch,\ntotal core flux divides into useful air-gap flux and leakage flux and rejoins before the lower yoke.\n\nFlux density B is derived from flux Phi and cross-sectional area. Magnetic field strength H is derived from B\nusing the applicable permeability. Magnetic potential difference is H times mean flux-line length. The series\nmagnetic potential drops plus the parallel air-gap/leakage branch drop balance the exciting-coil mmf.\n\n3. Released nominal geometry\n\n Item                                    Value                   Notes\n a                                     25 mm                   Square iron cross-section side\n  l                                     150 mm                   Reference mean geometry dimension from drawing\n delta                                       1.50 mm                  Nominal air-gap length\n Left/upper/lower iron length                        l-a                    Mean dashed flux line\n Right-leg iron length                              l-a-delta                        Air gap removed from iron length\n\n4. Quasi-static and induction requirements\nFlux, flux density, field strength, magnetic potential difference and electric quantities are represented by\ncomplex phasors. For the released linear elements, reluctance is real, so flux and magnetic potential difference\nshare phasor angle.\n\nThe exciting coil induced voltage has positive defined electric orientation; the measuring-coil voltage has\nnegative orientation relative to the useful air-gap flux. Both follow the quasi-static relation |U| = 2*pi*f*N*|Phi|.\n\n5. Grounds and assumptions\nAn electric ground and a magnetic ground shall both be present to establish reference potentials. Force\ninteraction is out of scope. The core is linear in this benchmark; nonlinear saturation is handled only by a\nseparate model variant and shall not be inferred into the baseline.\n[page 1 also supplied as visual image 1]",
+  "subject": "System Requirement Specification - Quasi-Static Magnetic Circuit",
+  "kind": "requirement specification",
+  "entities": [
+    {
+      "name": "benchmark magnetic circuit",
+      "kind": "system",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The benchmark magnetic circuit consists of a rectangular iron core with a square cross section, one discrete air\ngap, an exciting coil, a measuring coil located at the air-gap region, a useful-flux sensor, and a leakage-flux\npath."
+    },
+    {
+      "name": "rectangular iron core",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a rectangular iron core with a square cross section"
+    },
+    {
+      "name": "air gap",
+      "kind": "component",
+      "aliases": [
+        "discrete air gap"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "one discrete air\ngap"
+    },
+    {
+      "name": "exciting coil",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "an exciting coil"
+    },
+    {
+      "name": "measuring coil",
+      "kind": "component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a measuring coil located at the air-gap region"
+    },
+    {
+      "name": "useful-flux sensor",
+      "kind": "sensor",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a useful-flux sensor"
+    },
+    {
+      "name": "leakage-flux path",
+      "kind": "path",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a leakage-flux\npath"
+    },
+    {
+      "name": "a",
+      "kind": "geometry parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "side",
+          "value": "25",
+          "unit": "mm",
+          "status": "released nominal",
+          "supersedes": "",
+          "quote": "a                                     25 mm                   Square iron cross-section side"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a                                     25 mm                   Square iron cross-section side"
+    },
+    {
+      "name": "l",
+      "kind": "geometry parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "reference mean geometry dimension",
+          "value": "150",
+          "unit": "mm",
+          "status": "released nominal",
+          "supersedes": "",
+          "quote": "l                                     150 mm                   Reference mean geometry dimension from drawing"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "l                                     150 mm                   Reference mean geometry dimension from drawing"
+    },
+    {
+      "name": "delta",
+      "kind": "geometry parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "air-gap length",
+          "value": "1.50",
+          "unit": "mm",
+          "status": "released nominal",
+          "supersedes": "",
+          "quote": "delta                                       1.50 mm                  Nominal air-gap length"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "delta                                       1.50 mm                  Nominal air-gap length"
+    },
+    {
+      "name": "electric ground",
+      "kind": "ground",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "An electric ground and a magnetic ground shall both be present to establish reference potentials."
+    },
+    {
+      "name": "magnetic ground",
+      "kind": "ground",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "An electric ground and a magnetic ground shall both be present to establish reference potentials."
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "benchmark magnetic circuit",
+      "predicate": "consists of",
+      "object": "rectangular iron core",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "The benchmark magnetic circuit consists of a rectangular iron core"
+    },
+    {
+      "subject": "benchmark magnetic circuit",
+      "predicate": "consists of",
+      "object": "air gap",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "one discrete air\ngap"
+    },
+    {
+      "subject": "benchmark magnetic circuit",
+      "predicate": "consists of",
+      "object": "exciting coil",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "an exciting coil"
+    },
+    {
+      "subject": "benchmark magnetic circuit",
+      "predicate": "consists of",
+      "object": "measuring coil",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a measuring coil located at the air-gap region"
+    },
+    {
+      "subject": "benchmark magnetic circuit",
+      "predicate": "consists of",
+      "object": "useful-flux sensor",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a useful-flux sensor"
+    },
+    {
+      "subject": "benchmark magnetic circuit",
+      "predicate": "consists of",
+      "object": "leakage-flux path",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a leakage-flux\npath"
+    },
+    {
+      "subject": "measuring coil",
+      "predicate": "located at",
+      "object": "air gap",
+      "detail": "air-gap region",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a measuring coil located at the air-gap region"
+    },
+    {
+      "subject": "total core flux",
+      "predicate": "divides into",
+      "object": "useful air-gap flux",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "total core flux divides into useful air-gap flux and leakage flux"
+    },
+    {
+      "subject": "total core flux",
+      "predicate": "divides into",
+      "object": "leakage flux",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "total core flux divides into useful air-gap flux and leakage flux"
+    },
+    {
+      "subject": "useful air-gap flux",
+      "predicate": "rejoins before",
+      "object": "lower yoke",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "rejoins before the lower yoke"
+    },
+    {
+      "subject": "leakage flux",
+      "predicate": "rejoins before",
+      "object": "lower yoke",
+      "detail": "",
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "rejoins before the lower yoke"
+    }
+  ],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "A positive RMS current-phasor magnitude ramp through the exciting coil produces a positive magnetomotive force N*I.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "A positive RMS current-phasor magnitude ramp through the exciting coil produces a positive magnetomotive\nforce N*I."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Flux density B is derived from flux Phi and cross-sectional area.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "Flux density B is derived from flux Phi and cross-sectional area."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Magnetic field strength H is derived from B using the applicable permeability.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "Magnetic field strength H is derived from B\nusing the applicable permeability."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "Magnetic potential difference is H times mean flux-line length.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "Magnetic potential difference is H times mean flux-line length."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "The series magnetic potential drops plus the parallel air-gap/leakage branch drop balance the exciting-coil mmf.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "The series\nmagnetic potential drops plus the parallel air-gap/leakage branch drop balance the exciting-coil mmf."
+    },
+    {
+      "category": "requirement",
+      "statement": "Flux, flux density, field strength, magnetic potential difference and electric quantities are represented by complex phasors.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "Flux, flux density, field strength, magnetic potential difference and electric quantities are represented by\ncomplex phasors."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "For the released linear elements, reluctance is real, so flux and magnetic potential difference share phasor angle.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "For the released linear elements, reluctance is real, so flux and magnetic potential difference\nshare phasor angle."
+    },
+    {
+      "category": "requirement",
+      "statement": "Both follow the quasi-static relation |U| = 2*pi*f*N*|Phi|.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "Both follow the quasi-static relation |U| = 2*pi*f*N*|Phi|."
+    },
+    {
+      "category": "requirement",
+      "statement": "An electric ground and a magnetic ground shall both be present to establish reference potentials.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "An electric ground and a magnetic ground shall both be present to establish reference potentials."
+    },
+    {
+      "category": "constraint",
+      "statement": "The core is linear in this benchmark; nonlinear saturation is handled only by a separate model variant and shall not be inferred into the baseline.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "released",
+      "from_image": false,
+      "quote": "The core is linear in this benchmark; nonlinear saturation is handled only by a\nseparate model variant and shall not be inferred into the baseline."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

@@ -1,0 +1,484 @@
+{
+  "document": "[page 1]\n           Analytic Verification AV-11 - Rev B\n\n1. Objective\nVerify the released nominal magnetic circuit against closed-form analytic calculations under the linear\nquasi-static assumptions.\n\n2. Test configuration\n\n Parameter                                     Value\n a                                                 0.025 m\n  l                                                 0.150 m\n delta                                            0.00150 m nominal\n mu_r                                         1200\n sigma                                              0.08\n N_exc / N_meas                               600 / 50 turns\n Frequency                                    50 Hz\n Current ramp                                  0 A before 0.10 s; linear to 2.0 A RMS at 0.50 s; hold through 1.0 s\n\n3. Analytic checks at 2 A RMS\n\n Quantity                                          Expected\n Total core reluctance                                  5.289249e+05 A/Wb\n Air-gap reluctance                                    1.909859e+06 A/Wb\n Equivalent gap/leak reluctance                          1.757071e+06 A/Wb\n Total core flux                                         5.249354e-04 Wb\n Useful air-gap flux                                      4.829406e-04 Wb\n Leakage flux                                           4.199483e-05 Wb\n Core B                                               0.839897 T\n Gap B                                               0.772705 T\n Core magnetic drop                                    277.651 A-turn\n Gap magnetic drop                                     922.349 A-turn\n Exciting induced |U|                                     98.948 V RMS\n Measuring induced |U|                                   7.586 V RMS\n\n4. Acceptance\nMMF balance residual shall be within 0.5% of N*I. Useful/core flux ratio shall be 0.92 within 0.002 absolute.\nFlux, B, H and induced-voltage magnitudes shall each agree within 1% of the released analytic result.\n[page 1 also supplied as visual image 1]",
+  "subject": "released nominal magnetic circuit",
+  "kind": "test procedure",
+  "entities": [
+    {
+      "name": "magnetic circuit",
+      "kind": "system",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "released nominal magnetic circuit"
+    },
+    {
+      "name": "a",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "0.025",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "a                                                 0.025 m"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "a                                                 0.025 m"
+    },
+    {
+      "name": "l",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "0.150",
+          "unit": "m",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "l                                                 0.150 m"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "l                                                 0.150 m"
+    },
+    {
+      "name": "delta",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "length",
+          "value": "0.00150",
+          "unit": "m",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "delta                                            0.00150 m nominal"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "delta                                            0.00150 m nominal"
+    },
+    {
+      "name": "mu_r",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "relative permeability",
+          "value": "1200",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "mu_r                                         1200"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "mu_r                                         1200"
+    },
+    {
+      "name": "sigma",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "sigma",
+          "value": "0.08",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "sigma                                              0.08"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "sigma                                              0.08"
+    },
+    {
+      "name": "N_exc",
+      "kind": "winding",
+      "aliases": [
+        "exciting"
+      ],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "600",
+          "unit": "turns",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "N_exc / N_meas                               600 / 50 turns"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "N_exc / N_meas                               600 / 50 turns"
+    },
+    {
+      "name": "N_meas",
+      "kind": "winding",
+      "aliases": [
+        "measuring"
+      ],
+      "values": [
+        {
+          "quantity": "turns",
+          "value": "50",
+          "unit": "turns",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "N_exc / N_meas                               600 / 50 turns"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "N_exc / N_meas                               600 / 50 turns"
+    },
+    {
+      "name": "Frequency",
+      "kind": "parameter",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "frequency",
+          "value": "50",
+          "unit": "Hz",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Frequency                                    50 Hz"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Frequency                                    50 Hz"
+    },
+    {
+      "name": "Current ramp",
+      "kind": "test input",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "current",
+          "value": "0",
+          "unit": "A",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "0 A before 0.10 s; linear to 2.0 A RMS at 0.50 s; hold through 1.0 s"
+        },
+        {
+          "quantity": "time",
+          "value": "0.10",
+          "unit": "s",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "0 A before 0.10 s; linear to 2.0 A RMS at 0.50 s; hold through 1.0 s"
+        },
+        {
+          "quantity": "current",
+          "value": "2.0",
+          "unit": "A RMS",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "0 A before 0.10 s; linear to 2.0 A RMS at 0.50 s; hold through 1.0 s"
+        },
+        {
+          "quantity": "time",
+          "value": "0.50",
+          "unit": "s",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "0 A before 0.10 s; linear to 2.0 A RMS at 0.50 s; hold through 1.0 s"
+        },
+        {
+          "quantity": "time",
+          "value": "1.0",
+          "unit": "s",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "0 A before 0.10 s; linear to 2.0 A RMS at 0.50 s; hold through 1.0 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Current ramp                                  0 A before 0.10 s; linear to 2.0 A RMS at 0.50 s; hold through 1.0 s"
+    },
+    {
+      "name": "Total core reluctance",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "reluctance",
+          "value": "5.289249e+05",
+          "unit": "A/Wb",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Total core reluctance                                  5.289249e+05 A/Wb"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Total core reluctance                                  5.289249e+05 A/Wb"
+    },
+    {
+      "name": "Air-gap reluctance",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "reluctance",
+          "value": "1.909859e+06",
+          "unit": "A/Wb",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Air-gap reluctance                                    1.909859e+06 A/Wb"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Air-gap reluctance                                    1.909859e+06 A/Wb"
+    },
+    {
+      "name": "Equivalent gap/leak reluctance",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "reluctance",
+          "value": "1.757071e+06",
+          "unit": "A/Wb",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Equivalent gap/leak reluctance                          1.757071e+06 A/Wb"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Equivalent gap/leak reluctance                          1.757071e+06 A/Wb"
+    },
+    {
+      "name": "Total core flux",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "flux",
+          "value": "5.249354e-04",
+          "unit": "Wb",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Total core flux                                         5.249354e-04 Wb"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Total core flux                                         5.249354e-04 Wb"
+    },
+    {
+      "name": "Useful air-gap flux",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "flux",
+          "value": "4.829406e-04",
+          "unit": "Wb",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Useful air-gap flux                                      4.829406e-04 Wb"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Useful air-gap flux                                      4.829406e-04 Wb"
+    },
+    {
+      "name": "Leakage flux",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "flux",
+          "value": "4.199483e-05",
+          "unit": "Wb",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Leakage flux                                           4.199483e-05 Wb"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Leakage flux                                           4.199483e-05 Wb"
+    },
+    {
+      "name": "Core B",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "flux density",
+          "value": "0.839897",
+          "unit": "T",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Core B                                               0.839897 T"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Core B                                               0.839897 T"
+    },
+    {
+      "name": "Gap B",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "flux density",
+          "value": "0.772705",
+          "unit": "T",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Gap B                                               0.772705 T"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Gap B                                               0.772705 T"
+    },
+    {
+      "name": "Core magnetic drop",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "magnetic drop",
+          "value": "277.651",
+          "unit": "A-turn",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Core magnetic drop                                    277.651 A-turn"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Core magnetic drop                                    277.651 A-turn"
+    },
+    {
+      "name": "Gap magnetic drop",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "magnetic drop",
+          "value": "922.349",
+          "unit": "A-turn",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Gap magnetic drop                                     922.349 A-turn"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Gap magnetic drop                                     922.349 A-turn"
+    },
+    {
+      "name": "Exciting induced |U|",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "induced voltage magnitude",
+          "value": "98.948",
+          "unit": "V RMS",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Exciting induced |U|                                     98.948 V RMS"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Exciting induced |U|                                     98.948 V RMS"
+    },
+    {
+      "name": "Measuring induced |U|",
+      "kind": "analytic quantity",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "induced voltage magnitude",
+          "value": "7.586",
+          "unit": "V RMS",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Measuring induced |U|                                   7.586 V RMS"
+        }
+      ],
+      "ref": "",
+      "anchor": "[page 1]",
+      "from_image": false,
+      "quote": "Measuring induced |U|                                   7.586 V RMS"
+    }
+  ],
+  "relationships": [],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "MMF balance residual shall be within 0.5% of N*I.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "MMF balance residual shall be within 0.5% of N*I."
+    },
+    {
+      "category": "requirement",
+      "statement": "Useful/core flux ratio shall be 0.92 within 0.002 absolute.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Useful/core flux ratio shall be 0.92 within 0.002 absolute."
+    },
+    {
+      "category": "requirement",
+      "statement": "Flux, B, H and induced-voltage magnitudes shall each agree within 1% of the released analytic result.",
+      "ref": "",
+      "anchor": "[page 1]",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Flux, B, H and induced-voltage magnitudes shall each agree within 1% of the released analytic result."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

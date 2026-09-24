@@ -1,0 +1,54 @@
+flowchart TD
+    A["Simulation start<br/>t=0 s<br/>State IDLE code 0<br/>TK-101=0.05 m<br/>TK-102=0.05 m<br/>XV-101=0 XV-102=0 XV-103=0"] --> B{"Scheduled command/event?"}
+    B -->|"No command"| C{"State?"}
+    B -->|"START at 20 s or 280 s"| D{"Controller state PAUSED?"}
+    B -->|"STOP at 220 s or 650 s"| E{"State is normal run or wait?"}
+    B -->|"SHUT at 700 s"| F["Enter SHUTDOWN code 8<br/>Abandon stored resume context<br/>XV-101=0 inhibited closed<br/>XV-102=1 XV-103=1"]
+    D -->|"Yes"| G["Resume stored state context<br/>Restore stored remaining delay if paused in wait"]
+    D -->|"No"| H{"Already running or wait state?"}
+    H -->|"Yes"| C
+    H -->|"No"| I["Enter FILL_T1 code 1<br/>XV-101=1<br/>XV-102=0 XV-103=0"]
+    E -->|"Yes"| J["Enter PAUSED code 7<br/>Store interrupted state context<br/>Store remaining delay if in wait<br/>XV-101=0 XV-102=0 XV-103=0"]
+    E -->|"No"| C
+    G --> C
+    I --> C
+    J --> C
+    C -->|"IDLE"| K{"START edge received?"}
+    K -->|"Yes"| I
+    K -->|"No"| L{"t >= 900 s?"}
+    L -->|"Yes"| Z["End of requested run<br/>Report time_s tank1_level_m tank2_level_m<br/>valve1_open_cmd valve2_open_cmd valve3_open_cmd<br/>controller_state_code wait_remaining_s<br/>cmd_start cmd_stop cmd_shut"]
+    L -->|"No"| B
+    C -->|"FILL_T1"| M["Command XV-101 open<br/>XV-102 closed XV-103 closed<br/>tank1_level_m changes by qFill/A1"]
+    M --> N{"LT-101 >= 0.80 m?"}
+    N -->|"Yes"| O["Close XV-101<br/>Enter WAIT_AFTER_FILL code 2<br/>All valves closed<br/>Start 10 s timer"]
+    N -->|"No"| L
+    O --> P{"10 s timer expired?"}
+    P -->|"Yes"| Q["Enter TRANSFER_T1_T2 code 3<br/>XV-102=1<br/>XV-101=0 XV-103=0"]
+    P -->|"No"| L
+    C -->|"WAIT_AFTER_FILL"| P
+    C -->|"TRANSFER_T1_T2"| R["Command XV-102 open<br/>XV-101 closed XV-103 closed<br/>tank1_level_m changes by -qTransfer/A1<br/>tank2_level_m changes by qTransfer/A2"]
+    R --> S{"LT-101 <= 0.05 m?"}
+    S -->|"Yes"| T["Close XV-102<br/>Enter WAIT_AFTER_TRANSFER code 4<br/>All valves closed<br/>Start 12 s timer"]
+    S -->|"No"| L
+    T --> U{"12 s timer expired?"}
+    U -->|"Yes"| V["Enter DRAIN_T2 code 5<br/>XV-103=1<br/>XV-101=0 XV-102=0"]
+    U -->|"No"| L
+    C -->|"WAIT_AFTER_TRANSFER"| U
+    C -->|"DRAIN_T2"| W["Command XV-103 open<br/>XV-101 closed XV-102 closed<br/>tank2_level_m changes by -qDrain/A2"]
+    W --> X{"LT-102 <= 0.05 m?"}
+    X -->|"Yes"| Y["Close XV-103<br/>Enter WAIT_AFTER_DRAIN code 6<br/>All valves closed<br/>Start 8 s timer"]
+    X -->|"No"| L
+    Y --> AA{"8 s timer expired?"}
+    AA -->|"Yes"| I
+    AA -->|"No"| L
+    C -->|"WAIT_AFTER_DRAIN"| AA
+    C -->|"PAUSED"| AB{"START or SHUT received?"}
+    AB -->|"START"| G
+    AB -->|"SHUT"| F
+    C -->|"SHUTDOWN"| AC["XV-101=0 inhibited closed<br/>XV-102=1 XV-103=1 together<br/>Drain TK-101 and TK-102 concurrently"]
+    AC --> AD{"LT-101 <= 0.05 m and LT-102 <= 0.05 m?"}
+    AD -->|"Yes"| AE["Close XV-102 and XV-103<br/>All valves closed<br/>Reset sequence context<br/>Enter IDLE code 0"]
+    AD -->|"No"| AF{"START or STOP during SHUTDOWN?"}
+    AF -->|"START ignored"| AC
+    AF -->|"STOP ignored"| AC
+    AE --> L

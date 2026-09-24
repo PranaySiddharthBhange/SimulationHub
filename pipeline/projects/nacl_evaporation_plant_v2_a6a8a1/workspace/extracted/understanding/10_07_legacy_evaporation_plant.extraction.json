@@ -1,0 +1,422 @@
+{
+  "document": "within SyntheticBench;\nmodel EvaporationPlant_Legacy\n  replaceable package Medium = Modelica.Media.Water.StandardWater;\n\n  Tank B1(area=0.070, levelMax=0.60);\n  Tank B2(area=0.070, levelMax=0.60);\n  Tank B3(area=0.050, levelMax=0.45);\n  Tank B4(area=0.055, levelMax=0.45);\n  TankWithEvaporator B5(area=0.060, levelMax=0.45);\n  TankWithHeatPort B6(area=0.050, levelMax=0.40);\n  TankWithHeatPort B7(area=0.050, levelMax=0.40);\n\n  Controller controller(\n    B3_water_level=0.13,\n    B3_target_X=0.080,\n    B5_batch_level=0.18,\n    B5_target_X=0.180,\n    B6_target_T=293.15,\n    B7_target_T=293.15, // STALE: 20 C, superseded by CR-017\n    restartTime=2500);\n\nequation\n  controller.sensors.LIS_301 = B3.level;\n  controller.sensors.QI_302  = B3.medium.Xi[1];\n  controller.sensors.LIS_501 = B5.level;\n  controller.sensors.QIS_502 = B5.medium.Xi[1];\n  controller.sensors.TIS_602 = B6.medium.T;\n  controller.sensors.TIS_702 = B7.medium.T;\n\n  B5.heatPort.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;\n\n  // OLD return routing preserved from archived teaching controller:\n  // Branch B: B7/P1 to B1; Branch A: B6/P2 to B2.\n  // This is superseded by CR-017 in the released benchmark.\nend EvaporationPlant_Legacy;\n",
+  "subject": "EvaporationPlant_Legacy",
+  "kind": "legacy model",
+  "entities": [
+    {
+      "name": "Medium",
+      "kind": "package",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "replaceable package Medium = Modelica.Media.Water.StandardWater;"
+    },
+    {
+      "name": "B1",
+      "kind": "Tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.070",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Tank B1(area=0.070, levelMax=0.60);"
+        },
+        {
+          "quantity": "levelMax",
+          "value": "0.60",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Tank B1(area=0.070, levelMax=0.60);"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Tank B1(area=0.070, levelMax=0.60);"
+    },
+    {
+      "name": "B2",
+      "kind": "Tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.070",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Tank B2(area=0.070, levelMax=0.60);"
+        },
+        {
+          "quantity": "levelMax",
+          "value": "0.60",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Tank B2(area=0.070, levelMax=0.60);"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Tank B2(area=0.070, levelMax=0.60);"
+    },
+    {
+      "name": "B3",
+      "kind": "Tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.050",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Tank B3(area=0.050, levelMax=0.45);"
+        },
+        {
+          "quantity": "levelMax",
+          "value": "0.45",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Tank B3(area=0.050, levelMax=0.45);"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Tank B3(area=0.050, levelMax=0.45);"
+    },
+    {
+      "name": "B4",
+      "kind": "Tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.055",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Tank B4(area=0.055, levelMax=0.45);"
+        },
+        {
+          "quantity": "levelMax",
+          "value": "0.45",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "Tank B4(area=0.055, levelMax=0.45);"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Tank B4(area=0.055, levelMax=0.45);"
+    },
+    {
+      "name": "B5",
+      "kind": "TankWithEvaporator",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.060",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "TankWithEvaporator B5(area=0.060, levelMax=0.45);"
+        },
+        {
+          "quantity": "levelMax",
+          "value": "0.45",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "TankWithEvaporator B5(area=0.060, levelMax=0.45);"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "TankWithEvaporator B5(area=0.060, levelMax=0.45);"
+    },
+    {
+      "name": "B6",
+      "kind": "TankWithHeatPort",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.050",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "TankWithHeatPort B6(area=0.050, levelMax=0.40);"
+        },
+        {
+          "quantity": "levelMax",
+          "value": "0.40",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "TankWithHeatPort B6(area=0.050, levelMax=0.40);"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "TankWithHeatPort B6(area=0.050, levelMax=0.40);"
+    },
+    {
+      "name": "B7",
+      "kind": "TankWithHeatPort",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "area",
+          "value": "0.050",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "TankWithHeatPort B7(area=0.050, levelMax=0.40);"
+        },
+        {
+          "quantity": "levelMax",
+          "value": "0.40",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "TankWithHeatPort B7(area=0.050, levelMax=0.40);"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "TankWithHeatPort B7(area=0.050, levelMax=0.40);"
+    },
+    {
+      "name": "controller",
+      "kind": "Controller",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "B3_water_level",
+          "value": "0.13",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "B3_water_level=0.13"
+        },
+        {
+          "quantity": "B3_target_X",
+          "value": "0.080",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "B3_target_X=0.080"
+        },
+        {
+          "quantity": "B5_batch_level",
+          "value": "0.18",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "B5_batch_level=0.18"
+        },
+        {
+          "quantity": "B5_target_X",
+          "value": "0.180",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "B5_target_X=0.180"
+        },
+        {
+          "quantity": "B6_target_T",
+          "value": "293.15",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "B6_target_T=293.15"
+        },
+        {
+          "quantity": "B7_target_T",
+          "value": "293.15",
+          "unit": "",
+          "status": "stale",
+          "supersedes": "CR-017",
+          "quote": "B7_target_T=293.15, // STALE: 20 C, superseded by CR-017"
+        },
+        {
+          "quantity": "restartTime",
+          "value": "2500",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "restartTime=2500"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Controller controller("
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "controller",
+      "predicate": "senses",
+      "object": "B3",
+      "detail": "controller.sensors.LIS_301 = B3.level",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.LIS_301 = B3.level;"
+    },
+    {
+      "subject": "controller",
+      "predicate": "senses",
+      "object": "B3",
+      "detail": "controller.sensors.QI_302  = B3.medium.Xi[1]",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.QI_302  = B3.medium.Xi[1];"
+    },
+    {
+      "subject": "controller",
+      "predicate": "senses",
+      "object": "B5",
+      "detail": "controller.sensors.LIS_501 = B5.level",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.LIS_501 = B5.level;"
+    },
+    {
+      "subject": "controller",
+      "predicate": "senses",
+      "object": "B5",
+      "detail": "controller.sensors.QIS_502 = B5.medium.Xi[1]",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.QIS_502 = B5.medium.Xi[1];"
+    },
+    {
+      "subject": "controller",
+      "predicate": "senses",
+      "object": "B6",
+      "detail": "controller.sensors.TIS_602 = B6.medium.T",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.TIS_602 = B6.medium.T;"
+    },
+    {
+      "subject": "controller",
+      "predicate": "senses",
+      "object": "B7",
+      "detail": "controller.sensors.TIS_702 = B7.medium.T",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "controller.sensors.TIS_702 = B7.medium.T;"
+    },
+    {
+      "subject": "B7",
+      "predicate": "routes to",
+      "object": "B1",
+      "detail": "Branch B via P1; archived teaching controller; superseded by CR-017",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Branch B: B7/P1 to B1;"
+    },
+    {
+      "subject": "B6",
+      "predicate": "routes to",
+      "object": "B2",
+      "detail": "Branch A via P2; archived teaching controller; superseded by CR-017",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Branch A: B6/P2 to B2."
+    }
+  ],
+  "facts": [
+    {
+      "category": "behavior",
+      "statement": "B5.heatPort.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "B5.heatPort.Q_flow = if controller.actuators.T5_Heater then 20000 else 0;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "controller.sensors.LIS_301 = B3.level;",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "controller.sensors.LIS_301 = B3.level;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "controller.sensors.QI_302  = B3.medium.Xi[1];",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "controller.sensors.QI_302  = B3.medium.Xi[1];"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "controller.sensors.LIS_501 = B5.level;",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "controller.sensors.LIS_501 = B5.level;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "controller.sensors.QIS_502 = B5.medium.Xi[1];",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "controller.sensors.QIS_502 = B5.medium.Xi[1];"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "controller.sensors.TIS_602 = B6.medium.T;",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "controller.sensors.TIS_602 = B6.medium.T;"
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "controller.sensors.TIS_702 = B7.medium.T;",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "controller.sensors.TIS_702 = B7.medium.T;"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

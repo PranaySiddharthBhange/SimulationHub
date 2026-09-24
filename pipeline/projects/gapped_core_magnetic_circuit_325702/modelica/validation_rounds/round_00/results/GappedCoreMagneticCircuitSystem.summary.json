@@ -1,0 +1,97 @@
+{
+  "B_core_T": {
+    "min": 0.0,
+    "max": 0.5711986652277248,
+    "final": 0.5711986645999999
+  },
+  "B_gap_T": {
+    "min": 0.0,
+    "max": 0.5711986652277248,
+    "final": 0.5711986645999999
+  },
+  "Magnetic_reference.reference_At": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "Phi_core_Wb": {
+    "min": 0.0,
+    "max": 0.0002284794660910899,
+    "final": 0.00022847946584
+  },
+  "Vm_core_At": {
+    "min": 0.0,
+    "max": 90.90909100899643,
+    "final": 90.9090909090909
+  },
+  "Vm_gap_At": {
+    "min": 0.0,
+    "max": 909.0909100899642,
+    "final": 909.090909090909
+  },
+  "excitationCurrent.y": {
+    "min": 0.0,
+    "max": 2.000000002197921,
+    "final": 2.0
+  },
+  "mmf_At": {
+    "min": 0.0,
+    "max": 1000.000001098961,
+    "final": 1000.0
+  },
+  "Air_gap.B_gap_T": {
+    "min": 0.0,
+    "max": 0.5711986652277248,
+    "final": 0.5711986645999999
+  },
+  "Air_gap.Phi_Wb": {
+    "min": 0.0,
+    "max": 0.0002284794660910899,
+    "final": 0.00022847946584
+  },
+  "Air_gap.Vm_gap_At": {
+    "min": 0.0,
+    "max": 909.0909100899642,
+    "final": 909.090909090909
+  },
+  "Core_iron_path.B_core_T": {
+    "min": 0.0,
+    "max": 0.5711986652277248,
+    "final": 0.5711986645999999
+  },
+  "Core_iron_path.Phi_Wb": {
+    "min": 0.0,
+    "max": 0.0002284794660910899,
+    "final": 0.00022847946584
+  },
+  "Core_iron_path.Vm_core_At": {
+    "min": 0.0,
+    "max": 90.90909100899643,
+    "final": 90.9090909090909
+  },
+  "Excitation_coil.current_A": {
+    "min": 0.0,
+    "max": 2.000000002197921,
+    "final": 2.0
+  },
+  "Excitation_coil.mmf_At": {
+    "min": 0.0,
+    "max": 1000.000001098961,
+    "final": 1000.0
+  },
+  "Magnetic_reference.Phi_Wb": {
+    "min": 0.0,
+    "max": 0.0002284794660910899,
+    "final": 0.00022847946584
+  },
+  "Magnetic_reference.Phi_out_Wb": {
+    "min": 0.0,
+    "max": 0.0002284794660910899,
+    "final": 0.00022847946584
+  },
+  "magnetic_ground.reference_At": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  }
+}

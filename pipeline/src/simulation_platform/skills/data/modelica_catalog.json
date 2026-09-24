@@ -57,11 +57,12 @@
   "components": [
     {
       "class": "Modelica.Blocks.Continuous.Integrator",
-      "use_for": "Integrates a rate into an inventory: total mass, energy, or a species mass.",
+      "use_for": "Integrates a rate into an inventory: total mass, energy, a species mass, or a vessel level in the signal-flow alternative to Modelica.Fluid (der(level) = (inflow - outflow)/area).",
       "domains": [
         "species_concentration_balance",
         "multiphase_mixture_process",
-        "thermal"
+        "thermal",
+        "fluid_level_and_flow"
       ],
       "keywords": [
         "integrator",

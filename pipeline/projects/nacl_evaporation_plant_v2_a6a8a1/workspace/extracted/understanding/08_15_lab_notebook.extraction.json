@@ -1,0 +1,265 @@
+{
+  "document": "2026-04-01 / simulation bench notes\n- StandardWater topology runs all the way past 2500 s.\n- WaterNaCl still gets ugly when a pump transition becomes active. Do NOT delete pump states.\n- Tiny solver steps around port-level crossing disappeared with hysteresis.\n- Q_up fix stopped B5 boil/no-boil switching.\n- Old notebook says B7 20 C; CR-017 says 25 C.\n- Physical K1 exists; combined B5/K1 is only a simulation abstraction.\n- P&ID shows more valves than the StateGraph. Determine ownership before generating controller ports.\n",
+  "subject": "simulation bench notes",
+  "kind": "engineering notes",
+  "entities": [
+    {
+      "name": "StandardWater",
+      "kind": "topology",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "StandardWater topology runs all the way past 2500 s."
+    },
+    {
+      "name": "WaterNaCl",
+      "kind": "simulation/system",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "WaterNaCl still gets ugly when a pump transition becomes active."
+    },
+    {
+      "name": "pump transition",
+      "kind": "transition",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "pump transition becomes active"
+    },
+    {
+      "name": "pump states",
+      "kind": "states",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Do NOT delete pump states."
+    },
+    {
+      "name": "solver steps",
+      "kind": "solver setting/behavior",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Tiny solver steps around port-level crossing disappeared with hysteresis."
+    },
+    {
+      "name": "port-level crossing",
+      "kind": "crossing/event",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "port-level crossing"
+    },
+    {
+      "name": "hysteresis",
+      "kind": "method/setting",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "with hysteresis"
+    },
+    {
+      "name": "Q_up fix",
+      "kind": "fix/change",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Q_up fix stopped B5 boil/no-boil switching."
+    },
+    {
+      "name": "B5",
+      "kind": "component/state element",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Q_up fix stopped B5 boil/no-boil switching."
+    },
+    {
+      "name": "B7",
+      "kind": "component",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "temperature",
+          "value": "20",
+          "unit": "C",
+          "status": "archived",
+          "supersedes": "",
+          "quote": "Old notebook says B7 20 C;"
+        },
+        {
+          "quantity": "temperature",
+          "value": "25",
+          "unit": "C",
+          "status": "current",
+          "supersedes": "20 C",
+          "quote": "CR-017 says 25 C."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Old notebook says B7 20 C; CR-017 says 25 C."
+    },
+    {
+      "name": "CR-017",
+      "kind": "change request",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "CR-017 says 25 C."
+    },
+    {
+      "name": "K1",
+      "kind": "physical component",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Physical K1 exists;"
+    },
+    {
+      "name": "combined B5/K1",
+      "kind": "simulation abstraction",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "combined B5/K1 is only a simulation abstraction."
+    },
+    {
+      "name": "P&ID",
+      "kind": "diagram/document",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P&ID shows more valves than the StateGraph."
+    },
+    {
+      "name": "StateGraph",
+      "kind": "graph/model",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P&ID shows more valves than the StateGraph."
+    },
+    {
+      "name": "controller ports",
+      "kind": "ports",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "generating controller ports"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "combined B5/K1",
+      "predicate": "is abstraction of",
+      "object": "B5",
+      "detail": "combined with K1 in simulation only",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "combined B5/K1 is only a simulation abstraction."
+    },
+    {
+      "subject": "combined B5/K1",
+      "predicate": "is abstraction of",
+      "object": "K1",
+      "detail": "combined with B5 in simulation only",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "combined B5/K1 is only a simulation abstraction."
+    },
+    {
+      "subject": "P&ID",
+      "predicate": "shows more valves than",
+      "object": "StateGraph",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "P&ID shows more valves than the StateGraph."
+    }
+  ],
+  "facts": [
+    {
+      "category": "requirement",
+      "statement": "Do NOT delete pump states.",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Do NOT delete pump states."
+    },
+    {
+      "category": "behavior",
+      "statement": "WaterNaCl still gets ugly when a pump transition becomes active.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "WaterNaCl still gets ugly when a pump transition becomes active."
+    },
+    {
+      "category": "behavior",
+      "statement": "Tiny solver steps around port-level crossing disappeared with hysteresis.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "Tiny solver steps around port-level crossing disappeared with hysteresis."
+    },
+    {
+      "category": "behavior",
+      "statement": "Q_up fix stopped B5 boil/no-boil switching.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "Q_up fix stopped B5 boil/no-boil switching."
+    },
+    {
+      "category": "requirement",
+      "statement": "Determine ownership before generating controller ports.",
+      "ref": "",
+      "anchor": "",
+      "status": "unknown",
+      "from_image": false,
+      "quote": "Determine ownership before generating controller ports."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

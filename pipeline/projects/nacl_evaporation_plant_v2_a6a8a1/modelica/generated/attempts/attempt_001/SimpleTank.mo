@@ -1,0 +1,39 @@
+model SimpleTank
+  parameter Modelica.Units.SI.Area area=1;
+  parameter Modelica.Units.SI.Height level_start=0;
+  parameter Modelica.Units.SI.Height level_max=1;
+  parameter Real xNaCl_start(unit="kg/kg")=0;
+  parameter Modelica.Units.SI.Temperature T_start=293.15;
+  parameter Modelica.Units.SI.MassFlowRate rho=1000;
+  parameter Modelica.Units.SI.SpecificHeatCapacity cp=4180;
+  parameter Modelica.Units.SI.Mass m_min=1e-6;
+  Modelica.Blocks.Interfaces.RealInput qIn annotation(Placement(transformation(extent={{-120,50},{-100,70}})));
+  Modelica.Blocks.Interfaces.RealInput qOutCmd annotation(Placement(transformation(extent={{-120,10},{-100,30}})));
+  Modelica.Blocks.Interfaces.RealInput xIn annotation(Placement(transformation(extent={{-120,-30},{-100,-10}})));
+  Modelica.Blocks.Interfaces.RealInput Tin annotation(Placement(transformation(extent={{-120,-70},{-100,-50}})));
+  Modelica.Blocks.Interfaces.RealInput Qdot annotation(Placement(transformation(extent={{-20,100},{20,120}})));
+  Modelica.Blocks.Interfaces.RealOutput level annotation(Placement(transformation(extent={{100,50},{120,70}})));
+  Modelica.Blocks.Interfaces.RealOutput xNaCl annotation(Placement(transformation(extent={{100,10},{120,30}})));
+  Modelica.Blocks.Interfaces.RealOutput TdegC annotation(Placement(transformation(extent={{100,-30},{120,-10}})));
+  Modelica.Blocks.Interfaces.RealOutput qOut annotation(Placement(transformation(extent={{100,-70},{120,-50}})));
+protected 
+  Modelica.Units.SI.Mass m(start=max(rho*area*level_start,m_min));
+  Modelica.Units.SI.Mass mSalt(start=max(rho*area*level_start,m_min)*xNaCl_start);
+  Modelica.Units.SI.Energy E(start=max(rho*area*level_start,m_min)*cp*T_start);
+  Real x(unit="kg/kg");
+  Modelica.Units.SI.Temperature T;
+equation 
+  qOut = if m <= m_min and qOutCmd > 0 then 0 else qOutCmd;
+  der(m) = qIn - qOut;
+  der(mSalt) = qIn*xIn - qOut*x;
+  der(E) = qIn*cp*Tin - qOut*cp*T + Qdot;
+  x = mSalt/max(m,m_min);
+  T = E/max(cp*m,cp*m_min);
+  level = m/(rho*area);
+  xNaCl = x;
+  TdegC = T - 273.15;
+  assert(level >= 0, "level below zero");
+  assert(xNaCl >= 0 and xNaCl <= 1, "mass fraction out of range");
+  assert(T > 0, "temperature below absolute zero");
+annotation (Icon(graphics={Rectangle(extent={{-60,-100},{60,80}}, lineColor={0,0,255}),Rectangle(extent={{-58,-98},{58,0}}, lineColor={0,0,255}, fillColor={85,170,255}, fillPattern=FillPattern.Solid),Text(extent={{-100,100},{100,140}}, textString="%name")}),Diagram(graphics={}));
+end SimpleTank;

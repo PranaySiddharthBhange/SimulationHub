@@ -8,8 +8,10 @@ function stageKeyFromName(name = '') {
   if (value.startsWith('clarif')) return 'clarify'
   if (value.includes('stage 1:')) return 'stage_1'
   if (value.includes('stage 2:')) return 'stage_2'
-  if (value.includes('stage 3:')) return 'stage_3'
-  if (value.includes('stage 4:')) return 'stage_4'
+  // Stage 4 (validation) now runs as part of the same "Simulate" step as
+  // Stage 3 (see execute_reasoner_stage_3_and_4), so its cost/token spend
+  // rolls up into the same 'stage_3' card instead of a separate one.
+  if (value.includes('stage 3:') || value.includes('stage 4:')) return 'stage_3'
   return null
 }
 

@@ -1,0 +1,33 @@
+Subject: Synthetic legacy architecture draft - intentionally incomplete
+Document kind: legacy model
+
+## Entities
+* tankController -- component; aliases: PLC-101
+* tank1 -- component; aliases: TK-101
+* tank2 -- component; aliases: TK-102
+* valve1 -- component; aliases: XV-101
+* valve2 -- component; aliases: XV-102
+* valve3 -- component; aliases: XV-103
+* source -- component; aliases: SRC-101
+* ambient1 -- component; aliases: DRN-101
+* LT-101 -- component
+* LT-102 -- component
+* START -- input
+* STOP -- input
+* SHUT -- input
+* pause state -- state
+* controlled shutdown concurrency -- control feature
+
+## Relationships
+* source flows to valve1 (liquid)
+* valve1 flows to tank1 (liquid)
+* tank1 flows to valve2 (liquid)
+* valve2 flows to tank2 (liquid)
+* tank2 flows to valve3 (liquid)
+* valve3 flows to ambient1 (liquid)
+* tankController controls valve1 (valve1)
+* tankController controls valve2 (valve2)
+* tankController controls valve3 (valve3)
+
+## Unreadable
+* The note states omissions but does not provide further detail for "controlled shutdown concurrency".

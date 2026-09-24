@@ -1,0 +1,48 @@
+Subject: System Requirement Specification - Quasi-Static Magnetic Circuit
+Document kind: requirement specification
+
+## Entities
+* benchmark magnetic circuit -- system  <[page 1]>
+* rectangular iron core -- component  <[page 1]>
+* air gap -- component  <[page 1]>; aliases: discrete air gap
+* exciting coil -- component  <[page 1]>
+* measuring coil -- component  <[page 1]>
+* useful-flux sensor -- sensor  <[page 1]>
+* leakage-flux path -- path  <[page 1]>
+* a -- geometry parameter  <[page 1]>
+    - side: 25 mm [released_nominal/released nominal]
+* l -- geometry parameter  <[page 1]>
+    - reference mean geometry dimension: 150 mm [released_nominal/released nominal]
+* delta -- geometry parameter  <[page 1]>
+    - air-gap length: 1.50 mm [released_nominal/released nominal]
+* electric ground -- ground  <[page 1]>
+* magnetic ground -- ground  <[page 1]>
+
+## Relationships
+* benchmark magnetic circuit consists of rectangular iron core  <[page 1]>
+* benchmark magnetic circuit consists of air gap  <[page 1]>
+* benchmark magnetic circuit consists of exciting coil  <[page 1]>
+* benchmark magnetic circuit consists of measuring coil  <[page 1]>
+* benchmark magnetic circuit consists of useful-flux sensor  <[page 1]>
+* benchmark magnetic circuit consists of leakage-flux path  <[page 1]>
+* measuring coil located at air gap (air-gap region)  <[page 1]>
+* total core flux divides into useful air-gap flux  <[page 1]>
+* total core flux divides into leakage flux  <[page 1]>
+* useful air-gap flux rejoins before lower yoke  <[page 1]>
+* leakage flux rejoins before lower yoke  <[page 1]>
+
+## Requirements
+* Flux, flux density, field strength, magnetic potential difference and electric quantities are represented by complex phasors. [approved]  <[page 1]>
+* Both follow the quasi-static relation |U| = 2*pi*f*N*|Phi|. [approved]  <[page 1]>
+* An electric ground and a magnetic ground shall both be present to establish reference potentials. [approved]  <[page 1]>
+
+## Constraints
+* The core is linear in this benchmark; nonlinear saturation is handled only by a separate model variant and shall not be inferred into the baseline. [approved]  <[page 1]>
+
+## Physical relationships
+* A positive RMS current-phasor magnitude ramp through the exciting coil produces a positive magnetomotive force N*I. [approved]  <[page 1]>
+* Flux density B is derived from flux Phi and cross-sectional area. [approved]  <[page 1]>
+* Magnetic field strength H is derived from B using the applicable permeability. [approved]  <[page 1]>
+* Magnetic potential difference is H times mean flux-line length. [approved]  <[page 1]>
+* The series magnetic potential drops plus the parallel air-gap/leakage branch drop balance the exciting-coil mmf. [approved]  <[page 1]>
+* For the released linear elements, reluctance is real, so flux and magnetic potential difference share phasor angle. [approved]  <[page 1]>

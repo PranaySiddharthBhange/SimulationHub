@@ -1,0 +1,222 @@
+{
+  "tank1_level_m": {
+    "min": 0.0499999999449555,
+    "max": 0.8000000001600074,
+    "final": 0.0499999999449555
+  },
+  "tank2_level_m": {
+    "min": 0.04523809523325269,
+    "max": 0.6928571430414515,
+    "final": 0.04523809523325269
+  },
+  "der(tank1_level_m)": {
+    "min": -0.00375,
+    "max": 0.005,
+    "final": 0.0
+  },
+  "der(tank2_level_m)": {
+    "min": -0.003571428571428572,
+    "max": 0.003214285714285714,
+    "final": 0.0
+  },
+  "PLC_101.activeWaitDuration": {
+    "min": 0.0,
+    "max": 12.0,
+    "final": 0.0
+  },
+  "shutSchedule.combiTimeTable.y[1]": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "startSchedule.combiTimeTable.y[1]": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "stopSchedule.combiTimeTable.y[1]": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "time_s": {
+    "min": 0.0,
+    "max": 900.0,
+    "final": 900.0
+  },
+  "wait_remaining_s": {
+    "min": 0.0,
+    "max": 12.0,
+    "final": 0.0
+  },
+  "PLC_101.storedWaitRemaining": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "PLC_101.tEnter": {
+    "min": 0.0,
+    "max": 632.0000001688683,
+    "final": 632.0000001688683
+  },
+  "PLC_101.mode": {
+    "min": 1.0,
+    "max": 9.0,
+    "final": 1.0
+  },
+  "PLC_101.resumeMode": {
+    "min": 1.0,
+    "max": 4.0,
+    "final": 1.0
+  },
+  "controller_state_code": {
+    "min": 0.0,
+    "max": 8.0,
+    "final": 0.0
+  },
+  "PLC_101.shutButton": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.shutPulse": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "PLC_101.startButton": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.startPulse": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "PLC_101.stopButton": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.stopPulse": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "valve1_open_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "valve2_open_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "valve3_open_cmd": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.level1": {
+    "min": 0.0499999999449555,
+    "max": 0.8000000001600074,
+    "final": 0.0499999999449555
+  },
+  "PLC_101.level2": {
+    "min": 0.04523809523325269,
+    "max": 0.6928571430414515,
+    "final": 0.04523809523325269
+  },
+  "PLC_101.rawWaitRemaining": {
+    "min": 0.0,
+    "max": 12.0,
+    "final": 0.0
+  },
+  "PLC_101.waitRemaining": {
+    "min": 0.0,
+    "max": 12.0,
+    "final": 0.0
+  },
+  "shutSchedule.realToBoolean.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "startSchedule.realToBoolean.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "stopSchedule.realToBoolean.u": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.stateCode": {
+    "min": 0.0,
+    "max": 8.0,
+    "final": 0.0
+  },
+  "PLC_101.valve1": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.valve2": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "PLC_101.valve3": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "cmd_shut": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "cmd_start": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "cmd_stop": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "shutSchedule.realToBoolean.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "shutSchedule.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "startSchedule.realToBoolean.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "startSchedule.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "stopSchedule.realToBoolean.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  },
+  "stopSchedule.y": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 0.0
+  }
+}

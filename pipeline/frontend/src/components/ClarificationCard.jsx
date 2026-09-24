@@ -24,10 +24,10 @@ export default function ClarificationCard({ clarifications, stage, onSubmit, onU
 
   return (
     <div
-      className="fade-up overflow-hidden rounded-xl border bg-[#fdfaf4]"
+      className="fade-up flex h-full flex-col overflow-hidden rounded-xl border bg-[#fdfaf4]"
       style={{ borderColor: 'var(--border-strong)', borderLeft: '3px solid var(--amber)' }}
     >
-      <div className="flex items-center gap-3 border-b border-[var(--border)] px-5 py-3.5">
+      <div className="flex shrink-0 items-center gap-3 border-b border-[var(--border)] px-5 py-3.5">
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#faf1de] text-[var(--amber)]">
           <UserRoundCog className="h-4.5 w-4.5" />
         </div>
@@ -54,7 +54,7 @@ export default function ClarificationCard({ clarifications, stage, onSubmit, onU
         </div>
       </div>
 
-      <div className="divide-y divide-[var(--border)]">
+      <div className="min-h-0 flex-1 divide-y divide-[var(--border)] overflow-y-auto">
         {clarifications.map((c) => (
           <div key={c.id} className="px-5 py-4" style={c.resolved ? { background: 'rgba(34,197,94,0.04)' } : undefined}>
             <div className="mb-1.5 flex items-center gap-1.5">
@@ -126,7 +126,7 @@ export default function ClarificationCard({ clarifications, stage, onSubmit, onU
         ))}
       </div>
 
-      <div className="flex items-center justify-end gap-2 border-t border-[var(--border)] px-5 py-3.5">
+      <div className="flex shrink-0 items-center justify-end gap-2 border-t border-[var(--border)] px-5 py-3.5">
         {hasDefaults && (
           <button
             type="button"

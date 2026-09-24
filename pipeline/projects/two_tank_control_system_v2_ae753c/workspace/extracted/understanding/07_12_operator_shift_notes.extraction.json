@@ -1,0 +1,259 @@
+{
+  "document": "TEST ENGINEER SCRATCH NOTES - 04 APR 2026\n\n09:02 - Initial both tank displays ~0.05 m, all three output lamps off.\n09:03 - Start event at 20 s looks good. T1 fill is slow/linear.\n09:06 - V1 drops out at the high target. Observed target is 0.80, not the 0.78 number in Jin's old model.\n09:07 - Stop at 220 kills all valve lamps. Tank levels hold steady through pause.\n09:08 - Start at 280 picks transfer back up; it does NOT go back to fill.\n09:11 - After T1 low there is a noticeably longer dead time than the first wait. Controls says 12 s.\n09:15 - T2 drains, then new fill comes back fairly quickly (~8 s after low).\n09:16 - Stop at 650 interrupts second fill.\n09:17 - Shut at 700: transfer + drain lamps are on together. This is intentional for SHUT, not an interlock failure.\n09:18 - Shutdown finishes quickly because there was not much inventory left after the 650 stop. System stays idle to 900 s.\n\nTerminology reminders from the screen:\n  tank1 = TK-101, tank2 = TK-102\n  valve1 = XV-101, valve2 = XV-102, valve3 = XV-103\n  'shut' is controlled drain; E-stop is outside this demo scope.\n",
+  "subject": "TEST ENGINEER SCRATCH NOTES - 04 APR 2026",
+  "kind": "operator log",
+  "entities": [
+    {
+      "name": "tank1",
+      "kind": "tank",
+      "aliases": [
+        "TK-101",
+        "T1"
+      ],
+      "values": [
+        {
+          "quantity": "displayed level",
+          "value": "~0.05",
+          "unit": "m",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Initial both tank displays ~0.05 m"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "tank1 = TK-101"
+    },
+    {
+      "name": "tank2",
+      "kind": "tank",
+      "aliases": [
+        "TK-102",
+        "T2"
+      ],
+      "values": [
+        {
+          "quantity": "displayed level",
+          "value": "~0.05",
+          "unit": "m",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Initial both tank displays ~0.05 m"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "tank2 = TK-102"
+    },
+    {
+      "name": "valve1",
+      "kind": "valve",
+      "aliases": [
+        "XV-101",
+        "V1"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "valve1 = XV-101"
+    },
+    {
+      "name": "valve2",
+      "kind": "valve",
+      "aliases": [
+        "XV-102"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "valve2 = XV-102"
+    },
+    {
+      "name": "valve3",
+      "kind": "valve",
+      "aliases": [
+        "XV-103"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "valve3 = XV-103"
+    },
+    {
+      "name": "Start",
+      "kind": "command",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "time",
+          "value": "20",
+          "unit": "s",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Start event at 20 s looks good."
+        },
+        {
+          "quantity": "time",
+          "value": "280",
+          "unit": "s",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Start at 280 picks transfer back up"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Start event at 20 s looks good."
+    },
+    {
+      "name": "Stop",
+      "kind": "command",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "time",
+          "value": "220",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Stop at 220 kills all valve lamps."
+        },
+        {
+          "quantity": "time",
+          "value": "650",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Stop at 650 interrupts second fill."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Stop at 220 kills all valve lamps."
+    },
+    {
+      "name": "SHUT",
+      "kind": "command",
+      "aliases": [
+        "shut"
+      ],
+      "values": [
+        {
+          "quantity": "time",
+          "value": "700",
+          "unit": "",
+          "status": "observed",
+          "supersedes": "",
+          "quote": "Shut at 700: transfer + drain lamps are on together."
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "'shut' is controlled drain;"
+    },
+    {
+      "name": "E-stop",
+      "kind": "command",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "E-stop is outside this demo scope."
+    }
+  ],
+  "relationships": [],
+  "facts": [
+    {
+      "category": "physical_relationship",
+      "statement": "T1 fill is slow/linear.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "T1 fill is slow/linear."
+    },
+    {
+      "category": "constraint",
+      "statement": "Observed high target is 0.80; old model number is 0.78.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "Observed target is 0.80, not the 0.78 number in Jin's old model."
+    },
+    {
+      "category": "constraint",
+      "statement": "After T1 low the dead time is 12 s.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "Controls says 12 s."
+    },
+    {
+      "category": "constraint",
+      "statement": "After T2 low new fill comes back in ~8 s.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "(~8 s after low)."
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "Start at 20 s.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "Start event at 20 s looks good."
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "Stop at 220.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "Stop at 220 kills all valve lamps."
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "Start at 280.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "Start at 280 picks transfer back up"
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "Stop at 650.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "Stop at 650 interrupts second fill."
+    },
+    {
+      "category": "scheduled_command",
+      "statement": "Shut at 700.",
+      "ref": "",
+      "anchor": "",
+      "status": "observed",
+      "from_image": false,
+      "quote": "Shut at 700: transfer + drain lamps are on together."
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

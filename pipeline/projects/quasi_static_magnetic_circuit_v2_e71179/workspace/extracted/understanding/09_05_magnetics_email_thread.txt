@@ -1,0 +1,30 @@
+Subject: MCB-02 leakage fit / which gap value goes into the reference model
+Document kind: correspondence
+
+## Entities
+* v1.0 file -- file
+    - sigma: 0.05 [archived] (supersedes/superseded: sigma=0.08)
+* CR-MAG-006 -- change request  <CR-MAG-006>
+    - sigma: 0.08 [approved]
+* physical shim stack -- component
+    - gap: 1.58 mm [measured]
+    - delta: 1.58 mm [as_built/as-built]
+* analytic benchmark -- benchmark model
+    - nominal gap: 1.50 mm [nominal]
+    - delta: 1.50 mm [nominal]
+* CoreCatalog_A -- catalog
+    - mu_r: 1000
+* batch characterization sheet -- sheet
+    - mu_r: 1200
+* CR-MAG-004 -- change request  <CR-MAG-004>
+    - mu_r: 1200 [approved]
+* linear reference benchmark -- benchmark model
+    - mu_r: 1200 [approved]
+* measurement-coil sketch -- sketch
+    - turns: 40 turns
+* Coil Data B -- data sheet
+    - turns: 50 turns
+    - polarity dots: present
+
+## Requirements
+* Do not silently replace the 1.50 mm nominal gap in the analytic benchmark; both nominal and prototype/as-built values are needed.

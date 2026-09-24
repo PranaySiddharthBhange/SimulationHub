@@ -1,0 +1,128 @@
+Subject: Quasi-Static Magnetic Circuit - Synthetic Engineering Evidence Register
+Document kind: engineering register
+
+## Entities
+* CurrentRamp -- excitation source  <[sheet Interfaces]>
+* ExcitingCoil -- coil  <[sheet Interfaces]>
+    - turns: 600 turn [current/effective]
+* ElectricGround -- ground  <[sheet Interfaces]>
+* CORE-L -- magnetic flux-tube element  <CORE-L [sheet Magnetic_Elements]>; aliases: Left leg
+    - area: 0.0006250000000000001 m^2
+    - length: 0.125 m
+    - relative permeability: 1200
+* CORE-U -- magnetic flux-tube element  <CORE-U [sheet Magnetic_Elements]>; aliases: Upper yoke
+    - area: 0.0006250000000000001 m^2
+    - length: 0.125 m
+    - relative permeability: 1200
+* CORE-R -- magnetic flux-tube element  <CORE-R [sheet Magnetic_Elements]>; aliases: Right leg
+    - area: 0.0006250000000000001 m^2
+    - length: 0.1235 m
+    - relative permeability: 1200
+* GAP-1 -- magnetic flux-tube element  <GAP-1 [sheet Magnetic_Elements]>; aliases: Air gap
+    - area: 0.0006250000000000001 m^2
+    - length: 0.0015 m
+    - relative permeability: 1
+* CORE-D -- magnetic flux-tube element  <CORE-D [sheet Magnetic_Elements]>; aliases: Lower yoke
+    - area: 0.0006250000000000001 m^2
+    - length: 0.125 m
+    - relative permeability: 1200
+* LEAK-1 -- leakage path  <LEAK-1 [sheet Magnetic_Elements]>; aliases: Leakage path
+    - useful/core flux ratio: 0.92
+* MagneticGround -- ground  <[sheet Interfaces]>
+* FluxSensor -- sensor  <[sheet Interfaces]>
+* MeasuringCoil -- coil  <[sheet Interfaces]>
+    - turns: 40 turn [superseded]
+    - turns: 50 turn [current/effective] (supersedes/superseded: 40 turn)
+* iron core -- material/system part  <[sheet Parameters]>
+    - relative permeability: 1000 1 [superseded]
+    - relative permeability: 1200 1 [current/effective] (supersedes/superseded: 1000)
+* magnetic circuit -- system  <[sheet Parameters]>
+    - core side a: 0.025 m [current/effective]
+    - reference dimension l: 0.15 m [current/effective]
+    - nominal air gap delta: 0.0015 m [current/effective]
+    - measured shim gap: 0.00158 m [as_built/as-built]
+    - leakage coefficient sigma: 0.05 1 [superseded]
+    - leakage coefficient sigma: 0.08 1 [current/effective] (supersedes/superseded: 0.05)
+    - frequency: 50 Hz [current/effective]
+    - final RMS current magnitude: 2 A [current/effective]
+    - ramp start: 0.1 s [current/effective]
+    - ramp end: 0.5 s [current/effective]
+    - stop time: 1 s [current/effective]
+* prototype MCB-02 -- prototype  <[sheet Change_Log]>
+    - as-built shim gap: 1.58 mm [as_built/as-built]
+
+## Relationships
+* CurrentRamp provides current reference to ExcitingCoil (i_ref to electric current; Complex current phasor)  <IF-EL-01 [sheet Interfaces]>
+* ExcitingCoil referenced to ElectricGround (pin_p/pin_n to reference)  <IF-EL-02 [sheet Interfaces]>
+* ExcitingCoil connects magnetically to CORE-L (magnetic ports to magnetic port; Phi / Vm)  <IF-MAG-01 [sheet Interfaces]>
+* CORE-L in series with CORE-U (Series core path)  <IF-MAG-02 [sheet Interfaces]>
+* CORE-U in series with CORE-R (Series core path)  <IF-MAG-03 [sheet Interfaces]>
+* CORE-R branches to GAP-1 (Useful branch)  <IF-MAG-04 [sheet Interfaces]>
+* CORE-R branches to LEAK-1 (Leakage branch)  <IF-MAG-05 [sheet Interfaces]>
+* GAP-1 rejoins at CORE-D (Useful branch rejoin)  <IF-MAG-06 [sheet Interfaces]>
+* LEAK-1 rejoins at CORE-D (Leakage branch rejoin)  <IF-MAG-07 [sheet Interfaces]>
+* CORE-D referenced to MagneticGround (port_n to reference)  <IF-MAG-08 [sheet Interfaces]>
+* GAP-1 provides useful flux to FluxSensor (Phi_gap; Complex magnetic flux)  <IF-SEN-01 [sheet Interfaces]>
+* GAP-1 magnetically coupled to MeasuringCoil (Phi_gap to magnetic coupling; Induced voltage)  <IF-IND-01 [sheet Interfaces]>
+* LEAK-1 in parallel with GAP-1 (useful/core flux ratio = 1-sigma = 0.92)  <[sheet Magnetic_Elements]>
+
+## Requirements
+* The electromagnetic converter shall create positive magnetic mmf when positive exciting-coil current is applied. [current]  <REQ-FUN-001 [sheet Requirements]>
+* The core magnetic circuit shall include left leg, upper yoke, right leg, lower yoke and one discrete air gap. [current]  <REQ-FUN-002 [sheet Requirements]>
+* The magnetic circuit shall include a leakage flux path in parallel with the useful air-gap path. [current]  <REQ-FUN-003 [sheet Requirements]>
+* The effective leakage coefficient sigma shall be 0.08 for the released benchmark configuration. [current]  <REQ-PER-001 [sheet Requirements]>
+* The released effective relative permeability of the iron core shall be 1200 under the linear benchmark assumption. [current]  <REQ-PER-002 [sheet Requirements]>
+* The square core cross section shall have side a = 25 mm. [current]  <REQ-GEO-001 [sheet Requirements]>
+* The mean outside magnetic-circuit dimension l shall be 150 mm as defined on the reference drawing. [current]  <REQ-GEO-002 [sheet Requirements]>
+* The nominal air-gap length delta shall be 1.50 mm. [current]  <REQ-GEO-003 [sheet Requirements]>
+* The exciting coil shall have 600 turns. [current]  <REQ-ELC-001 [sheet Requirements]>
+* The measuring coil in the air gap shall have 50 turns. [current]  <REQ-ELC-002 [sheet Requirements]>
+* The exciting current RMS phasor magnitude shall ramp from 0 A to 2.0 A between 0.10 s and 0.50 s and then remain at 2.0 A through 1.0 s. [current]  <REQ-ELC-003 [sheet Requirements]>
+* The quasi-static excitation frequency shall be 50 Hz. [current]  <REQ-ELC-004 [sheet Requirements]>
+* Magnetic flux, flux density, field strength and magnetic potential shall be represented as quasi-static phasor quantities. [current]  <REQ-QS-001 [sheet Requirements]>
+* For linear reluctance elements, reluctance shall remain a real-valued quantity and magnetic potential difference and flux shall have the same phasor angle. [current]  <REQ-QS-002 [sheet Requirements]>
+* The exciting coil induced voltage shall be oriented positive with respect to the defined positive electric direction. [current]  <REQ-IND-001 [sheet Requirements]>
+* The measuring coil induced voltage shall be oriented negative with respect to the air-gap flux direction shown in the reference configuration. [current]  <REQ-IND-002 [sheet Requirements]>
+* The electrical network shall contain an electric ground defining zero electric potential. [current]  <REQ-GND-001 [sheet Requirements]>
+* The magnetic network shall contain a magnetic ground defining zero magnetic scalar potential. [current]  <REQ-GND-002 [sheet Requirements]>
+* Force interaction shall not be modeled. [current]  <REQ-ASM-001 [sheet Requirements]>
+* Core reluctance shall be linear with constant effective relative permeability for this benchmark. [current]  <REQ-ASM-002 [sheet Requirements]>
+* Flux sensor output shall expose the useful air-gap flux with positive sign in the arrow direction shown on the reference model. [current]  <REQ-DAT-001 [sheet Requirements]>
+* Current, flux, magnetic potential and induced-voltage channels shall retain explicit units and phasor convention metadata. [current]  <REQ-DAT-002 [sheet Requirements]>
+
+## Constraints
+* At 2.0 A RMS, analytic and simulated total mmf balance shall agree within 0.5%. [current]  <REQ-VV-001 [sheet Requirements]>
+* At 2.0 A RMS, the simulated useful/core flux ratio shall equal 0.92 within 0.2 percentage points. [current]  <REQ-VV-002 [sheet Requirements]>
+* At 2.0 A RMS, simulated flux, B, H and induced-voltage magnitudes shall agree with the released analytic calculation within 1%. [current]  <REQ-VV-003 [sheet Requirements]>
+
+## Physical relationships
+* Useful air-gap flux shall be modeled as (1-sigma) times total core flux. [current]  <REQ-FUN-004 [sheet Requirements]>
+* Mean flux-line lengths shall be l-a for left leg, upper yoke and lower yoke, and l-a-delta for the right leg iron section. [current]  <REQ-GEO-004 [sheet Requirements]>
+* For each linear flux-tube element, reluctance shall be Rm = length/(mu0*mu_r*A). [current]  <REQ-MAG-001 [sheet Requirements]>
+* Flux density shall be B = Phi/A for constant cross-section elements. [current]  <REQ-MAG-002 [sheet Requirements]>
+* Core field strength shall be H = B/(mu0*mu_r), and air-gap field strength shall be H = B/mu0. [current]  <REQ-MAG-003 [sheet Requirements]>
+* Magnetic potential difference of each element shall equal H multiplied by its mean flux-line length. [current]  <REQ-MAG-004 [sheet Requirements]>
+* The sum of series core magnetic potential drops plus the air-gap branch magnetic potential shall equal N*I. [current]  <REQ-MAG-005 [sheet Requirements]>
+* Magnetic potential difference across GAP-1 and LEAK-1 shall be equal because the elements are connected in parallel. [current]  <REQ-MAG-006 [sheet Requirements]>
+* Flux continuity shall be satisfied at the split: Phi_core = Phi_gap + Phi_leak. [current]  <REQ-MAG-007 [sheet Requirements]>
+* Induced-voltage phasor magnitude for a sinusoidal flux shall satisfy |U| = 2*pi*f*N*|Phi|. [current]  <REQ-IND-003 [sheet Requirements]>
+* l_core = 3*(l-a)+(l-a-delta) [approved]  <[sheet Analytic_Calculation]>
+* R_core = l_core/(mu0*mu_r*A) [approved]  <[sheet Analytic_Calculation]>
+* R_gap = delta/(mu0*A) [approved]  <[sheet Analytic_Calculation]>
+* R_leak = R_gap*(1-sigma)/sigma [approved]  <[sheet Analytic_Calculation]>
+* R_par = 1/(1/R_gap+1/R_leak) [approved]  <[sheet Analytic_Calculation]>
+* R_total = R_core+R_par [approved]  <[sheet Analytic_Calculation]>
+* F=N*I [approved]  <[sheet Analytic_Calculation]>
+* Phi_core = F/R_total [approved]  <[sheet Analytic_Calculation]>
+* Phi_gap = (1-sigma)*Phi_core [approved]  <[sheet Analytic_Calculation]>
+* Phi_leak = sigma*Phi_core [approved]  <[sheet Analytic_Calculation]>
+* B_core = Phi_core/A [approved]  <[sheet Analytic_Calculation]>
+* B_gap = Phi_gap/A [approved]  <[sheet Analytic_Calculation]>
+* H_core = B_core/(mu0*mu_r) [approved]  <[sheet Analytic_Calculation]>
+* H_gap = B_gap/mu0 [approved]  <[sheet Analytic_Calculation]>
+* Vm_core = H_core*l_core [approved]  <[sheet Analytic_Calculation]>
+* Vm_gap = H_gap*delta [approved]  <[sheet Analytic_Calculation]>
+* N*I - Vm_core - Vm_gap [approved]  <[sheet Analytic_Calculation]>
+* 2*pi*f*N_exc*Phi_core [approved]  <[sheet Analytic_Calculation]>
+* 2*pi*f*N_meas*Phi_gap [approved]  <[sheet Analytic_Calculation]>
+* Phi_gap/Phi_core [approved]  <[sheet Analytic_Calculation]>

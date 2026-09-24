@@ -1,0 +1,23 @@
+flowchart TD
+    A["Start simulation<br/>t = 0 s to 1.0 s"] --> B["Instantiate benchmark magnetic circuit<br/>ExcitingCoil, MeasuringCoil, FluxSensor<br/>ElectricGround and MagneticGround"]
+    B --> C["Use released nominal parameters<br/>a = 0.025 m, A = 0.0006250000000000001 m^2<br/>delta = 0.00150 m, mu_r = 1200, sigma = 0.08<br/>N_exc = 600 turn, N_meas = 50 turn, f = 50 Hz"]
+    C --> D["Compute geometry and reluctances<br/>l_core = 0.4985 m<br/>R_core = l_core/(mu0*mu_r*A)<br/>R_gap = delta/(mu0*A)<br/>R_leak = R_gap*(1-sigma)/sigma<br/>R_par = 1/(1/R_gap + 1/R_leak)<br/>R_total = R_core + R_par"]
+    D --> E{"Time schedule?"}
+    E -->|t < 0.10 s| F1["Set I_rms_A = 0 A"]
+    E -->|0.10 s to 0.50 s| F2["Ramp I_rms_A linearly<br/>0 A to 2.0 A RMS"]
+    E -->|0.50 s to 1.0 s| F3["Hold I_rms_A = 2.0 A RMS"]
+    F1 --> G["Compute mmf_At = N_exc*I_rms_A<br/>positive exciting current gives positive mmf"]
+    F2 --> G
+    F3 --> G
+    G --> H["Compute total core flux<br/>Phi_core_Wb = mmf_At/R_total"]
+    H --> I["Split flux after CORE-R<br/>Phi_gap_Wb = (1-sigma)*Phi_core_Wb<br/>Phi_leak_Wb = sigma*Phi_core_Wb<br/>Phi_gap_over_Phi_core = Phi_gap_Wb/Phi_core_Wb"]
+    I --> J["Useful branch GAP-1 to FluxSensor<br/>MeasuringCoil magnetically coupled to GAP-1<br/>Leakage branch through LEAK-1<br/>Branches rejoin before CORE-D"]
+    J --> K["Compute field and magnetic drops<br/>B_core_T = Phi_core_Wb/A<br/>B_gap_T = Phi_gap_Wb/A<br/>H_core_A_m = B_core_T/(mu0*mu_r)<br/>H_gap_A_m = B_gap_T/mu0<br/>Vm_core_At = R_core*Phi_core_Wb<br/>Vm_gap_At = R_gap*Phi_gap_Wb"]
+    K --> L["Compute induced voltages<br/>U_exc_induced_V_rms = 2*pi*f*N_exc*Phi_core_Wb<br/>U_meas_induced_signed_V_rms = -2*pi*f*N_meas*Phi_gap_Wb"]
+    L --> M{"t = 1.0 s?"}
+    M -->|No| E
+    M -->|Yes| N["Report variables<br/>time_s, I_rms_A, mmf_At<br/>Phi_core_Wb, Phi_gap_Wb, Phi_leak_Wb<br/>Phi_gap_over_Phi_core, B_core_T, B_gap_T<br/>H_core_A_m, H_gap_A_m<br/>Vm_core_At, Vm_gap_At<br/>U_exc_induced_V_rms, U_meas_induced_signed_V_rms"]
+    N --> O["Final endpoint checks at 1.0 s hold<br/>I_rms_A = 2.0 A RMS<br/>Phi_gap_over_Phi_core = 0.92<br/>mmf balance residual <= 0.005<br/>Phi_core_Wb = 0.0005249354<br/>Phi_gap_Wb = 0.0004829406"]
+    O --> P["Final endpoint checks continued<br/>B_core_T = 0.839897<br/>B_gap_T = 0.772705<br/>U_exc_induced_V_rms = 98.948<br/>-U_meas_induced_signed_V_rms = 7.586"]
+    P --> Q["Ever-value checks over 0 to 1.0 s<br/>I_rms_A <= 1e-9 at t = 0.1 s<br/>I_rms_A reaches 2.0 A<br/>mmf_At > 0 during positive excitation<br/>U_meas_induced_signed_V_rms < 0"]
+    Q --> R["End released nominal benchmark run"]

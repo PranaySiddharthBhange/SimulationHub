@@ -1,0 +1,81 @@
+Subject: Magnetic Circuit
+Document kind: engineering register
+
+## Entities
+* left leg -- flux-tube reluctance element
+    - area: a*a
+    - mean length: l-a
+    - relative permeability: mu_r
+* upper yoke -- flux-tube reluctance element
+    - area: a*a
+    - mean length: l-a
+    - relative permeability: mu_r
+* right leg iron -- flux-tube reluctance element
+    - area: a*a
+    - mean length: l-a-delta
+    - relative permeability: mu_r
+* lower yoke -- flux-tube reluctance element
+    - area: a*a
+    - mean length: l-a
+    - relative permeability: mu_r
+* GAP-1 -- branch element
+* LEAK-1 -- branch element
+* exciting coil -- coil
+* Air gap -- flux-tube reluctance element; aliases: Gap
+    - area: a*a
+    - mean length: delta
+    - relative permeability: 1
+    - gap: 1.50 mm [nominal]
+    - gap: 1.58 mm [as_built/as-built]
+* Current I -- quantity
+* flux Phi -- quantity
+* flux density B -- quantity
+* field strength H -- quantity
+* magnetic potential difference Vm -- quantity
+* induced voltage U -- quantity
+* EP-03 -- reference dataset
+* SysML parameter model -- model
+* Rm -- reluctance quantity
+* Vm -- quantity
+* Phi -- quantity
+* measuring coil -- coil
+    - turns: 40 [archived]
+    - turns: 50 [approved/released] (supersedes/superseded: 40)
+* Phi_gap -- quantity
+* Phi_core -- quantity
+* R_leak -- reluctance quantity
+* R_gap -- reluctance quantity
+* ElectricGround -- reference potential
+* MagneticGround -- reference potential
+* mu_r -- quantity  <CR-MAG-004>
+    - relative permeability: 1000 [archived]
+    - relative permeability: 1200 [approved/released] (supersedes/superseded: 1000)
+* sigma -- quantity  <CR-MAG-006>
+    - coefficient: 0.05 [archived]
+    - coefficient: 0.08 [approved/released] (supersedes/superseded: 0.05)
+* CR-MAG-004 -- authority
+* CR-MAG-006 -- authority
+* Coil Data Rev B -- authority
+* Drawing MC-101 / Metrology note -- authority
+
+## Relationships
+* left leg in series with upper yoke
+* upper yoke in series with right leg iron
+* right leg iron in series with lower yoke
+* GAP-1 in parallel with LEAK-1
+* right leg iron branches to GAP-1 (after the right-leg iron)
+* right leg iron branches to LEAK-1 (after the right-leg iron)
+* GAP-1 rejoins before lower yoke
+* LEAK-1 rejoins before lower yoke
+* exciting coil provides magnetic potential source N*I
+* ElectricGround included in exciting coil (electrical coil circuit)
+* MagneticGround included in Air gap (magnetic flux-tube network)
+
+## Requirements
+* Input current values in EP-03 are RMS phasor magnitudes and are not to be converted to peak values in the SysML parameter model unless an explicit representation conversion is modeled.
+* Both the electrical and magnetic domains require a reference potential.
+* Include ElectricGround in the electrical coil circuit and MagneticGround in the magnetic flux-tube network.
+
+## Physical relationships
+* Phi_gap/Phi_core = 1-sigma
+* R_leak = R_gap*(1-sigma)/sigma

@@ -1,0 +1,11 @@
+flowchart TD
+    A["Start simulation at t = 0 s<br/>tank_level_m = 0 m"] --> B["Command inlet valve open<br/>valve_open_cmd = 1"]
+    B --> C{"tank_level_m >= 0.80 m?"}
+    C -->|No| D["Fill Tank from Single supply through Inlet valve<br/>constant inflow 0.01 m^3/s"]
+    D --> E["tank_level_m rises in Tank<br/>constant area 0.5 m^2"]
+    E --> C
+    C -->|Yes| F["Close Inlet valve at Fill target<br/>valve_open_cmd = 0"]
+    F --> G["Valve stays closed for rest of run<br/>tank_level_m stops rising"]
+    G --> H{"t = 100 s reached?"}
+    H -->|No| G
+    H -->|Yes| I["End simulation and report<br/>tank_level_m<br/>valve_open_cmd"]

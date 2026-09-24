@@ -1,0 +1,34 @@
+Subject: Magnetic Circuit Design Review - DR-MAG-03
+Document kind: correspondence
+
+## Entities
+* DR-MAG-03 -- design review  <DR-MAG-03>
+* leakage branch -- magnetic branch
+    - effective coefficient: 0.08 [approved]
+* useful air-gap flux -- magnetic quantity
+* Phi_core -- magnetic quantity
+* air gap -- design parameter
+    - air gap: 1.50 mm [nominal]
+    - air gap: 1.58 mm [as_built/as-built]
+* mu_r -- material parameter
+    - mu_r: 1200 [approved]
+* Measuring coil -- coil
+    - turns: 50 [approved]
+* Exciting coil -- coil
+    - turns: 600 [approved]
+* Electric ground -- ground
+* magnetic ground -- ground
+* AV-11 -- verification artifact  <AV-11>
+* legacy v1.0 -- legacy version; aliases: v1.0
+
+## Relationships
+* useful air-gap flux defined_as Phi_core ((1-sigma)*Phi_core)
+* legacy v1.0 has_superseded_parameters mu_r (tag its sigma, mu_r and measuring-coil turns as superseded)
+* legacy v1.0 has_superseded_parameters Measuring coil (tag its sigma, mu_r and measuring-coil turns as superseded)
+
+## Requirements
+* Electric and magnetic grounds are both required. [approved]
+* The model shall preserve the distinction between model parameter, as-built measurement, and verification configuration. [approved]
+
+## Physical relationships
+* Useful air-gap flux is `(1-sigma)*Phi_core`. [approved]

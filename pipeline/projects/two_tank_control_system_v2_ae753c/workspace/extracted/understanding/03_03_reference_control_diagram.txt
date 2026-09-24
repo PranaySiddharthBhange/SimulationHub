@@ -1,0 +1,45 @@
+Subject: reference control diagram
+Document kind: diagram
+
+## Entities
+* system -- control element
+* defaults -- control setting
+* g -- parameter
+    - g: 9
+* source -- source
+* valve1 -- valve
+* tank1 -- tank
+* tank1.level -- level signal
+* valve2 -- valve
+* tank2 -- tank
+* tank2.level -- level signal
+* ambient1 -- ambient source
+* valve3 -- valve
+* tankController1 -- controller
+* start -- command input
+* stop -- command input
+* shut -- command input
+* level1 -- controller input
+* level2 -- controller input
+* tank1 level display -- displayed tank value
+    - level: 0.05 [observed]
+* tank2 level display -- displayed tank value
+    - level: 0.05 [observed]
+
+## Relationships
+* source connects to valve1
+* valve1 feeds tank1
+* tank1 connects to valve2
+* valve2 feeds tank2
+* ambient1 connects to valve3
+* valve3 feeds tank2
+* tank1.level measures tank1
+* tank2.level measures tank2
+* start inputs to tankController1
+* stop inputs to tankController1
+* shut inputs to tankController1
+* level1 inputs to tankController1
+* level2 inputs to tankController1
+* tankController1 outputs to valve1
+* tankController1 outputs to valve2
+* tankController1 outputs to valve3

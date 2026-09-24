@@ -1,0 +1,46 @@
+{
+  "attempt": 1,
+  "entry_class": "NaClBatchPlantSystem",
+  "files": [
+    {
+      "filename": "NaClBatchController.mo",
+      "role": "controller"
+    },
+    {
+      "filename": "NaClBatchPlantSystem.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Icons.Example",
+    "Modelica.Media.Water.StandardWater",
+    "Modelica.Fluid.System",
+    "Modelica.Fluid.Sources.Boundary_pT",
+    "Modelica.Fluid.Vessels.OpenTank",
+    "Modelica.Fluid.Vessels.ClosedVolume",
+    "Modelica.Fluid.Valves.ValveDiscrete",
+    "Modelica.Fluid.Machines.PrescribedPump",
+    "Modelica.Fluid.Sensors.MassFlowRate",
+    "Modelica.Fluid.Sensors.Pressure",
+    "Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow",
+    "Modelica.Blocks.Math.BooleanToReal",
+    "Modelica.Blocks.Sources.BooleanTable",
+    "Modelica.Blocks.Sources.BooleanConstant",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Blocks.Interfaces.BooleanInput",
+    "Modelica.Blocks.Interfaces.BooleanOutput",
+    "Modelica.Blocks.Interfaces.RealInput",
+    "Modelica.Blocks.Interfaces.IntegerOutput"
+  ],
+  "corrections": [
+    "Assumption: the executable bundle uses Modelica.Media.Water.StandardWater as the baseline integration-test medium, because the brief states StandardWater is the required medium for topology/control-sequence validation and the intended WaterNaCl medium remains unresolved for implementation details such as composition-dependent properties and pump-start convergence.",
+    "Assumption: source/sink pressures and several hydraulic sizing parameters not given in the brief were chosen to make a runnable baseline fluid network: source boundaries at 2.5e6 Pa, drain boundaries at ambient pressure, gravity-driven transfer valves with dp_nominal=1 Pa, and pressurized/return valves with dp_nominal=1e5 Pa, following the provided MSL guidance pattern.",
+    "Assumption: initial levels for B1 and B2 were set to 0.20 m and initial levels for B3-B7 to 0.0 m because the brief gives B3 Step1 target level and vessel geometry but does not provide a complete authoritative initial inventory set for every vessel.",
+    "Assumption: K1 is modeled as a distinct ClosedVolume with V=0.01 m3 to keep K1 separate in the architecture, because the brief requires K1 to remain distinct but does not provide condenser vessel volume.",
+    "Correction/limitation: B3_X_NaCl, B5_X_NaCl, B5_T, B6_T, and B7_T are represented in this baseline bundle by evidence-guided surrogate signal expressions rather than a validated composition-dependent WaterNaCl thermodynamic model. This preserves the named reporting contract and controller logic structure, but it is not the intended physical WaterNaCl implementation.",
+    "Correction/limitation: the branch-completion and cooling/evaporation behavior are implemented with the clarified discrete sequence and baseline signal expressions, because the brief does not provide a complete executable WaterNaCl medium model, complete condenser heat-transfer parameterization, or fully resolved manifold geometry beyond approved destinations and observed return valve groups.",
+    "Assumption: the second start command is scheduled at 2505 s with the BooleanTable held true from 0.001 s to 2505 s, because the brief requires a restart indication at t=2505 s but does not provide a complete operator start/stop command schedule. This schedule choice is not evidenced as the real operator input history beyond the stated restart check time.",
+    "Question unresolved in code comments but not silently re-decided: the exact physical role of PIS-901 and PIS-1001 alarm actions is not modeled as a trip because the brief states alarm thresholds but does not state a controller action on those alarms."
+  ],
+  "references": []
+}

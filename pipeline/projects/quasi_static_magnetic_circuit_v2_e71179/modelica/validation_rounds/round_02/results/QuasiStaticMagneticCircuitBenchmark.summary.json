@@ -1,0 +1,232 @@
+{
+  "B_core_T": {
+    "min": 0.0,
+    "max": 0.8398966670438835,
+    "final": 0.8398966667290422
+  },
+  "B_gap_T": {
+    "min": 0.0,
+    "max": 0.7727049336803729,
+    "final": 0.7727049333907189
+  },
+  "H_core_A_m": {
+    "min": 0.0,
+    "max": 556.973776026841,
+    "final": 556.9737758180554
+  },
+  "H_gap_A_m": {
+    "min": 0.0,
+    "max": 614899.0487336325,
+    "final": 614899.0485031332
+  },
+  "I_rms_A": {
+    "min": 0.0,
+    "max": 2.000000000749715,
+    "final": 2.0
+  },
+  "Phi_core_Wb": {
+    "min": 0.0,
+    "max": 0.0005249354169024273,
+    "final": 0.0005249354167056515
+  },
+  "Phi_gap_Wb": {
+    "min": 0.0,
+    "max": 0.0004829405835502332,
+    "final": 0.0004829405833691994
+  },
+  "Phi_gap_over_Phi_core": {
+    "min": 0.0,
+    "max": 0.9200000000000002,
+    "final": 0.92
+  },
+  "Phi_leak_Wb": {
+    "min": 0.0,
+    "max": 4.199483335219419e-05,
+    "final": 4.199483333645212e-05
+  },
+  "R_leak_A_per_Wb": {
+    "min": 21963382.14668155,
+    "max": 21963382.14668155,
+    "final": 21963382.14668155
+  },
+  "R_par_A_per_Wb": {
+    "min": 1757070.571734524,
+    "max": 1757070.571734524,
+    "final": 1757070.571734524
+  },
+  "R_total_A_per_Wb": {
+    "min": 2285995.499276589,
+    "max": 2285995.499276589,
+    "final": 2285995.499276589
+  },
+  "U_exc_induced_V_rms": {
+    "min": 0.0,
+    "max": 98.94799496098565,
+    "final": 98.94799492389429
+  },
+  "U_meas_induced_signed_V_rms": {
+    "min": -7.586012947008901,
+    "max": -0.0,
+    "final": -7.58601294416523
+  },
+  "Vm_core_At": {
+    "min": 0.0,
+    "max": 277.6514273493802,
+    "final": 277.6514272453006
+  },
+  "Vm_gap_At": {
+    "min": 0.0,
+    "max": 922.3485731004488,
+    "final": 922.3485727546998
+  },
+  "electricGround.p.i": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "electricGround.p.v": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "magneticCorePath.R_core_A_per_Wb": {
+    "min": 528924.9275420654,
+    "max": 528924.9275420654,
+    "final": 528924.9275420654
+  },
+  "magneticCorePath.R_gap_A_per_Wb": {
+    "min": 1909859.317102744,
+    "max": 1909859.317102744,
+    "final": 1909859.317102744
+  },
+  "magneticGround.port.Phi": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "magneticGround.port.V_m": {
+    "min": 0.0,
+    "max": 0.0,
+    "final": 0.0
+  },
+  "mmf_At": {
+    "min": 0.0,
+    "max": 1200.000000449829,
+    "final": 1200.0
+  },
+  "time_s": {
+    "min": 0.0,
+    "max": 1.0,
+    "final": 1.0
+  },
+  "R_core_A_per_Wb": {
+    "min": 528924.9275420654,
+    "max": 528924.9275420654,
+    "final": 528924.9275420654
+  },
+  "R_gap_A_per_Wb": {
+    "min": 1909859.317102744,
+    "max": 1909859.317102744,
+    "final": 1909859.317102744
+  },
+  "currentRamp.y": {
+    "min": 0.0,
+    "max": 2.000000000749715,
+    "final": 2.0
+  },
+  "excitingCoil.I_rms_A": {
+    "min": 0.0,
+    "max": 2.000000000749715,
+    "final": 2.0
+  },
+  "excitingCoil.mmf_At": {
+    "min": 0.0,
+    "max": 1200.000000449829,
+    "final": 1200.0
+  },
+  "excitingVoltage.y": {
+    "min": 0.0,
+    "max": 98.94799496098565,
+    "final": 98.94799492389429
+  },
+  "magneticCorePath.B_core_T": {
+    "min": 0.0,
+    "max": 0.8398966670438835,
+    "final": 0.8398966667290422
+  },
+  "magneticCorePath.B_gap_T": {
+    "min": 0.0,
+    "max": 0.7727049336803729,
+    "final": 0.7727049333907189
+  },
+  "magneticCorePath.H_core_A_m": {
+    "min": 0.0,
+    "max": 556.973776026841,
+    "final": 556.9737758180554
+  },
+  "magneticCorePath.H_gap_A_m": {
+    "min": 0.0,
+    "max": 614899.0487336325,
+    "final": 614899.0485031332
+  },
+  "magneticCorePath.Phi_core_Wb": {
+    "min": 0.0,
+    "max": 0.0005249354169024273,
+    "final": 0.0005249354167056515
+  },
+  "magneticCorePath.Phi_gap_Wb": {
+    "min": 0.0,
+    "max": 0.0004829405835502332,
+    "final": 0.0004829405833691994
+  },
+  "magneticCorePath.Phi_gap_over_Phi_core": {
+    "min": 0.0,
+    "max": 0.9200000000000002,
+    "final": 0.92
+  },
+  "magneticCorePath.Phi_leak_Wb": {
+    "min": 0.0,
+    "max": 4.199483335219419e-05,
+    "final": 4.199483333645212e-05
+  },
+  "magneticCorePath.R_leak_A_per_Wb": {
+    "min": 21963382.14668155,
+    "max": 21963382.14668155,
+    "final": 21963382.14668155
+  },
+  "magneticCorePath.R_par_A_per_Wb": {
+    "min": 1757070.571734524,
+    "max": 1757070.571734524,
+    "final": 1757070.571734524
+  },
+  "magneticCorePath.R_total_A_per_Wb": {
+    "min": 2285995.499276589,
+    "max": 2285995.499276589,
+    "final": 2285995.499276589
+  },
+  "magneticCorePath.Vm_core_At": {
+    "min": 0.0,
+    "max": 277.6514273493802,
+    "final": 277.6514272453006
+  },
+  "magneticCorePath.Vm_gap_At": {
+    "min": 0.0,
+    "max": 922.3485731004488,
+    "final": 922.3485727546998
+  },
+  "magneticCorePath.mmf_At": {
+    "min": 0.0,
+    "max": 1200.000000449829,
+    "final": 1200.0
+  },
+  "measuringCoil.Phi_gap_Wb": {
+    "min": 0.0,
+    "max": 0.0004829405835502332,
+    "final": 0.0004829405833691994
+  },
+  "measuringCoil.U_meas_induced_signed_V_rms": {
+    "min": -7.586012947008901,
+    "max": -0.0,
+    "final": -7.58601294416523
+  }
+}

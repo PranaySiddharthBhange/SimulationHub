@@ -1,0 +1,171 @@
+{
+  "document": "Image evidence: magnetic_circuit_sysmlv2_full_dataset/03_architecture_diagrams/03_reference_magnetic_circuit.png, image 1",
+  "subject": "reference magnetic circuit",
+  "kind": "engineering diagram",
+  "entities": [
+    {
+      "name": "leg",
+      "kind": "magnetic circuit element",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label \"leg\" on the left vertical member"
+    },
+    {
+      "name": "yoke",
+      "kind": "magnetic circuit element",
+      "aliases": [
+        "yoke",
+        "yoke"
+      ],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label \"yoke\" on the top and bottom horizontal members"
+    },
+    {
+      "name": "coil",
+      "kind": "coil",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label \"coil\" beside the winding on the left inner side"
+    },
+    {
+      "name": "N.I",
+      "kind": "magnetomotive force",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label \"N.I\" with polarity marker near the coil"
+    },
+    {
+      "name": "cross section",
+      "kind": "cross section",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "side length",
+          "value": "a",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "dimension \"a\" shown horizontally and vertically on the square cross section"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label \"cross section\" beside the square inset at upper right"
+    },
+    {
+      "name": "Φδ",
+      "kind": "magnetic flux",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label \"Φδ\" at the air gap on the right side"
+    },
+    {
+      "name": "air gap",
+      "kind": "gap",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "dimension \"δ\" marked across the right-side opening"
+    },
+    {
+      "name": "magnetic circuit",
+      "kind": "assembly",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "overall horizontal length",
+          "value": "1",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "dimension \"1\" across the top of the outer rectangle"
+        },
+        {
+          "quantity": "overall vertical length",
+          "value": "l",
+          "unit": "",
+          "status": "unknown",
+          "supersedes": "",
+          "quote": "dimension \"l\" along the left side of the outer rectangle"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "rectangular magnetic core with labelled leg, yoke, coil, and right-side gap"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "coil",
+      "predicate": "is wound on",
+      "object": "leg",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "coil symbols placed alongside the left inner vertical member labelled \"leg\""
+    },
+    {
+      "subject": "N.I",
+      "predicate": "is associated with",
+      "object": "coil",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label \"N.I\" placed adjacent to the coil"
+    },
+    {
+      "subject": "Φδ",
+      "predicate": "passes through",
+      "object": "air gap",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "label \"Φδ\" drawn at the right-side gap marked by dimension \"δ\""
+    },
+    {
+      "subject": "yoke",
+      "predicate": "connects to",
+      "object": "leg",
+      "detail": "topology shown as a rectangular magnetic core",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "top and bottom members labelled \"yoke\" joined to the left vertical member labelled \"leg\""
+    },
+    {
+      "subject": "cross section",
+      "predicate": "has dimension",
+      "object": "air gap",
+      "detail": "cross-sectional side length a; gap length δ shown separately on main view",
+      "ref": "",
+      "anchor": "",
+      "from_image": true,
+      "quote": "square inset labelled \"cross section\" with dimension \"a\"; main view gap dimension \"δ\""
+    }
+  ],
+  "facts": [],
+  "unreadable": [],
+  "unverified_quotes": []
+}

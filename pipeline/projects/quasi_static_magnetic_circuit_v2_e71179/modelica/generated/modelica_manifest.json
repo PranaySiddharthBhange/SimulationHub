@@ -1,0 +1,57 @@
+{
+  "entry_class": "QuasiStaticMagneticCircuitBenchmark",
+  "files": [
+    {
+      "filename": "MagneticCorePath.mo",
+      "role": "component"
+    },
+    {
+      "filename": "ExcitingCoilDrive.mo",
+      "role": "component"
+    },
+    {
+      "filename": "MeasuringCoilOutput.mo",
+      "role": "component"
+    },
+    {
+      "filename": "QuasiStaticMagneticCircuitBenchmark.mo",
+      "role": "system"
+    }
+  ],
+  "library_components": [
+    "Modelica.Blocks.Sources.Ramp",
+    "Modelica.Blocks.Sources.RealExpression",
+    "Modelica.Electrical.Analog.Basic.Ground",
+    "Modelica.Icons.Example",
+    "Modelica.Magnetic.FluxTubes.Basic.Ground"
+  ],
+  "corrections": [
+    "Assumption from brief and Merge: the executable released benchmark uses the nominal air gap delta = 0.00150 m; the as-built prototype gap 0.00158 m is retained only as a parameter for separate evidence and is not used in the released nominal acceptance case.",
+    "Assumption from brief and Merge: simulation tolerance is set to 1e-6 because the evidence states acceptance tolerances but does not state a solver tolerance.",
+    "Derived from the brief's stated analytic relationships: the executable model reports the quasi-static benchmark outputs from the released closed-form reluctance equations mmf_At = N_exc*I_rms_A, R_core = l_core/(mu0*mu_r*A), R_gap = delta/(mu0*A), R_leak = R_gap*(1-sigma)/sigma, R_par = 1/(1/R_gap + 1/R_leak), Phi_core = mmf_At/R_total, Phi_gap = (1-sigma)*Phi_core, Phi_leak = sigma*Phi_core, and induced-voltage magnitudes |U| = 2*pi*f*N*|Phi| with the released negative sign convention on the measuring coil.",
+    "Assumption for numerical robustness only: Phi_gap_over_Phi_core is computed as Phi_gap_Wb/max(Phi_core_Wb, 1e-30) so the reported ratio remains defined at zero excitation; for all nonzero excitation the ratio follows the stated branch fluxes and equals 1-sigma.",
+    "Both ElectricGround and MagneticGround are instantiated as named components in the system model because the brief explicitly requires both reference potentials to be present; they are included for topology/reporting consistency even though the released executable benchmark is implemented from the stated analytic quasi-static relationships rather than a solved FluxTubes network."
+  ],
+  "references": [
+    {
+      "path": "14_10_quasistatic_ramp_results.txt",
+      "time_column": "time_s",
+      "reference_column": "I_rms_A",
+      "model_variable": "I_rms_A",
+      "absolute_tolerance": 0.001,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Reference run evidence for the commanded RMS current ramp; not used as an input forcing function."
+    },
+    {
+      "path": "14_10_quasistatic_ramp_results.txt",
+      "time_column": "time_s",
+      "reference_column": "Phi_gap_Wb",
+      "model_variable": "Phi_gap_Wb",
+      "absolute_tolerance": 4.829406e-06,
+      "relative_tolerance": 0.0,
+      "interpolation": "linear",
+      "reason": "Reference run evidence for useful air-gap flux trajectory and endpoint consistency with the released nominal benchmark."
+    }
+  ]
+}

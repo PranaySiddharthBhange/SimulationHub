@@ -1,0 +1,318 @@
+{
+  "document": "# Single Tank Fill — One Valve, One Threshold\n\n## System\n\nOne atmospheric, open tank is filled from a single supply through one inlet\nvalve. There is no operator command, no second tank, and no multi-step\nsequence: the valve is simply open whenever the tank level is below its fill\ntarget, and closed once the target is reached. Once closed, the valve never\nreopens during this run (there is no drain and nothing lowers the level\nagain).\n\n- Tank: cross-sectional area 0.5 m^2, height 1.0 m, empty at the start\n  (level = 0 m at t = 0).\n- Inlet valve: on/off, supplies a constant nominal inflow of 0.01 m^3/s\n  (10 L/s) whenever it is open.\n- Fill target: the valve closes as soon as the tank level reaches 0.80 m,\n  and stays closed for the rest of the run.\n\n## Requirements\n\n- REQ-SIM-001: Simulate for 100 seconds and report the tank level and the\n  inlet valve's open/closed command for the whole run.\n- REQ-FUN-001: Starting from empty, the tank shall fill until its level\n  reaches the 0.80 m fill target, at which point the inlet valve shall close\n  and the level shall stop rising.\n\n## Acceptance checks\n\n- AC-01 fill target reached: `tank_level_m >= 0.80` becomes true at some\n  point during the run (ever value == 1.0). Expected around t = 40 s, given\n  a 0.5 m^2 tank area and a 0.01 m^3/s inflow (0.80 m * 0.5 m^2 / 0.01 m^3/s\n  = 40 s).\n- AC-02 no overfill: `tank_level_m <= 0.85` holds for the entire run (always\n  value == 1.0) -- the level must not run away past the fill target.\n- AC-03 valve open early: `valve_open_cmd == 1` at t = 5 s (the valve is open\n  while the tank is still filling).\n- AC-04 valve closed at the end: `valve_open_cmd == 0` at t = 100 s (the\n  valve has closed after reaching the fill target and stayed closed).\n- AC-05 final level holds the target: `tank_level_m == 0.80` at t = 100 s\n  (absolute tolerance 0.01 m) -- once the valve closes, nothing changes the\n  level again.\n\n## Notes\n\n- This case has exactly one state (the tank level) and exactly one\n  transition (the valve closing once, never reopening), so it deliberately\n  has no pause/resume behavior, no scheduled operator commands, and no\n  second controlled unit.\n",
+  "subject": "Single Tank Fill — One Valve, One Threshold",
+  "kind": "requirement specification",
+  "entities": [
+    {
+      "name": "Tank",
+      "kind": "tank",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "cross-sectional area",
+          "value": "0.5",
+          "unit": "m^2",
+          "status": "current",
+          "supersedes": "",
+          "quote": "cross-sectional area 0.5 m^2"
+        },
+        {
+          "quantity": "height",
+          "value": "1.0",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "height 1.0 m"
+        },
+        {
+          "quantity": "level",
+          "value": "0",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "level = 0 m at t = 0"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Tank: cross-sectional area 0.5 m^2, height 1.0 m, empty at the start"
+    },
+    {
+      "name": "Inlet valve",
+      "kind": "valve",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "inflow",
+          "value": "0.01",
+          "unit": "m^3/s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "constant nominal inflow of 0.01 m^3/s"
+        },
+        {
+          "quantity": "inflow",
+          "value": "10",
+          "unit": "L/s",
+          "status": "nominal",
+          "supersedes": "",
+          "quote": "(10 L/s)"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Inlet valve: on/off, supplies a constant nominal inflow of 0.01 m^3/s"
+    },
+    {
+      "name": "Fill target",
+      "kind": "setpoint",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "level",
+          "value": "0.80",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "reaches 0.80 m"
+        },
+        {
+          "quantity": "time",
+          "value": "40",
+          "unit": "s",
+          "status": "expected",
+          "supersedes": "",
+          "quote": "Expected around t = 40 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "Fill target: the valve closes as soon as the tank level reaches 0.80 m"
+    },
+    {
+      "name": "single supply",
+      "kind": "supply",
+      "aliases": [],
+      "values": [],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "filled from a single supply through one inlet\nvalve."
+    },
+    {
+      "name": "tank_level_m",
+      "kind": "reported variable",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "threshold",
+          "value": "0.80",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`tank_level_m >= 0.80`"
+        },
+        {
+          "quantity": "limit",
+          "value": "0.85",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`tank_level_m <= 0.85`"
+        },
+        {
+          "quantity": "final value",
+          "value": "0.80",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`tank_level_m == 0.80`"
+        },
+        {
+          "quantity": "tolerance",
+          "value": "0.01",
+          "unit": "m",
+          "status": "current",
+          "supersedes": "",
+          "quote": "absolute tolerance 0.01 m"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "`tank_level_m >= 0.80`"
+    },
+    {
+      "name": "valve_open_cmd",
+      "kind": "command signal",
+      "aliases": [],
+      "values": [
+        {
+          "quantity": "value at time",
+          "value": "1",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`valve_open_cmd == 1` at t = 5 s"
+        },
+        {
+          "quantity": "time",
+          "value": "5",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "at t = 5 s"
+        },
+        {
+          "quantity": "value at time",
+          "value": "0",
+          "unit": "",
+          "status": "current",
+          "supersedes": "",
+          "quote": "`valve_open_cmd == 0` at t = 100 s"
+        },
+        {
+          "quantity": "time",
+          "value": "100",
+          "unit": "s",
+          "status": "current",
+          "supersedes": "",
+          "quote": "at t = 100 s"
+        }
+      ],
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "`valve_open_cmd == 1` at t = 5 s"
+    }
+  ],
+  "relationships": [
+    {
+      "subject": "single supply",
+      "predicate": "fills via",
+      "object": "Inlet valve",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "filled from a single supply through one inlet\nvalve."
+    },
+    {
+      "subject": "Inlet valve",
+      "predicate": "feeds",
+      "object": "Tank",
+      "detail": "",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "One atmospheric, open tank is filled from a single supply through one inlet\nvalve."
+    },
+    {
+      "subject": "Inlet valve",
+      "predicate": "closes at",
+      "object": "Fill target",
+      "detail": "closes as soon as tank level reaches target and stays closed",
+      "ref": "",
+      "anchor": "",
+      "from_image": false,
+      "quote": "the valve closes as soon as the tank level reaches 0.80 m,\n  and stays closed for the rest of the run."
+    }
+  ],
+  "facts": [
+    {
+      "category": "behavior",
+      "statement": "the valve is simply open whenever the tank level is below its fill target, and closed once the target is reached",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "the valve is simply open whenever the tank level is below its fill\ntarget, and closed once the target is reached."
+    },
+    {
+      "category": "behavior",
+      "statement": "Once closed, the valve never reopens during this run",
+      "ref": "",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "Once closed, the valve never\nreopens during this run"
+    },
+    {
+      "category": "requirement",
+      "statement": "Simulate for 100 seconds and report the tank level and the inlet valve's open/closed command for the whole run.",
+      "ref": "REQ-SIM-001",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-SIM-001: Simulate for 100 seconds and report the tank level and the\n  inlet valve's open/closed command for the whole run."
+    },
+    {
+      "category": "requirement",
+      "statement": "Starting from empty, the tank shall fill until its level reaches the 0.80 m fill target, at which point the inlet valve shall close and the level shall stop rising.",
+      "ref": "REQ-FUN-001",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "REQ-FUN-001: Starting from empty, the tank shall fill until its level\n  reaches the 0.80 m fill target, at which point the inlet valve shall close\n  and the level shall stop rising."
+    },
+    {
+      "category": "constraint",
+      "statement": "`tank_level_m >= 0.80` becomes true at some point during the run (ever value == 1.0).",
+      "ref": "AC-01",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-01 fill target reached: `tank_level_m >= 0.80` becomes true at some\n  point during the run (ever value == 1.0)."
+    },
+    {
+      "category": "physical_relationship",
+      "statement": "0.80 m * 0.5 m^2 / 0.01 m^3/s = 40 s",
+      "ref": "AC-01",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "0.80 m * 0.5 m^2 / 0.01 m^3/s\n  = 40 s"
+    },
+    {
+      "category": "constraint",
+      "statement": "`tank_level_m <= 0.85` holds for the entire run (always value == 1.0) -- the level must not run away past the fill target.",
+      "ref": "AC-02",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-02 no overfill: `tank_level_m <= 0.85` holds for the entire run (always\n  value == 1.0) -- the level must not run away past the fill target."
+    },
+    {
+      "category": "constraint",
+      "statement": "`valve_open_cmd == 1` at t = 5 s",
+      "ref": "AC-03",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-03 valve open early: `valve_open_cmd == 1` at t = 5 s"
+    },
+    {
+      "category": "constraint",
+      "statement": "`valve_open_cmd == 0` at t = 100 s",
+      "ref": "AC-04",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-04 valve closed at the end: `valve_open_cmd == 0` at t = 100 s"
+    },
+    {
+      "category": "constraint",
+      "statement": "`tank_level_m == 0.80` at t = 100 s (absolute tolerance 0.01 m)",
+      "ref": "AC-05",
+      "anchor": "",
+      "status": "current",
+      "from_image": false,
+      "quote": "AC-05 final level holds the target: `tank_level_m == 0.80` at t = 100 s\n  (absolute tolerance 0.01 m)"
+    }
+  ],
+  "unreadable": [],
+  "unverified_quotes": []
+}

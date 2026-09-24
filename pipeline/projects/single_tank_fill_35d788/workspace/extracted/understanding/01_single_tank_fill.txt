@@ -1,0 +1,48 @@
+Subject: Single Tank Fill — One Valve, One Threshold
+Document kind: requirement specification
+
+## Entities
+* Tank -- tank
+    - cross-sectional area: 0.5 m^2 [current]
+    - height: 1.0 m [current]
+    - level: 0 m [current]
+* Inlet valve -- valve
+    - inflow: 0.01 m^3/s [nominal]
+    - inflow: 10 L/s [nominal]
+* Fill target -- setpoint
+    - level: 0.80 m [current]
+    - time: 40 s [expected]
+* single supply -- supply
+* tank_level_m -- reported variable
+    - threshold: 0.80 [current]
+    - limit: 0.85 [current]
+    - final value: 0.80 [current]
+    - tolerance: 0.01 m [current]
+* valve_open_cmd -- command signal
+    - value at time: 1 [current]
+    - time: 5 s [current]
+    - value at time: 0 [current]
+    - time: 100 s [current]
+
+## Relationships
+* single supply fills via Inlet valve
+* Inlet valve feeds Tank
+* Inlet valve closes at Fill target (closes as soon as tank level reaches target and stays closed)
+
+## Requirements
+* Simulate for 100 seconds and report the tank level and the inlet valve's open/closed command for the whole run. [current]  <REQ-SIM-001>
+* Starting from empty, the tank shall fill until its level reaches the 0.80 m fill target, at which point the inlet valve shall close and the level shall stop rising. [current]  <REQ-FUN-001>
+
+## Constraints
+* `tank_level_m >= 0.80` becomes true at some point during the run (ever value == 1.0). [current]  <AC-01>
+* `tank_level_m <= 0.85` holds for the entire run (always value == 1.0) -- the level must not run away past the fill target. [current]  <AC-02>
+* `valve_open_cmd == 1` at t = 5 s [current]  <AC-03>
+* `valve_open_cmd == 0` at t = 100 s [current]  <AC-04>
+* `tank_level_m == 0.80` at t = 100 s (absolute tolerance 0.01 m) [current]  <AC-05>
+
+## Behaviors
+* the valve is simply open whenever the tank level is below its fill target, and closed once the target is reached [current]
+* Once closed, the valve never reopens during this run [current]
+
+## Physical relationships
+* 0.80 m * 0.5 m^2 / 0.01 m^3/s = 40 s [current]  <AC-01>
