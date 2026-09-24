@@ -36,6 +36,7 @@ defaulting every project a server restart forgot about to a misleading
 
 from __future__ import annotations
 
+import io
 import json
 import re
 import shutil
@@ -43,6 +44,7 @@ import threading
 import time
 import traceback
 import uuid
+import zipfile
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -356,6 +358,33 @@ def health():
     return {"ok": True, "application": "hackathon-simulation-pipeline"}
 
 
+def _extract_zip_documents(data: bytes, docs_dir: Path) -> int:
+    """Unzip an uploaded archive's member files straight into a project's
+    documents directory, flattened (no subfolders) so every member lands
+    next to a plain uploaded file the same way. Returns how many files were
+    written.
+
+    Flattening also closes zip-slip: a member's own path (`../../etc/passwd`)
+    is discarded entirely in favour of just its final path segment, so a
+    crafted archive can never write outside `docs_dir`. Directory entries and
+    macOS's own `__MACOSX/`/`.DS_Store` junk are skipped; anything else is
+    written regardless of extension -- the same as a plain (non-zip) upload,
+    which is unfiltered too, so `sources.read_source` remains the one place
+    that rejects an unsupported format, at ingestion time.
+    """
+    written = 0
+    with zipfile.ZipFile(io.BytesIO(data)) as archive:
+        for info in archive.infolist():
+            if info.is_dir():
+                continue
+            member_name = Path(info.filename).name
+            if not member_name or member_name == ".DS_Store" or "__MACOSX" in info.filename:
+                continue
+            (docs_dir / member_name).write_bytes(archive.read(info))
+            written += 1
+    return written
+
+
 @app.post("/api/projects")
 async def create_project(name: str = Form(...), stage1_backend: str = Form("ollama"), files: list[UploadFile] = File(...)):
     if not files:
@@ -367,7 +396,16 @@ async def create_project(name: str = Form(...), stage1_backend: str = Form("olla
     docs_dir.mkdir(parents=True, exist_ok=True)
     for f in files:
         filename = Path(f.filename or "document").name
-        (docs_dir / filename).write_bytes(await f.read())
+        data = await f.read()
+        if filename.lower().endswith(".zip"):
+            try:
+                _extract_zip_documents(data, docs_dir)
+            except zipfile.BadZipFile:
+                raise HTTPException(400, f"'{filename}' is not a valid zip archive")
+        else:
+            (docs_dir / filename).write_bytes(data)
+    if not any(docs_dir.iterdir()):
+        raise HTTPException(400, "no documents found -- the attached zip archive(s) were empty")
     _ws.ensure_layout(project_id)
     _meta_path(project_id).write_text(json.dumps({"name": name, "stage1_backend": stage1_backend}), encoding="utf-8")
     return {"project_id": project_id, "name": name}
@@ -923,10 +961,6 @@ def download_project_archive(project_id: str, path: str = ""):
     Built in memory rather than written beside the project, so a download never
     leaves a stray artifact inside the folder it is archiving.
     """
-
-    import io
-    import zipfile
-    from fastapi.responses import StreamingResponse
 
     root = _project_root(project_id)
     target = _safe_member(project_id, path) if path else root

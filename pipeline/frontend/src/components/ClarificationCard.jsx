@@ -24,11 +24,11 @@ export default function ClarificationCard({ clarifications, stage, onSubmit, onU
 
   return (
     <div
-      className="fade-up flex h-full flex-col overflow-hidden rounded-xl border bg-[#fdfaf4]"
+      className="fade-up flex h-full flex-col overflow-hidden rounded-xl border bg-[var(--bg-soft)]"
       style={{ borderColor: 'var(--border-strong)', borderLeft: '3px solid var(--amber)' }}
     >
       <div className="flex shrink-0 items-center gap-3 border-b border-[var(--border)] px-5 py-3.5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#faf1de] text-[var(--amber)]">
+        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[var(--amber-soft)] text-[var(--amber)]">
           <UserRoundCog className="h-4.5 w-4.5" />
         </div>
         <div>
@@ -60,8 +60,8 @@ export default function ClarificationCard({ clarifications, stage, onSubmit, onU
             <div className="mb-1.5 flex items-center gap-1.5">
               {c.resolved ? (
                 <>
-                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[var(--green,#16a34a)]" />
-                  <span className="text-[10.5px] font-semibold uppercase tracking-wide text-[var(--green,#16a34a)]">
+                  <CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[var(--green)]" />
+                  <span className="text-[10.5px] font-semibold uppercase tracking-wide text-[var(--green)]">
                     Resolved from evidence -- confirm or change
                   </span>
                 </>
@@ -90,7 +90,7 @@ export default function ClarificationCard({ clarifications, stage, onSubmit, onU
                       className="rounded-full border px-3 py-1.5 text-[12px] font-medium transition-colors"
                       style={
                         active
-                          ? { borderColor: 'var(--amber)', background: '#faf1de', color: 'var(--accent-strong)' }
+                          ? { borderColor: 'var(--amber)', background: 'var(--amber-soft)', color: 'var(--accent-strong)' }
                           : { borderColor: 'var(--border-strong)', color: 'var(--text-muted)' }
                       }
                     >
@@ -98,7 +98,7 @@ export default function ClarificationCard({ clarifications, stage, onSubmit, onU
                       {isSuggested && (
                         <span
                           className="ml-1.5 text-[10px] font-normal"
-                          style={{ color: c.resolved ? 'var(--green,#16a34a)' : 'var(--amber)' }}
+                          style={{ color: c.resolved ? 'var(--green)' : 'var(--amber)' }}
                         >
                           {c.resolved ? 'resolved' : 'suggested'}
                         </span>
@@ -114,7 +114,7 @@ export default function ClarificationCard({ clarifications, stage, onSubmit, onU
                 value={answers[c.id] ?? ''}
                 onChange={(ev) => setAnswer(c.id, ev.target.value)}
                 placeholder={c.suggested_value}
-                className="font-mono w-full max-w-md rounded-lg border border-[var(--border-strong)] bg-white px-3 py-1.5 text-[12.5px] text-[var(--text)] outline-none focus:border-[var(--amber)]"
+                className="font-mono w-full max-w-md rounded-lg border border-[var(--border-strong)] bg-[var(--panel)] px-3 py-1.5 text-[12.5px] text-[var(--text)] outline-none focus:border-[var(--amber)]"
               />
               {!c.options?.length && c.suggested_value?.trim() && (
                 <span className="shrink-0 text-[11px] text-[var(--text-dim)]">

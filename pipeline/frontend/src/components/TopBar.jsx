@@ -1,4 +1,5 @@
-import { ChevronRight, FileText, Loader2, Play, RotateCcw, Workflow } from 'lucide-react'
+import { ChevronRight, FileText, Loader2, Play, RotateCcw } from 'lucide-react'
+import ThemeToggle from './ThemeToggle'
 
 export default function TopBar({
   onNavigateHome,
@@ -15,12 +16,7 @@ export default function TopBar({
     <header className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--panel)] px-6">
       <div className="flex min-w-0 items-center gap-3">
         <button type="button" onClick={onNavigateHome} className="flex shrink-0 items-center gap-2.5">
-          <div
-            className="flex h-8 w-8 items-center justify-center rounded-md border"
-            style={{ borderColor: 'var(--border-strong)', color: 'var(--accent)' }}
-          >
-            <Workflow className="h-4 w-4" />
-          </div>
+          <img src="/logo.png" alt="SimulationHub" className="h-8 w-8 shrink-0 rounded-md object-contain" />
           <div className="text-left">
             <div className="font-serif text-[15px] font-semibold leading-tight text-[var(--text)]">
               SimulationHub
@@ -45,6 +41,8 @@ export default function TopBar({
       </div>
 
       <div className="flex shrink-0 items-center gap-3">
+        <ThemeToggle />
+
         <button
           type="button"
           onClick={onToggleLogs}

@@ -21,6 +21,7 @@ import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import mermaid from 'mermaid'
 import { getArtifact } from '../api'
+import { useTheme } from '../hooks/useTheme'
 import { useZoomPan } from '../hooks/useZoomPan'
 import CodeBlock, { languageForFilename } from './CodeBlock'
 import FileBrowser from './FileBrowser'
@@ -42,9 +43,9 @@ const TABS = [
 const ALWAYS_AVAILABLE = new Set(['files'])
 
 const VERDICT_STYLE = {
-  valid: { bg: 'var(--green-soft, rgba(34,197,94,0.15))', fg: 'var(--green)', label: 'Valid' },
-  partially_valid: { bg: 'rgba(234,179,8,0.15)', fg: '#eab308', label: 'Partially valid' },
-  invalid: { bg: 'rgba(239,68,68,0.15)', fg: '#ef4444', label: 'Invalid' },
+  valid: { bg: 'var(--green-soft)', fg: 'var(--green)', label: 'Valid' },
+  partially_valid: { bg: 'var(--amber-soft)', fg: 'var(--amber)', label: 'Partially valid' },
+  invalid: { bg: 'var(--red-soft)', fg: 'var(--red)', label: 'Invalid' },
 }
 
 function ReportSection({ title, items }) {
@@ -89,8 +90,8 @@ function PlotModal({ projectId, plot, onClose }) {
         if (event.target === event.currentTarget) onClose()
       }}
     >
-      <div className="flex h-[94vh] w-[96vw] max-w-[1800px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-[var(--border)] bg-white px-4 py-3">
+      <div className="flex h-[94vh] w-[96vw] max-w-[1800px] flex-col overflow-hidden rounded-2xl bg-[var(--panel)] shadow-2xl">
+        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--panel)] px-4 py-3">
           <div className="min-w-0">
             <div className="text-[13px] font-semibold text-[var(--text)]">Simulation graph</div>
             <div className="font-mono truncate text-[11px] text-[var(--text-dim)]">{plot}</div>
@@ -129,7 +130,7 @@ function PlotModal({ projectId, plot, onClose }) {
             <button
               type="button"
               onClick={onClose}
-              className="ml-2 inline-flex items-center gap-1.5 rounded-lg bg-[var(--text)] px-3 py-2 text-[12px] font-semibold text-white hover:opacity-85"
+              className="ml-2 inline-flex items-center gap-1.5 rounded-lg bg-[var(--text)] px-3 py-2 text-[12px] font-semibold text-[var(--bg)] hover:opacity-85"
             >
               <X className="h-4 w-4" /> Close
             </button>
@@ -137,7 +138,7 @@ function PlotModal({ projectId, plot, onClose }) {
         </div>
         <div
           ref={viewportRef}
-          className="relative flex-1 cursor-grab overflow-auto bg-[#e8eaed] active:cursor-grabbing"
+          className="relative flex-1 cursor-grab overflow-auto bg-[var(--overlay)] active:cursor-grabbing"
           {...handlers}
         >
           <div
@@ -160,8 +161,8 @@ function PlotModal({ projectId, plot, onClose }) {
 
 const CHECK_STYLE = {
   pass: { fg: 'var(--green)', label: 'pass' },
-  fail: { fg: '#ef4444', label: 'fail' },
-  not_evaluable: { fg: '#eab308', label: 'not evaluable' },
+  fail: { fg: 'var(--red)', label: 'fail' },
+  not_evaluable: { fg: 'var(--amber)', label: 'not evaluable' },
 }
 
 // Every acceptance check, passes included: a run is easy to read as broadly
@@ -201,11 +202,11 @@ function CheckResults({ items }) {
 }
 
 const OUTCOME_STYLE = {
-  confirmed: { label: 'Confirmed suggestion', fg: 'var(--green)', bg: '#edf3ec' },
-  changed_by_human: { label: 'Overridden', fg: 'var(--amber)', bg: '#faf1de' },
-  carried_over: { label: 'Carried over', fg: 'var(--blue)', bg: '#eaf1f4' },
-  answered: { label: 'Answered', fg: 'var(--green)', bg: '#edf3ec' },
-  unanswered: { label: 'Not answered', fg: 'var(--red)', bg: '#f8eae7' },
+  confirmed: { label: 'Confirmed suggestion', fg: 'var(--green)', bg: 'var(--green-soft)' },
+  changed_by_human: { label: 'Overridden', fg: 'var(--amber)', bg: 'var(--amber-soft)' },
+  carried_over: { label: 'Carried over', fg: 'var(--blue)', bg: 'var(--blue-soft)' },
+  answered: { label: 'Answered', fg: 'var(--green)', bg: 'var(--green-soft)' },
+  unanswered: { label: 'Not answered', fg: 'var(--red)', bg: 'var(--red-soft)' },
 }
 
 // Confirm (Merge's clarify pause) writes every question it raises to
@@ -327,7 +328,7 @@ function ResultView({ projectId, data }) {
             key={plot.filename}
             type="button"
             onClick={() => setActivePlot(plot.filename)}
-            className="group overflow-hidden rounded-xl border border-[var(--border)] bg-white text-left shadow-sm transition-shadow hover:shadow-md"
+            className="group overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--panel)] text-left shadow-sm transition-shadow hover:shadow-md"
           >
             <div className="flex items-center justify-between border-b border-[var(--border)] px-3 py-2">
               <span className="font-mono truncate text-[11px] text-[var(--text-muted)]">{plot.label}</span>
@@ -502,18 +503,18 @@ function DiagramModal({ svg, onClose }) {
         if (event.target === event.currentTarget) onClose()
       }}
     >
-      <div className="flex h-[94vh] w-[96vw] max-w-[1800px] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-[var(--border)] bg-white px-4 py-3">
+      <div className="flex h-[94vh] w-[96vw] max-w-[1800px] flex-col overflow-hidden rounded-2xl bg-[var(--panel)] shadow-2xl">
+        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--panel)] px-4 py-3">
           <div className="text-[13px] font-semibold text-[var(--text)]">System flow diagram</div>
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--text)] px-3 py-2 text-[12px] font-semibold text-white hover:opacity-85"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--text)] px-3 py-2 text-[12px] font-semibold text-[var(--bg)] hover:opacity-85"
           >
             <X className="h-4 w-4" /> Close
           </button>
         </div>
-        <div className="relative flex-1 overflow-hidden bg-[#e8eaed]">
+        <div className="relative flex-1 overflow-hidden bg-[var(--overlay)]">
           <div
             ref={viewportRef}
             className="h-full cursor-grab touch-none select-none overflow-auto p-10 active:cursor-grabbing"
@@ -529,9 +530,31 @@ function DiagramModal({ svg, onClose }) {
   )
 }
 
+const MERMAID_THEME_VARIABLES = {
+  light: {
+    background: '#ffffff',
+    primaryColor: '#f6f5f1',
+    primaryBorderColor: '#d8d4c4',
+    primaryTextColor: '#262624',
+    lineColor: '#a19d8d',
+    secondaryColor: '#f4e3d4',
+    tertiaryColor: '#ffffff',
+  },
+  dark: {
+    background: '#242320',
+    primaryColor: '#2a2926',
+    primaryBorderColor: '#4a473f',
+    primaryTextColor: '#ece8de',
+    lineColor: '#726d60',
+    secondaryColor: '#3c2a1c',
+    tertiaryColor: '#242320',
+  },
+}
+
 function MermaidView({ code }) {
   const reactId = useId()
   const renderIdRef = useRef(`system-flow-${reactId.replace(/:/g, "")}`)
+  const { theme } = useTheme()
   const [error, setError] = useState(null)
   const [svg, setSvg] = useState(null)
   const [maximized, setMaximized] = useState(false)
@@ -560,15 +583,7 @@ function MermaidView({ code }) {
           startOnLoad: false,
           securityLevel: 'strict',
           theme: 'base',
-          themeVariables: {
-            background: '#ffffff',
-            primaryColor: '#f6f5f1',
-            primaryBorderColor: '#d8d4c4',
-            primaryTextColor: '#262624',
-            lineColor: '#a19d8d',
-            secondaryColor: '#f4e3d4',
-            tertiaryColor: '#ffffff',
-          },
+          themeVariables: MERMAID_THEME_VARIABLES[theme] || MERMAID_THEME_VARIABLES.light,
           flowchart: { curve: 'linear' },
         })
         await mermaid.parse(code)
@@ -582,12 +597,15 @@ function MermaidView({ code }) {
     return () => {
       cancelled = true
     }
-  }, [code])
+  }, [code, theme])
 
   if (error) {
     return (
       <div className="fade-up space-y-3 px-5 py-4">
-        <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[12px] text-red-700">
+        <div
+          className="rounded-lg border px-3 py-2 text-[12px]"
+          style={{ borderColor: 'var(--red-soft-border)', background: 'var(--red-soft)', color: 'var(--red)' }}
+        >
           Mermaid could not render this diagram. The generated source is shown below so it can be corrected safely.
         </div>
         <pre className="overflow-auto rounded-lg bg-[var(--bg-soft)] p-4 font-mono text-[12px] leading-relaxed text-[var(--text)]">
@@ -601,7 +619,7 @@ function MermaidView({ code }) {
 
   return (
     <>
-      <div className="fade-up relative h-full overflow-hidden bg-white">
+      <div className="fade-up relative h-full overflow-hidden bg-[var(--panel)]">
         <div
           ref={viewportRef}
           className="h-full cursor-grab touch-none select-none overflow-auto px-5 py-6 active:cursor-grabbing"
