@@ -10,11 +10,27 @@ import {
 } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
+function elapsedSince(prevTs, ts) {
+  if (!prevTs || !ts) return null
+  const deltaMs = new Date(ts) - new Date(prevTs)
+  if (!Number.isFinite(deltaMs) || deltaMs < 0) return null
+  return deltaMs / 1000
+}
+
+function formatElapsed(seconds) {
+  if (seconds == null) return null
+  if (seconds < 1) return '<1s'
+  if (seconds < 60) return `${seconds.toFixed(1)}s`
+  const minutes = Math.floor(seconds / 60)
+  const secs = Math.round(seconds % 60)
+  return `${minutes}m ${secs}s`
+}
+
 function timeOf(ts) {
   try {
     return new Date(ts).toLocaleTimeString([], { hour12: false })
   } catch {
-    return ''
+    return null
   }
 }
 
@@ -23,33 +39,58 @@ function describe(e) {
     case 'run_started':
       return { icon: PlayCircle, color: 'var(--accent)', title: 'Pipeline run started' }
     case 'stage_start':
-      return { icon: PlayCircle, color: 'var(--blue)', title: `Started — ${e.name}` }
+      return { icon: PlayCircle, color: 'var(--blue)', title: `Started — ${e.name}`, meta: [{ label: 'Stage', value: e.name }] }
     case 'stage_end':
       return e.ok
-        ? { icon: CheckCircle2, color: 'var(--green)', title: `${e.name}`, sub: `done in ${e.elapsed_seconds}s` }
+        ? {
+            icon: CheckCircle2,
+            color: 'var(--green)',
+            title: `${e.name}`,
+            meta: [{ label: 'Duration', value: `${e.elapsed_seconds}s` }],
+          }
         : {
             icon: XCircle,
             color: 'var(--red)',
             title: `${e.name} failed`,
-            sub: `${e.error_type}: ${e.error_message}`,
+            meta: [
+              { label: 'Error type', value: e.error_type },
+              { label: 'Message', value: e.error_message },
+            ],
           }
     case 'llm_call':
       return {
         icon: Brain,
         color: 'var(--violet)',
         title: `${e.model} → ${e.schema}`,
-        sub: `stage ${e.stage} · ${e.backend}${e.cumulative_spent_usd ? ` · $${e.cumulative_spent_usd}` : ''}`,
+        meta: [
+          { label: 'Stage', value: e.stage },
+          { label: 'Backend', value: e.backend },
+          { label: 'Input tokens', value: e.input_tokens != null ? e.input_tokens.toLocaleString() : null },
+          { label: 'Output tokens', value: e.output_tokens != null ? e.output_tokens.toLocaleString() : null },
+          { label: 'Call cost', value: e.call_spent_usd != null ? `$${e.call_spent_usd}` : null },
+          { label: 'Cumulative cost', value: e.cumulative_spent_usd != null ? `$${e.cumulative_spent_usd}` : null },
+        ],
       }
     case 'validation_attempt':
       if (e.status === 'PASSED')
-        return { icon: CheckCircle2, color: 'var(--green)', title: `${e.tool} passed`, sub: `attempt ${e.attempt}` }
+        return {
+          icon: CheckCircle2,
+          color: 'var(--green)',
+          title: `${e.tool} passed`,
+          meta: [{ label: 'Attempt', value: e.attempt }],
+        }
       if (e.status === 'UNAVAILABLE')
-        return { icon: AlertCircle, color: 'var(--text-dim)', title: `${e.tool} unavailable`, sub: e.detail }
+        return {
+          icon: AlertCircle,
+          color: 'var(--text-dim)',
+          title: `${e.tool} unavailable`,
+          meta: [{ label: 'Detail', value: e.detail }],
+        }
       return {
         icon: AlertCircle,
         color: 'var(--amber)',
         title: `${e.tool} found ${e.issue_count ?? e.error_count ?? 0} issue(s)`,
-        sub: `attempt ${e.attempt}`,
+        meta: [{ label: 'Attempt', value: e.attempt }],
         detail: e.issues || e.errors,
       }
     case 'validation_report':
@@ -58,20 +99,20 @@ function describe(e) {
             icon: XCircle,
             color: 'var(--red)',
             title: 'Validation verdict: Invalid',
-            sub: `${e.issue_count ?? 0} issue(s) · open the Validation tab for the diagnosis`,
+            meta: [{ label: 'Issues', value: e.issue_count ?? 0 }],
           }
         : {
             icon: CheckCircle2,
             color: 'var(--green)',
             title: `Validation verdict: ${e.verdict || 'complete'}`,
-            sub: `${e.issue_count ?? 0} issue(s)`,
+            meta: [{ label: 'Issues', value: e.issue_count ?? 0 }],
           }
     case 'clarification_requested':
       return {
         icon: HelpCircle,
         color: 'var(--amber)',
         title: `Stage 2 has ${e.questions?.length ?? 0} question(s) for you`,
-        sub: 'waiting on human review',
+        meta: [{ label: 'Status', value: 'waiting on human review' }],
         detail: e.questions,
       }
     case 'clarification_answered':
@@ -79,7 +120,7 @@ function describe(e) {
         icon: MessageSquareText,
         color: 'var(--accent)',
         title: 'User input submitted',
-        sub: `${Object.keys(e.answers || {}).length} selected value(s) · click to view`,
+        meta: [{ label: 'Answers', value: Object.keys(e.answers || {}).length }],
         detail: e.answers,
       }
     default:
@@ -103,47 +144,65 @@ function formatDetail(detail) {
   }
   if (detail && typeof detail === 'object') {
     return Object.entries(detail)
-      .map(([key, value]) => `${key}\n${String(value)}`)
+      .map(([key, value]) => `${key}\n${typeof value === 'object' && value !== null ? JSON.stringify(value, null, 2) : String(value)}`)
       .join('\n\n')
   }
   return String(detail ?? '')
 }
 
-function LogLine({ e }) {
+function LogLine({ e, elapsed }) {
   const [open, setOpen] = useState(false)
-  const { icon: Icon, color, title, sub, detail } = describe(e)
+  const { icon: Icon, color, title, meta, detail } = describe(e)
+  const rows = [
+    { label: 'Time', value: timeOf(e.ts) },
+    { label: 'Took', value: elapsed },
+    ...(meta || []),
+  ].filter((row) => row.value != null && row.value !== '')
+
   return (
     <div className="fade-up group px-3 py-1.5">
       <button
         type="button"
-        className="flex w-full items-start gap-2.5 text-left"
-        onClick={() => detail && setOpen((o) => !o)}
+        className="flex w-full items-center gap-2.5 text-left"
+        onClick={() => setOpen((o) => !o)}
       >
-        <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color }} />
-        <span className="shrink-0 font-mono text-[11px] text-[var(--text-dim)]">{timeOf(e.ts)}</span>
-        <span className="min-w-0 flex-1">
-          <span className="text-[12.5px] text-[var(--text)]">{title}</span>
-          {sub && <span className="ml-2 text-[11.5px] text-[var(--text-muted)]">{sub}</span>}
-        </span>
-        {detail && (
-          <ChevronRight
-            className={`h-3.5 w-3.5 shrink-0 text-[var(--text-dim)] transition-transform ${open ? 'rotate-90' : ''}`}
-          />
-        )}
+        <Icon className="h-3.5 w-3.5 shrink-0" style={{ color }} />
+        <span className="min-w-0 flex-1 truncate text-[12.5px] text-[var(--text)]">{title}</span>
       </button>
-      {open && detail && (
-        <pre className="font-mono ml-6 mt-1.5 max-h-40 overflow-auto rounded-lg border border-[var(--border)] bg-[var(--bg-soft)] p-2 text-[11px] whitespace-pre-wrap text-[var(--text-muted)]">
-          {formatDetail(detail)}
-        </pre>
+      {open && (
+        <div className="ml-6 mt-1.5 space-y-2">
+          {rows.length > 0 && (
+            <dl className="grid grid-cols-[max-content_1fr] gap-x-3 gap-y-1 text-[11.5px]">
+              {rows.map((row) => (
+                <div key={row.label} className="contents">
+                  <dt className="text-[var(--text-dim)]">{row.label}</dt>
+                  <dd className="font-mono min-w-0 truncate text-[var(--text-muted)]">{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+          {detail && (
+            <pre className="font-mono max-h-40 overflow-auto rounded-lg border border-[var(--border)] bg-[var(--bg-soft)] p-2 text-[11px] whitespace-pre-wrap text-[var(--text-muted)]">
+              {formatDetail(detail)}
+            </pre>
+          )}
+        </div>
       )}
     </div>
   )
 }
 
-export default function LogPanel({ logs, stage1Backend }) {
+export default function LogPanel({ logs }) {
   const scrollRef = useRef(null)
-  const newestFirst = useMemo(() => [...logs].reverse(), [logs])
-  const modelLabel = stage1Backend === 'openai' ? 'Extraction · Cloud GPT-5.4' : 'Extraction · Local Gemma 3 4B'
+  const withElapsed = useMemo(
+    () =>
+      logs.map((e, i) => ({
+        e,
+        elapsed: formatElapsed(i > 0 ? elapsedSince(logs[i - 1].ts, e.ts) : null),
+      })),
+    [logs],
+  )
+  const newestFirst = useMemo(() => [...withElapsed].reverse(), [withElapsed])
 
   useEffect(() => {
     const el = scrollRef.current
@@ -155,12 +214,8 @@ export default function LogPanel({ logs, stage1Backend }) {
       <div className="flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg-soft)] px-4 py-2.5">
         <div className="flex items-center gap-2">
           <span className="text-[12.5px] font-semibold text-[var(--text)]">Activity log</span>
-          <span className="font-mono text-[10.5px] text-[var(--text-dim)]">newest first</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--panel)] px-2 py-0.5 text-[10.5px] font-medium text-[var(--text-muted)]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--green)]" /> {modelLabel}
-          </span>
           <span className="font-mono text-[11px] text-[var(--text-dim)]">{logs.length} events</span>
         </div>
       </div>
@@ -173,8 +228,8 @@ export default function LogPanel({ logs, stage1Backend }) {
             Logs will appear here once the run starts.
           </div>
         )}
-        {newestFirst.map((e, i) => (
-          <LogLine key={`${e.ts || 'event'}-${e.event || 'log'}-${logs.length - i}`} e={e} />
+        {newestFirst.map(({ e, elapsed }, i) => (
+          <LogLine key={`${e.ts || 'event'}-${e.event || 'log'}-${logs.length - i}`} e={e} elapsed={elapsed} />
         ))}
       </div>
     </div>

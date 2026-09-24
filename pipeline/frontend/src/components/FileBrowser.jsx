@@ -14,6 +14,12 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { archiveDownloadUrl, fileDownloadUrl, listProjectFiles, previewProjectFile } from '../api'
+import CodeBlock, { languageForFilename } from './CodeBlock'
+import MarkdownView from './MarkdownView'
+
+function isMarkdown(path = '') {
+  return path.split('.').pop()?.toLowerCase() === 'md'
+}
 
 const ICON_BY_SUFFIX = {
   mo: FileCode2,
@@ -266,11 +272,27 @@ export default function FileBrowser({ projectId, refreshToken }) {
                   <span className="text-[13px]">{preview.unpreviewable}</span>
                 </div>
               )}
-              {!previewLoading && preview?.content != null && (
-                <pre className="font-mono whitespace-pre-wrap px-4 py-3 text-[12px] leading-relaxed text-[var(--text)]">
-                  {preview.content}
-                </pre>
+              {!previewLoading && preview?.content != null && isMarkdown(selected.path) && (
+                <MarkdownView text={preview.content} />
               )}
+              {!previewLoading &&
+                preview?.content != null &&
+                !isMarkdown(selected.path) &&
+                languageForFilename(selected.path) && (
+                  <CodeBlock
+                    code={preview.content}
+                    language={languageForFilename(selected.path)}
+                    className="text-[12px]"
+                  />
+                )}
+              {!previewLoading &&
+                preview?.content != null &&
+                !isMarkdown(selected.path) &&
+                !languageForFilename(selected.path) && (
+                  <pre className="font-mono whitespace-pre-wrap px-4 py-3 text-[12px] leading-relaxed text-[var(--text)]">
+                    {preview.content}
+                  </pre>
+                )}
             </div>
           </>
         )}
